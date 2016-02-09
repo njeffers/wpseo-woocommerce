@@ -822,7 +822,18 @@ function initialize_yoast_woocommerce_seo() {
 	}
 }
 
-if ( ! defined( 'WP_INSTALLING' ) || WP_INSTALLING === false ) {
+if ( ! function_exists( 'wp_installing' ) ) {
+	/**
+	 * We need to define wp_installing in WordPress versions older than 4.4
+	 *
+	 * @return bool
+	 */
+	function wp_installing() {
+		return defined( 'WP_INSTALLING' );
+	}
+}
+
+if ( ! wp_installing() ) {
 	add_action( 'plugins_loaded', 'initialize_yoast_woocommerce_seo', 20 );
 }
 
