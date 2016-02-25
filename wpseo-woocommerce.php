@@ -838,7 +838,7 @@ if ( ! function_exists( 'wp_installing' ) ) {
 /**
  * Instantiate the plugin license manager for the current plugin and activate it's license.
  */
-function yoast_woocommerce_seo_activate_license( ) {
+function yoast_woocommerce_seo_activate_license() {
 	if ( class_exists( 'Yoast_Plugin_License_Manager' ) ) {
 		if ( ! class_exists( 'Yoast_Product_WPSEO_WooCommerce' ) ) {
 			require_once( dirname( __FILE__ ) . '/class-product-wpseo-woocommerce.php' );
