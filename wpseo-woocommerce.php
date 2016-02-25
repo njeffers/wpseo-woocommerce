@@ -196,7 +196,9 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		require_once( dirname( __FILE__ ) . '/class-product-wpseo-woocommerce.php' );
+		if ( ! class_exists( 'Yoast_Product_WPSEO_WooCommerce' ) ) {
+			require_once( dirname( __FILE__ ) . '/class-product-wpseo-woocommerce.php' );
+		}
 
 		$license_manager = new Yoast_Plugin_License_Manager(
 			new Yoast_Product_WPSEO_WooCommerce()
@@ -833,8 +835,33 @@ if ( ! function_exists( 'wp_installing' ) ) {
 	}
 }
 
+/**
+ * Instantiate the plugin license manager for the current plugin and activate it's license.
+ */
+function yoast_woocommerce_seo_activate_license( ) {
+	if ( class_exists( 'Yoast_Plugin_License_Manager' ) ) {
+		if ( ! class_exists( 'Yoast_Product_WPSEO_WooCommerce' ) ) {
+			require_once( dirname( __FILE__ ) . '/class-product-wpseo-woocommerce.php' );
+		}
+
+		$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
+		$license_manager->activate_license();
+	}
+}
+
+
 if ( ! wp_installing() ) {
 	add_action( 'plugins_loaded', 'initialize_yoast_woocommerce_seo', 20 );
+
+
+	/*
+	 * When the plugin is deactivated and activated again, the license have to be activated. This is mostly the case
+	 * during a update of the plugin. To solve this, we hook into the activation process by calling a method that will
+	 * activate the license.
+	 */
+	register_activation_hook( __FILE__, 'yoast_woocommerce_seo_activate_license' );
+
+
 }
 
 class WPSEO_WooCommerce_Wrappers {
