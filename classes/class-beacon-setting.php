@@ -1,6 +1,11 @@
 <?php
+/**
+ * @package WPSEO/WooCommerce
+ */
 
-
+/**
+ * Implements the helpscout beacon suggestions for wpseo WooCommerce
+ */
 class WPSEO_WooCommerce_Beacon_Setting implements Yoast_HelpScout_Beacon_Setting {
 
 	/**
