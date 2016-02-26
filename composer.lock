@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "98791654410a0f0a88737163f257bbfd",
-    "content-hash": "3744a0e7db49f94621a6b26a42953cb0",
+    "hash": "0e85c4181dff801c0b66243a46857818",
+    "content-hash": "e7e33412b00232d6eb05eacca59ab739",
     "packages": [
         {
             "name": "xrstf/composer-php52",
@@ -38,12 +38,54 @@
             ],
             "homepage": "http://www.xrstf.de/",
             "time": "2015-10-01 14:11:58"
+        },
+        {
+            "name": "yoast/wp-helpscout",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Yoast/wp-helpscout.git",
+                "reference": "624be69461b091eb19229787f1ce103668c87762"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Yoast/wp-helpscout/zipball/624be69461b091eb19229787f1ce103668c87762",
+                "reference": "624be69461b091eb19229787f1ce103668c87762",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ],
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Team Yoast",
+                    "email": "support@yoast.com",
+                    "homepage": "https://yoast.com"
+                }
+            ],
+            "description": "A package to integrate the helpscout beacon into WordPress",
+            "support": {
+                "source": "https://github.com/Yoast/wp-helpscout/tree/master",
+                "issues": "https://github.com/Yoast/wp-helpscout/issues"
+            },
+            "time": "2016-02-26 07:41:53"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "yoast/wp-helpscout": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

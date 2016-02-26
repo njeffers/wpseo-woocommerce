@@ -132,6 +132,8 @@ class Yoast_WooCommerce_SEO {
 			}
 		}
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		add_action( 'admin_init', array( $this, 'init_beacon' ) );
 	}
 
 
@@ -718,6 +720,17 @@ class Yoast_WooCommerce_SEO {
 			return false;
 		} else {
 			return $link;
+		}
+	}
+
+	public function init_beacon() {
+		$query_var = ( $page = filter_input( INPUT_GET, 'page' ) ) ? $page : '';
+
+		// Only add the helpscout beacon on Yoast SEO pages.
+		if ( substr( $query_var, 0, 5 ) === 'wpseo' ) {
+			$beacon = yoast_get_helpscout_beacon( $query_var );
+			$beacon->add_setting( new WPSEO_WooCommerce_Beacon_Setting() );
+			$beacon->register_hooks();
 		}
 	}
 
