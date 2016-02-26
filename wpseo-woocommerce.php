@@ -18,6 +18,11 @@ if ( ! function_exists( 'add_filter' ) ) {
 	header( 'HTTP/1.1 403 Forbidden' );
 	exit();
 }
+
+if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload_52.php' ) ) {
+	require dirname( __FILE__ ) . '/vendor/autoload_52.php';
+}
+
 class Yoast_WooCommerce_SEO {
 
 	/**
@@ -62,7 +67,6 @@ class Yoast_WooCommerce_SEO {
 	function __construct() {
 
 		// Initialize the options
-		require_once( plugin_dir_path( __FILE__ ) . 'class-wpseo-option-woo.php' );
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
 		$this->short_name      = $this->option_instance->option_name;
 		$this->options         = get_option( $this->short_name );
@@ -195,8 +199,6 @@ class Yoast_WooCommerce_SEO {
 		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 			return;
 		}
-
-		require_once( dirname( __FILE__ ) . '/class-product-wpseo-woocommerce.php' );
 
 		$license_manager = new Yoast_Plugin_License_Manager(
 			new Yoast_Product_WPSEO_WooCommerce()
