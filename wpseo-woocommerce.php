@@ -18,6 +18,11 @@ if ( ! function_exists( 'add_filter' ) ) {
 	header( 'HTTP/1.1 403 Forbidden' );
 	exit();
 }
+
+if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload_52.php' ) ) {
+	require dirname( __FILE__ ) . '/vendor/autoload_52.php';
+}
+
 class Yoast_WooCommerce_SEO {
 
 	/**
@@ -62,7 +67,6 @@ class Yoast_WooCommerce_SEO {
 	function __construct() {
 
 		// Initialize the options
-		require_once( plugin_dir_path( __FILE__ ) . 'class-wpseo-option-woo.php' );
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
 		$this->short_name      = $this->option_instance->option_name;
 		$this->options         = get_option( $this->short_name );
@@ -128,6 +132,8 @@ class Yoast_WooCommerce_SEO {
 			}
 		}
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		add_action( 'admin_init', array( $this, 'init_beacon' ) );
 	}
 
 
@@ -194,10 +200,6 @@ class Yoast_WooCommerce_SEO {
 		// we don't need this in AJAX requests
 		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 			return;
-		}
-
-		if ( ! class_exists( 'Yoast_Product_WPSEO_WooCommerce' ) ) {
-			require_once( dirname( __FILE__ ) . '/class-product-wpseo-woocommerce.php' );
 		}
 
 		$license_manager = new Yoast_Plugin_License_Manager(
@@ -718,6 +720,17 @@ class Yoast_WooCommerce_SEO {
 			return false;
 		} else {
 			return $link;
+		}
+	}
+
+	public function init_beacon() {
+		$query_var = ( $page = filter_input( INPUT_GET, 'page' ) ) ? $page : '';
+
+		// Only add the helpscout beacon on Yoast SEO pages.
+		if ( substr( $query_var, 0, 5 ) === 'wpseo' ) {
+			$beacon = yoast_get_helpscout_beacon( $query_var );
+			$beacon->add_setting( new WPSEO_WooCommerce_Beacon_Setting() );
+			$beacon->register_hooks();
 		}
 	}
 
