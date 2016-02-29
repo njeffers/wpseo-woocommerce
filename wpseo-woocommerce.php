@@ -107,7 +107,6 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'wpseo_metadesc', array( $this, 'metadesc' ) );
 
 				// OpenGraph
-				add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
 				add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
 				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
 
