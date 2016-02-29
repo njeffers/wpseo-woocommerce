@@ -107,14 +107,8 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'wpseo_metadesc', array( $this, 'metadesc' ) );
 
 				// OpenGraph
-				add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
 				add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
 				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
-
-				// Twitter
-				add_filter( 'wpseo_twitter_card_type', array( $this, 'return_type_product' ) );
-				add_filter( 'wpseo_twitter_domain', array( $this, 'filter_twitter_domain' ) );
-				add_action( 'wpseo_twitter', array( $this, 'twitter_enhancement' ) );
 
 				add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
 				add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'xml_sitemap_taxonomies' ), 10, 2 );
@@ -306,40 +300,9 @@ class Yoast_WooCommerce_SEO {
 
 		$taxonomies = get_object_taxonomies( 'product', 'objects' );
 
-		echo '<h2>' . __( 'Twitter Product Cards', 'yoast-woo-seo' ) . '</h2>';
-		echo '<p>' . __( 'Twitter allows you to display two pieces of data in the Twitter card, pick which two are shown:', 'yoast-woo-seo' ) . '</p>';
-
-		$i = 1;
-		while ( $i < 3 ) {
-			echo '
-			<label class="select" for="datatype' . $i . '">' . sprintf( __( 'Data %d', 'yoast-woo-seo' ), $i ) . ':</label>
-			<select class="select" id="datatype' . $i . '" name="' . esc_attr( $this->short_name . '[data' . $i . '_type]' ) . '">' . "\n";
-			foreach ( $this->option_instance->valid_data_types as $data_type => $translation ) {
-				$sel = selected( $data_type, $this->options[ 'data' . $i . '_type' ], false );
-				echo '<option value="' . esc_attr( $data_type ) . '"' . $sel . '>' . esc_html( $translation ) . "</option>\n";
-			}
-			unset( $sel, $data_type, $translation );
-
-			if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
-				foreach ( $taxonomies as $tax ) {
-					$sel = selected( strtolower( $tax->name ), $this->options[ 'data' . $i . '_type' ], false );
-					echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"' . $sel . '>' . esc_html( $tax->labels->name ) . "</option>\n";
-				}
-				unset( $tax, $sel );
-			}
-
-
-			echo '</select>';
-			if ( $i === 1 ) {
-				echo '<br class="clear"/>';
-			}
-			$i ++;
-		}
-
-		echo '<br class="clear"/>
-		<h2>' . __( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
+		echo '<h2>' . __( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
 		<p>' . __( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>
-		<label class="select" for="schema_brand">' . sprintf( __( 'Brand', 'yoast-woo-seo' ), $i ) . ':</label>
+		<label class="select" for="schema_brand">' . __( 'Brand', 'yoast-woo-seo' ) . ':</label>
 		<select class="select" id="schema_brand" name="' . esc_attr( $this->short_name . '[schema_brand]' ) . '">
 			<option value="">-</option>' . "\n";
 		if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
@@ -606,83 +569,6 @@ class Yoast_WooCommerce_SEO {
 		return $metadesc;
 	}
 
-
-	/**
-	 * Keep old behaviour of getting the twitter domain in a different way than in WPSEO, but prevent duplicate
-	 * twitter:domain meta tags
-	 *
-	 * @param    string $domain
-	 *
-	 * @return  string
-	 */
-	function filter_twitter_domain( $domain ) {
-		return get_bloginfo( 'site_name' );
-	}
-
-
-	/**
-	 * Output the extra data for the Twitter Card
-	 *
-	 * @since 1.0
-	 */
-	function twitter_enhancement() {
-		if ( ! is_singular( 'product' ) || ! function_exists( 'get_product' ) ) {
-			return;
-		}
-
-		$product = get_product( get_the_ID() );
-
-		$product_atts = array();
-
-		$i = 1;
-		while ( $i < 3 ) {
-			switch ( $this->options[ 'data' . $i . '_type' ] ) {
-				case 'stock':
-					$product_atts[ 'label' . $i ] = __( 'In stock', 'yoast-woo-seo' );
-					$product_atts[ 'data' . $i ]  = ( $product->is_in_stock() ) ? __( 'Yes', 'yoast-woo-seo' ) : __( 'No', 'yoast-woo-seo' );
-					break;
-
-				case 'category':
-					$product_atts[ 'label' . $i ] = __( 'Category', 'yoast-woo-seo' );
-					$product_atts[ 'data' . $i ]  = strip_tags( get_the_term_list( get_the_ID(), 'product_cat', '', ', ' ) );
-					break;
-
-				case 'price':
-					$product_atts[ 'label' . $i ] = __( 'Price', 'yoast-woo-seo' );
-					$product_atts[ 'data' . $i ]  = strip_tags( wc_price( $product->get_price() ) );
-					break;
-
-				default:
-					$tax                          = get_taxonomy( $this->options[ 'data' . $i . '_type' ] );
-					$product_atts[ 'label' . $i ] = $tax->labels->name;
-					$product_atts[ 'data' . $i ]  = strip_tags( get_the_term_list( get_the_ID(), $tax->name, '', ', ' ) );
-					break;
-			}
-			$i ++;
-		}
-
-		foreach ( $product_atts as $label => $value ) {
-			echo '<meta name="' . esc_attr( 'twitter:' . $label ) . '" content="' . esc_attr( $value ) . '"/>' . "\n";
-		}
-	}
-
-	/**
-	 * Return 'product' when current page is, well... a product.
-	 *
-	 * @since 1.0
-	 *
-	 * @param string $type Passed on without changing if not a product.
-	 *
-	 * @return string
-	 */
-	function return_type_product( $type ) {
-		if ( is_singular( 'product' ) ) {
-			return 'product';
-		}
-
-		return $type;
-	}
-
 	/**
 	 * Filter the output of attributes and add schema.org attributes where possible
 	 *
@@ -754,6 +640,45 @@ class Yoast_WooCommerce_SEO {
 	 */
 	function options_init() {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 1.1.0', null );
+	}
+
+	/**
+	 * Keep old behaviour of getting the twitter domain in a different way than in WPSEO, but prevent duplicate
+	 * twitter:domain meta tags
+	 *
+	 * @deprecated 3.1
+	 * @param string $domain
+	 *
+	 * @return  string
+	 */
+	public function filter_twitter_domain( $domain ) {
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
+		return '';
+	}
+
+	/**
+	 * Output the extra data for the Twitter Card
+	 *
+	 * @deprecated 3.1
+	 * @since 1.0
+	 */
+	public function twitter_enhancement() {
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
+	}
+
+	/**
+	 * Return 'product' when current page is, well... a product.
+	 *
+	 * @deprecated 3.1
+	 * @since 1.0
+	 *
+	 * @param string $type Passed on without changing if not a product.
+	 *
+	 * @return string
+	 */
+	public function return_type_product( $type ) {
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
+		return $type;
 	}
 
 	/**
