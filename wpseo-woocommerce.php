@@ -644,6 +644,45 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Keep old behaviour of getting the twitter domain in a different way than in WPSEO, but prevent duplicate
+	 * twitter:domain meta tags
+	 *
+	 * @deprecated 3.1
+	 * @param string $domain
+	 *
+	 * @return  string
+	 */
+	public function filter_twitter_domain( $domain ) {
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
+		return '';
+	}
+
+	/**
+	 * Output the extra data for the Twitter Card
+	 *
+	 * @deprecated 3.1
+	 * @since 1.0
+	 */
+	public function twitter_enhancement() {
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
+	}
+
+	/**
+	 * Return 'product' when current page is, well... a product.
+	 *
+	 * @deprecated 3.1
+	 * @since 1.0
+	 *
+	 * @param string $type Passed on without changing if not a product.
+	 *
+	 * @return string
+	 */
+	public function return_type_product( $type ) {
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
+		return $type;
+ 	}
+
+	/**
 	 * Enqueues the pluginscripts.
 	 */
 	public function enqueue_scripts() {
