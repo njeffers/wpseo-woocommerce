@@ -679,7 +679,7 @@ class Yoast_WooCommerce_SEO {
 	public function return_type_product( $type ) {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
 		return $type;
- 	}
+	}
 
 	/**
 	 * Enqueues the pluginscripts.
