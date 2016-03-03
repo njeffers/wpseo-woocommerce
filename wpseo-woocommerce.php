@@ -107,6 +107,7 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'wpseo_metadesc', array( $this, 'metadesc' ) );
 
 				// OpenGraph
+				add_filter( 'language_attributes', array( $this, 'og_product_namespace' ), 11 );
 				add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
 				add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
 				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
@@ -455,11 +456,28 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Filter for the namespace, adding the OpenGraph namespace.
+	 *
+	 * @link https://developers.facebook.com/docs/web/tutorials/scrumptious/open-graph-object/
+	 *
+	 * @param string $input The input namespace string.
+	 *
+	 * @return string
+	 */
+	public function og_product_namespace( $input ) {
+		if ( is_singular( 'product' ) ) {
+			$input .= ' product: http://ogp.me/ns/product#';
+		}
+
+		return $input;
+	}
+
+	/**
 	 * Adds the other product images to the OpenGraph output
 	 *
 	 * @since 1.0
 	 */
-	function og_enhancement() {
+	public function og_enhancement() {
 		global $wpseo_og;
 
 		if ( is_product_category() || ! function_exists( 'is_product_category' ) ) {
