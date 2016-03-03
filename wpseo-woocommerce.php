@@ -466,7 +466,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function og_product_namespace( $input ) {
 		if ( is_singular( 'product' ) ) {
-			$input = str_replace( 'prefix="', 'prefix="product: http://ogp.me/ns/product# ', $input );
+			$input = preg_replace( '/prefix="([^"]+)"/', 'prefix="$1 product: http://ogp.me/ns/product#"', $input );
 		}
 
 		return $input;
@@ -522,12 +522,12 @@ class Yoast_WooCommerce_SEO {
 		 * @api bool unsigned Defaults to true.
 		 */
 		if ( apply_filters( 'wpseo_woocommerce_og_price', true ) ) {
-			echo '<meta property="og:product:price:amount" content="' . esc_attr( $product->get_price() ) . "\"/>\n";
-			echo '<meta property="og:product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . "\"/>\n";
+			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . "\"/>\n";
+			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . "\"/>\n";
 		}
 
 		if ( $product->is_in_stock() ) {
-			echo '<meta property="og:product:availability" content="instock"/>' . "\n";
+			echo '<meta property="product:availability" content="instock"/>' . "\n";
 		}
 	}
 
