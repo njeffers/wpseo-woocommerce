@@ -458,7 +458,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Filter for the namespace, adding the OpenGraph namespace.
 	 *
-	 * @link https://developers.facebook.com/docs/web/tutorials/scrumptious/open-graph-object/
+	 * @link https://developers.facebook.com/docs/reference/opengraph/object-type/product/
 	 *
 	 * @param string $input The input namespace string.
 	 *
@@ -466,7 +466,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function og_product_namespace( $input ) {
 		if ( is_singular( 'product' ) ) {
-			$input = str_replace( 'prefix="', 'prefix="product: http://ogp.me/ns/product#', $input );
+			$input = str_replace( 'prefix="', 'prefix="product: http://ogp.me/ns/product# ', $input );
 		}
 
 		return $input;
