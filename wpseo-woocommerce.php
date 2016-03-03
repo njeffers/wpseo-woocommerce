@@ -107,6 +107,7 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'wpseo_metadesc', array( $this, 'metadesc' ) );
 
 				// OpenGraph
+				add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
 				add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
 				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
 
@@ -537,6 +538,22 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Return 'product' when current page is, well... a product.
+	 *
+	 * @since 1.0
+	 *
+	 * @param string $type Passed on without changing if not a product.
+	 *
+	 * @return string
+	 */
+	public function return_type_product( $type ) {
+		if ( is_singular( 'product' ) ) {
+			return 'product';
+		}
+		return $type;
+	}
+
+	/**
 	 * If metadesc is empty check which value we should use
 	 *
 	 * On empty metadesc it will check for post_excerpt, otherwise it will use the full product description. If all empty
@@ -664,21 +681,6 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function twitter_enhancement() {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
-	}
-
-	/**
-	 * Return 'product' when current page is, well... a product.
-	 *
-	 * @deprecated 3.1
-	 * @since 1.0
-	 *
-	 * @param string $type Passed on without changing if not a product.
-	 *
-	 * @return string
-	 */
-	public function return_type_product( $type ) {
-		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
-		return $type;
 	}
 
 	/**
