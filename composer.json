@@ -10,18 +10,12 @@
             "homepage": "https://yoast.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Yoast/wp-helpscout"
-        }
-    ],
     "autoload": {
         "classmap": [ "classes/" ]
     },
     "require": {
         "xrstf/composer-php52": "^1.0",
-        "yoast/wp-helpscout": "dev-master"
+        "yoast/wp-helpscout": "^1.0"
     },
     "scripts": {
         "config-yoastcs": [
