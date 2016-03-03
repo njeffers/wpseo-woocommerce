@@ -466,7 +466,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function og_product_namespace( $input ) {
 		if ( is_singular( 'product' ) ) {
-			$input .= ' product: http://ogp.me/ns/product#';
+			$input = str_replace( 'prefix="', 'prefix="product: http://ogp.me/ns/product#', $input );
 		}
 
 		return $input;
