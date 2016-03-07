@@ -716,24 +716,11 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Localizes scripts for the wooplugin.
-	 * @return array
-	 */
-	private function localize_woo_script() {
-		return array(
-			'woo_desc_none'    => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
-			'woo_desc_short'   => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
-			'woo_desc_good'    => __( 'Your short description has a good length.', 'yoast-woo-seo' ),
-			'woo_desc_long'    => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
-		);
-	}
-
-	/**
 	 * Register the promotion class for our GlotPress instance.
 	 *
 	 * @link https://github.com/Yoast/i18n-module
 	 */
-	private function register_i18n_promo_class(){
+	protected function register_i18n_promo_class(){
 		new yoast_i18n(
 			array(
 				'textdomain'     => 'yoast-woo-seo',
@@ -745,6 +732,19 @@ class Yoast_WooCommerce_SEO {
 				'glotpress_logo' => 'http://translate.yoast.com/gp-templates/images/Yoast_Translate.svg',
 				'register_url'   => 'http://translate.yoast.com/gp/projects#utm_source=plugin&utm_medium=promo-box&utm_campaign=wpseo-woo-i18n-promo',
 			)
+		);
+	}
+
+	/**
+	 * Localizes scripts for the wooplugin.
+	 * @return array
+	 */
+	private function localize_woo_script() {
+		return array(
+			'woo_desc_none'    => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
+			'woo_desc_short'   => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
+			'woo_desc_good'    => __( 'Your short description has a good length.', 'yoast-woo-seo' ),
+			'woo_desc_long'    => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
 		);
 	}
 }
