@@ -720,7 +720,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @link https://github.com/Yoast/i18n-module
 	 */
-	protected function register_i18n_promo_class(){
+	protected function register_i18n_promo_class() {
 		new yoast_i18n(
 			array(
 				'textdomain'     => 'yoast-woo-seo',
@@ -878,7 +878,7 @@ class WPSEO_WooCommerce_Wrappers {
 
 		if ( method_exists( 'Yoast_Form', 'admin_footer' ) ) {
 			$admin_footer = Yoast_Form::get_instance()->admin_footer( $submit, $show_sidebar );
-		}
+		} 
 		else {
 			$admin_footer = self::admin_pages()->admin_footer( $submit, $show_sidebar );
 		}
