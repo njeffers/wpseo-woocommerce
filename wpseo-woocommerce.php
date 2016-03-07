@@ -64,7 +64,8 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function __construct() {
+	public function __construct() {
+		$this->register_i18n_promo_class();
 
 		// Initialize the options
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
@@ -88,7 +89,6 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'admin_menu', array( $this, 'register_settings_page' ), 20 );
 			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
 			add_action( 'wpseo_licenses_forms', array( $this->license_manager, 'show_license_form' ) );
-
 
 			// Products tab columns
 			if ( $this->options['hide_columns'] === true ) {
@@ -294,8 +294,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function admin_panel() {
-
+	public function admin_panel() {
 		WPSEO_WooCommerce_Wrappers::admin_header( true, $this->option_instance->group_name, $this->short_name, false );
 
 		// @todo [JRF => whomever] change the form fields so they use the methods as defined in WPSEO_Admin_Pages
@@ -355,6 +354,7 @@ class Yoast_WooCommerce_SEO {
 
 		// Submit button and debug info
 		WPSEO_WooCommerce_Wrappers::admin_footer( true, false );
+
 	}
 
 	/**
@@ -727,6 +727,26 @@ class Yoast_WooCommerce_SEO {
 			'woo_desc_long'    => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
 		);
 	}
+
+	/**
+	 * Register the promotion class for our GlotPress instance.
+	 *
+	 * @link https://github.com/Yoast/i18n-module
+	 */
+	private function register_i18n_promo_class(){
+		new yoast_i18n(
+			array(
+				'textdomain'     => 'yoast-woo-seo',
+				'project_slug'   => 'woocommerce-seo',
+				'plugin_name'    => 'Yoast WooCommerce SEO',
+				'hook'           => 'yoast_woo_seo_admin_footer',
+				'glotpress_url'  => 'http://translate.yoast.com/gp/',
+				'glotpress_name' => 'Yoast Translate',
+				'glotpress_logo' => 'http://translate.yoast.com/gp-templates/images/Yoast_Translate.svg',
+				'register_url'   => 'http://translate.yoast.com/gp/projects#utm_source=plugin&utm_medium=promo-box&utm_campaign=wpseo-woo-i18n-promo',
+			)
+		);
+	}
 }
 
 
@@ -807,7 +827,6 @@ function yoast_woocommerce_seo_activate_license() {
 	}
 }
 
-
 if ( ! wp_installing() ) {
 	add_action( 'plugins_loaded', 'initialize_yoast_woocommerce_seo', 20 );
 
@@ -854,14 +873,20 @@ class WPSEO_WooCommerce_Wrappers {
 	 * @return mixed
 	 */
 	public static function admin_footer( $submit = true, $show_sidebar = true ) {
+		// By removing the action 'wpseo_admin_footer' we make sure the Yoast SEO i18n module isn't loaded.
+		remove_all_actions( 'wpseo_admin_footer' );
 
 		if ( method_exists( 'Yoast_Form', 'admin_footer' ) ) {
-			Yoast_Form::get_instance()->admin_footer( $submit, $show_sidebar );
-
-			return;
+			$admin_footer = Yoast_Form::get_instance()->admin_footer( $submit, $show_sidebar );
+		}
+		else {
+			$admin_footer = self::admin_pages()->admin_footer( $submit, $show_sidebar );
 		}
 
-		return self::admin_pages()->admin_footer( $submit, $show_sidebar );
+		// Load the i18n module for Woo SEO.
+		do_action( 'yoast_woo_seo_admin_footer' );
+
+		return $admin_footer;
 	}
 
 	/**
