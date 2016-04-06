@@ -20,7 +20,7 @@
 	function YoastWooCommercePlugin() {
 		YoastSEO.app.registerPlugin( 'YoastWooCommerce', { 'status': 'ready' } );
 
-		YoastSEO.app.registerTest( 'productTitle', this.productDescription, productDescriptionScore, 'YoastWooCommerce' );
+		YoastSEO.app.registerAssessment( 'productTitle', { getResult: this.productDescription.bind( this ) }, 'YoastWooCommerce' );
 
 		this.addCallback();
 
@@ -30,36 +30,6 @@
 
 		this.bindEvents();
 	}
-
-	/**
-	 * Scoring array for the product descriptions. Takes texts from the localize script in wpseo-commerce.php.
-	 * @type {{scoreArray: *[]}}
-	 */
-	var productDescriptionScore = {
-		scoreArray: [
-			{
-				max: 0,
-				score: 1,
-				text: wpseoWooL10n.woo_desc_none
-			},
-			{
-				min: 1,
-				max: 20,
-				score: 5,
-				text: wpseoWooL10n.woo_desc_short
-			},
-			{
-				min: 20,
-				max: 50,
-				score: 9,
-				text: wpseoWooL10n.woo_desc_good
-			},{
-				min: 50,
-				score: 5,
-				text: wpseoWooL10n.woo_desc_long
-			}
-		]
-	};
 
 	/**
 	 * Strip double spaces from text
@@ -95,15 +65,58 @@
 
 	/**
 	 * Tests the length of the productdescription.
-	 * @returns {Number}
+	 * @param {object} paper The paper to run this assessment on
+	 * @param {object} researcher The researcher used for the assessment
+	 * @param {object} i18n The i18n-object used for parsing translations
+	 * @returns {object} an assessmentresult with the score and formatted text.
 	 */
-	YoastWooCommercePlugin.prototype.productDescription = function(){
+	YoastWooCommercePlugin.prototype.productDescription = function( paper, researcher, i18n ) {
 		var productDescription = document.getElementById( 'excerpt' ).value;
 		if (typeof tinyMCE !== 'undefined' && tinyMCE.get( 'excerpt') !== null) {
 			productDescription = tinyMCE.get( 'excerpt').getContent();
 		}
+
 		productDescription = stripTags( productDescription );
-		return productDescription.split( ' ' ).length;
+		var result = this.scoreProductDescription( productDescription.split( ' ' ).length );
+		var assessmentResult = new YoastSEO.app.assessmentResult();
+		assessmentResult.setScore( result.score );
+		assessmentResult.setText( result.text );
+		return assessmentResult;
+	};
+
+	/**
+	 * Returns the score based on the lengt of the product description.
+	 * @param {number} length The length of the product description.
+	 * @returns {{score: number, text: *}} The result object with score and text.
+	 */
+	YoastWooCommercePlugin.prototype.scoreProductDescription = function( length ) {
+
+		if ( length === 0 ) {
+			return {
+				score: 1,
+				text: wpseoWooL10n.woo_desc_none
+			}
+		}
+
+		if ( length > 0 && length < 20 ) {
+			return {
+				score: 5,
+				text: wpseoWooL10n.woo_desc_short
+			}
+		}
+
+		if ( length >= 20 && length <= 50 ) {
+			return {
+				score: 9,
+				text: wpseoWooL10n.woo_desc_good
+			}
+		}
+		if ( length > 50 ) {
+			return {
+				score: 5,
+				text: wpseoWooL10n.woo_desc_long
+			}
+		}
 	};
 
 	/**
