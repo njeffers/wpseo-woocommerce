@@ -99,7 +99,7 @@
 			return {
 				score: 1,
 				text: wpseoWooL10n.woo_desc_none
-			}
+			};
 		}
 
 		if ( length > 0 && length < 20 ) {
