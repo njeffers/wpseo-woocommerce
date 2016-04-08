@@ -6,7 +6,7 @@ module.exports = {
 			report: "gzip"
 		},
 		files: {
-			"js/yoastseo-woo-plugin.min.js": [
+			"js/yoastseo-woo-plugin-311.min.js": [
 				"js/yoastseo-woo-plugin-311.js"
 			]
 		}
