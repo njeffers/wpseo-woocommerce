@@ -105,20 +105,20 @@
 			return {
 				score: 5,
 				text: wpseoWooL10n.woo_desc_short
-			}
+			};
 		}
 
 		if ( length >= 20 && length <= 50 ) {
 			return {
 				score: 9,
 				text: wpseoWooL10n.woo_desc_good
-			}
+			};
 		}
 		if ( length > 50 ) {
 			return {
 				score: 5,
 				text: wpseoWooL10n.woo_desc_long
-			}
+			};
 		}
 	};
 
