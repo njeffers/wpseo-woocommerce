@@ -10,7 +10,7 @@ if ( ! class_exists( 'Yoast_Product_WPSEO_WooCommerce' ) ) {
 		public function __construct() {
 			$file = plugin_basename( Yoast_WooCommerce_SEO::get_plugin_file() );
 			$slug = dirname( $file );
-			
+
 			parent::__construct(
 				'http://yoast.com/edd-sl-api',
 				'WooCommerce Yoast SEO',
