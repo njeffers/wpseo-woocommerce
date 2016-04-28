@@ -28,7 +28,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * @const string Version of the plugin.
 	 */
-	const VERSION = '3.2';
+	const VERSION = '3.2.1';
 
 	/**
 	 * @var object $option_instance Instance of the WooCommerce_SEO option management class
