@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Yoast WooCommerce SEO
- * Version:     3.2
+ * Version:     3.2.1
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
