@@ -891,13 +891,12 @@ class WPSEO_WooCommerce_Wrappers {
 	 */
 	public static function admin_footer( $submit = true, $show_sidebar = true ) {
 		if ( method_exists( 'Yoast_Form', 'admin_footer' ) ) {
-			$admin_footer = Yoast_Form::get_instance()->admin_footer( $submit, $show_sidebar );
-		}
-		else {
-			$admin_footer = self::admin_pages()->admin_footer( $submit, $show_sidebar );
+			Yoast_Form::get_instance()->admin_footer( $submit, $show_sidebar );
+
+			return;
 		}
 
-		return $admin_footer;
+		 return self::admin_pages()->admin_footer( $submit, $show_sidebar );
 	}
 
 	/**
