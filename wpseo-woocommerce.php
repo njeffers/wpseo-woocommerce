@@ -65,7 +65,9 @@ class Yoast_WooCommerce_SEO {
 	 * @since 1.0
 	 */
 	public function __construct() {
-		$this->register_i18n_promo_class();
+		if ( $this->is_woocommerce_page( filter_input( INPUT_GET, 'page' ) ) ) {
+			$this->register_i18n_promo_class();
+		}
 
 		// Initialize the options
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
@@ -656,6 +658,21 @@ class Yoast_WooCommerce_SEO {
 	}
 
 
+
+	/**
+	 * Checks if the current page is a woocommerce seo plugin page.
+	 *
+	 * @param string $page
+	 *
+	 * @return bool
+	 */
+	protected function is_woocommerce_page( $page ) {
+		$woo_pages = array( 'wpseo_woo' );
+
+		return in_array( $page, $woo_pages );
+	}
+
+
 	/********************** DEPRECATED METHODS **********************/
 
 	/**
@@ -726,7 +743,7 @@ class Yoast_WooCommerce_SEO {
 				'textdomain'     => 'yoast-woo-seo',
 				'project_slug'   => 'woocommerce-seo',
 				'plugin_name'    => 'Yoast WooCommerce SEO',
-				'hook'           => 'yoast_woo_seo_admin_footer',
+				'hook'           => 'wpseo_admin_promo-footer',
 				'glotpress_url'  => 'http://translate.yoast.com/gp/',
 				'glotpress_name' => 'Yoast Translate',
 				'glotpress_logo' => 'http://translate.yoast.com/gp-templates/images/Yoast_Translate.svg',
@@ -873,18 +890,12 @@ class WPSEO_WooCommerce_Wrappers {
 	 * @return mixed
 	 */
 	public static function admin_footer( $submit = true, $show_sidebar = true ) {
-		// By removing the action 'wpseo_admin_footer' we make sure the Yoast SEO i18n module isn't loaded.
-		remove_all_actions( 'wpseo_admin_footer' );
-
 		if ( method_exists( 'Yoast_Form', 'admin_footer' ) ) {
 			$admin_footer = Yoast_Form::get_instance()->admin_footer( $submit, $show_sidebar );
-		} 
+		}
 		else {
 			$admin_footer = self::admin_pages()->admin_footer( $submit, $show_sidebar );
 		}
-
-		// Load the i18n module for Woo SEO.
-		do_action( 'yoast_woo_seo_admin_footer' );
 
 		return $admin_footer;
 	}
