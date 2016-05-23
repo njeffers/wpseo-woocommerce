@@ -893,7 +893,7 @@ class WPSEO_WooCommerce_Wrappers {
 			return;
 		}
 
-		 return self::admin_pages()->admin_footer( $submit, $show_sidebar );
+		return self::admin_pages()->admin_footer( $submit, $show_sidebar );
 	}
 
 	/**
