@@ -694,7 +694,7 @@ class Yoast_WooCommerce_SEO {
 				'textdomain'     => 'yoast-woo-seo',
 				'project_slug'   => 'woocommerce-seo',
 				'plugin_name'    => 'Yoast WooCommerce SEO',
-				'hook'           => 'wpseo_admin_promo-footer',
+				'hook'           => 'wpseo_admin_promo_footer',
 				'glotpress_url'  => 'http://translate.yoast.com/gp/',
 				'glotpress_name' => 'Yoast Translate',
 				'glotpress_logo' => 'http://translate.yoast.com/gp-templates/images/Yoast_Translate.svg',
