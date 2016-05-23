@@ -760,7 +760,6 @@ class Yoast_WooCommerce_SEO {
 	public function twitter_enhancement() {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
 	}
-
 }
 
 
