@@ -64,7 +64,10 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function __construct() {
+	public function __construct() {
+		if ( $this->is_woocommerce_page( filter_input( INPUT_GET, 'page' ) ) ) {
+			$this->register_i18n_promo_class();
+		}
 
 		// Initialize the options
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
@@ -88,7 +91,6 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'admin_menu', array( $this, 'register_settings_page' ), 20 );
 			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
 			add_action( 'wpseo_licenses_forms', array( $this->license_manager, 'show_license_form' ) );
-
 
 			// Products tab columns
 			if ( $this->options['hide_columns'] === true ) {
@@ -294,8 +296,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function admin_panel() {
-
+	public function admin_panel() {
 		WPSEO_WooCommerce_Wrappers::admin_header( true, $this->option_instance->group_name, $this->short_name, false );
 
 		// @todo [JRF => whomever] change the form fields so they use the methods as defined in WPSEO_Admin_Pages
@@ -655,6 +656,65 @@ class Yoast_WooCommerce_SEO {
 		}
 	}
 
+	/**
+	 * Checks if the current page is a woocommerce seo plugin page.
+	 *
+	 * @param string $page
+	 *
+	 * @return bool
+	 */
+	protected function is_woocommerce_page( $page ) {
+		$woo_pages = array( 'wpseo_woo' );
+
+		return in_array( $page, $woo_pages );
+	}
+
+	/**
+	 * Enqueues the pluginscripts.
+	 */
+	public function enqueue_scripts() {
+		// Only do this on product pages.
+		if ( 'product' !== get_post_type( ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . '311' . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
+
+		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
+	}
+
+	/**
+	 * Register the promotion class for our GlotPress instance.
+	 *
+	 * @link https://github.com/Yoast/i18n-module
+	 */
+	protected function register_i18n_promo_class() {
+		new yoast_i18n(
+			array(
+				'textdomain'     => 'yoast-woo-seo',
+				'project_slug'   => 'woocommerce-seo',
+				'plugin_name'    => 'Yoast WooCommerce SEO',
+				'hook'           => 'wpseo_admin_promo_footer',
+				'glotpress_url'  => 'http://translate.yoast.com/gp/',
+				'glotpress_name' => 'Yoast Translate',
+				'glotpress_logo' => 'http://translate.yoast.com/gp-templates/images/Yoast_Translate.svg',
+				'register_url'   => 'http://translate.yoast.com/gp/projects#utm_source=plugin&utm_medium=promo-box&utm_campaign=wpseo-woo-i18n-promo',
+			)
+		);
+	}
+
+	/**
+	 * Localizes scripts for the wooplugin.
+	 * @return array
+	 */
+	private function localize_woo_script() {
+		return array(
+			'woo_desc_none'    => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
+			'woo_desc_short'   => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
+			'woo_desc_good'    => __( 'Your short description has a good length.', 'yoast-woo-seo' ),
+			'woo_desc_long'    => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
+		);
+	}
 
 	/********************** DEPRECATED METHODS **********************/
 
@@ -699,33 +759,6 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function twitter_enhancement() {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
-	}
-
-	/**
-	 * Enqueues the pluginscripts.
-	 */
-	public function enqueue_scripts() {
-		// Only do this on product pages.
-		if ( 'product' !== get_post_type( ) ) {
-			return;
-		}
-
-		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . '311' . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
-
-		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
-	}
-
-	/**
-	 * Localizes scripts for the wooplugin.
-	 * @return array
-	 */
-	private function localize_woo_script() {
-		return array(
-			'woo_desc_none'    => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
-			'woo_desc_short'   => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
-			'woo_desc_good'    => __( 'Your short description has a good length.', 'yoast-woo-seo' ),
-			'woo_desc_long'    => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
-		);
 	}
 }
 
@@ -807,7 +840,6 @@ function yoast_woocommerce_seo_activate_license() {
 	}
 }
 
-
 if ( ! wp_installing() ) {
 	add_action( 'plugins_loaded', 'initialize_yoast_woocommerce_seo', 20 );
 
@@ -854,7 +886,6 @@ class WPSEO_WooCommerce_Wrappers {
 	 * @return mixed
 	 */
 	public static function admin_footer( $submit = true, $show_sidebar = true ) {
-
 		if ( method_exists( 'Yoast_Form', 'admin_footer' ) ) {
 			Yoast_Form::get_instance()->admin_footer( $submit, $show_sidebar );
 
