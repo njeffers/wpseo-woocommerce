@@ -56,7 +56,7 @@ class WPSEO_WooCommerce_Beacon_Setting implements Yoast_HelpScout_Beacon_Setting
 	 *
 	 * @return array A list with configuration for the beacon
 	 */
-	public function get_config( $page ){
+	public function get_config( $page ) {
 		return array();
 	}
 }
