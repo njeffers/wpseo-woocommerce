@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Yoast WooCommerce SEO
+ * Plugin Name: Yoast SEO: WooCommerce
  * Version:     3.2
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
@@ -353,19 +353,19 @@ class Yoast_WooCommerce_SEO {
 		if ( $wpseo_options['breadcrumbs-enable'] === true ) {
 			echo '
 		<h2>' . __( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>
-		<p>' . sprintf( __( 'Both WooCommerce and Yoast SEO for WordPress have breadcrumbs functionality. The Yoast SEO breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sInternal Links settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ), '<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_internal-links' ) ) . '">', '</a>' ) . "</p>\n";
+		<p>' . sprintf( __( 'Both WooCommerce and Yoast SEO have breadcrumbs functionality. The Yoast SEO breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sInternal Links settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ), '<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_internal-links' ) ) . '">', '</a>' ) . "</p>\n";
 			$this->checkbox( 'breadcrumbs', __( 'Replace WooCommerce Breadcrumbs', 'yoast-woo-seo' ) );
 		}
 
 		echo '
 		<br class="clear"/>
 		<h2>' . __( 'Admin', 'yoast-woo-seo' ) . '</h2>
-		<p>' . __( 'Both WooCommerce and Yoast SEO for WordPress add columns to the product page, to remove all but the SEO score column from Yoast SEO on that page, check this box.', 'yoast-woo-seo' ) . "</p>\n";
+		<p>' . __( 'Both WooCommerce and Yoast SEO add columns to the product page, to remove all but the SEO score column from Yoast SEO on that page, check this box.', 'yoast-woo-seo' ) . "</p>\n";
 		$this->checkbox( 'hide_columns', __( 'Remove Yoast SEO columns', 'yoast-woo-seo' ) );
 
 		echo '
 		<br class="clear"/>
-		<p>' . __( 'Both WooCommerce and Yoast SEO for WordPress add metaboxes to the edit product page, if you want WooCommerce to be above Yoast SEO for WordPress, check the box.', 'yoast-woo-seo' ) . "</p>\n";
+		<p>' . __( 'Both WooCommerce and Yoast SEO add metaboxes to the edit product page, if you want WooCommerce to be above Yoast SEO, check the box.', 'yoast-woo-seo' ) . "</p>\n";
 		$this->checkbox( 'metabox_woo_top', __( 'Move WooCommerce up', 'yoast-woo-seo' ) );
 
 		echo '<br class="clear"/>';
@@ -790,7 +790,7 @@ class Yoast_WooCommerce_SEO {
  * @since 1.0.1
  */
 function yoast_wpseo_woocommerce_missing_error() {
-	echo '<div class="error"><p>' . sprintf( __( 'Please %sinstall &amp; activate Yoast SEO for WordPress%s and then enable its XML sitemap functionality to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ), '<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=wordpress+seo&plugin-search-input=Search+Plugins' ) ) . '">', '</a>' ) . '</p></div>';
+	echo '<div class="error"><p>' . sprintf( __( 'Please %sinstall &amp; activate Yoast SEO%s and then enable its XML sitemap functionality to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ), '<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=wordpress+seo&plugin-search-input=Search+Plugins' ) ) . '">', '</a>' ) . '</p></div>';
 }
 
 /**
@@ -808,7 +808,7 @@ function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
  * @since 1.0.1
  */
 function yoast_wpseo_woocommerce_upgrade_error() {
-	echo '<div class="error"><p>' . __( 'Please upgrade the Yoast SEO for WordPress plugin to the latest version to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ) . '</p></div>';
+	echo '<div class="error"><p>' . __( 'Please upgrade the Yoast SEO plugin to the latest version to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ) . '</p></div>';
 }
 
 
