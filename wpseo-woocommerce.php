@@ -205,24 +205,20 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		if ( class_exists( 'Yoast_Plugin_License_Manager_v2' ) ) {
-			$license_manager = new Yoast_Plugin_License_Manager_v2(
-				new Yoast_Product_WPSEO_WooCommerce_v2()
-			);
+			$license_manager = new Yoast_Plugin_License_Manager_v2( new Yoast_Product_WPSEO_WooCommerce_v2() );
 		}
 
 		if ( ! isset( $license_manager ) && class_exists( 'Yoast_Plugin_License_Manager' ) ) {
-			$license_manager = new Yoast_Plugin_License_Manager(
-				new Yoast_Product_WPSEO_WooCommerce()
-			);
+			$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
 		}
 
-		if ( isset( $license_manager ) ) {
-			$license_manager->setup_hooks();
-
-			return $license_manager;
+		if ( ! isset( $license_manager ) ) {
+			return null;
 		}
 
-		return null;
+		$license_manager->setup_hooks();
+
+		return $license_manager;
 	}
 
 	/**
@@ -856,13 +852,14 @@ if ( ! function_exists( 'wp_installing' ) ) {
 function yoast_woocommerce_seo_activate_license() {
 	if ( class_exists( 'Yoast_Plugin_License_Manager_v2' ) ) {
 		$license_manager = new Yoast_Plugin_License_Manager_v2( new Yoast_Product_WPSEO_WooCommerce_v2() );
-		$license_manager->activate_license();
-
-		return;
 	}
 
-	if ( class_exists( 'Yoast_Plugin_License_Manager' ) ) {
+	if ( ! isset( $license_manager ) && class_exists( 'Yoast_Plugin_License_Manager' ) ) {
 		$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
+	}
+
+	if ( isset ($license_manager ) ) {
+		// Activate license.
 		$license_manager->activate_license();
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-if ( ! class_exists( 'Yoast_Product_WPSEO_WooCommerce' ) ) {
+if ( ! class_exists( 'Yoast_Product_WPSEO_WooCommerce', false ) && class_exists( 'Yoast_Product' ) ) {
 
 	/**
 	 * Class Yoast_Product_WPSEO_WooCommerce
