@@ -134,6 +134,7 @@ class Yoast_WooCommerce_SEO {
 		}
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		// Only initialise beacon when the License Manager is present.
 		if ( $this->license_manager ) {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
 		}
