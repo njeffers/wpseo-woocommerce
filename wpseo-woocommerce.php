@@ -135,7 +135,9 @@ class Yoast_WooCommerce_SEO {
 		}
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		add_action( 'admin_init', array( $this, 'init_beacon' ) );
+		if ( $this->license_manager ) {
+			add_action( 'admin_init', array( $this, 'init_beacon' ) );
+		}
 	}
 
 
@@ -204,18 +206,11 @@ class Yoast_WooCommerce_SEO {
 			return null;
 		}
 
-		if ( class_exists( 'Yoast_Plugin_License_Manager_v2' ) ) {
-			$license_manager = new Yoast_Plugin_License_Manager_v2( new Yoast_Product_WPSEO_WooCommerce_v2() );
-		}
-
-		if ( ! isset( $license_manager ) && class_exists( 'Yoast_Plugin_License_Manager' ) ) {
-			$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
-		}
-
-		if ( ! isset( $license_manager ) ) {
+		if ( ! class_exists( 'Yoast_Plugin_License_Manager' ) ) {
 			return null;
 		}
 
+		$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
 		$license_manager->setup_hooks();
 
 		return $license_manager;
@@ -850,18 +845,13 @@ if ( ! function_exists( 'wp_installing' ) ) {
  * Instantiate the plugin license manager for the current plugin and activate it's license.
  */
 function yoast_woocommerce_seo_activate_license() {
-	if ( class_exists( 'Yoast_Plugin_License_Manager_v2' ) ) {
-		$license_manager = new Yoast_Plugin_License_Manager_v2( new Yoast_Product_WPSEO_WooCommerce_v2() );
+	if ( ! class_exists( 'Yoast_Plugin_License_Manager' ) ) {
+		return;
 	}
 
-	if ( ! isset( $license_manager ) && class_exists( 'Yoast_Plugin_License_Manager' ) ) {
-		$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
-	}
-
-	if ( isset ($license_manager ) ) {
-		// Activate license.
-		$license_manager->activate_license();
-	}
+	// Activate license.
+	$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
+	$license_manager->activate_license();
 }
 
 if ( ! wp_installing() ) {
