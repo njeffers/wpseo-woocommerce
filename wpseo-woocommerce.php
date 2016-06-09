@@ -134,7 +134,7 @@ class Yoast_WooCommerce_SEO {
 		}
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		// Only initialise beacon when the License Manager is present.
+		// Only initialize beacon when the License Manager is present.
 		if ( $this->license_manager ) {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
 		}
@@ -342,21 +342,32 @@ class Yoast_WooCommerce_SEO {
 
 		$wpseo_options = WPSEO_Options::get_all();
 		if ( $wpseo_options['breadcrumbs-enable'] === true ) {
-			echo '
-		<h2>' . __( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>
-		<p>' . sprintf( __( 'Both WooCommerce and Yoast SEO have breadcrumbs functionality. The Yoast SEO breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sInternal Links settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ), '<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_internal-links' ) ) . '">', '</a>' ) . "</p>\n";
+			echo '<h2>' . __( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
+			echo '<p>' . sprintf(
+					/* translators: %1$s resolves to interal links options page, %2$s resolves to closing link tag, %3$s resolves to Yoast SEO */
+					__( 'Both WooCommerce and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sInternal Links settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_internal-links' ) ) . '">',
+					'</a>',
+					'Yoast SEO'
+				) . "</p>\n";
 			$this->checkbox( 'breadcrumbs', __( 'Replace WooCommerce Breadcrumbs', 'yoast-woo-seo' ) );
 		}
 
-		echo '
-		<br class="clear"/>
-		<h2>' . __( 'Admin', 'yoast-woo-seo' ) . '</h2>
-		<p>' . __( 'Both WooCommerce and Yoast SEO add columns to the product page, to remove all but the SEO score column from Yoast SEO on that page, check this box.', 'yoast-woo-seo' ) . "</p>\n";
+		echo '<br class="clear"/>';
+		echo '<h2>' . __( 'Admin', 'yoast-woo-seo' ) . '</h2>';
+		echo '<p>' . sprintf(
+				/* translators: %1$s resolves to Yoast SEO */
+				__( 'Both WooCommerce and %1$s add columns to the product page, to remove all but the SEO score column from %1$s on that page, check this box.', 'yoast-woo-seo' ),
+				'Yoast SEO'
+			) . "</p>\n";
 		$this->checkbox( 'hide_columns', __( 'Remove Yoast SEO columns', 'yoast-woo-seo' ) );
 
-		echo '
-		<br class="clear"/>
-		<p>' . __( 'Both WooCommerce and Yoast SEO add metaboxes to the edit product page, if you want WooCommerce to be above Yoast SEO, check the box.', 'yoast-woo-seo' ) . "</p>\n";
+		echo '<br class="clear"/>';
+		echo '<p>' . sprintf(
+				/* translators: %1$s resolves to Yoast SEO */
+				__( 'Both WooCommerce and %1$s add metaboxes to the edit product page, if you want WooCommerce to be above %1$s, check the box.', 'yoast-woo-seo' ),
+				'Yoast SEO'
+			) . "</p>\n";
 		$this->checkbox( 'metabox_woo_top', __( 'Move WooCommerce up', 'yoast-woo-seo' ) );
 
 		echo '<br class="clear"/>';
@@ -779,7 +790,13 @@ class Yoast_WooCommerce_SEO {
  * @since 1.0.1
  */
 function yoast_wpseo_woocommerce_missing_error() {
-	echo '<div class="error"><p>' . sprintf( __( 'Please %sinstall &amp; activate Yoast SEO%s and then enable its XML sitemap functionality to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ), '<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=wordpress+seo&plugin-search-input=Search+Plugins' ) ) . '">', '</a>' ) . '</p></div>';
+	echo '<div class="error"><p>' . sprintf(
+			/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO */
+			__( 'Please %1$sinstall &amp; activate %3$s%2$s and then enable its XML sitemap functionality to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ),
+			'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=yoast+seo&plugin-search-input=Search+Plugins' ) ) . '">',
+			'</a>',
+			'Yoast SEO'
+		) . '</p></div>';
 }
 
 /**
@@ -797,7 +814,11 @@ function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
  * @since 1.0.1
  */
 function yoast_wpseo_woocommerce_upgrade_error() {
-	echo '<div class="error"><p>' . __( 'Please upgrade the Yoast SEO plugin to the latest version to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ) . '</p></div>';
+	echo '<div class="error"><p>' . sprintf(
+			/* translators: %1$s resolves to Yoast SEO */
+			__( 'Please upgrade the %1$s plugin to the latest version to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ),
+			'Yoast SEO'
+		) . '</p></div>';
 }
 
 
