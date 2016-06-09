@@ -104,8 +104,7 @@ class Yoast_WooCommerce_SEO {
 			if ( $this->options['metabox_woo_top'] === true ) {
 				add_action( 'admin_footer', array( $this, 'footer_js' ) );
 			}
-		}
-		else {
+		} else {
 			if ( class_exists( 'WooCommerce', false ) ) {
 				$wpseo_options = WPSEO_Options::get_all();
 
@@ -599,8 +598,7 @@ class Yoast_WooCommerce_SEO {
 
 					if ( $product->post->post_excerpt != '' ) {
 						$metadesc = $product->post->post_excerpt;
-					}
-					elseif ( $product->post->post_content != '' ) {
+					} elseif ( $product->post->post_content != '' ) {
 						$metadesc = $product->post->post_content;
 					}
 
@@ -649,8 +647,7 @@ class Yoast_WooCommerce_SEO {
 
 		if ( $post_type === 'product' ) {
 			return false;
-		}
-		else {
+		} else {
 			return $link;
 		}
 	}
@@ -816,16 +813,13 @@ function initialize_yoast_woocommerce_seo() {
 
 	if ( ! version_compare( $wp_version, '3.5', '>=' ) ) {
 		add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_wordpress_upgrade_error' );
-	}
-	else if ( defined( 'WPSEO_VERSION' ) ) {
+	} else if ( defined( 'WPSEO_VERSION' ) ) {
 		if ( version_compare( WPSEO_VERSION, '1.5', '>=' ) ) {
 			$yoast_woo_seo = new Yoast_WooCommerce_SEO();
-		}
-		else {
+		} else {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_upgrade_error' );
 		}
-	}
-	else {
+	} else {
 		add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_missing_error' );
 	}
 }
