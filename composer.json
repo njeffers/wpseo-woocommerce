@@ -31,5 +31,8 @@
         "post-autoload-dump": [
             "xrstf\\Composer52\\Generator::onPostInstallCmd"
         ]
+    },
+    "require-dev": {
+        "yoast/yoastcs": "^0.3.0"
     }
 }
