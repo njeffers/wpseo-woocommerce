@@ -660,11 +660,19 @@ class Yoast_WooCommerce_SEO {
 	 */
 	function xml_post_type_archive_link( $link, $post_type ) {
 
-		if ( $post_type === 'product' ) {
-			return false;
-		} else {
+		if ( 'product' !== $post_type ) {
 			return $link;
 		}
+
+		if ( function_exists( 'wc_get_page_id' ) ) {
+			$shop_page_id = wc_get_page_id( 'shop' );
+			$home_page_id = (int) get_option( 'page_on_front' );
+			if ( $home_page_id === $shop_page_id ) {
+				return false;
+			}
+		}
+
+		return $link;
 	}
 
 	public function init_beacon() {
