@@ -29,6 +29,9 @@ You can find the FAQ [online here](https://yoast.com/wordpress/plugins/yoast-woo
 Changelog
 =========
 
+### 3.5
+* Compatibilty with YoastSEO 3.5
+
 ### 3.2: April 20th, 2016
 
 * Bug fixes
