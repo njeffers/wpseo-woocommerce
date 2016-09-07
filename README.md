@@ -2,7 +2,8 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.3<br>
 Tested up to: 4.5<br>
-Stable tag: 3.2<br>
+Stable tag: 3.4<br>
+Depends: wordpress-seo
 
 This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
 
@@ -24,13 +25,32 @@ Installation
 Frequently Asked Questions
 --------------------------
 
-You can find the FAQ [online here](https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/faq/).
+You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
 =========
 
 ### 3.5
 * Compatibilty with YoastSEO 3.5
+
+### 3.4: July 19th, 2016
+
+* Changes
+	* Updated translations.
+
+### 3.3: June 14th, 2016
+
+* Enhancements
+	* Adds the Yoast i18n module to the Yoast SEO WooCommerce settings page, which informs users the plugin isn't available in their language and what they can do about it.
+
+* Bugfixes
+    * Fixes a bug where the support beacon for Yoast SEO WooCommerce was added to all Yoast SEO settings pages.
+    * Fixes a bug where updates were not working reliably when multiple paid Yoast plugins were active.
+
+### 3.2.1: April 28th, 2016
+
+* Bug fixes
+	* Fixes a bug where the rel=next and rel=prev links were not displayed on shop archive pages 2 and up.
 
 ### 3.2: April 20th, 2016
 

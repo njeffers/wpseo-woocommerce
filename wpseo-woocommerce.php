@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     3.2
+ * Version:     3.4
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -10,7 +10,7 @@
  * Text Domain: yoast-woo-seo
  * Domain Path: /languages/
  *
- * Copyright 2014 Yoast BV (email: supportyoast.com)
+ * Copyright 2016 Yoast BV (email: supportyoast.com)
  */
 
 if ( ! function_exists( 'add_filter' ) ) {
@@ -28,7 +28,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * @const string Version of the plugin.
 	 */
-	const VERSION = '3.2';
+	const VERSION = '3.4';
 
 	/**
 	 * @var object $option_instance Instance of the WooCommerce_SEO option management class
@@ -660,18 +660,26 @@ class Yoast_WooCommerce_SEO {
 	 */
 	function xml_post_type_archive_link( $link, $post_type ) {
 
-		if ( $post_type === 'product' ) {
-			return false;
-		} else {
+		if ( 'product' !== $post_type ) {
 			return $link;
 		}
+
+		if ( function_exists( 'wc_get_page_id' ) ) {
+			$shop_page_id = wc_get_page_id( 'shop' );
+			$home_page_id = (int) get_option( 'page_on_front' );
+			if ( $home_page_id === $shop_page_id ) {
+				return false;
+			}
+		}
+
+		return $link;
 	}
 
 	public function init_beacon() {
 		$query_var = ( $page = filter_input( INPUT_GET, 'page' ) ) ? $page : '';
 
 		// Only add the helpscout beacon on Yoast SEO pages.
-		if ( substr( $query_var, 0, 5 ) === 'wpseo' ) {
+		if ( $query_var === 'wpseo_woo' ) {
 			$beacon = yoast_get_helpscout_beacon( $query_var );
 			$beacon->add_setting( new WPSEO_WooCommerce_Beacon_Setting() );
 			$beacon->register_hooks();

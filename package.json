@@ -1,6 +1,7 @@
 {
   "name": "wpseo-woocommerce",
   "description": "Development files for the WordPress WooCommerce SEO plugin",
+  "license": "GPL-2.0+",
   "plugin": {
     "glotpress": "https://translate.yoast.com",
     "slug": "woocommerce-seo",
@@ -16,7 +17,7 @@
     "url": "https://github.com/Yoast/wpseo-woocommerce"
   },
   "dependencies": {
-    "yoastseo": "github:yoast/YoastSEO.js"
+    "yoastseo": "github:yoast/YoastSEO.js#master"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
