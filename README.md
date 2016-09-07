@@ -30,6 +30,9 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
+### 3.5
+* Compatibilty with YoastSEO 3.5
+
 ### 3.4: July 19th, 2016
 
 * Changes
