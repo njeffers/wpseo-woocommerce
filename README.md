@@ -30,6 +30,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
+### 4.0: December 13th, 2016
+
+* Compatibility with Yoast SEO 4.0
+
 ### 3.9: November 29th
 
 * Compatibility with Yoast SEO 3.9
