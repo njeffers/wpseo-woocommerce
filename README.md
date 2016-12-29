@@ -5,12 +5,10 @@ Tested up to: 4.7<br>
 Stable tag: 3.9<br>
 Depends: wordpress-seo
 
-This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
-
 Description
 -----------
 
-This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
+This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins.
 
 Installation
 ------------
