@@ -28,11 +28,15 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
-### 3.9: November 29th
+### 4.1: January, 2017.
+
+* Compatibility with Yoast SEO 4.1
+
+### 3.9: November 29th, 2016
 
 * Compatibility with Yoast SEO 3.9
 
-### 3.8: November 8th
+### 3.8: November 8th, 2016
 
 * Compatibility with Yoast SEO 3.8
 
