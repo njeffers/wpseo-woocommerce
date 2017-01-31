@@ -116,7 +116,10 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
 				add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
 				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
-				add_action( 'wpseo_add_opengraph_images', array( $this, 'set_opengraph_image' ) );
+
+				if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
+					add_action( 'wpseo_add_opengraph_images', array( $this, 'set_opengraph_image' ) );
+				}
 
 				add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
 				add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'xml_sitemap_taxonomies' ), 10, 2 );
