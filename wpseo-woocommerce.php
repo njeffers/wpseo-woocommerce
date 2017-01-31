@@ -135,7 +135,7 @@ class Yoast_WooCommerce_SEO {
 					add_filter( 'wpseo_breadcrumb_links', array( $this, 'add_attribute_to_breadcrumbs' ) );
 				}
 			}
-		} // End of else statement.
+		} // End if().
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Only initialize beacon when the License Manager is present.
