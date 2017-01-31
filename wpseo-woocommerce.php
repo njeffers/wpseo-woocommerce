@@ -116,6 +116,7 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
 				add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
 				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
+				add_action( 'wpseo_add_opengraph_images', array( $this, 'set_opengraph_image' ) );
 
 				add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
 				add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'xml_sitemap_taxonomies' ), 10, 2 );
@@ -495,12 +496,13 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Adds the other product images to the OpenGraph output
+	 * Adds the opengraph images.
 	 *
-	 * @since 1.0
+	 * @since 4.3
+	 *
+	 * @param WPSEO_OpenGraph_Image $opengraph_image
 	 */
-	public function og_enhancement() {
-		global $wpseo_og;
+	public function set_opengraph_image( WPSEO_OpenGraph_Image $opengraph_image ) {
 
 		if ( ! function_exists( 'is_product_category' ) || is_product_category() ) {
 			global $wp_query;
@@ -508,16 +510,12 @@ class Yoast_WooCommerce_SEO {
 			$thumbnail_id = get_woocommerce_term_meta( $cat->term_id, 'thumbnail_id', true );
 			$img_url      = wp_get_attachment_url( $thumbnail_id );
 			if ( $img_url ) {
-				$wpseo_og->image_output( $img_url );
+				$opengraph_image->add_image( $img_url );
 			}
 		}
 
-		if ( ! is_singular( 'product' ) || ! function_exists( 'get_product' ) ) {
-			return;
-		}
-
-		$product = get_product( get_the_ID() );
-		if ( ! is_object( $product ) ) {
+		$product = $this->get_product();
+		if ( ! is_object( $product )  ) {
 			return;
 		}
 
@@ -526,8 +524,20 @@ class Yoast_WooCommerce_SEO {
 		if ( is_array( $img_ids ) && $img_ids !== array() ) {
 			foreach ( $img_ids as $img_id ) {
 				$img_url = wp_get_attachment_url( $img_id );
-				$wpseo_og->image_output( $img_url );
+				$opengraph_image->add_image( $img_url );
 			}
+		}
+	}
+
+	/**
+	 * Adds the other product images to the OpenGraph output
+	 *
+	 * @since 1.0
+	 */
+	public function og_enhancement() {
+		$product = $this->get_product();
+		if ( ! is_object( $product ) ) {
+			return;
 		}
 
 		if ( $this->options['schema_brand'] !== '' ) {
@@ -551,6 +561,23 @@ class Yoast_WooCommerce_SEO {
 		if ( $product->is_in_stock() ) {
 			echo '<meta property="product:availability" content="instock"/>' . "\n";
 		}
+	}
+
+	/**
+	 * Returns the product object when the current page is the product page.
+	 *
+	 * @since 4.3
+	 *
+	 * @return null|WC_Product
+	 */
+	private function get_product() {
+		if ( ! is_singular( 'product' ) || ! function_exists( 'get_product' ) ) {
+			return null;
+		}
+
+		$product = wc_get_product( get_the_ID() );
+
+		return $product;
 	}
 
 	/**
