@@ -28,6 +28,11 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
+### 4.2.1: February 3rd, 2017
+
+* Bugfixes
+	* Fixes "Fatal error: Class 'yoast_i18n' not found". 
+
 ### 4.2: January 31st, 2017
 
 * Compatibility with Yoast SEO 4.2
