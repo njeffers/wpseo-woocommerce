@@ -28,6 +28,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
+### 4.3: February , 2017
+* Bugfixes
+    * Fixes a bug where duplicate opengraph image tags were added to product categories.
+
 ### 4.2.1: February 3rd, 2017
 
 * Bugfixes
