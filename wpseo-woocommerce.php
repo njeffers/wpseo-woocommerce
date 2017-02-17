@@ -188,7 +188,9 @@ class Yoast_WooCommerce_SEO {
 				$term = get_term( (int) $att, array_shift( $att_keys ) );
 
 				if ( is_object( $term ) ) {
-					$crumbs[] = array( 'term' => $term );
+					$crumbs[] = array(
+						'term' => $term,
+					);
 				}
 			}
 		}
