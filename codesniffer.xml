@@ -29,6 +29,10 @@
 
 		<!-- Turned off because of known & reported bugs in the Sniffs, should be turned on once the bugs are fixed. -->
 		<exclude name="WordPress.VIP.ValidatedSanitizedInput"/>
+
+		<!-- Do not demand class name change. -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
 	</rule>
 	<rule ref="WordPress.PHP.DiscouragedFunctions"/>
+
 </ruleset>
