@@ -524,7 +524,7 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		$img_ids = $product->get_gallery_attachment_ids();
+		$img_ids = $this->get_image_ids( $product );
 
 		if ( is_array( $img_ids ) && $img_ids !== array() ) {
 			foreach ( $img_ids as $img_id ) {
@@ -627,36 +627,42 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * If metadesc is empty check which value we should use
+	 * Returns the meta description. It checks which value should be used when the given meta description is empty.
 	 *
-	 * On empty metadesc it will check for post_excerpt, otherwise it will use the full product description. If all empty
-	 * just return value $metadesc
+	 * When the meta description it will use the short_description if that one is set. Otherwise it will use the full
+	 * product description. If everything is empty, it will return an empty string.
 	 *
-	 * @param string $metadesc
+	 * @param string $meta_description The meta description to check.
 	 *
 	 * @return string
 	 */
-	public function metadesc( $metadesc ) {
+	public function metadesc( $meta_description ) {
 
-		if ( $metadesc == '' ) {
-			if ( is_singular( 'product' ) && function_exists( 'get_product' ) ) {
-				$product = get_product( get_the_ID() );
-				if ( is_object( $product ) ) {
+		if ( $meta_description !== '' ) {
+			return $meta_description;
+		}
 
-					if ( $product->post->post_excerpt != '' ) {
-						$metadesc = $product->post->post_excerpt;
-					} elseif ( $product->post->post_content != '' ) {
-						$metadesc = $product->post->post_content;
-					}
+		if ( ! is_singular( 'product' ) ) {
+			return '';
+		}
 
-					if ( ! empty( $metadesc ) ) {
-						$metadesc = wp_html_excerpt( $metadesc, 156 );
-					}
-				}
+		$product_id = get_the_id();
+		$product = $this->get_product_for_id( $product_id );
+
+		if ( is_object( $product ) ) {
+			if ( $product->get_short_description() !== '' ) {
+				$meta_description = $product->get_short_description();
+			}
+			elseif ( $product->get_description() !== '' ) {
+				$meta_description = $product->get_description();
+			}
+
+			if ( ! empty( $meta_description ) ) {
+				return wp_html_excerpt( $meta_description, 156 );
 			}
 		}
 
-		return $metadesc;
+		return '';
 	}
 
 	/**
@@ -764,6 +770,45 @@ class Yoast_WooCommerce_SEO {
 				'register_url'   => 'http://translate.yoast.com/gp/projects#utm_source=plugin&utm_medium=promo-box&utm_campaign=wpseo-woo-i18n-promo',
 			)
 		);
+	}
+
+	/**
+	 * Returns the set image ids for the given product.
+	 *
+	 * @since 4.9
+	 *
+	 * @param WC_Product $product The product to get the image ids for.
+	 *
+	 * @return array
+	 */
+	protected function get_image_ids( $product ) {
+		if ( method_exists( $product, 'get_gallery_image_ids' ) ) {
+			return $product->get_gallery_image_ids();
+		}
+
+		// Backwards compatibility.
+		return $product->get_gallery_attachment_ids();
+	}
+
+	/**
+	 * Returns the product for given product_id
+	 *
+	 * @since 4.9
+	 *
+	 * @param integer $product_id The id to get the product for.
+	 *
+	 * @return null|WC_Product
+	 */
+	protected function get_product_for_id( $product_id ) {
+		if ( function_exists( 'wc_get_product' ) ) {
+			return wc_get_product( $product_id );
+		}
+
+		if ( function_exists( 'get_product' ) ) {
+			return get_product( $product_id );
+		}
+
+		return null;
 	}
 
 	/**
