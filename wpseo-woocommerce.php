@@ -650,11 +650,13 @@ class Yoast_WooCommerce_SEO {
 		$product = $this->get_product_for_id( $product_id );
 
 		if ( is_object( $product ) ) {
-			if ( $product->get_short_description() !== '' ) {
-				$meta_description = $product->get_short_description();
+			$short_description = $this->get_short_product_description( $product );
+			$long_description = $this->get_product_description( $product );
+			if ( $short_description !== '' ) {
+				$meta_description = $short_description;
 			}
-			elseif ( $product->get_description() !== '' ) {
-				$meta_description = $product->get_description();
+			elseif ( $long_description !== '' ) {
+				$meta_description = $long_description;
 			}
 
 			if ( ! empty( $meta_description ) ) {
@@ -663,6 +665,22 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
+	 * the post attribute.
+	 *
+	 * @param WC_Product $product The product.
+	 *
+	 * @return string
+	 */
+	protected function get_short_description( $product ) {
+		if (  method_exists( $product, 'get_short_description' ) ) {
+			return $product->get_short_description() ;
+		}
+
+		return $product->post->post_excerpt;
 	}
 
 	/**
@@ -809,6 +827,42 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
+	 * the post attribute.
+	 *
+	 * @since 4.9
+	 *
+	 * @param WC_Product $product The product.
+	 *
+	 * @return string
+	 */
+	protected function get_short_product_description( $product ) {
+		if (  method_exists( $product, 'get_short_description' ) ) {
+			return $product->get_short_description() ;
+		}
+
+		return $product->post->post_excerpt;
+	}
+
+	/**
+	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
+	 * the post attribute.
+	 *
+	 * @since 4.9
+	 *
+	 * @param WC_Product $product The product.
+	 *
+	 * @return string
+	 */
+	protected function get_product_description( $product ) {
+		if (  method_exists( $product, 'get_description' ) ) {
+			return $product->get_description() ;
+		}
+
+		return $product->post->post_content;
 	}
 
 	/**
