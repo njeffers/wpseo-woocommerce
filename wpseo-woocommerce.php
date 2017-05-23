@@ -429,7 +429,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return mixed
 	 */
 	function column_heading( $columns ) {
-		unset( $columns['wpseo-title'], $columns['wpseo-metadesc'], $columns['wpseo-focuskw'] );
+		unset( $columns['wpseo-title'], $columns['wpseo-metadesc'], $columns['wpseo-focuskw'], $columns['wpseo-score'], $columns['wpseo-score-readability'] );
 
 		return $columns;
 	}
