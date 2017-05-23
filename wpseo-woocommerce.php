@@ -138,10 +138,33 @@ class Yoast_WooCommerce_SEO {
 		} // End if().
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		// Make sure the primary category will be used in the permalink.
+		add_filter( 'wc_product_post_type_link_product_cat', array( $this, 'add_primary_category_permalink' ), 10, 3 );
+
 		// Only initialize beacon when the License Manager is present.
 		if ( $this->license_manager ) {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
 		}
+	}
+
+	/**
+	 * Makes sure the primary category is used in the permalink.
+	 *
+	 * @param WP_Term   $term  The first found term belonging to the post.
+	 * @param WP_Term[] $terms Array with all the terms belonging to the post.
+	 * @param WP_Post   $post  The current open post.
+	 *
+	 * @return WP_Term
+	 */
+	public function add_primary_category_permalink( $term, $terms, $post ) {
+		$primary_term    = new WPSEO_Primary_Term( 'product_cat', $post->ID );
+		$primary_term_id = $primary_term->get_primary_term();
+
+		if ( $primary_term_id ) {
+			return get_term( $primary_term_id, 'product_cat' );
+		}
+
+		return $term;
 	}
 
 
