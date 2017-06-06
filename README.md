@@ -27,6 +27,11 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 4.9: June 7th, 2017
+* Adds a filter to set the primary category in the permalink.
+* Adds fallbacks for several deprecated warnings.
+* Fixes a bug where not all Yoast SEO columns were hidden when the columns output by Yoast were removed.
+
 ### 4.8: May 23rd, 2017
 * Compatibility with Yoast SEO 4.8
 
