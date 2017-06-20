@@ -27,6 +27,9 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 5.0: June 27th, 2017
+* Compatibility with Yoast SEO 5.0
+
 ### 4.9: June 7th, 2017
 * Adds a filter to set the primary category in the permalink.
 * Adds fallbacks for several deprecated warnings.
