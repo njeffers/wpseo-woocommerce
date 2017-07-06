@@ -17,7 +17,7 @@
     "url": "https://github.com/Yoast/wpseo-woocommerce"
   },
   "dependencies": {
-    "yoastseo": "github:yoast/YoastSEO.js#master"
+    "yoastseo": "github:yoast/YoastSEO.js#1.18.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
