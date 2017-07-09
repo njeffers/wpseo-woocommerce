@@ -116,6 +116,7 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
 				add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
 				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
+				add_action( 'wpseo_register_extra_replacements', array( $this, 'register_replacements' ) );
 
 				if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
 					add_action( 'wpseo_add_opengraph_images', array( $this, 'set_opengraph_image' ) );
@@ -673,7 +674,7 @@ class Yoast_WooCommerce_SEO {
 		$product = $this->get_product_for_id( $product_id );
 
 		if ( is_object( $product ) ) {
-			$short_description = $this->get_short_product_description( $product );
+			$short_description = $this->get_product_short_description( $product );
 			$long_description = $this->get_product_description( $product );
 			if ( $short_description !== '' ) {
 				$meta_description = $short_description;
@@ -698,7 +699,11 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return string
 	 */
-	protected function get_short_description( $product ) {
+	protected function get_product_short_description( $product = null ) {
+	    if ( is_null( $product ) ) {
+	        $product = $this->get_product();
+        }
+
 		if (  method_exists( $product, 'get_short_description' ) ) {
 			return $product->get_short_description() ;
 		}
@@ -794,6 +799,16 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Registers variable replacements for WooCommerce products
+	 */
+	public function register_replacements() {
+		wpseo_register_var_replacement( 'wc_price', array( $this, 'get_product_price' ), 'basic', 'The product\'s price.' );
+		wpseo_register_var_replacement( 'wc_sku', array( $this, 'get_product_sku' ), 'basic', 'The product\'s SKU.' );
+		wpseo_register_var_replacement( 'wc_shortdesc', array( $this, 'get_product_short_desc' ), 'basic', 'The product\'s short description.' );
+		wpseo_register_var_replacement( 'wc_brand', array( $this, 'get_product_brand' ), 'basic', 'The product\'s brand.' );
+	}
+
+	/**
 	 * Register the promotion class for our GlotPress instance.
 	 *
 	 * @link https://github.com/Yoast/i18n-module
@@ -862,30 +877,75 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return string
 	 */
-	protected function get_short_product_description( $product ) {
-		if (  method_exists( $product, 'get_short_description' ) ) {
-			return $product->get_short_description() ;
-		}
-
-		return $product->post->post_excerpt;
-	}
-
-	/**
-	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
-	 * the post attribute.
-	 *
-	 * @since 4.9
-	 *
-	 * @param WC_Product $product The product.
-	 *
-	 * @return string
-	 */
 	protected function get_product_description( $product ) {
 		if (  method_exists( $product, 'get_description' ) ) {
 			return $product->get_description() ;
 		}
 
 		return $product->post->post_content;
+	}
+
+	/**
+	 * Retrieves the product price
+	 *
+	 * @since 5.0
+	 *
+	 * @return string
+	 */
+	public function get_product_price() {
+		$product = $this->get_product();
+		if ( ! is_object( $product ) ) {
+			return '';
+		}
+
+		if (  method_exists( $product, 'get_price' ) ) {
+			return get_woocommerce_currency_symbol() . $product->get_price() ;
+		}
+
+		return '';
+	}
+
+	/**
+	 * Retrieves the product SKU
+	 *
+	 * @since 5.0
+	 *
+	 * @return string
+	 */
+	public function get_product_sku() {
+		$product = $this->get_product();
+		if ( ! is_object( $product ) ) {
+			return '';
+		}
+
+		if (  method_exists( $product, 'get_sku' ) ) {
+			return $product->get_sku();
+		}
+
+		return '';
+	}
+
+	/**
+	 * Retrieves the product brand
+	 *
+	 * @since 5.0
+	 *
+	 * @return string
+	 */
+	public function get_product_brand() {
+		$product = $this->get_product();
+		if ( ! is_object( $product ) ) {
+			return '';
+		}
+
+		if ( taxonomy_exists('product_brand' ) ) {
+            $terms = wp_get_post_terms( $product->get_id(), 'product_brand' );
+			if ( is_array( $terms ) ) {
+				return $terms[0]->name;
+            }
+        }
+
+		return '';
 	}
 
 	/**
