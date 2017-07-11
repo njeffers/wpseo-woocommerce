@@ -687,7 +687,8 @@ class Yoast_WooCommerce_SEO {
 			$long_description  = $this->get_product_description( $product );
 			if ( $short_description !== '' ) {
 				$meta_description = $short_description;
-			} elseif ( $long_description !== '' ) {
+			}
+			elseif ( $long_description !== '' ) {
 				$meta_description = $long_description;
 			}
 
@@ -925,9 +926,10 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return string
 	 */
-	public function get_product_var_price() { $product = $this->get_product() ;
-		if (  ! is_object( $product ) ) {
-			return '' ;
+	public function get_product_var_price() {
+		$product = $this->get_product();
+		if ( ! is_object( $product ) ) {
+			return '';
 		}
 
 		if ( method_exists( $product, 'get_price' ) ) {
