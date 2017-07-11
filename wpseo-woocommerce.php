@@ -920,7 +920,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		if ( method_exists( $product, 'get_price' ) ) {
-			return get_woocommerce_currency_symbol() . $product->get_price();
+			return strip_tags( wc_price( $product->get_price() ) );
 		}
 
 		return '';
