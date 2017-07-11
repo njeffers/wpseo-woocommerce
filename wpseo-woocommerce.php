@@ -820,28 +820,28 @@ class Yoast_WooCommerce_SEO {
 	public function register_replacements() {
 		wpseo_register_var_replacement(
 			'wc_price',
-			array( $this, 'get_product_price' ),
+			array( $this, 'get_product_var_price' ),
 			'basic',
 			'The product\'s price.'
 		);
 
 		wpseo_register_var_replacement(
 			'wc_sku',
-			array( $this, 'get_product_sku' ),
+			array( $this, 'get_product_var_sku' ),
 			'basic',
 			'The product\'s SKU.'
 		);
 
 		wpseo_register_var_replacement(
 			'wc_shortdesc',
-			array( $this, 'get_product_short_desc' ),
+			array( $this, 'get_product_var_short_description' ),
 			'basic',
 			'The product\'s short description.'
 		);
 
 		wpseo_register_var_replacement(
 			'wc_brand',
-			array( $this, 'get_product_brand' ),
+			array( $this, 'get_product_var_brand' ),
 			'basic',
 			'The product\'s brand.'
 		);
@@ -909,11 +909,11 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Retrieves the product price
 	 *
-	 * @since 5.0
+	 * @since 5.1
 	 *
 	 * @return string
 	 */
-	public function get_product_price() {
+	public function get_product_var_price() {
 		$product = $this->get_product();
 		if ( ! is_object( $product ) ) {
 			return '';
@@ -927,13 +927,24 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Retrieves the product SKU
+	 * Retrieves the product short description.
 	 *
-	 * @since 5.0
+	 * @since 5.1
 	 *
 	 * @return string
 	 */
-	public function get_product_sku() {
+	public function get_product_var_short_description() {
+		return $this->get_product_short_description();
+	}
+
+	/**
+	 * Retrieves the product SKU
+	 *
+	 * @since 5.1
+	 *
+	 * @return string
+	 */
+	public function get_product_var_sku() {
 		$product = $this->get_product();
 		if ( ! is_object( $product ) ) {
 			return '';
@@ -949,11 +960,11 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Retrieves the product brand
 	 *
-	 * @since 5.0
+	 * @since 5.1
 	 *
 	 * @return string
 	 */
-	public function get_product_brand() {
+	public function get_product_var_brand() {
 		$product = $this->get_product();
 		if ( ! is_object( $product ) ) {
 			return '';
