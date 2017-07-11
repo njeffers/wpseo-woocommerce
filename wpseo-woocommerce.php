@@ -604,7 +604,7 @@ class Yoast_WooCommerce_SEO {
 			return null;
 		}
 
-		$product = wc_get_product( get_the_ID() );
+		$product = wc_get_product( get_queried_object_id() );
 
 		return $product;
 	}
@@ -670,7 +670,7 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		$product_id = get_the_id();
+		$product_id = get_queried_object_id();
 		$product    = $this->get_product_for_id( $product_id );
 
 		if ( is_object( $product ) ) {
