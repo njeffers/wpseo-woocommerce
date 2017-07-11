@@ -2,26 +2,28 @@ language: php
 
 sudo: false
 
+branches:
+  only:
+    - master
+    - trunk
+
 matrix:
+  fast_finish: true
   include:
     - php: 7.0
-      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1
+      env: WP_VERSION=4.8 WP_MULTISITE=1 PHPLINT=1 PHPCS=1
     - php: 5.2
-      env: WP_VERSION=master WP_MULTISITE=1 PHPLINT=1
-    - php: 7.0
-      env: WP_VERSION=4.5
-    - php: 7.0
-      env: WP_VERSION=4.4
-    - php: 7.0
-      env: WP_VERSION=4.3
-    - php: 5.6
-      env: WP_VERSION=4.5
-    - php: 5.5
-      env: WP_VERSION=4.5
-    - php: 5.4
-      env: WP_VERSION=4.5
+      env: WP_VERSION=4.8 WP_MULTISITE=1 PHPLINT=1
     - php: 5.3
-      env: WP_VERSION=4.5
+      env: WP_VERSION=4.6
+    - php: 5.6
+      env: WP_VERSION=4.6
+    - php: 7.1
+      env: WP_VERSION=4.8
+    - php: 5.2
+      env: WP_VERSION=master
+    - php: nightly
+      env: WP_VERSION=master
 
 cache:
   directories:
@@ -50,12 +52,14 @@ before_script:
 - scripts/phpcs --config-set installed_paths ../wpcs
 - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 - phpenv local 5.6
-- composer selfupdate --no-interaction
+- composer selfupdate 1.0.0 --no-interaction
+- if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then composer require --dev phpunit/phpunit ^5.7; fi
 - composer install --no-interaction
+- composer config-yoastcs
 - phpenv local --unset
 - phpenv rehash
 
 script:
 - if [[ "$PHPLINT" == "1" ]]; then find -L . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
-- if [[ "$PHPLINT" == "1" ]]; then /tmp/wordpress/phpcs/scripts/phpcs -p -s -v -n . --standard=./codesniffer.xml --extensions=php; fi
+- if [[ "$PHPCS" == "1" ]]; then vendor/bin/phpcs -v; fi
 - phpunit -c phpunit.xml
