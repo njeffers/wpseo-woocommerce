@@ -691,6 +691,23 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Checks if product class has a description method. Otherwise it returns the value of the post_content.
+	 *
+	 * @since 4.9
+	 *
+	 * @param WC_Product $product The product.
+	 *
+	 * @return string
+	 */
+	protected function get_product_description( $product ) {
+		if ( method_exists( $product, 'get_description' ) ) {
+			return $product->get_description();
+		}
+
+		return $product->post->post_content;
+	}
+
+	/**
 	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
 	 * the post attribute.
 	 *
@@ -887,24 +904,6 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return null;
-	}
-
-	/**
-	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
-	 * the post attribute.
-	 *
-	 * @since 4.9
-	 *
-	 * @param WC_Product $product The product.
-	 *
-	 * @return string
-	 */
-	protected function get_product_description( $product ) {
-		if ( method_exists( $product, 'get_description' ) ) {
-			return $product->get_description();
-		}
-
-		return $product->post->post_content;
 	}
 
 	/**
