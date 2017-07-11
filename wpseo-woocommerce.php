@@ -671,15 +671,14 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		$product_id = get_the_id();
-		$product = $this->get_product_for_id( $product_id );
+		$product    = $this->get_product_for_id( $product_id );
 
 		if ( is_object( $product ) ) {
 			$short_description = $this->get_product_short_description( $product );
-			$long_description = $this->get_product_description( $product );
+			$long_description  = $this->get_product_description( $product );
 			if ( $short_description !== '' ) {
 				$meta_description = $short_description;
-			}
-			elseif ( $long_description !== '' ) {
+			} elseif ( $long_description !== '' ) {
 				$meta_description = $long_description;
 			}
 
@@ -700,12 +699,12 @@ class Yoast_WooCommerce_SEO {
 	 * @return string
 	 */
 	protected function get_product_short_description( $product = null ) {
-	    if ( is_null( $product ) ) {
-	        $product = $this->get_product();
-        }
+		if ( is_null( $product ) ) {
+			$product = $this->get_product();
+		}
 
-		if (  method_exists( $product, 'get_short_description' ) ) {
-			return $product->get_short_description() ;
+		if ( method_exists( $product, 'get_short_description' ) ) {
+			return $product->get_short_description();
 		}
 
 		return $product->post->post_excerpt;
@@ -760,7 +759,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	public function init_beacon() {
-		$page = filter_input( INPUT_GET, 'page' );
+		$page      = filter_input( INPUT_GET, 'page' );
 		$query_var = ( ! empty( $page ) ) ? $page : '';
 
 		// Only add the helpscout beacon on Yoast SEO pages.
@@ -802,10 +801,33 @@ class Yoast_WooCommerce_SEO {
 	 * Registers variable replacements for WooCommerce products
 	 */
 	public function register_replacements() {
-		wpseo_register_var_replacement( 'wc_price', array( $this, 'get_product_price' ), 'basic', 'The product\'s price.' );
-		wpseo_register_var_replacement( 'wc_sku', array( $this, 'get_product_sku' ), 'basic', 'The product\'s SKU.' );
-		wpseo_register_var_replacement( 'wc_shortdesc', array( $this, 'get_product_short_desc' ), 'basic', 'The product\'s short description.' );
-		wpseo_register_var_replacement( 'wc_brand', array( $this, 'get_product_brand' ), 'basic', 'The product\'s brand.' );
+		wpseo_register_var_replacement(
+			'wc_price',
+			array( $this, 'get_product_price' ),
+			'basic',
+			'The product\'s price.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_sku',
+			array( $this, 'get_product_sku' ),
+			'basic',
+			'The product\'s SKU.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_shortdesc',
+			array( $this, 'get_product_short_desc' ),
+			'basic',
+			'The product\'s short description.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_brand',
+			array( $this, 'get_product_brand' ),
+			'basic',
+			'The product\'s brand.'
+		);
 	}
 
 	/**
@@ -878,8 +900,8 @@ class Yoast_WooCommerce_SEO {
 	 * @return string
 	 */
 	protected function get_product_description( $product ) {
-		if (  method_exists( $product, 'get_description' ) ) {
-			return $product->get_description() ;
+		if ( method_exists( $product, 'get_description' ) ) {
+			return $product->get_description();
 		}
 
 		return $product->post->post_content;
@@ -898,8 +920,8 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		if (  method_exists( $product, 'get_price' ) ) {
-			return get_woocommerce_currency_symbol() . $product->get_price() ;
+		if ( method_exists( $product, 'get_price' ) ) {
+			return get_woocommerce_currency_symbol() . $product->get_price();
 		}
 
 		return '';
@@ -918,7 +940,7 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		if (  method_exists( $product, 'get_sku' ) ) {
+		if ( method_exists( $product, 'get_sku' ) ) {
 			return $product->get_sku();
 		}
 
@@ -938,12 +960,12 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		if ( taxonomy_exists('product_brand' ) ) {
-            $terms = wp_get_post_terms( $product->get_id(), 'product_brand' );
+		if ( taxonomy_exists( 'product_brand' ) ) {
+			$terms = wp_get_post_terms( $product->get_id(), 'product_brand' );
 			if ( is_array( $terms ) ) {
 				return $terms[0]->name;
-            }
-        }
+			}
+		}
 
 		return '';
 	}
