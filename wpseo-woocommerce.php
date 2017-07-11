@@ -983,10 +983,17 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		if ( taxonomy_exists( 'product_brand' ) ) {
-			$terms = wp_get_post_terms( $product->get_id(), 'product_brand' );
-			if ( is_array( $terms ) ) {
-				return $terms[0]->name;
+		$product_brand_taxonomies = array(
+			'product_brand',
+			'pwb-brand',
+		);
+
+		foreach ( $product_brand_taxonomies as $taxonomy ) {
+			if ( taxonomy_exists( $taxonomy ) ) {
+				$terms = get_the_terms( $product->get_id(), $taxonomy );
+				if ( is_array( $terms ) ) {
+					return $terms[0]->name;
+				}
 			}
 		}
 
