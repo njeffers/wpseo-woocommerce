@@ -336,7 +336,6 @@ class Yoast_WooCommerce_SEO {
 		WPSEO_WooCommerce_Wrappers::admin_header( true, $this->option_instance->group_name, $this->short_name, false );
 
 		// @todo [JRF => whomever] change the form fields so they use the methods as defined in WPSEO_Admin_Pages
-
 		$taxonomies = get_object_taxonomies( 'product', 'objects' );
 
 		echo '<h2>' . __( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
@@ -380,7 +379,7 @@ class Yoast_WooCommerce_SEO {
 					'</a>',
 					'Yoast SEO'
 				), "</p>\n";
-			$this->checkbox( 'breadcrumbs', __( 'Replace WooCommerce Breadcrumbs', 'yoast-woo-seo' ) );
+				$this->checkbox( 'breadcrumbs', __( 'Replace WooCommerce Breadcrumbs', 'yoast-woo-seo' ) );
 		}
 
 		echo '<br class="clear"/>';
@@ -391,21 +390,21 @@ class Yoast_WooCommerce_SEO {
 				__( 'Both WooCommerce and %1$s add columns to the product page, to remove all but the SEO score column from %1$s on that page, check this box.', 'yoast-woo-seo' ),
 				'Yoast SEO'
 			), "</p>\n";
-		$this->checkbox( 'hide_columns', __( 'Remove Yoast SEO columns', 'yoast-woo-seo' ) );
+			$this->checkbox( 'hide_columns', __( 'Remove Yoast SEO columns', 'yoast-woo-seo' ) );
 
-		echo '<br class="clear"/>';
-		echo '<p>',
+			echo '<br class="clear"/>';
+			echo '<p>',
 			sprintf(
 				/* translators: %1$s resolves to Yoast SEO */
 				__( 'Both WooCommerce and %1$s add metaboxes to the edit product page, if you want WooCommerce to be above %1$s, check the box.', 'yoast-woo-seo' ),
 				'Yoast SEO'
 			), "</p>\n";
-		$this->checkbox( 'metabox_woo_top', __( 'Move WooCommerce up', 'yoast-woo-seo' ) );
+			$this->checkbox( 'metabox_woo_top', __( 'Move WooCommerce up', 'yoast-woo-seo' ) );
 
-		echo '<br class="clear"/>';
+			echo '<br class="clear"/>';
 
-		// Submit button and debug info
-		WPSEO_WooCommerce_Wrappers::admin_footer( true, false );
+			// Submit button and debug info
+			WPSEO_WooCommerce_Wrappers::admin_footer( true, false );
 	}
 
 	/**
@@ -700,7 +699,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	protected function get_short_description( $product ) {
 		if (  method_exists( $product, 'get_short_description' ) ) {
-			return $product->get_short_description() ;
+			return $product->get_short_description();
 		}
 
 		return $product->post->post_excerpt;
@@ -864,7 +863,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	protected function get_short_product_description( $product ) {
 		if (  method_exists( $product, 'get_short_description' ) ) {
-			return $product->get_short_description() ;
+			return $product->get_short_description();
 		}
 
 		return $product->post->post_excerpt;
@@ -882,7 +881,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	protected function get_product_description( $product ) {
 		if (  method_exists( $product, 'get_description' ) ) {
-			return $product->get_description() ;
+			return $product->get_description();
 		}
 
 		return $product->post->post_content;
@@ -890,6 +889,7 @@ class Yoast_WooCommerce_SEO {
 
 	/**
 	 * Localizes scripts for the wooplugin.
+	 *
 	 * @return array
 	 */
 	private function localize_woo_script() {
