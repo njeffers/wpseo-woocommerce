@@ -6,6 +6,7 @@ branches:
   only:
     - master
     - trunk
+    - stories/update-travis-build
 
 matrix:
   fast_finish: true
