@@ -10,7 +10,7 @@
  * Text Domain: yoast-woo-seo
  * Domain Path: /languages/
  *
- * Copyright 2016 Yoast BV (email: supportyoast.com)
+ * Copyright 2017 Yoast BV (email: supportyoast.com)
  */
 
 if ( ! function_exists( 'add_filter' ) ) {
