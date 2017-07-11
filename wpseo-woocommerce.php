@@ -600,7 +600,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return null|WC_Product
 	 */
 	private function get_product() {
-		if ( ! is_singular( 'product' ) || ! function_exists( 'get_product' ) ) {
+		if ( ! is_singular( 'product' ) || ! function_exists( 'wc_get_product' ) ) {
 			return null;
 		}
 
