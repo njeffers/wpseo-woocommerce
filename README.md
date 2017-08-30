@@ -27,6 +27,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+
+### 5.4: September 5th, 2017
+* Compatibility with Yoast SEO 5.4
+
 ### 5.3: August 22nd, 2017
 * Compatibility with Yoast SEO 5.3
 
