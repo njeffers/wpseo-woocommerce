@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.6
 Tested up to: 4.8.1
-Stable tag: 5.3
+Stable tag: 5.4
 Depends: wordpress-seo
 
 Description
@@ -27,6 +27,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+
+### 5.4: September 6th, 2017
+* Compatibility with Yoast SEO 5.4
+
 ### 5.3: August 22nd, 2017
 * Compatibility with Yoast SEO 5.3
 
