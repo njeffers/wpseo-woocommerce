@@ -811,7 +811,7 @@ class Yoast_WooCommerce_SEO {
 	 * @link https://github.com/Yoast/i18n-module
 	 */
 	protected function register_i18n_promo_class() {
-		new Yoast_I18n_v2(
+		new Yoast_I18n_v3(
 			array(
 				'textdomain'     => 'yoast-woo-seo',
 				'project_slug'   => 'woocommerce-seo',
