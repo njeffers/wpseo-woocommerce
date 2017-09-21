@@ -989,6 +989,11 @@ class Yoast_WooCommerce_SEO {
 		);
 
 		foreach ( $brand_taxonomies as $taxonomy ) {
+			$primary_brand    = new WPSEO_Primary_Term( $taxonomy, $product->get_id() );
+			$primary_brand_id = $primary_brand->get_primary_term();
+			if ( $primary_brand_id ) {
+				return get_term( $primary_brand_id, $taxonomy )->name;
+			}
 			if ( taxonomy_exists( $taxonomy ) ) {
 				$terms = get_the_terms( $product->get_id(), $taxonomy );
 				if ( is_array( $terms ) ) {

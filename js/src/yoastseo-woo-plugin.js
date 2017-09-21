@@ -1,6 +1,12 @@
+/* global jQuery, tinyMCE, YoastSEO, YoastReplaceVarPlugin */
+
 (function() {
 
+	var debounce = require( 'lodash/debounce' );
+
 	var AssessmentResult = require( 'yoastseo/js/values/AssessmentResult' );
+
+	var inputDebounceDelay = 400;
 
 	/**
 	 * Adds eventlistener to load the Yoast WooCommerce plugin
@@ -31,40 +37,10 @@
 
 		this.registerModifications();
 
+		this.addReplacements();
+
 		this.bindEvents();
 	}
-
-	/**
-	 * Strip double spaces from text
-	 *
-	 * @param {String} text The text to strip spaces from.
-	 * @returns {String} The text without double spaces
-	 */
-	var stripSpaces = function( text ) {
-
-		// Replace multiple spaces with single space
-		text = text.replace( /\s{2,}/g, ' ' );
-
-		// Replace spaces followed by periods with only the period.
-		text = text.replace( /\s\./g, '.' );
-
-		// Remove first/last character if space
-		text = text.replace( /^\s+|\s+$/g, '' );
-
-		return text;
-	};
-
-	/**
-	 * Strip HTML-tags from text
-	 *
-	 * @param {String} text The text to strip the HTML-tags from.
-	 * @returns {String} The text without HTML-tags.
-	 */
-	var stripTags = function( text ) {
-		text = text.replace( /(<([^>]+)>)/ig, ' ' );
-		text = stripSpaces( text );
-		return text;
-	};
 
 	/**
 	 * Tests the length of the productdescription.
@@ -74,12 +50,8 @@
 	 * @returns {object} an assessmentresult with the score and formatted text.
 	 */
 	YoastWooCommercePlugin.prototype.productDescription = function( paper, researcher, i18n ) {
-		var productDescription = document.getElementById( 'excerpt' ).value;
-		if (typeof tinyMCE !== 'undefined' && tinyMCE.get( 'excerpt') !== null) {
-			productDescription = tinyMCE.get( 'excerpt').getContent();
-		}
+		var productDescription = this.getShortDesc();
 
-		productDescription = stripTags( productDescription );
 		var result = this.scoreProductDescription( productDescription.split( ' ' ).length );
 		var assessmentResult = new AssessmentResult();
 		assessmentResult.setScore( result.score );
@@ -127,19 +99,21 @@
 	 * The tinyMCE triggers automatically since that inherets the binding from the content field tinyMCE.
 	 */
 	YoastWooCommercePlugin.prototype.addCallback = function() {
-		var elem = document.getElementById( 'excerpt' );
-		if( elem !== null ){
-			elem.addEventListener( 'input', YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
-		}
-
+		jQuery( '#excerpt' ).on( 'input', YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
 	};
 
 	/**
-	 * binds events to the add_product_images anchor.
+	 * binds events to the add_product_images anchor and product inputs.
 	 */
 	YoastWooCommercePlugin.prototype.bindEvents = function() {
 		jQuery( '.add_product_images' ).find( 'a' ).on( 'click', this.bindLinkEvent.bind( this ) );
 
+		jQuery( '#_regular_price' ).on( 'input', debounce( this.updatePrice.bind( this ), inputDebounceDelay ) );
+		jQuery( '._sku_field input' ).on( 'input', debounce( this.updateSKU.bind( this ), inputDebounceDelay ) );
+        jQuery( '#excerpt' ).on( 'input', debounce( this.updateShortDesc.bind( this ), inputDebounceDelay ) );
+		jQuery( '#taxonomy-pwb-brand' ).on( 'click', debounce( this.updateBrand.bind( this ), inputDebounceDelay ) );
+		YoastSEO.wp._tinyMCEHelper.addEventHandler( 'excerpt', [ 'input', 'change', 'cut', 'paste' ],
+			debounce( this.updateShortDesc.bind( this ), inputDebounceDelay ) );
 	};
 
 	/**
@@ -198,6 +172,121 @@
 
 		YoastSEO.app.registerModification( 'content', callback, 'YoastWooCommercePlugin', 10 );
 	};
+
+	/**
+	 * Returns the product's price from the DOM
+	 */
+	YoastWooCommercePlugin.prototype.getPrice = function () {
+		return jQuery( '#_regular_price' ).val() || ""
+	};
+
+	/**
+	 * Updates the Yoast SEO snippet Preview with the new price.
+	 */
+	YoastWooCommercePlugin.prototype.updatePrice = function () {
+		this.priceReplaceVar.replacement = this.getPrice();
+		YoastSEO.app.refresh();
+	};
+
+	/**
+	 * Returns the product's sku from the DOM
+	 */
+	YoastWooCommercePlugin.prototype.getSKU = function () {
+		return jQuery( "._sku_field input" ).val() || ""
+	};
+
+	/**
+	 * Updates the Yoast SEO snippet Preview with the new sku.
+	 */
+	YoastWooCommercePlugin.prototype.updateSKU = function () {
+		this.skuReplaceVar.replacement = this.getSKU();
+		YoastSEO.app.refresh();
+	};
+
+	/**
+	 * Returns the product's short description from the DOM
+	 */
+	YoastWooCommercePlugin.prototype.getShortDesc = function () {
+		if (typeof tinyMCE !== 'undefined' && tinyMCE.get( 'excerpt' ) !== null) {
+			return jQuery( jQuery.parseHTML( tinyMCE.get( 'excerpt' ).getContent() ) ).text();
+		}
+		return jQuery( '#excerpt' ).val();
+	};
+
+	/**
+	 * Updates the Yoast SEO snippet Preview with the new short description.
+	 */
+	YoastWooCommercePlugin.prototype.updateShortDesc = function () {
+		this.shortDescReplaceVar.replacement = this.getShortDesc();
+		YoastSEO.app.refresh();
+	};
+
+    /**
+     * Returns the product's Official WooCommerce Brands brand from the DOM
+     */
+    YoastWooCommercePlugin.prototype.getWooBrand = function () {
+
+    }
+
+
+    /**
+     * Returns the product's Perfect WooCommerce Brands brand from the DOM
+     */
+    YoastWooCommercePlugin.prototype.getPWBBrand = function () {
+        // Check if we're dealing with Perfect WooCommerce Brands.
+        var pwbContainer = jQuery( '#taxonomy-pwb-brand' );
+        if (pwbContainer.length > 0) {
+            // Select the primary brand from multiple Perfect WooCommerce Brands.
+            var primaryBrand = pwbContainer.find('.wpseo-primary-term .selectit');
+            if (primaryBrand.length > 0) {
+                return primaryBrand.text().trim().split(/\s+/)[0];
+            }
+            // Select a single Perfect WooCommerce Brand if only one is selected.
+            var onlyBrand = pwbContainer.find('[name="tax_input[pwb-brand][]"]:checked');
+            if (onlyBrand.length === 1) {
+                return onlyBrand.parent().text().trim().split(/\s+/)[0];
+            }
+        }
+    }
+
+	/**
+	 * Returns the product's brand from the DOM
+	 */
+	YoastWooCommercePlugin.prototype.getBrand = function () {
+		return this.getWooBrand() || this.getPWBBrand() || "";
+	};
+
+	/**
+	 * Updates the Yoast SEO snippet Preview with the new brand.
+	 */
+	YoastWooCommercePlugin.prototype.updateBrand = function () {
+		this.brandReplaceVar.replacement = this.getBrand();
+		YoastSEO.app.refresh();
+	};
+
+	/**
+	 * Adds replacements for WooCommerce price, SKU, short description and brand variables.
+	 */
+	YoastWooCommercePlugin.prototype.addReplacements = function () {
+		var ReplaceVar = YoastReplaceVarPlugin.ReplaceVar;
+
+		// Compatibility with older version of YoastSeo which do not expose the ReplaceVar class.
+		if (ReplaceVar === undefined) {
+			return;
+		}
+
+		// Define the ReplaceVar objects, hold them in memory so we can update them when the DOM changes.
+		this.priceReplaceVar = new ReplaceVar( '%%wc_price%%', this.getPrice(), { source: 'direct' } );
+		this.skuReplaceVar = new ReplaceVar( '%%wc_sku%%', this.getSKU(), { source: 'direct' } );
+		this.shortDescReplaceVar = new ReplaceVar( '%%wc_shortdesc%%', this.getShortDesc(), { source: 'direct' } );
+		this.brandReplaceVar = new ReplaceVar( '%%wc_brand%%', this.getBrand(), { source: 'direct' } );
+
+		// Add our ReplaceVar objects to the ReplaceVarsPlugin.
+		YoastSEO.wp.replaceVarsPlugin.addReplacement( this.priceReplaceVar );
+		YoastSEO.wp.replaceVarsPlugin.addReplacement( this.skuReplaceVar );
+		YoastSEO.wp.replaceVarsPlugin.addReplacement( this.shortDescReplaceVar );
+		YoastSEO.wp.replaceVarsPlugin.addReplacement( this.brandReplaceVar );
+	}
 
 	/**
 	 * Adds the images from the pagegallery to the content to be analyzed by the analyzer.
