@@ -681,19 +681,19 @@ class Yoast_WooCommerce_SEO {
 		$product = $this->get_product_for_id( get_the_id() );
 
 		if ( ! is_object( $product ) ) {
-		    return '';
+			return '';
 		}
 
-        $short_description = $this->get_short_product_description( $product );
-        $long_description = $this->get_product_description( $product );
+		$short_description = $this->get_short_product_description( $product );
+		$long_description = $this->get_product_description( $product );
 
-        if ( $short_description !== '' ) {
-            $meta_description = $short_description;
-        }
+		if ( $short_description !== '' ) {
+			$meta_description = $short_description;
+		}
 
-        if ( $long_description !== '' ) {
-	        $meta_description =  wp_html_excerpt( $long_description, 156 );
-        }
+		if ( $long_description !== '' ) {
+			$meta_description =  wp_html_excerpt( $long_description, 156 );
+		}
 
 
 		return $meta_description;
