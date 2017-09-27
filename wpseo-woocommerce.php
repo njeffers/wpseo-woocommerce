@@ -678,25 +678,25 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		$product_id = get_the_id();
-		$product = $this->get_product_for_id( $product_id );
+		$product = $this->get_product_for_id( get_the_id() );
 
-		if ( is_object( $product ) ) {
-			$short_description = $this->get_short_product_description( $product );
-			$long_description = $this->get_product_description( $product );
-			if ( $short_description !== '' ) {
-				$meta_description = $short_description;
-			}
-			elseif ( $long_description !== '' ) {
-				$meta_description = $long_description;
-			}
-
-			if ( ! empty( $meta_description ) ) {
-				return wp_html_excerpt( $meta_description, 156 );
-			}
+		if ( ! is_object( $product ) ) {
+		    return '';
 		}
 
-		return '';
+        $short_description = $this->get_short_product_description( $product );
+        $long_description = $this->get_product_description( $product );
+
+        if ( $short_description !== '' ) {
+            $meta_description = $short_description;
+        }
+
+        if ( $long_description !== '' ) {
+	        $meta_description =  wp_html_excerpt( $long_description, 156 );
+        }
+
+
+		return $meta_description;
 	}
 
 	/**
