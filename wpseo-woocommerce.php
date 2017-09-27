@@ -659,14 +659,14 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Returns the meta description. It checks which value should be used when the given meta description is empty.
+	 * Returns the meta description. Checks which value should be used when the given meta description is empty.
 	 *
-	 * When the meta description it will use the short_description if that one is set. Otherwise it will use the full
-	 * product description. If everything is empty, it will return an empty string.
+	 * It will use the short_description if that one is set. Otherwise it will use the full
+	 * product description limited to 156 characters. If everything is empty, it will return an empty string.
 	 *
 	 * @param string $meta_description The meta description to check.
 	 *
-	 * @return string
+	 * @return string The meta description.
 	 */
 	public function metadesc( $meta_description ) {
 
@@ -688,15 +688,14 @@ class Yoast_WooCommerce_SEO {
 		$long_description = $this->get_product_description( $product );
 
 		if ( $short_description !== '' ) {
-			$meta_description = $short_description;
+			return $short_description;
 		}
 
 		if ( $long_description !== '' ) {
-			$meta_description = wp_html_excerpt( $long_description, 156 );
+			return wp_html_excerpt( $long_description, 156 );
 		}
 
-
-		return $meta_description;
+		return '';
 	}
 
 	/**
