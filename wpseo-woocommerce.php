@@ -692,7 +692,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		if ( $long_description !== '' ) {
-			$meta_description =  wp_html_excerpt( $long_description, 156 );
+			$meta_description = wp_html_excerpt( $long_description, 156 );
 		}
 
 
