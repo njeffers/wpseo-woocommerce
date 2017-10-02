@@ -94,8 +94,8 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
-			// Admin page.
-			add_action( 'admin_menu', array( $this, 'register_settings_page' ), 20 );
+			// Add subitem to menu.
+			add_filter( 'wpseo_submenu_pages', array( $this, 'add_submenu_pages' ) );
 			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
 
 			if ( $this->license_manager ) {
@@ -317,12 +317,32 @@ class Yoast_WooCommerce_SEO {
 	 * Registers the settings page in the WP SEO menu.
 	 *
 	 * @since 1.0
+	 *
+	 * @deprecated
 	 */
 	public function register_settings_page() {
-		add_submenu_page( 'wpseo_dashboard', __( 'WooCommerce SEO Settings', 'yoast-woo-seo' ), __( 'WooCommerce SEO', 'yoast-woo-seo' ), 'manage_options', $this->short_name, array(
-			$this,
-			'admin_panel',
-		) );
+	}
+
+	/**
+	 * Registers the settings page in the WP SEO menu.
+	 *
+	 * @since 5.6
+	 *
+	 * @param array $submenu_pages List of current submenus.
+	 *
+	 * @return array All submenu pages including our own.
+	 */
+	public function add_submenu_pages( $submenu_pages ) {
+		$submenu_pages[] = array(
+			'wpseo_dashboard',
+			__( 'WooCommerce SEO Settings', 'yoast-woo-seo' ),
+			__( 'WooCommerce SEO', 'yoast-woo-seo' ),
+			'wpseo_manage_options',
+			$this->short_name,
+			array( $this, 'admin_panel' ),
+		);
+
+		return $submenu_pages;
 	}
 
 	/**
