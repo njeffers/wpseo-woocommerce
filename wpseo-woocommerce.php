@@ -56,6 +56,10 @@ class Yoast_WooCommerce_SEO {
 	 * @var Yoast_Plugin_License_Manager
 	 */
 	private $license_manager;
+	/**
+	 * @var null|WPSEO_Structured_Data
+	 */
+	private $structured_data = null;
 
 	/**
 	 * Return the plugin file
@@ -93,7 +97,21 @@ class Yoast_WooCommerce_SEO {
 			$this->upgrade();
 		}
 
-		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
+		$this->init();
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		// Make sure the primary category will be used in the permalink.
+		add_filter( 'wc_product_post_type_link_product_cat', array( $this, 'add_primary_category_permalink' ), 10, 3 );
+
+		// Only initialize beacon when the License Manager is present.
+		if ( $this->license_manager ) {
+			add_action( 'admin_init', array( $this, 'init_beacon' ) );
+		}
+	}
+
+	protected function init() {
+		if ( is_admin() || $this->running_crons() ) {
 			// Admin page.
 			add_action( 'admin_menu', array( $this, 'register_settings_page' ), 20 );
 			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
@@ -137,6 +155,8 @@ class Yoast_WooCommerce_SEO {
 
 				add_filter( 'woocommerce_attribute', array( $this, 'schema_filter' ), 10, 2 );
 
+				$this->structured_data = new WPSEO_Structured_Data();
+
 				// Fix breadcrumbs.
 				if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
 					add_filter( 'woo_breadcrumbs', array( $this, 'override_woo_breadcrumbs' ) );
@@ -144,15 +164,10 @@ class Yoast_WooCommerce_SEO {
 				}
 			}
 		} // End if.
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+	}
 
-		// Make sure the primary category will be used in the permalink.
-		add_filter( 'wc_product_post_type_link_product_cat', array( $this, 'add_primary_category_permalink' ), 10, 3 );
-
-		// Only initialize beacon when the License Manager is present.
-		if ( $this->license_manager ) {
-			add_action( 'admin_init', array( $this, 'init_beacon' ) );
-		}
+	protected function running_crons() {
+        return defined( 'DOING_CRON' ) && DOING_CRON;
 	}
 
 	/**
@@ -726,11 +741,12 @@ class Yoast_WooCommerce_SEO {
 	 * @return string
 	 */
 	function schema_filter( $text, $attribute ) {
-		if ( 1 == $attribute['is_taxonomy'] ) {
-			if ( $this->options['schema_brand'] === $attribute['name'] ) {
+		if ( $attribute['is_taxonomy'] == 1 ) {
+			if ( $attribute['name'] === $this->options['schema_brand'] ) {
 				return str_replace( '<p', '<p itemprop="brand"', $text );
 			}
-			if ( $this->options['schema_manufacturer'] === $attribute['name'] ) {
+
+			if ( $attribute['name'] === $this->options['schema_manufacturer'] ) {
 				return str_replace( '<p', '<p itemprop="manufacturer"', $text );
 			}
 		}
@@ -1063,80 +1079,4 @@ if ( ! wp_installing() ) {
 	 * activate the license.
 	 */
 	register_activation_hook( __FILE__, 'yoast_woocommerce_seo_activate_license' );
-}
-
-/**
- * Class WPSEO_WooCommerce_Wrappers
- */
-class WPSEO_WooCommerce_Wrappers {
-
-	/**
-	 * Fallback for admin_header
-	 *
-	 * @param bool   $form             Using a form or not.
-	 * @param string $option_long_name The option long name.
-	 * @param string $option           The option name.
-	 * @param bool   $contains_files   If the form contains files.
-	 *
-	 * @return mixed
-	 */
-	public static function admin_header( $form = true, $option_long_name = 'yoast_wpseo_options', $option = 'wpseo', $contains_files = false ) {
-
-		if ( method_exists( 'Yoast_Form', 'admin_header' ) ) {
-			Yoast_Form::get_instance()->admin_header( $form, $option, $contains_files, $option_long_name );
-
-			return;
-		}
-
-		return self::admin_pages()->admin_header( true, $option_long_name, $option );
-	}
-
-	/**
-	 * Fallback for admin_footer.
-	 *
-	 * @param bool $submit       Show the submit button or not.
-	 * @param bool $show_sidebar Show the sidebar or not.
-	 *
-	 * @return mixed
-	 */
-	public static function admin_footer( $submit = true, $show_sidebar = true ) {
-		if ( method_exists( 'Yoast_Form', 'admin_footer' ) ) {
-			Yoast_Form::get_instance()->admin_footer( $submit, $show_sidebar );
-
-			return;
-		}
-
-		return self::admin_pages()->admin_footer( $submit, $show_sidebar );
-	}
-
-	/**
-	 * Returns the wpseo_admin pages global variable
-	 *
-	 * @return mixed
-	 */
-	private static function admin_pages() {
-		global $wpseo_admin_pages;
-
-		if ( ! $wpseo_admin_pages instanceof WPSEO_Admin_Pages ) {
-			$wpseo_admin_pages = new WPSEO_Admin_Pages;
-		}
-
-		return $wpseo_admin_pages;
-	}
-
-	/**
-	 * Returns the result of validate bool from WPSEO_Utils if this class exists, otherwise it will return the result from
-	 * validate_bool from WPSEO_Option_Woo
-	 *
-	 * @param mixed $bool_to_validate Variable to validate as bool.
-	 *
-	 * @return bool
-	 */
-	public static function validate_bool( $bool_to_validate ) {
-		if ( class_exists( 'WPSEO_Utils' ) && method_exists( 'WPSEO_Utils', 'validate_bool' ) ) {
-			return WPSEO_Utils::validate_bool( $bool_to_validate );
-		}
-
-		return WPSEO_Option_Woo::validate_bool( $bool_to_validate );
-	}
 }
