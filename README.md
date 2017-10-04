@@ -28,6 +28,15 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
+### 5.6: October 10th, 2017
+Enhancements:
+* Changed the capability on which the submenu is registered to `wpseo_manage_options`
+* Changed the way the submenu is registered to use the `wpseo_submenu_pages` filter
+
+Bugfixes:
+* Fixes a bug where the short product description was cut after 156 characters in the meta description
+* Fixes a bug where the license check endpoint was using an incorrect URL
+
 ### 5.5: September 26th, 2017
 * Updated the internationalization module to version 3.0.
 
