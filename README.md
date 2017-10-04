@@ -30,8 +30,8 @@ Changelog
 
 ### 5.6: October 10th, 2017
 Enhancements:
-* Changed the capability on which the submenu is registered to `wpseo_manage_options`
-* Changed the way the submenu is registered to use the `wpseo_submenu_pages` filter
+* Changes the capability on which the submenu is registered to `wpseo_manage_options`
+* Changes the way the submenu is registered to use the `wpseo_submenu_pages` filter
 
 Bugfixes:
 * Fixes a bug where the short product description was cut after 156 characters in the meta description
