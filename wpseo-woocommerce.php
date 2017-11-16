@@ -126,7 +126,7 @@ class Yoast_WooCommerce_SEO {
 				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
 
 				if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
-					add_action( 'wpseo_add_opengraph_images', array( $this, 'set_opengraph_image' ) );
+					add_action( 'wpseo_add_opengraph_additional_images', array( $this, 'set_opengraph_image' ) );
 				}
 
 				add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
