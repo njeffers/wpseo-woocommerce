@@ -1,8 +1,8 @@
 WooCommerce Yoast SEO
 =====================
-Requires at least: 4.5<br>
-Tested up to: 4.8<br>
-Stable tag: 5.0<br>
+Requires at least: 4.6
+Tested up to: 4.8.3
+Stable tag: 5.8
 Depends: wordpress-seo
 
 Description
@@ -27,6 +27,37 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+
+### 5.8: November 15th, 2017
+* Compatibility with Yoast SEO 5.8
+
+### 5.7: October 24th, 2017
+* Compatibility with Yoast SEO 5.7
+
+### 5.6: October 10th, 2017
+Enhancements:
+* Changes the capability on which the submenu is registered to `wpseo_manage_options`
+* Changes the way the submenu is registered to use the `wpseo_submenu_pages` filter
+
+Bugfixes:
+* Fixes a bug where the short product description was cut after 156 characters in the meta description
+* Fixes a bug where the license check endpoint was using an incorrect URL
+
+### 5.5: September 26th, 2017
+* Updated the internationalization module to version 3.0.
+
+### 5.4: September 6th, 2017
+* Compatibility with Yoast SEO 5.4
+
+### 5.3: August 22nd, 2017
+* Compatibility with Yoast SEO 5.3
+
+### 5.2: August 8th, 2017
+* Compatibility with Yoast SEO 5.2
+
+### 5.1: July 25th, 2017
+* Compatibility with Yoast SEO 5.1
+
 ### 5.0: July 6th, 2017
 * Compatibility with Yoast SEO 5.0
 
@@ -39,7 +70,7 @@ Changelog
 * Compatibility with Yoast SEO 4.8
 
 ### 4.7: May 2nd, 2017
-* Compatibility with Yoast SEO 4.7.
+* Compatibility with Yoast SEO 4.7
 
 ### 4.6: April 11th, 2017
 * Compatibility with Yoast SEO 4.6

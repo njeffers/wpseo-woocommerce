@@ -5,7 +5,7 @@
 
 /**
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     5.0
+ * Version:     5.8
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -35,12 +35,12 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * @const string Version of the plugin.
 	 */
-	const VERSION = '5.0';
+	const VERSION = '5.8';
 
 	/**
 	 * @var object $option_instance Instance of the WooCommerce_SEO option management class
 	 */
-	var $option_instance;
+	public $option_instance;
 
 	/**
 	 * @var array $options
@@ -50,7 +50,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * @var string Name of the option to store plugins setting
 	 */
-	var $short_name;
+	public $short_name;
 
 	/**
 	 * @var Yoast_Plugin_License_Manager
@@ -94,8 +94,8 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
-			// Admin page.
-			add_action( 'admin_menu', array( $this, 'register_settings_page' ), 20 );
+			// Add subitem to menu.
+			add_filter( 'wpseo_submenu_pages', array( $this, 'add_submenu_pages' ) );
 			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
 
 			if ( $this->license_manager ) {
@@ -127,7 +127,7 @@ class Yoast_WooCommerce_SEO {
 				add_action( 'wpseo_register_extra_replacements', array( $this, 'register_replacements' ) );
 
 				if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
-					add_action( 'wpseo_add_opengraph_images', array( $this, 'set_opengraph_image' ) );
+					add_action( 'wpseo_add_opengraph_additional_images', array( $this, 'set_opengraph_image' ) );
 				}
 
 				add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
@@ -259,7 +259,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Refresh the options property on add/update of the option to ensure it's always current.
 	 */
-	function refresh_options_property() {
+	public function refresh_options_property() {
 		$this->options = get_option( $this->short_name );
 	}
 
@@ -271,7 +271,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return array
 	 */
-	function add_product_images_to_xml_sitemap( $images, $post_id ) {
+	public function add_product_images_to_xml_sitemap( $images, $post_id ) {
 		if ( metadata_exists( 'post', $post_id, '_product_image_gallery' ) ) {
 			$product_image_gallery = get_post_meta( $post_id, '_product_image_gallery', true );
 
@@ -296,7 +296,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Perform upgrade procedures to the settings.
 	 */
-	function upgrade() {
+	public function upgrade() {
 
 		// Upgrade license options.
 		if ( $this->license_manager && $this->license_manager->license_is_valid() == false ) {
@@ -318,12 +318,32 @@ class Yoast_WooCommerce_SEO {
 	 * Registers the settings page in the WP SEO menu.
 	 *
 	 * @since 1.0
+	 *
+	 * @deprecated
 	 */
 	public function register_settings_page() {
-		add_submenu_page( 'wpseo_dashboard', __( 'WooCommerce SEO Settings', 'yoast-woo-seo' ), __( 'WooCommerce SEO', 'yoast-woo-seo' ), 'manage_options', $this->short_name, array(
-			$this,
-			'admin_panel',
-		) );
+	}
+
+	/**
+	 * Registers the settings page in the WP SEO menu.
+	 *
+	 * @since 5.6
+	 *
+	 * @param array $submenu_pages List of current submenus.
+	 *
+	 * @return array All submenu pages including our own.
+	 */
+	public function add_submenu_pages( $submenu_pages ) {
+		$submenu_pages[] = array(
+			'wpseo_dashboard',
+			__( 'WooCommerce SEO Settings', 'yoast-woo-seo' ),
+			__( 'WooCommerce SEO', 'yoast-woo-seo' ),
+			'wpseo_manage_options',
+			$this->short_name,
+			array( $this, 'admin_panel' ),
+		);
+
+		return $submenu_pages;
 	}
 
 	/**
@@ -331,7 +351,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function config_page_styles() {
+	public function config_page_styles() {
 		global $pagenow;
 		if ( $pagenow == 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === 'wpseo_woo' ) && ( defined( 'WPSEO_PATH' ) && defined( 'WPSEO_CSSJS_SUFFIX' ) && defined( 'WPSEO_VERSION' ) ) ) {
 			wp_enqueue_style( 'yoast-admin-css', plugins_url( 'css/yst_plugin_tools' . WPSEO_CSSJS_SUFFIX . '.css', WPSEO_PATH . 'dummy.txt' ), array(), WPSEO_VERSION );
@@ -660,14 +680,14 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Returns the meta description. It checks which value should be used when the given meta description is empty.
+	 * Returns the meta description. Checks which value should be used when the given meta description is empty.
 	 *
-	 * When the meta description it will use the short_description if that one is set. Otherwise it will use the full
-	 * product description. If everything is empty, it will return an empty string.
+	 * It will use the short_description if that one is set. Otherwise it will use the full
+	 * product description limited to 156 characters. If everything is empty, it will return an empty string.
 	 *
 	 * @param string $meta_description The meta description to check.
 	 *
-	 * @return string
+	 * @return string The meta description.
 	 */
 	public function metadesc( $meta_description ) {
 
@@ -679,22 +699,21 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		$product_id = get_queried_object_id();
-		$product    = $this->get_product_for_id( $product_id );
+		$product = $this->get_product_for_id( get_the_id() );
 
-		if ( is_object( $product ) ) {
-			$short_description = $this->get_product_short_description( $product );
-			$long_description  = $this->get_product_description( $product );
-			if ( $short_description !== '' ) {
-				$meta_description = $short_description;
-			}
-			elseif ( $long_description !== '' ) {
-				$meta_description = $long_description;
-			}
+		if ( ! is_object( $product ) ) {
+			return '';
+		}
 
-			if ( ! empty( $meta_description ) ) {
-				return wp_html_excerpt( $meta_description, 156 );
-			}
+		$short_description = $this->get_short_product_description( $product );
+		$long_description = $this->get_product_description( $product );
+
+		if ( $short_description !== '' ) {
+			return $short_description;
+		}
+
+		if ( $long_description !== '' ) {
+			return wp_html_excerpt( $long_description, 156 );
 		}
 
 		return '';
@@ -747,7 +766,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return string
 	 */
-	function schema_filter( $text, $attribute ) {
+	public function schema_filter( $text, $attribute ) {
 		if ( 1 == $attribute['is_taxonomy'] ) {
 			if ( $this->options['schema_brand'] === $attribute['name'] ) {
 				return str_replace( '<p', '<p itemprop="brand"', $text );
@@ -768,7 +787,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return bool
 	 */
-	function xml_post_type_archive_link( $link, $post_type ) {
+	public function xml_post_type_archive_link( $link, $post_type ) {
 
 		if ( 'product' !== $post_type ) {
 			return $link;
@@ -822,7 +841,7 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . '311' . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . '510' . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
 
 		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
 	}
@@ -866,7 +885,7 @@ class Yoast_WooCommerce_SEO {
 	 * @link https://github.com/Yoast/i18n-module
 	 */
 	protected function register_i18n_promo_class() {
-		new yoast_i18n(
+		new Yoast_I18n_v3(
 			array(
 				'textdomain'     => 'yoast-woo-seo',
 				'project_slug'   => 'woocommerce-seo',

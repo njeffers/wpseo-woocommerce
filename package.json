@@ -17,9 +17,11 @@
     "url": "https://github.com/Yoast/wpseo-woocommerce"
   },
   "dependencies": {
-    "yoastseo": "github:yoast/YoastSEO.js#1.18.0"
+    "yoastseo": "^1.23.1"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^7.3.0",
     "grunt": "^0.4.5",
     "grunt-browserify": "^5.0.0",
     "grunt-checktextdomain": "^0.1.1",
