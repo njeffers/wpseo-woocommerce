@@ -842,8 +842,10 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . '510' . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . '590' . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
 
 		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
+		wp_localize_script( 'wp-seo-woo-replacevars', 'wpseoWooReplaceVarsL10n', $this->localize_woo_replacevars_script() );
 	}
 
 	/**
@@ -1017,6 +1019,20 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Localizes scripts for the Woo Replacevars plugin.
+	 *
+	 * @return array The localized values.
+	 */
+	protected function localize_woo_replacevars_script() {
+		return array(
+			'currency'       => get_woocommerce_currency(),
+			'currencySymbol' => get_woocommerce_currency_symbol(),
+			'decimals'       => wc_get_price_decimals(),
+			'locale'         => str_replace( '_', '-', get_locale() ),
+		);
 	}
 
 	/**
