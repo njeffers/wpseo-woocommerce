@@ -943,7 +943,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Retrieves the product price
 	 *
-	 * @since 5.1
+	 * @since 5.9
 	 *
 	 * @return string
 	 */
@@ -963,7 +963,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Retrieves the product short description.
 	 *
-	 * @since 5.1
+	 * @since 5.9
 	 *
 	 * @return string
 	 */
@@ -974,7 +974,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Retrieves the product SKU
 	 *
-	 * @since 5.1
+	 * @since 5.9
 	 *
 	 * @return string
 	 */
@@ -994,7 +994,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Retrieves the product brand
 	 *
-	 * @since 5.1
+	 * @since 5.9
 	 *
 	 * @return string
 	 */
@@ -1009,12 +1009,43 @@ class Yoast_WooCommerce_SEO {
 			'pwb-brand',
 		);
 
+		$brand_taxonomies = array_filter( $brand_taxonomies, 'taxonomy_exists' );
+
+		$primary_term = $this->search_primary_term( $brand_taxonomies );
+		if ( $primary_term !== '' ) {
+			return $primary_term;
+		}
+
 		foreach ( $brand_taxonomies as $taxonomy ) {
-			if ( taxonomy_exists( $taxonomy ) ) {
-				$terms = get_the_terms( $product->get_id(), $taxonomy );
-				if ( is_array( $terms ) ) {
-					return $terms[0]->name;
-				}
+			$terms = get_the_terms( $product->get_id(), $taxonomy );
+			if ( is_array( $terms ) ) {
+				return $terms[0]->name;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Searches for the first found primary term for the given taxonomies.
+	 *
+	 * @param array $brand_taxonomies The taxonomies to find the primary term for.
+	 *
+	 * @return string The term name if found, otherwise an empty string
+	 */
+	protected function search_primary_term( array $brand_taxonomies ) {
+		// First find the primary term.
+		if ( ! class_exists( 'WPSEO_Primary_Term' ) ) {
+			return '';
+		}
+
+		foreach ( $brand_taxonomies as $taxonomy ) {
+			$primary_term       = new WPSEO_Primary_Term( $taxonomy, $product->get_id() );
+			$found_primary_term = $primary_term->get_primary_term();
+
+			if ( $found_primary_term ) {
+				$term = get_term_by( 'id', $found_primary_term, $taxonomy );
+				return $term->name;
 			}
 		}
 
