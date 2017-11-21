@@ -52,8 +52,70 @@
 	}
 
 	/**
+	 * Gets the taxonomy name from categories.
+	 * The logic of this function is inspired by: http://viralpatel.net/blogs/jquery-get-text-element-without-child-element/
+	 *
+	 * @param {Object} checkbox The checkbox to parse to retrieve the label.
+	 * @returns {string} The category name.
+	 */
+	function extractBrandName( checkbox ) {
+		// Take the parent of checkbox with type label and clone it.
+		var clonedLabel = checkbox.parent( "label" ).clone();
+
+		// Finds child elements and removes them so we only get the label's text left.
+		clonedLabel.children().remove();
+
+		// Returns the trimmed text value,
+		return clonedLabel.text().trim();
+	}
+
+	/**
+	 * Finds the brand element. First it looks to an primary term. If nothing found it gets the first checked
+	 * term.
+	 *
+	 * @param {jQuery} brandContainer The metabox container to look in.
+	 * @returns {jQuery|null} The element if found, otherwise null.
+	 */
+	function findPrimaryBrand( brandContainer ) {
+		var primaryBrand = brandContainer.find( 'li.wpseo-primary-term input:checked' );
+		if ( primaryBrand.length > 0 ) {
+			return primaryBrand.first();
+		}
+
+		var checkboxes = brandContainer.find( 'li input:checked' );
+		if( checkboxes.length > 0 ) {
+			return checkboxes.first();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the name of the first found brand name.
+	 *
+	 * @returns string The name of the brand.
+	 */
+	function getBrand() {
+		var brandContainers = [ '#product_brand-all', '#pwb-brand-all' ];
+		var totalBrandContainers = brandContainers.length;
+		for( var i = 0; i < totalBrandContainers; i++ ) {
+			var brandContainer = jQuery( brandContainers[ i ] );
+			if ( brandContainer.length === 0 ) {
+				continue;
+			}
+
+			var primaryProductBrand = findPrimaryBrand( brandContainer );
+			if ( primaryProductBrand !== null && primaryProductBrand.length > 0 ) {
+				return extractBrandName( jQuery( primaryProductBrand ) );
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Variable replacement plugin for WordPress.
-	 *	 *
+	 *
 	 * @returns {void}
 	 */
 	var YoastReplaceVarPlugin = function() {
@@ -62,7 +124,33 @@
 
 		this.registerReplacements();
 		this.registerModifications( this._app );
+		this.registerEvents();
 	};
+
+	/**
+	 * Register the events that might have influence for the replace vars.
+	 *
+	 * @returns {void}
+	 */
+	YoastReplaceVarPlugin.prototype.registerEvents = function() {
+		var brandElements = [ '#taxonomy-product_brand', '#pwb-branddiv' ];
+		brandElements.forEach( this.registerBrandEvents.bind( this ) );
+	};
+
+	/**
+	 * Registers the events for the brand containers.
+	 *
+	 * @param {string} brandElement The element target name.
+	 *
+	 * @returns {void}
+	 */
+	YoastReplaceVarPlugin.prototype.registerBrandEvents = function( brandElement ) {
+		brandElement = jQuery( brandElement );
+		brandElement.on( "wpListAddEnd", ".categorychecklist", this.declareReloaded.bind( this ) );
+		brandElement.on( "change", "input[type=checkbox]", this.declareReloaded.bind( this ) );
+		brandElement.on( "click active", ".wpseo-make-primary-term", this.declareReloaded.bind( this ) );
+	};
+
 
 	/**
 	 * Registers all the placeholders and their replacements.
@@ -102,6 +190,7 @@
 			data = data.replace( /%%wc_price%%/g, GetPrice() );
 			data = data.replace( /%%wc_sku%%/g, jQuery( '#_sku' ).val() );
 			data = data.replace( /%%wc_shortdesc%%/g, GetShortDescription() );
+			data = data.replace( /%%wc_brand%%/g, getBrand() );
 
 			data = this.replacePlaceholders( data );
 		}
