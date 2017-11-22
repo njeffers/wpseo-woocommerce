@@ -20,4 +20,11 @@
 			<directory prefix="test-" suffix=".php">./tests/</directory>
 		</testsuite>
 	</testsuites>
+
+	<filter>
+		<whitelist>
+			<directory>./classes</directory>
+			<file>./wpseo-woocommerce.php</file>
+		</whitelist>
+	</filter>
 </phpunit>
