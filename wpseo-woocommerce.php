@@ -488,7 +488,7 @@ class Yoast_WooCommerce_SEO {
 			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED;
 		}
 
-		foreach( $keys_to_remove as $key_to_remove ) {
+		foreach ( $keys_to_remove as $key_to_remove ) {
 			unset( $columns[ $key_to_remove ] );
 		}
 
