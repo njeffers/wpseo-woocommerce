@@ -472,13 +472,13 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Clean up the columns in the edit products page.
+	 * Removes the Yoast SEO columns in the edit products page.
 	 *
 	 * @since 1.0
 	 *
 	 * @param array $columns List of registered columns.
 	 *
-	 * @return mixed
+	 * @return array Array with the filtered columns.
 	 */
 	public function column_heading( $columns ) {
 		$keys_to_remove = array( 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-score', 'wpseo-score-readability' );
