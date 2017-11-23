@@ -121,17 +121,10 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 
 			// Prepare an array of valid data types and taxonomies to validate against.
 			$valid_data_types = array_keys( $this->valid_data_types );
-			$valid_taxonomies = array();
-			$taxonomies       = get_object_taxonomies( 'product', 'objects' );
-			if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
-				foreach ( $taxonomies as $tax ) {
-					$tax_name            = strtolower( $tax->name );
-					$valid_data_types[] = $tax_name;
-					$valid_taxonomies[] = $tax_name;
-				}
+			$valid_taxonomies = $this->get_taxonomies();
+			if ( ! empty( $valid_taxonomies ) ) {
+				$valid_data_types = array_merge( $valid_data_types, $valid_taxonomies );
 			}
-			unset( $taxonomies, $tax, $tax_name );
-
 
 			foreach ( $clean as $key => $value ) {
 				switch ( $key ) {
@@ -215,6 +208,25 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			} // End foreach().
 
 			return $clean;
+		}
+
+		/**
+		 * Returns a list of lower cased taxonomies.
+		 *
+		 * @return array The found taxonomies.
+		 */
+		protected function get_taxonomies() {
+			$taxonomies           = get_object_taxonomies( 'product', 'objects' );
+			$processed_taxonomies = array();
+			if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
+				foreach ( $taxonomies as $tax ) {
+					$processed_taxonomies[] = strtolower( $tax->name );
+				}
+			}
+
+			unset( $taxonomies, $tax, $tax_name );
+
+			return $processed_taxonomies;
 		}
 	} // End of class WPSEO_Option_Woo.
 
