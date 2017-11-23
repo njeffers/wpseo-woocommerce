@@ -217,11 +217,14 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		 */
 		protected function get_taxonomies() {
 			$taxonomies           = get_object_taxonomies( 'product', 'objects' );
+
+			if ( ! is_array( $taxonomies ) || empty( $taxonomies ) ) {
+				return array();
+			}
+
 			$processed_taxonomies = array();
-			if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
-				foreach ( $taxonomies as $tax ) {
-					$processed_taxonomies[] = strtolower( $tax->name );
-				}
+			foreach ( $taxonomies as $tax ) {
+				$processed_taxonomies[] = strtolower( $tax->name );
 			}
 
 			unset( $taxonomies, $tax, $tax_name );
