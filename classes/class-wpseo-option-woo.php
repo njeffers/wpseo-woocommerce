@@ -223,11 +223,11 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			}
 
 			$processed_taxonomies = array();
-			foreach ( $taxonomies as $tax ) {
-				$processed_taxonomies[] = strtolower( $tax->name );
+			foreach ( $taxonomies as $taxonomy ) {
+				$processed_taxonomies[] = strtolower( $taxonomy->name );
 			}
 
-			unset( $taxonomies, $tax, $tax_name );
+			unset( $taxonomies );
 
 			return $processed_taxonomies;
 		}
