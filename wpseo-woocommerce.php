@@ -472,16 +472,25 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Clean up the columns in the edit products page.
+	 * Removes the Yoast SEO columns in the edit products page.
 	 *
 	 * @since 1.0
 	 *
 	 * @param array $columns List of registered columns.
 	 *
-	 * @return mixed
+	 * @return array Array with the filtered columns.
 	 */
-	function column_heading( $columns ) {
-		unset( $columns['wpseo-title'], $columns['wpseo-metadesc'], $columns['wpseo-focuskw'], $columns['wpseo-score'], $columns['wpseo-score-readability'] );
+	public function column_heading( $columns ) {
+		$keys_to_remove = array( 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-score', 'wpseo-score-readability' );
+
+		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
+			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS;
+			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED;
+		}
+
+		foreach ( $keys_to_remove as $key_to_remove ) {
+			unset( $columns[ $key_to_remove ] );
+		}
 
 		return $columns;
 	}
