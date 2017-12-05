@@ -1,8 +1,8 @@
 WooCommerce Yoast SEO
 =====================
 Requires at least: 4.8
-Tested up to: 4.9
-Stable tag: 5.8
+Tested up to: 4.9.1
+Stable tag: 5.9
 Depends: wordpress-seo
 
 Description
@@ -29,9 +29,12 @@ Changelog
 =========
 
 ### 5.9: December 5th, 2017
-* Bugfixes:
+Bugfixes:
 * Fixes a bug where product gallery images were being placed above the featured image in the OpenGraph output. This caused an unexpected image to be used when sharing the page.
 * Fixes a bug where the Yoast SEO link count columns where not removed from the product page when the setting `Remove Yoast SEO columns` is used.
+
+Other:
+* Compatibility with Yoast SEO 5.9
 
 ### 5.8: November 15th, 2017
 * Compatibility with Yoast SEO 5.8
