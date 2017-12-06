@@ -345,18 +345,6 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Loads CSS.
-	 *
-	 * @since 1.0
-	 */
-	public function config_page_styles() {
-		global $pagenow;
-		if ( $pagenow == 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === 'wpseo_woo' ) && ( defined( 'WPSEO_PATH' ) && defined( 'WPSEO_CSSJS_SUFFIX' ) && defined( 'WPSEO_VERSION' ) ) ) {
-			wp_enqueue_style( 'yoast-admin-css', plugins_url( 'css/yst_plugin_tools' . WPSEO_CSSJS_SUFFIX . '.css', WPSEO_PATH . 'dummy.txt' ), array(), WPSEO_VERSION );
-		}
-	}
-
-	/**
 	 * Builds the admin page.
 	 *
 	 * @since 1.0
@@ -988,6 +976,16 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function twitter_enhancement() {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
+	}
+
+	/**
+	 * Loads CSS.
+	 *
+	 * @deprecated 6.0
+	 * @since      1.0
+	 */
+	public function config_page_styles() {
+		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 6.0', null );
 	}
 }
 
