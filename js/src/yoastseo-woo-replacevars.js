@@ -96,13 +96,16 @@
 	function getBrand() {
 		var brandContainers = [ '#product_brand-all', '#pwb-brand-all' ];
 		var totalBrandContainers = brandContainers.length;
+
 		for( var i = 0; i < totalBrandContainers; i++ ) {
 			var brandContainer = jQuery( brandContainers[ i ] );
+
 			if ( brandContainer.length === 0 ) {
 				continue;
 			}
 
 			var primaryProductBrand = findPrimaryBrand( brandContainer );
+
 			if ( primaryProductBrand !== null && primaryProductBrand.length > 0 ) {
 				return extractBrandName( jQuery( primaryProductBrand ) );
 			}
@@ -227,6 +230,7 @@
 	YoastReplaceVarPlugin.prototype.replacePlaceholders = function( text ) {
 		for ( var placeholder in placeholders ) {
 			var replaceVar = placeholders[ placeholder ];
+
 			text = text.replace(
 				new RegExp( replaceVar.getPlaceholder( true ), 'g' ), replaceVar.replacement
 			);
