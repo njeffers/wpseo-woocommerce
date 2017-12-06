@@ -96,7 +96,6 @@ class Yoast_WooCommerce_SEO {
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 			// Add subitem to menu.
 			add_filter( 'wpseo_submenu_pages', array( $this, 'add_submenu_pages' ) );
-			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
 
 			if ( $this->license_manager ) {
 				add_action( 'wpseo_licenses_forms', array( $this->license_manager, 'show_license_form' ) );
@@ -350,7 +349,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function config_page_styles() {
+	public function config_page_styles() {
 		global $pagenow;
 		if ( $pagenow == 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === 'wpseo_woo' ) && ( defined( 'WPSEO_PATH' ) && defined( 'WPSEO_CSSJS_SUFFIX' ) && defined( 'WPSEO_VERSION' ) ) ) {
 			wp_enqueue_style( 'yoast-admin-css', plugins_url( 'css/yst_plugin_tools' . WPSEO_CSSJS_SUFFIX . '.css', WPSEO_PATH . 'dummy.txt' ), array(), WPSEO_VERSION );
