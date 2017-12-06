@@ -1031,7 +1031,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @param array $brand_taxonomies The taxonomies to find the primary term for.
 	 *
-	 * @return string The term name if found, otherwise an empty string
+	 * @return string The term's name (if found). Otherwise an empty string.
 	 */
 	protected function search_primary_term( array $brand_taxonomies ) {
 		// First find the primary term.
