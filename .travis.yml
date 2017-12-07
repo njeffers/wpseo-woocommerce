@@ -55,7 +55,17 @@ before_script:
 - export WP_DEVELOP_DIR=/tmp/wordpress/
 # Clone WordPress
 - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/wordpress
-# Copy news seo to the test directory
+
+# Clone WPSEO and its submodule
+- git clone --depth=50 --branch="trunk" https://github.com/Yoast/wordpress-seo.git $WP_DEVELOP_DIR/src/wp-content/plugins/wordpress-seo
+- cd /tmp/wordpress/src/wp-content/plugins/wordpress-seo
+- if [[ $TRAVIS_PHP_VERSION == "5.2" || $TRAVIS_PHP_VERSION == "5.3" ]]; then phpenv local 5.6.13; fi
+- composer selfupdate 1.0.0 --no-interaction
+- composer install --no-interaction
+- phpenv local --unset
+- cd -
+
+# Copy woocommerce seo to the test directory
 - cd ..
 - cp -r "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 - cd /tmp/wordpress/

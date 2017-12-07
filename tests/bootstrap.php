@@ -8,6 +8,10 @@ if ( function_exists( 'xdebug_disable' ) ) {
 echo 'Welcome to the Wordpress SEO WooCommerce test suite' . PHP_EOL;
 echo 'Version: 1.0' . PHP_EOL . PHP_EOL;
 
+if ( false !== getenv( 'WP_PLUGIN_DIR' ) ) {
+	define( 'WP_PLUGIN_DIR', getenv( 'WP_PLUGIN_DIR' ) );
+}
+
 $GLOBALS['wp_tests_options'] = array(
 	'active_plugins' => array( 'wpseo-woocommerce/wpseo-woocommerce.php' ),
 );
@@ -17,6 +21,9 @@ if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 } else {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
+
+// Load wordpress seo.
+require dirname( __FILE__ ) . '/../../wordpress-seo/wp-seo.php';
 
 // include unit test base class
 require_once dirname( __FILE__ ) . '/framework/class-wpseo-woocommerce-unit-test-case.php';

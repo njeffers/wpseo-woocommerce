@@ -5,7 +5,7 @@
 
 /**
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     5.8
+ * Version:     5.9
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -35,7 +35,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * @const string Version of the plugin.
 	 */
-	const VERSION = '5.8';
+	const VERSION = '5.9';
 
 	/**
 	 * @var object $option_instance Instance of the WooCommerce_SEO option management class
@@ -473,16 +473,25 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Clean up the columns in the edit products page.
+	 * Removes the Yoast SEO columns in the edit products page.
 	 *
 	 * @since 1.0
 	 *
 	 * @param array $columns List of registered columns.
 	 *
-	 * @return mixed
+	 * @return array Array with the filtered columns.
 	 */
-	function column_heading( $columns ) {
-		unset( $columns['wpseo-title'], $columns['wpseo-metadesc'], $columns['wpseo-focuskw'], $columns['wpseo-score'], $columns['wpseo-score-readability'] );
+	public function column_heading( $columns ) {
+		$keys_to_remove = array( 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-score', 'wpseo-score-readability' );
+
+		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
+			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS;
+			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED;
+		}
+
+		foreach ( $keys_to_remove as $key_to_remove ) {
+			unset( $columns[ $key_to_remove ] );
+		}
 
 		return $columns;
 	}
@@ -840,9 +849,11 @@ class Yoast_WooCommerce_SEO {
 		if ( 'product' !== get_post_type() ) {
 			return;
 		}
+    
+		$version = '590';
 
-		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . '510' . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
-		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . '590' . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
 
 		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
 		wp_localize_script( 'wp-seo-woo-replacevars', 'wpseoWooReplaceVarsL10n', $this->localize_woo_replacevars_script() );

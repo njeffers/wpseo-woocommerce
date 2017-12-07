@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Yoast SEO: WooCommerce package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Yoast SEO: WooCommerce 5.8\n"
+"Project-Id-Version: Yoast SEO: WooCommerce 5.9\n"
 "Report-Msgid-Bugs-To: https://github.com/yoast/wpseo-woocommerce/issues\n"
-"POT-Creation-Date: 2017-11-15 10:04:54+00:00\n"
+"POT-Creation-Date: 2017-12-05 10:16:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -231,23 +231,23 @@ msgstr ""
 msgid "Move WooCommerce up"
 msgstr ""
 
-#: wpseo-woocommerce.php:929
+#: wpseo-woocommerce.php:938
 msgid "You should write a short description for this product."
 msgstr ""
 
-#: wpseo-woocommerce.php:930
+#: wpseo-woocommerce.php:939
 msgid "The short description for this product is too short."
 msgstr ""
 
-#: wpseo-woocommerce.php:931
+#: wpseo-woocommerce.php:940
 msgid "Your short description has a good length."
 msgstr ""
 
-#: wpseo-woocommerce.php:932
+#: wpseo-woocommerce.php:941
 msgid "The short description for this product is too long."
 msgstr ""
 
-#: wpseo-woocommerce.php:994
+#: wpseo-woocommerce.php:1003
 #. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
 #. to the closing tag, %3$s resolves to Yoast SEO
 msgid ""
@@ -255,13 +255,13 @@ msgid ""
 "functionality to allow the WooCommerce SEO module to work."
 msgstr ""
 
-#: wpseo-woocommerce.php:1007
+#: wpseo-woocommerce.php:1016
 msgid ""
 "Please upgrade WordPress to the latest version to allow WordPress and the "
 "WooCommerce SEO module to work properly."
 msgstr ""
 
-#: wpseo-woocommerce.php:1019
+#: wpseo-woocommerce.php:1028
 #. translators: %1$s resolves to Yoast SEO
 msgid ""
 "Please upgrade the %1$s plugin to the latest version to allow the "
