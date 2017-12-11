@@ -358,10 +358,12 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		if ( class_exists( 'WPSEO_Admin_Asset_Manager' ) ) {
-			$asset_manager = new WPSEO_Admin_Asset_Manager();
-			$asset_manager->enqueue_style( 'admin-css' );
+		if ( ! class_exists( 'WPSEO_Admin_Asset_Manager' ) ) {
+			return;
 		}
+
+		$asset_manager = new WPSEO_Admin_Asset_Manager();
+		$asset_manager->enqueue_style( 'admin-css' );
 	}
 
 	/**
