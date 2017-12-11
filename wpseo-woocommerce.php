@@ -96,6 +96,7 @@ class Yoast_WooCommerce_SEO {
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 			// Add subitem to menu.
 			add_filter( 'wpseo_submenu_pages', array( $this, 'add_submenu_pages' ) );
+			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
 
 			if ( $this->license_manager ) {
 				add_action( 'wpseo_licenses_forms', array( $this->license_manager, 'show_license_form' ) );
@@ -342,6 +343,25 @@ class Yoast_WooCommerce_SEO {
 		);
 
 		return $submenu_pages;
+	}
+
+	/**
+	 * Loads CSS.
+	 *
+	 * @since 1.0
+	 */
+	public function config_page_styles() {
+		global $pagenow;
+
+		$is_wpseo_woocommerce_page = ( $pagenow === 'admin.php' && filter_input( INPUT_GET, 'page' ) );
+		if ( ! $is_wpseo_woocommerce_page ) {
+			return;
+		}
+
+		if ( class_exists( 'WPSEO_Admin_Asset_Manager' ) ) {
+			$asset_manager = new WPSEO_Admin_Asset_Manager();
+			$asset_manager->enqueue_style( 'admin-css' );
+		}
 	}
 
 	/**
@@ -976,16 +996,6 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function twitter_enhancement() {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 3.1', null );
-	}
-
-	/**
-	 * Loads CSS.
-	 *
-	 * @deprecated 6.0
-	 * @since      1.0
-	 */
-	public function config_page_styles() {
-		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 6.0', null );
 	}
 }
 
