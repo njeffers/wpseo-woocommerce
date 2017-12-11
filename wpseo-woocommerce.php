@@ -353,7 +353,7 @@ class Yoast_WooCommerce_SEO {
 	public function config_page_styles() {
 		global $pagenow;
 
-		$is_wpseo_woocommerce_page = ( $pagenow === 'admin.php' && filter_input( INPUT_GET, 'page' ) );
+		$is_wpseo_woocommerce_page = ( $pagenow === 'admin.php' && filter_input( INPUT_GET, 'page' ) === 'wpseo_woo' );
 		if ( ! $is_wpseo_woocommerce_page ) {
 			return;
 		}
