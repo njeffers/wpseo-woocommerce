@@ -28,6 +28,11 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
+### 6.0: December 19th, 2017
+Changes:
+
+* Compatibility with Yoast SEO 6.0
+
 ### 5.9: December 5th, 2017
 Bugfixes:
 * Fixes a bug where product gallery images were being placed above the featured image in the OpenGraph output. This caused an unexpected image to be used when sharing the page.
