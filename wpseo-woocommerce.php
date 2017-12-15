@@ -1064,7 +1064,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Localizes scripts for the Woo Replacevars plugin.
+	 * Localizes scripts for the WooCommerce Replacevars plugin.
 	 *
 	 * @return array The localized values.
 	 */
