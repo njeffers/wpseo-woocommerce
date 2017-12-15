@@ -81,7 +81,7 @@
 
 		var checkboxes = brandContainer.find( 'li input:checked' );
 
-		if( checkboxes.length > 0 ) {
+		if ( checkboxes.length > 0 ) {
 			return checkboxes.first();
 		}
 
@@ -240,12 +240,17 @@
 	};
 
 	/**
-	 * Adds event listener to load the Yoast WooCommerce replacevars plugin.
+	 * Initializes the Yoast WooCommerce replacevars plugin.
 	 */
-	if ( typeof YoastSEO !== 'undefined' && typeof YoastSEO.app !== 'undefined' ) {
-		var replacevarPlugin = new YoastReplaceVarPlugin();
-	}
-	else {
+	function initializeReplacevarPlugin() {
+		// When YoastSEO is available, just instantiate the plugin.
+		if ( typeof YoastSEO !== 'undefined' && typeof YoastSEO.app !== 'undefined' ) {
+			var replacevarPlugin = new YoastReplaceVarPlugin();
+
+			return;
+		}
+
+		// Otherwise, add an event that will be executed when YoastSEO will be available.
 		jQuery( window ).on(
 			'YoastSEO:ready',
 			function() {
@@ -253,4 +258,7 @@
 			}
 		);
 	}
+
+	// Initializes
+	initializeReplacevarPlugin();
 }() );

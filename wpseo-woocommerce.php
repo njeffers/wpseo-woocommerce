@@ -1038,7 +1038,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Searches for the first found primary term for the given taxonomies.
+	 * Searches for the primary terms for given taxonomies and returns the first found primary term.
 	 *
 	 * @param array $brand_taxonomies The taxonomies to find the primary term for.
 	 *
