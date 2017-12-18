@@ -350,11 +350,20 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function config_page_styles() {
+	public function config_page_styles() {
 		global $pagenow;
-		if ( $pagenow == 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === 'wpseo_woo' ) && ( defined( 'WPSEO_PATH' ) && defined( 'WPSEO_CSSJS_SUFFIX' ) && defined( 'WPSEO_VERSION' ) ) ) {
-			wp_enqueue_style( 'yoast-admin-css', plugins_url( 'css/yst_plugin_tools' . WPSEO_CSSJS_SUFFIX . '.css', WPSEO_PATH . 'dummy.txt' ), array(), WPSEO_VERSION );
+
+		$is_wpseo_woocommerce_page = ( $pagenow === 'admin.php' && filter_input( INPUT_GET, 'page' ) === 'wpseo_woo' );
+		if ( ! $is_wpseo_woocommerce_page ) {
+			return;
 		}
+
+		if ( ! class_exists( 'WPSEO_Admin_Asset_Manager' ) ) {
+			return;
+		}
+
+		$asset_manager = new WPSEO_Admin_Asset_Manager();
+		$asset_manager->enqueue_style( 'admin-css' );
 	}
 
 	/**
