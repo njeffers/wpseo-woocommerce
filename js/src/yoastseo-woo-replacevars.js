@@ -240,7 +240,9 @@
 	};
 
 	/**
-	 * Initializes the Yoast WooCommerce replacevars plugin.
+	 * Initializes the Yoast WooCommerce ReplaceVars plugin.
+	 *
+	 * @returns void
 	 */
 	function initializeReplacevarPlugin() {
 		// When YoastSEO is available, just instantiate the plugin.
@@ -259,6 +261,5 @@
 		);
 	}
 
-	// Initializes
 	initializeReplacevarPlugin();
 }() );
