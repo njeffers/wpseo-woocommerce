@@ -729,6 +729,23 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
+	 * the post attribute.
+	 *
+	 * @since 4.9
+	 *
+	 * @param WC_Product $product The product.
+	 *
+	 * @return string
+	 */
+	protected function get_short_product_description( $product ) {
+		if (  method_exists( $product, 'get_short_description' ) ) {
+			return $product->get_short_description();
+		}
+		return $product->post->post_excerpt;
+	}
+
+	/**
 	 * Checks if product class has a description method. Otherwise it returns the value of the post_content.
 	 *
 	 * @since 4.9
@@ -1022,7 +1039,7 @@ class Yoast_WooCommerce_SEO {
 
 		$brand_taxonomies = array_filter( $brand_taxonomies, 'taxonomy_exists' );
 
-		$primary_term = $this->search_primary_term( $brand_taxonomies );
+		$primary_term = $this->search_primary_term( $brand_taxonomies, $product );
 		if ( $primary_term !== '' ) {
 			return $primary_term;
 		}
@@ -1040,11 +1057,12 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Searches for the primary terms for given taxonomies and returns the first found primary term.
 	 *
-	 * @param array $brand_taxonomies The taxonomies to find the primary term for.
+	 * @param array      $brand_taxonomies The taxonomies to find the primary term for.
+	 * @param WC_Product $product          The WooCommerce Product
 	 *
 	 * @return string The term's name (if found). Otherwise an empty string.
 	 */
-	protected function search_primary_term( array $brand_taxonomies ) {
+	protected function search_primary_term( array $brand_taxonomies, $product ) {
 		// First find the primary term.
 		if ( ! class_exists( 'WPSEO_Primary_Term' ) ) {
 			return '';
