@@ -299,7 +299,7 @@ class Yoast_WooCommerce_SEO {
 	public function upgrade() {
 
 		// Upgrade license options.
-		if ( $this->license_manager && $this->license_manager->license_is_valid() == false ) {
+		if ( $this->license_manager && $this->license_manager->license_is_valid() === false ) {
 
 			if ( isset( $this->options['license-status'] ) ) {
 				$this->license_manager->set_license_status( $this->options['license-status'] );
@@ -353,7 +353,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function config_page_styles() {
 		global $pagenow;
-		if ( $pagenow == 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === 'wpseo_woo' ) && ( defined( 'WPSEO_PATH' ) && defined( 'WPSEO_CSSJS_SUFFIX' ) && defined( 'WPSEO_VERSION' ) ) ) {
+		if ( $pagenow === 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === 'wpseo_woo' ) && ( defined( 'WPSEO_PATH' ) && defined( 'WPSEO_CSSJS_SUFFIX' ) && defined( 'WPSEO_VERSION' ) ) ) {
 			wp_enqueue_style( 'yoast-admin-css', plugins_url( 'css/yst_plugin_tools' . WPSEO_CSSJS_SUFFIX . '.css', WPSEO_PATH . 'dummy.txt' ), array(), WPSEO_VERSION );
 		}
 	}
@@ -444,7 +444,7 @@ class Yoast_WooCommerce_SEO {
 	 * @param string $id    The ID and option name for the checkbox.
 	 * @param string $label The label for the checkbox.
 	 */
-	function checkbox( $id, $label ) {
+	public function checkbox( $id, $label ) {
 		$current = false;
 		if ( isset( $this->options[ $id ] ) && $this->options[ $id ] === true ) {
 			$current = 'on';
@@ -459,7 +459,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function footer_js() {
+	public function footer_js() {
 		?>
 		<script type="text/javascript">
 			jQuery( document ).ready( function( $ ) {
@@ -501,7 +501,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 */
-	function woo_wpseo_breadcrumbs() {
+	public function woo_wpseo_breadcrumbs() {
 		yoast_breadcrumb( '<nav class="woocommerce-breadcrumb">', '</nav>' );
 	}
 
@@ -515,7 +515,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return bool
 	 */
-	function xml_sitemap_post_types( $bool, $post_type ) {
+	public function xml_sitemap_post_types( $bool, $post_type ) {
 		if ( $post_type === 'product_variation' || $post_type === 'shop_coupon' ) {
 			return true;
 		}
@@ -533,7 +533,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return bool
 	 */
-	function xml_sitemap_taxonomies( $bool, $taxonomy ) {
+	public function xml_sitemap_taxonomies( $bool, $taxonomy ) {
 		if ( $taxonomy === 'product_type' || $taxonomy === 'product_shipping_class' || $taxonomy === 'shop_order_status' ) {
 			return true;
 		}
@@ -656,7 +656,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return string
 	 */
-	function og_desc_enhancement( $desc ) {
+	public function og_desc_enhancement( $desc ) {
 
 		if ( is_product_taxonomy() ) {
 
@@ -1116,7 +1116,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @deprecated 1.1.0 - now auto-handled by class WPSEO_Option_Woo
 	 */
-	function initialize_defaults() {
+	public function initialize_defaults() {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 1.1.0', null );
 	}
 
@@ -1126,7 +1126,7 @@ class Yoast_WooCommerce_SEO {
 	 * @since      1.0
 	 * @deprecated 1.1.0 - now auto-handled by class WPSEO_Option_Woo
 	 */
-	function options_init() {
+	public function options_init() {
 		_deprecated_function( __CLASS__ . '::' . __METHOD__, 'WooCommerce SEO 1.1.0', null );
 	}
 
