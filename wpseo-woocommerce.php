@@ -5,7 +5,7 @@
 
 /**
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     5.9
+ * Version:     6.0
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -35,7 +35,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * @const string Version of the plugin.
 	 */
-	const VERSION = '5.9';
+	const VERSION = '6.0';
 
 	/**
 	 * @var object $option_instance Instance of the WooCommerce_SEO option management class
@@ -353,9 +353,18 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function config_page_styles() {
 		global $pagenow;
-		if ( $pagenow === 'admin.php' && ( isset( $_GET['page'] ) && $_GET['page'] === 'wpseo_woo' ) && ( defined( 'WPSEO_PATH' ) && defined( 'WPSEO_CSSJS_SUFFIX' ) && defined( 'WPSEO_VERSION' ) ) ) {
-			wp_enqueue_style( 'yoast-admin-css', plugins_url( 'css/yst_plugin_tools' . WPSEO_CSSJS_SUFFIX . '.css', WPSEO_PATH . 'dummy.txt' ), array(), WPSEO_VERSION );
+
+		$is_wpseo_woocommerce_page = ( $pagenow === 'admin.php' && filter_input( INPUT_GET, 'page' ) === 'wpseo_woo' );
+		if ( ! $is_wpseo_woocommerce_page ) {
+			return;
 		}
+
+		if ( ! class_exists( 'WPSEO_Admin_Asset_Manager' ) ) {
+			return;
+		}
+
+		$asset_manager = new WPSEO_Admin_Asset_Manager();
+		$asset_manager->enqueue_style( 'admin-css' );
 	}
 
 	/**
