@@ -1067,7 +1067,7 @@ class Yoast_WooCommerce_SEO {
 	 * Searches for the primary terms for given taxonomies and returns the first found primary term.
 	 *
 	 * @param array      $brand_taxonomies The taxonomies to find the primary term for.
-	 * @param WC_Product $product          The WooCommerce Product
+	 * @param WC_Product $product          The WooCommerce Product.
 	 *
 	 * @return string The term's name (if found). Otherwise an empty string.
 	 */
