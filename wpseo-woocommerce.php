@@ -439,7 +439,7 @@ class Yoast_WooCommerce_SEO {
 			), "</p>\n";
 			$this->checkbox('hide_columns', sprintf(
 			/* translators: %1$s resolves to Yoast SEO */
-				__('Remove %1$s columns', 'yoast-woo-seo'), 'Yoast SEO')
+				__( 'Remove %1$s columns', 'yoast-woo-seo' ), 'Yoast SEO' )
 			);
 
 			echo '<br class="clear"/>';
