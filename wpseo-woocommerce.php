@@ -335,7 +335,9 @@ class Yoast_WooCommerce_SEO {
 	public function add_submenu_pages( $submenu_pages ) {
 		$submenu_pages[] = array(
 			'wpseo_dashboard',
-			sprintf( __( '%1$s Settings', 'yoast-woo-seo' ), 'WooCommerce SEO' ),
+			sprintf( __(
+			        /* translators: %1$s resolves to WooCommerce SEO  */
+			        '%1$s Settings', 'yoast-woo-seo' ), 'WooCommerce SEO' ),
 			'WooCommerce SEO',
 			'wpseo_manage_options',
 			$this->short_name,
@@ -412,7 +414,7 @@ class Yoast_WooCommerce_SEO {
 			echo '<h2>' . __( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
 			echo '<p>',
 				sprintf(
-					/* translators: %1$s resolves to internal links options page, %2$s resolves to closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WoOCommerce */
+					/* translators: %1$s resolves to internal links options page, %2$s resolves to closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce */
 					__( 'Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sInternal Links settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ),
 					'<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_internal-links' ) ) . '">',
 					'</a>',
@@ -421,7 +423,7 @@ class Yoast_WooCommerce_SEO {
 				), "</p>\n";
 				$this->checkbox( 'breadcrumbs',
 					sprintf(
-							/* translators: %1$s resolves to WooCommerce */
+					    /* translators: %1$s resolves to WooCommerce */
 						__( 'Replace %1$s Breadcrumbs', 'yoast-woo-seo' ),
 						'WooCommerce'
 					)
@@ -438,7 +440,7 @@ class Yoast_WooCommerce_SEO {
 				'WooCommerce'
 			), "</p>\n";
 			$this->checkbox('hide_columns', sprintf(
-			/* translators: %1$s resolves to Yoast SEO */
+			    /* translators: %1$s resolves to Yoast SEO */
 				__( 'Remove %1$s columns', 'yoast-woo-seo' ), 'Yoast SEO' )
 			);
 
@@ -451,8 +453,8 @@ class Yoast_WooCommerce_SEO {
 				'WooCommerce'
 			), "</p>\n";
 			$this->checkbox( 'metabox_woo_top',
-				/* translators: %1$s resolves to WooCommerce */
 				sprintf(
+                    /* translators: %1$s resolves to WooCommerce */
 					__( 'Move %1$s up', 'yoast-woo-seo' ),
 					'WooCommerce'
 				)
