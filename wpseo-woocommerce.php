@@ -413,8 +413,8 @@ class Yoast_WooCommerce_SEO {
 			echo '<p>',
 				sprintf(
 					/* translators: %1$s resolves to interal links options page, %2$s resolves to closing link tag, %3$s resolves to Yoast SEO */
-					__( 'Both WooCommerce and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sInternal Links settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_internal-links' ) ) . '">',
+                    __( 'Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sBreadcrumbs settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ),
+                    '<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_advanced&tab=breadcrumbs' ) ) . '">',
 					'</a>',
 					'Yoast SEO'
 				), "</p>\n";
