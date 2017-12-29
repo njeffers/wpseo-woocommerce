@@ -412,22 +412,30 @@ class Yoast_WooCommerce_SEO {
 			echo '<h2>' . __( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
 			echo '<p>',
 				sprintf(
-					/* translators: %1$s resolves to interal links options page, %2$s resolves to closing link tag, %3$s resolves to Yoast SEO */
-					__( 'Both WooCommerce and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sInternal Links settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ),
+					/* translators: %1$s resolves to internal links options page, %2$s resolves to closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WoOCommerce */
+					__( 'Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sInternal Links settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ),
 					'<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_internal-links' ) ) . '">',
 					'</a>',
-					'Yoast SEO'
+					'Yoast SEO',
+                    'WooCommerce'
 				), "</p>\n";
-				$this->checkbox( 'breadcrumbs', __( 'Replace WooCommerce Breadcrumbs', 'yoast-woo-seo' ) );
+				$this->checkbox( 'breadcrumbs',
+                    sprintf(
+                            /* translators: %1$s resolves to WooCommerce */
+				        __( 'Replace %1$s Breadcrumbs', 'yoast-woo-seo' ),
+                        'WooCommerce'
+                    )
+                );
 		}
 
 		echo '<br class="clear"/>';
 		echo '<h2>' . __( 'Admin', 'yoast-woo-seo' ) . '</h2>';
 		echo '<p>',
 			sprintf(
-				/* translators: %1$s resolves to Yoast SEO */
-				__( 'Both WooCommerce and %1$s add columns to the product page, to remove all but the SEO score column from %1$s on that page, check this box.', 'yoast-woo-seo' ),
-				'Yoast SEO'
+				/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce */
+				__( 'Both %2$s and %1$s add columns to the product page, to remove all but the SEO score column from %1$s on that page, check this box.', 'yoast-woo-seo' ),
+				'Yoast SEO',
+                'WooCommerce'
 			), "</p>\n";
             $this->checkbox('hide_columns', sprintf(
             /* translators: %1$s resolves to Yoast SEO */
@@ -437,11 +445,18 @@ class Yoast_WooCommerce_SEO {
 			echo '<br class="clear"/>';
 			echo '<p>',
 			sprintf(
-				/* translators: %1$s resolves to Yoast SEO */
-				__( 'Both WooCommerce and %1$s add metaboxes to the edit product page, if you want WooCommerce to be above %1$s, check the box.', 'yoast-woo-seo' ),
-				'Yoast SEO'
+				/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce */
+				__( 'Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s to be above %1$s, check the box.', 'yoast-woo-seo' ),
+				'Yoast SEO',
+                'WooCommerce'
 			), "</p>\n";
-			$this->checkbox( 'metabox_woo_top', __( 'Move WooCommerce up', 'yoast-woo-seo' ) );
+			$this->checkbox( 'metabox_woo_top',
+                /* translators: %1$s resolves to WooCommerce */
+                sprintf(
+			        __( 'Move %1$s up', 'yoast-woo-seo' ),
+                    'WooCommerce'
+                )
+            );
 
 			echo '<br class="clear"/>';
 
@@ -1032,7 +1047,8 @@ function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
         sprintf(
             /* translators: %1$s resolves to WooCommerce SEO */
             __( 'Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly.', 'yoast-woo-seo' ),
-            'WooCommerce SEO' ) .
+            'WooCommerce SEO'
+        ) .
         '</p></div>';
 }
 
