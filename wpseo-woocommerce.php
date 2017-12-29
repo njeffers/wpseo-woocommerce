@@ -333,14 +333,14 @@ class Yoast_WooCommerce_SEO {
 	 * @return array All submenu pages including our own.
 	 */
 	public function add_submenu_pages( $submenu_pages ) {
-		$submenu_pages[] = array(
-			'wpseo_dashboard',
-			__( 'WooCommerce SEO Settings', 'yoast-woo-seo' ),
-			__( 'WooCommerce SEO', 'yoast-woo-seo' ),
-			'wpseo_manage_options',
-			$this->short_name,
-			array( $this, 'admin_panel' ),
-		);
+	    $submenu_pages[] = array(
+            'wpseo_dashboard',
+            sprintf( __( '%1$s Settings', 'yoast-woo-seo' ), 'WooCommerce SEO' ),
+            'WooCommerce SEO',
+            'wpseo_manage_options',
+            $this->short_name,
+            array( $this, 'admin_panel' ),
+        );
 
 		return $submenu_pages;
 	}
@@ -429,7 +429,10 @@ class Yoast_WooCommerce_SEO {
 				__( 'Both WooCommerce and %1$s add columns to the product page, to remove all but the SEO score column from %1$s on that page, check this box.', 'yoast-woo-seo' ),
 				'Yoast SEO'
 			), "</p>\n";
-			$this->checkbox( 'hide_columns', __( 'Remove Yoast SEO columns', 'yoast-woo-seo' ) );
+            $this->checkbox('hide_columns', sprintf(
+            /* translators: %1$s resolves to Yoast SEO */
+                __('Remove %1$s columns', 'yoast-woo-seo'), 'Yoast SEO')
+            );
 
 			echo '<br class="clear"/>';
 			echo '<p>',
@@ -1010,11 +1013,12 @@ class Yoast_WooCommerce_SEO {
 function yoast_wpseo_woocommerce_missing_error() {
 	echo '<div class="error"><p>',
 		sprintf(
-			/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO */
-			__( 'Please %1$sinstall &amp; activate %3$s%2$s and then enable its XML sitemap functionality to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ),
+			/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce SEO */
+			__( 'Please %1$sinstall &amp; activate %3$s%2$s and then enable its XML sitemap functionality to allow the %4$s module to work.', 'yoast-woo-seo' ),
 			'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=yoast+seo&plugin-search-input=Search+Plugins' ) ) . '">',
 			'</a>',
-			'Yoast SEO'
+			'Yoast SEO',
+            'WooCommerce SEO'
 		), '</p></div>';
 }
 
@@ -1024,7 +1028,12 @@ function yoast_wpseo_woocommerce_missing_error() {
  * @since 1.0.1
  */
 function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
-	echo '<div class="error"><p>' . __( 'Please upgrade WordPress to the latest version to allow WordPress and the WooCommerce SEO module to work properly.', 'yoast-woo-seo' ) . '</p></div>';
+	echo '<div class="error"><p>' .
+        sprintf(
+            /* translators: %1$s resolves to WooCommerce SEO */
+            __( 'Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly.', 'yoast-woo-seo' ),
+            'WooCommerce SEO' ) .
+        '</p></div>';
 }
 
 /**
@@ -1035,9 +1044,10 @@ function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
 function yoast_wpseo_woocommerce_upgrade_error() {
 	echo '<div class="error"><p>',
 		sprintf(
-			/* translators: %1$s resolves to Yoast SEO */
-			__( 'Please upgrade the %1$s plugin to the latest version to allow the WooCommerce SEO module to work.', 'yoast-woo-seo' ),
-			'Yoast SEO'
+			/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce SEO */
+			__( 'Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work.', 'yoast-woo-seo' ),
+			'Yoast SEO',
+            'WooCommerce SEO'
 		), '</p></div>';
 }
 
