@@ -336,8 +336,8 @@ class Yoast_WooCommerce_SEO {
 		$submenu_pages[] = array(
 			'wpseo_dashboard',
 			sprintf( __(
-			        /* translators: %1$s resolves to WooCommerce SEO  */
-			        '%1$s Settings', 'yoast-woo-seo' ), 'WooCommerce SEO' ),
+					/* translators: %1$s resolves to WooCommerce SEO  */
+					'%1$s Settings', 'yoast-woo-seo' ), 'WooCommerce SEO' ),
 			'WooCommerce SEO',
 			'wpseo_manage_options',
 			$this->short_name,
@@ -423,7 +423,7 @@ class Yoast_WooCommerce_SEO {
 				), "</p>\n";
 				$this->checkbox( 'breadcrumbs',
 					sprintf(
-					    /* translators: %1$s resolves to WooCommerce */
+						/* translators: %1$s resolves to WooCommerce */
 						__( 'Replace %1$s Breadcrumbs', 'yoast-woo-seo' ),
 						'WooCommerce'
 					)
@@ -440,7 +440,7 @@ class Yoast_WooCommerce_SEO {
 				'WooCommerce'
 			), "</p>\n";
 			$this->checkbox('hide_columns', sprintf(
-			    /* translators: %1$s resolves to Yoast SEO */
+				/* translators: %1$s resolves to Yoast SEO */
 				__( 'Remove %1$s columns', 'yoast-woo-seo' ), 'Yoast SEO' )
 			);
 
@@ -454,7 +454,7 @@ class Yoast_WooCommerce_SEO {
 			), "</p>\n";
 			$this->checkbox( 'metabox_woo_top',
 				sprintf(
-                    /* translators: %1$s resolves to WooCommerce */
+					/* translators: %1$s resolves to WooCommerce */
 					__( 'Move %1$s up', 'yoast-woo-seo' ),
 					'WooCommerce'
 				)
