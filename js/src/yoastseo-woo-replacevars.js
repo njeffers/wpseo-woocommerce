@@ -24,11 +24,13 @@
 	function getPrice() {
 		var price = parseFloat( jQuery( '#_regular_price' ).val() );
 
-		price = Math.round( price );
-		price = price.toFixed( parseInt( wpseoWooReplaceVarsL10n.decimals, 10 ) );
-		price = price.toLocaleString( wpseoWooReplaceVarsL10n.locale, { currency: wpseoWooReplaceVarsL10n.currency } );
-
-		return wpseoWooReplaceVarsL10n.currencySymbol + ' ' +  price;
+		return price.toLocaleString(
+			wpseoWooReplaceVarsL10n.locale,
+			{
+				style: 'currency',
+				currency: wpseoWooReplaceVarsL10n.currency,
+			}
+		);
 	}
 
 	/**
@@ -134,6 +136,9 @@
 	 * @returns {void}
 	 */
 	YoastReplaceVarPlugin.prototype.registerEvents = function() {
+		jQuery( '#_regular_price' ).on( 'input', this.declareReloaded.bind( this ) );
+		jQuery( '#_sku' ).on( 'input', this.declareReloaded.bind( this ) );
+
 		var brandElements = [ '#taxonomy-product_brand', '#pwb-branddiv' ];
 
 		brandElements.forEach( this.registerBrandEvents.bind( this ) );
