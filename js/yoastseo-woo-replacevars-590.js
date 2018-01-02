@@ -137,8 +137,7 @@
 	 * @returns {void}
 	 */
 	YoastReplaceVarPlugin.prototype.registerEvents = function() {
-		jQuery( '#_regular_price' ).on( 'input', this.declareReloaded.bind( this ) );
-		jQuery( '#_sku' ).on( 'input', this.declareReloaded.bind( this ) );
+		jQuery( document ).on( 'input', '#_regular_price, #_sku', this.declareReloaded.bind( this ) );
 
 		var brandElements = [ '#taxonomy-product_brand', '#pwb-branddiv' ];
 
