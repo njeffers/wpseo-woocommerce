@@ -1,14 +1,14 @@
-# Copyright (C) 2017 Team Yoast
+# Copyright (C) 2018 Team Yoast
 # This file is distributed under the same license as the Yoast SEO: WooCommerce package.
 msgid ""
 msgstr ""
 "Project-Id-Version: Yoast SEO: WooCommerce 6.0\n"
 "Report-Msgid-Bugs-To: https://github.com/yoast/wpseo-woocommerce/issues\n"
-"POT-Creation-Date: 2017-12-20 08:14:47+00:00\n"
+"POT-Creation-Date: 2018-01-09 08:33:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Yoast Translate Team <translations@yoast.com>\n"
 "Language-Team: Yoast Translate <translations@yoast.com>\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -159,113 +159,111 @@ msgid ""
 "of hours."
 msgstr ""
 
-#: wpseo-woocommerce.php:338
-msgid "WooCommerce SEO Settings"
-msgstr ""
-
-#: wpseo-woocommerce.php:339
-msgid "WooCommerce SEO"
-msgstr ""
-
-#: wpseo-woocommerce.php:371
+#: wpseo-woocommerce.php:382
+#. translators: %1$s resolves to WooCommerce SEO
 msgid "Schema & OpenGraph additions"
 msgstr ""
 
-#: wpseo-woocommerce.php:372
+#: wpseo-woocommerce.php:383
 msgid ""
 "If you have product attributes for the following types, select them here, "
 "the plugin will make sure they're used for the appropriate Schema.org and "
 "OpenGraph markup."
 msgstr ""
 
-#: wpseo-woocommerce.php:373
+#: wpseo-woocommerce.php:384
 msgid "Brand"
 msgstr ""
 
-#: wpseo-woocommerce.php:387
+#: wpseo-woocommerce.php:398
 msgid "Manufacturer"
 msgstr ""
 
-#: wpseo-woocommerce.php:403
+#: wpseo-woocommerce.php:414
 msgid "Breadcrumbs"
 msgstr ""
 
-#: wpseo-woocommerce.php:407
-#. translators: %1$s resolves to interal links options page, %2$s resolves to
-#. closing link tag, %3$s resolves to Yoast SEO
+#: wpseo-woocommerce.php:419
+#. translators: %1$s resolves to internal links options page, %2$s resolves to
+#. closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
 msgid ""
-"Both WooCommerce and %3$s have breadcrumbs functionality. The %3$s "
-"breadcrumbs have a slightly higher chance of being picked up by search "
-"engines and you can configure them a bit more, on the %1$sInternal Links "
-"settings page%2$s. To enable them, check the box below and the WooCommerce "
-"breadcrumbs will be replaced."
+"Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs "
+"have a slightly higher chance of being picked up by search engines and you "
+"can configure them a bit more, on the %1$sBreadcrumbs settings page%2$s. To "
+"enable them, check the box below and the WooCommerce breadcrumbs will be "
+"replaced."
 msgstr ""
 
-#: wpseo-woocommerce.php:412
-msgid "Replace WooCommerce Breadcrumbs"
+#: wpseo-woocommerce.php:428
+#. translators: %1$s resolves to WooCommerce
+msgid "Replace %1$s Breadcrumbs"
 msgstr ""
 
-#: wpseo-woocommerce.php:416
+#: wpseo-woocommerce.php:435
 msgid "Admin"
 msgstr ""
 
-#: wpseo-woocommerce.php:420
-#. translators: %1$s resolves to Yoast SEO
+#: wpseo-woocommerce.php:439
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce
 msgid ""
-"Both WooCommerce and %1$s add columns to the product page, to remove all "
-"but the SEO score column from %1$s on that page, check this box."
+"Both %2$s and %1$s add columns to the product page, to remove all but the "
+"SEO score column from %1$s on that page, check this box."
 msgstr ""
 
-#: wpseo-woocommerce.php:423
-msgid "Remove Yoast SEO columns"
-msgstr ""
-
-#: wpseo-woocommerce.php:429
+#: wpseo-woocommerce.php:445
 #. translators: %1$s resolves to Yoast SEO
+msgid "Remove %1$s columns"
+msgstr ""
+
+#: wpseo-woocommerce.php:452
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce
 msgid ""
-"Both WooCommerce and %1$s add metaboxes to the edit product page, if you "
-"want WooCommerce to be above %1$s, check the box."
+"Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s "
+"to be above %1$s, check the box."
 msgstr ""
 
-#: wpseo-woocommerce.php:432
-msgid "Move WooCommerce up"
+#: wpseo-woocommerce.php:459
+#. translators: %1$s resolves to WooCommerce
+msgid "Move %1$s up"
 msgstr ""
 
-#: wpseo-woocommerce.php:940
+#: wpseo-woocommerce.php:970
 msgid "You should write a short description for this product."
 msgstr ""
 
-#: wpseo-woocommerce.php:941
+#: wpseo-woocommerce.php:971
 msgid "The short description for this product is too short."
 msgstr ""
 
-#: wpseo-woocommerce.php:942
+#: wpseo-woocommerce.php:972
 msgid "Your short description has a good length."
 msgstr ""
 
-#: wpseo-woocommerce.php:943
+#: wpseo-woocommerce.php:973
 msgid "The short description for this product is too long."
 msgstr ""
 
-#: wpseo-woocommerce.php:1005
+#: wpseo-woocommerce.php:1035
 #. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
-#. to the closing tag, %3$s resolves to Yoast SEO
+#. to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
+#. SEO
 msgid ""
 "Please %1$sinstall &amp; activate %3$s%2$s and then enable its XML sitemap "
-"functionality to allow the WooCommerce SEO module to work."
+"functionality to allow the %4$s module to work."
 msgstr ""
 
-#: wpseo-woocommerce.php:1018
+#: wpseo-woocommerce.php:1052
+#. translators: %1$s resolves to WooCommerce SEO
 msgid ""
 "Please upgrade WordPress to the latest version to allow WordPress and the "
-"WooCommerce SEO module to work properly."
+"%1$s module to work properly."
 msgstr ""
 
-#: wpseo-woocommerce.php:1030
-#. translators: %1$s resolves to Yoast SEO
+#: wpseo-woocommerce.php:1067
+#. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce SEO
 msgid ""
-"Please upgrade the %1$s plugin to the latest version to allow the "
-"WooCommerce SEO module to work."
+"Please upgrade the %1$s plugin to the latest version to allow the %2$s "
+"module to work."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
