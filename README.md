@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.8
 Tested up to: 4.9.1
-Stable tag: 6.0
+Stable tag: 6.1
 Depends: wordpress-seo
 
 Description
@@ -27,6 +27,13 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+
+### 6.1: January 9th, 2018
+Enhancements:
+* Excludes product names from being translated.
+
+Bugfixes:
+* Fixes a bug where there was a link to a settings page that no longer existed.
 
 ### 6.0: December 20th, 2017
 * Compatibility with Yoast SEO 6.0
