@@ -28,6 +28,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
+### 6.2: January 23th, 2018
+Enhancements:
+* Adds `%%wc_price%%`, `%%wc_sku%%`, `%%wc_shortdesc%%` and `%%wc_brand%%` replacement variables for titles and meta description.
+
 ### 6.1: January 9th, 2018
 Enhancements:
 * Excludes product names from being translated.
