@@ -4817,9 +4817,9 @@ yargs@~3.5.4:
     window-size "0.1.0"
     wordwrap "0.0.2"
 
-yoastseo@^1.23.1:
-  version "1.23.1"
-  resolved "https://registry.yarnpkg.com/yoastseo/-/yoastseo-1.23.1.tgz#317bd2d03065d0b432d0b5d2a20df7a239eaa85b"
+yoastseo@^1.29:
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/yoastseo/-/yoastseo-1.29.0.tgz#296de8f08c677d8a25fb776ed3f77e2ce26d461c"
   dependencies:
     htmlparser2 "^3.9.2"
     jed "^1.1.0"
