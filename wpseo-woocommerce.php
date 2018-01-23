@@ -5,7 +5,7 @@
 
 /**
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     6.1
+ * Version:     6.2
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -35,7 +35,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * @const string Version of the plugin.
 	 */
-	const VERSION = '6.1';
+	const VERSION = '6.2';
 
 	/**
 	 * @var object $option_instance Instance of the WooCommerce_SEO option management class
