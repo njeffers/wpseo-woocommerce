@@ -1,8 +1,8 @@
 WooCommerce Yoast SEO
 =====================
 Requires at least: 4.8
-Tested up to: 4.9.1
-Stable tag: 6.1
+Tested up to: 4.9.2
+Stable tag: 6.2
 Depends: wordpress-seo
 
 Description
@@ -28,7 +28,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 
-### 6.2: January 23th, 2018
+### 6.2: January 23rd, 2018
 Enhancements:
 * Adds `%%wc_price%%`, `%%wc_sku%%`, `%%wc_shortdesc%%` and `%%wc_brand%%` replacement variables for titles and meta description.
 
