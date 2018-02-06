@@ -53,6 +53,15 @@
 		</properties>
 	</rule>
 
+	<rule ref="Yoast.Files.FileName">
+		<properties>
+			<!-- Don't trigger on the main file as renaming it would deactivate the plugin. -->
+			<property name="exclude" type="array" value="wpseo-woocommerce.php"/>
+			<!-- Remove the following prefixes from the names of object structures. -->
+			<property name="prefixes" type="array" value="wpseo,yoast"/>
+		</properties>
+	</rule>
+
 
 	<!--
 	#############################################################################
