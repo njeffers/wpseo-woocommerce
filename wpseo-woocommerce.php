@@ -336,9 +336,11 @@ class Yoast_WooCommerce_SEO {
 	public function add_submenu_pages( $submenu_pages ) {
 		$submenu_pages[] = array(
 			'wpseo_dashboard',
-			sprintf( __(
-					/* translators: %1$s resolves to WooCommerce SEO  */
-					'%1$s Settings', 'yoast-woo-seo' ), 'WooCommerce SEO' ),
+			sprintf(
+				/* translators: %1$s resolves to WooCommerce SEO */
+				esc_html__( '%1$s Settings', 'yoast-woo-seo' ),
+				'WooCommerce SEO'
+			),
 			'WooCommerce SEO',
 			'wpseo_manage_options',
 			$this->short_name,
