@@ -14,7 +14,7 @@ if ( ! class_exists( 'Yoast_WooCommerce_SEO' ) ) {
 
 
 /**
- *****************************************************************
+ * ****************************************************************
  * Option: wpseo_woo
  */
 if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {

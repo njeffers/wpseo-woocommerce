@@ -7,7 +7,7 @@ class WPSEO_WooCommerce_UnitTestCase extends WP_UnitTestCase {
 
 	/**
 	 * @param string $key
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	protected function set_post( $key, $value ) {
 		$_POST[ $key ]    = addslashes( $value );
