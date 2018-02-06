@@ -84,3 +84,4 @@ script:
 - if [[ "$PHPCS" == "1" ]]; then vendor/bin/phpcs -v; fi
 - if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then phpunit -c phpunit.xml; fi
 - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then vendor/bin/phpunit -c phpunit.xml; fi
+- if [[ $TRAVIS_PHP_VERSION == "5.3" || $TRAVIS_PHP_VERSION == "7.2" ]]; then composer validate --no-check-all; fi
