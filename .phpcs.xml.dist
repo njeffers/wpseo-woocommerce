@@ -24,6 +24,9 @@
 	<!-- Strip the filepaths down to the relevant bit. -->
 	<arg name="basepath" value="./"/>
 
+	<!-- Check 20 files simultanously. -->
+	<arg name="parallel" value="20"/>
+
 
 	<!--
 	#############################################################################
