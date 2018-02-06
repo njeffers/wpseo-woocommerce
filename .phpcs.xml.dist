@@ -62,6 +62,19 @@
 		</properties>
 	</rule>
 
+	<!-- Verify that everything in the global namespace is prefixed with a plugin specific prefix. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<!-- Provide the prefixes to look for. -->
+			<property name="prefixes" type="array" value="wpseo,yoast,initialize_yoast"/>
+			<!-- Test classes do not need to be prefixed as they won't go into production. -->
+			<property name="custom_test_class_whitelist" type="array" value="WPSEO_UnitTestCase,WPSEO_WooCommerce_UnitTestCase"/>
+		</properties>
+
+		<!-- Valid usage: For testing purposes, some non-prefixed globals are being created. -->
+		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
+	</rule>
+
 
 	<!--
 	#############################################################################
