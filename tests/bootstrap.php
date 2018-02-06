@@ -1,11 +1,11 @@
 <?php
 
-// disable xdebug backtrace
+// Disable Xdebug backtrace.
 if ( function_exists( 'xdebug_disable' ) ) {
 	xdebug_disable();
 }
 
-echo 'Welcome to the Wordpress SEO WooCommerce test suite' . PHP_EOL;
+echo 'Welcome to the WordPress SEO WooCommerce test suite' . PHP_EOL;
 echo 'Version: 1.0' . PHP_EOL . PHP_EOL;
 
 if ( false !== getenv( 'WP_PLUGIN_DIR' ) ) {
@@ -23,8 +23,8 @@ else {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
 
-// Load wordpress seo.
+// Load WordPress SEO.
 require dirname( __FILE__ ) . '/../../wordpress-seo/wp-seo.php';
 
-// include unit test base class
+// Include unit test base class.
 require_once dirname( __FILE__ ) . '/framework/class-wpseo-woocommerce-unit-test-case.php';

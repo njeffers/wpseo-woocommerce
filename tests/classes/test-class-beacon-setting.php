@@ -12,7 +12,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	protected $beacon_settings;
 
 	/**
-	 * Sets an instance of the WPSEO_WooCommerce_Beacon_Setting
+	 * Sets an instance of the WPSEO_WooCommerce_Beacon_Setting.
 	 */
 	public function setUp() {
 		parent::setUp();

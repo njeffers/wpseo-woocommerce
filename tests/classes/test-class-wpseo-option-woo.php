@@ -43,7 +43,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 *
 	 * @param string           $field_name The field name to validate.
 	 * @param string|bool      $expected   The expected value.
-	 * @param string|bool|null $dirty      The value for the dirty argument
+	 * @param string|bool|null $dirty      The value for the dirty argument.
 	 * @param string|bool      $clean      The value for the clean argument.
 	 * @param string|bool|null $old        The value for the old argument.
 	 * @param string           $short      Determines whether the short form should set or not.
@@ -78,7 +78,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * Provider for the test_validate_option.
 	 *
 	 * Formatting of each record that is provided:
-	 * field, expected, dirty, clean, old and short-form
+	 * field, expected, dirty, clean, old and short-form.
 	 *
 	 * @return array
 	 */
