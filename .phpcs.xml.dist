@@ -107,4 +107,20 @@
 		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
 	</rule>
 
+
+	<!--
+	#############################################################################
+	TEMPORARY ADJUSTMENTS
+	Adjustments which should be removed once the associated issue has been resolved.
+	#############################################################################
+	-->
+
+	<!-- Temporarily excluded due to a bug in WPCS.
+		 The bug has been addressed and will be fixed in WPCS 1.0.0.
+		 WPCS PR: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1293
+	-->
+	<rule ref="WordPress.XSS.EscapeOutput.OutputNotEscaped">
+		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
+	</rule>
+
 </ruleset>
