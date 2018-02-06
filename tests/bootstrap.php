@@ -1,4 +1,9 @@
 <?php
+/**
+ * WooCommerce Yoast SEO plugin test file.
+ *
+ * @package WPSEO/WooCommerce/Tests
+ */
 
 // Disable Xdebug backtrace.
 if ( function_exists( 'xdebug_disable' ) ) {

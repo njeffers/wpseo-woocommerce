@@ -1,4 +1,9 @@
 <?php
+/**
+ * WooCommerce Yoast SEO plugin test file.
+ *
+ * @package WPSEO/WooCommerce/Tests
+ */
 
 class WPSEO_Option_Woo_Double extends WPSEO_Option_Woo {
 
