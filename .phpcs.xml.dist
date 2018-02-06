@@ -91,5 +91,20 @@
 	#############################################################################
 	-->
 
+	<!-- Allow for the double/mock classes to override methods just to change the visibility. -->
+	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
+		<exclude-pattern>/tests/doubles/*\.php$</exclude-pattern>
+	</rule>
+
+	<!-- Allow for the unit test case file to make changes to the superglobals. -->
+	<rule ref="WordPress.VIP.SuperGlobalInputUsage">
+		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.CSRF.NonceVerification">
+		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.VIP.ValidatedSanitizedInput">
+		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
+	</rule>
 
 </ruleset>
