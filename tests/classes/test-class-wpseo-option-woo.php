@@ -28,7 +28,10 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	public function test_constructor() {
 		$option = new WPSEO_Option_Woo_Double();
 		$this->assertEquals(
-			array( 'price' => 'Price', 'stock' => 'Stock' ),
+			array(
+				'price' => 'Price',
+				'stock' => 'Stock',
+			),
 			$option->valid_data_types
 		);
 	}
