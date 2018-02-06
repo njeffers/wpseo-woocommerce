@@ -319,7 +319,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 *
-	 * @deprecated
+	 * @deprecated 5.6
 	 */
 	public function register_settings_page() {
 	}
