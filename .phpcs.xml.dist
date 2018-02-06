@@ -75,6 +75,14 @@
 		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
 	</rule>
 
+	<!-- Overwriting WP globals can be perfectly valid in test situations. -->
+	<rule ref="WordPress.Variables.GlobalVariables">
+		<properties>
+			<!-- To that end, make the sniff aware of the WPSEO unit test base class. -->
+			<property name="custom_test_class_whitelist" type="array" value="WPSEO_UnitTestCase,WPSEO_WooCommerce_UnitTestCase"/>
+		</properties>
+	</rule>
+
 
 	<!--
 	#############################################################################
