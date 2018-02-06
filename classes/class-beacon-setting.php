@@ -1,5 +1,7 @@
 <?php
 /**
+ * WooCommerce Yoast SEO plugin file.
+ *
  * @package WPSEO/WooCommerce
  */
 

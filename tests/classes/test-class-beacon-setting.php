@@ -1,5 +1,7 @@
 <?php
 /**
+ * WooCommerce Yoast SEO plugin test file.
+ *
  * @package WPSEO/WooCommerce/Tests
  */
 

@@ -1,5 +1,7 @@
 <?php
 /**
+ * WooCommerce Yoast SEO plugin file.
+ *
  * @package    Internals
  * @since      1.1.0
  * @version    1.1.0
