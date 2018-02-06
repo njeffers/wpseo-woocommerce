@@ -693,7 +693,7 @@ class Yoast_WooCommerce_SEO {
 			$term_desc = term_description();
 
 			if ( ! empty( $term_desc ) ) {
-				$desc = trim( strip_tags( $term_desc ) );
+				$desc = wp_strip_all_tags( $term_desc, true );
 				$desc = strip_shortcodes( $desc );
 			}
 		}
@@ -1012,7 +1012,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		if ( method_exists( $product, 'get_price' ) ) {
-			return strip_tags( wc_price( $product->get_price() ) );
+			return wp_strip_all_tags( wc_price( $product->get_price() ), true );
 		}
 
 		return '';
