@@ -5,6 +5,9 @@
  * @package WPSEO/WooCommerce/Tests
  */
 
+/**
+ * Test helper.
+ */
 class WPSEO_Option_Woo_Double extends WPSEO_Option_Woo {
 
 	/**
