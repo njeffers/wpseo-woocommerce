@@ -11,6 +11,8 @@
 class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCase {
 
 	/**
+	 * Instance of the class being tested.
+	 *
 	 * @var WPSEO_WooCommerce_Beacon_Setting
 	 */
 	protected $beacon_settings;

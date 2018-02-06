@@ -49,6 +49,8 @@ class Yoast_WooCommerce_SEO {
 	public $option_instance;
 
 	/**
+	 * Cache of the current value of the WooCommerce_SEO option.
+	 *
 	 * @var array
 	 */
 	protected $options = array();
@@ -61,6 +63,8 @@ class Yoast_WooCommerce_SEO {
 	public $short_name;
 
 	/**
+	 * Plugin Licence Manager.
+	 *
 	 * @var Yoast_Plugin_License_Manager
 	 */
 	private $license_manager;

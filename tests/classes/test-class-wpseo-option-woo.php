@@ -11,6 +11,8 @@
 class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 
 	/**
+	 * Instance of the class being tested.
+	 *
 	 * @var WPSEO_Option_Woo_Double
 	 */
 	protected $option;
