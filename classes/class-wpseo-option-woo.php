@@ -204,8 +204,8 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 							}
 						}
 						break;
-				} // End switch().
-			} // End foreach().
+				}
+			}
 
 			return $clean;
 		}
@@ -231,6 +231,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 
 			return $processed_taxonomies;
 		}
-	} // End of class WPSEO_Option_Woo.
+	}
 
-} // End if().
+}
