@@ -17,7 +17,7 @@ class WPSEO_WooCommerce_UnitTestCase extends WP_UnitTestCase {
 	 * @param string $key
 	 */
 	protected function unset_post( $key ) {
-		unset( $_POST[$key], $_REQUEST[$key] );
+		unset( $_POST[ $key ], $_REQUEST[ $key ] );
 	}
 
 	/**

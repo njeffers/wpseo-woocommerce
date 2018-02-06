@@ -745,7 +745,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		$short_description = $this->get_short_product_description( $product );
-		$long_description = $this->get_product_description( $product );
+		$long_description  = $this->get_product_description( $product );
 
 		if ( $short_description !== '' ) {
 			return $short_description;
@@ -769,7 +769,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return string
 	 */
 	protected function get_short_product_description( $product ) {
-		if (  method_exists( $product, 'get_short_description' ) ) {
+		if ( method_exists( $product, 'get_short_description' ) ) {
 			return $product->get_short_description();
 		}
 		return $product->post->post_excerpt;
@@ -1250,7 +1250,7 @@ function initialize_yoast_woocommerce_seo() {
 	if ( ! version_compare( $wp_version, '3.5', '>=' ) ) {
 		add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_wordpress_upgrade_error' );
 	}
-	else if ( defined( 'WPSEO_VERSION' ) ) {
+	elseif ( defined( 'WPSEO_VERSION' ) ) {
 		if ( version_compare( WPSEO_VERSION, '1.5', '>=' ) ) {
 			$yoast_woo_seo = new Yoast_WooCommerce_SEO();
 		}

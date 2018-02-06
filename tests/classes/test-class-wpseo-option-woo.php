@@ -82,10 +82,10 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	public function validate_option_values() {
 		return array(
 			// Tests a non defined value.
-			array( 'test', null, 123, null, null  ),
+			array( 'test', null, 123, null, null ),
 
 			// Tests the validation of the dbversion option.
-			array( 'dbversion', 2, 1, 3, ''  ),
+			array( 'dbversion', 2, 1, 3, '' ),
 
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
 			array( 'data1_type', 'price', 'price', 'price', null ),
