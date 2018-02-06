@@ -10,7 +10,9 @@
  */
 class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCase {
 
-	/** @var WPSEO_WooCommerce_Beacon_Setting */
+	/**
+	 * @var WPSEO_WooCommerce_Beacon_Setting
+	 */
 	protected $beacon_settings;
 
 	/**

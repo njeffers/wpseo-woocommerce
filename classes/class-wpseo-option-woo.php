@@ -27,33 +27,46 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 	class WPSEO_Option_Woo extends WPSEO_Option {
 
 		/**
-		 * @var  string  option name
+		 * Option name.
+		 *
+		 * @var string
 		 */
 		public $option_name = 'wpseo_woo';
 
 		/**
-		 * @var  string  option group name for use in settings forms
+		 * Option group name for use in settings forms.
+		 *
+		 * @var string
 		 */
 		public $group_name = 'wpseo_woo_options';
 
 		/**
-		 * @var  bool  whether to include the option in the return for WPSEO_Options::get_all()
+		 * Whether to include the option in the return for WPSEO_Options::get_all().
+		 *
+		 * @var bool
 		 */
 		public $include_in_all = false;
 
 		/**
-		 * @var  bool  whether this option is only for when the install is multisite
+		 * Whether this option is only for when the install is multisite.
+		 *
+		 * @var bool
 		 */
 		public $multisite_only = false;
 
 		/**
-		 * @var int Database version to check whether the plugins options need updating.
+		 * Database version to check whether the plugins options need updating.
+		 *
+		 * @var int
 		 */
 		public $db_version = 2;
 
 		/**
-		 * @var  array  Array of defaults for the option
-		 *        Shouldn't be requested directly, use $this->get_defaults().
+		 * Array of defaults for the option.
+		 *
+		 * Shouldn't be requested directly, use $this->get_defaults().
+		 *
+		 * @var array
 		 */
 		protected $defaults = array(
 			// Non-form fields, set via validation routine.
@@ -70,7 +83,9 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		);
 
 		/**
-		 * @var    array $valid_data_types Array of pre-defined valid data types, will be enriched with taxonomies.
+		 * Array of pre-defined valid data types, will be enriched with taxonomies.
+		 *
+		 * @var array
 		 */
 		public $valid_data_types = array();
 

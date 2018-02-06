@@ -10,7 +10,9 @@
  */
 class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 
-	/** @var WPSEO_Option_Woo_Double */
+	/**
+	 * @var WPSEO_Option_Woo_Double
+	 */
 	protected $option;
 
 	/**

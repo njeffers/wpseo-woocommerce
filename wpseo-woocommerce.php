@@ -1,5 +1,7 @@
 <?php
 /**
+ * WooCommerce Yoast SEO plugin file.
+ *
  * @package WPSEO/WooCommerce
  */
 
@@ -33,22 +35,28 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload_52.php' ) ) {
 class Yoast_WooCommerce_SEO {
 
 	/**
-	 * @const string Version of the plugin.
+	 * Version of the plugin.
+	 *
+	 * @var string
 	 */
 	const VERSION = '6.2';
 
 	/**
-	 * @var object $option_instance Instance of the WooCommerce_SEO option management class
+	 * Instance of the WooCommerce_SEO option management class.
+	 *
+	 * @var object
 	 */
 	public $option_instance;
 
 	/**
-	 * @var array $options
+	 * @var array
 	 */
 	protected $options = array();
 
 	/**
-	 * @var string Name of the option to store plugins setting
+	 * Name of the option to store plugins setting.
+	 *
+	 * @var string
 	 */
 	public $short_name;
 
