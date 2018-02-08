@@ -1225,17 +1225,6 @@ function initialize_yoast_woocommerce_seo() {
 	}
 }
 
-if ( ! function_exists( 'wp_installing' ) ) {
-	/**
-	 * We need to define wp_installing in WordPress versions older than 4.4
-	 *
-	 * @return bool
-	 */
-	function wp_installing() {
-		return defined( 'WP_INSTALLING' );
-	}
-}
-
 /**
  * Instantiate the plugin license manager for the current plugin and activate it's license.
  */
