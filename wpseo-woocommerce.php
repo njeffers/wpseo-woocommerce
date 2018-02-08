@@ -893,7 +893,7 @@ class Yoast_WooCommerce_SEO {
 	protected function is_woocommerce_page( $page ) {
 		$woo_pages = array( 'wpseo_woo' );
 
-		return in_array( $page, $woo_pages );
+		return in_array( $page, $woo_pages, true );
 	}
 
 	/**
