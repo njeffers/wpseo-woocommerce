@@ -1302,7 +1302,7 @@ class WPSEO_WooCommerce_Wrappers {
 		global $wpseo_admin_pages;
 
 		if ( ! $wpseo_admin_pages instanceof WPSEO_Admin_Pages ) {
-			$wpseo_admin_pages = new WPSEO_Admin_Pages;
+			$wpseo_admin_pages = new WPSEO_Admin_Pages();
 		}
 
 		return $wpseo_admin_pages;
