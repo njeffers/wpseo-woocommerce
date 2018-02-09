@@ -394,15 +394,16 @@ class Yoast_WooCommerce_SEO {
 		// @todo [JRF => whomever] change the form fields so they use the methods as defined in WPSEO_Admin_Pages.
 		$taxonomies = get_object_taxonomies( 'product', 'objects' );
 
-		echo '<h2>' . __( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
-		<p>' . __( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>
-		<label class="select" for="schema_brand">' . __( 'Brand', 'yoast-woo-seo' ) . ':</label>
+		echo '<h2>' . esc_html__( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
+		<p>' . esc_html__( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>
+		<label class="select" for="schema_brand">' . esc_html__( 'Brand', 'yoast-woo-seo' ) . ':</label>
 		<select class="select" id="schema_brand" name="' . esc_attr( $this->short_name . '[schema_brand]' ) . '">
 			<option value="">-</option>' . "\n";
 		if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
 			foreach ( $taxonomies as $tax ) {
-				$sel = selected( strtolower( $tax->name ), $this->options['schema_brand'], false );
-				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"' . $sel . '>' . esc_html( $tax->labels->name ) . "</option>\n";
+				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"'
+					. selected( strtolower( $tax->name ), $this->options['schema_brand'], false ) . '>'
+					. esc_html( $tax->labels->name ) . "</option>\n";
 			}
 		}
 		unset( $tax, $sel );
@@ -410,13 +411,14 @@ class Yoast_WooCommerce_SEO {
 		</select>
 		<br class="clear"/>
 
-		<label class="select" for="schema_manufacturer">' . __( 'Manufacturer', 'yoast-woo-seo' ) . ':</label>
+		<label class="select" for="schema_manufacturer">' . esc_html__( 'Manufacturer', 'yoast-woo-seo' ) . ':</label>
 		<select class="select" id="schema_manufacturer" name="' . esc_attr( $this->short_name . '[schema_manufacturer]' ) . '">
 			<option value="">-</option>' . "\n";
 		if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
 			foreach ( $taxonomies as $tax ) {
-				$sel = selected( strtolower( $tax->name ), $this->options['schema_manufacturer'], false );
-				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"' . $sel . '>' . esc_html( $tax->labels->name ) . "</option>\n";
+				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"'
+					. selected( strtolower( $tax->name ), $this->options['schema_manufacturer'], false ) . '>'
+					. esc_html( $tax->labels->name ) . "</option>\n";
 			}
 		}
 		unset( $tax, $sel );
@@ -426,11 +428,11 @@ class Yoast_WooCommerce_SEO {
 
 		$wpseo_options = WPSEO_Options::get_all();
 		if ( $wpseo_options['breadcrumbs-enable'] === true ) {
-			echo '<h2>' . __( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
+			echo '<h2>' . esc_html__( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
 			echo '<p>';
 			printf(
 				/* translators: %1$s resolves to internal links options page, %2$s resolves to closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce */
-				__( 'Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sBreadcrumbs settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ),
+				esc_html__( 'Both %4$s and %3$s have breadcrumbs functionality. The %3$s breadcrumbs have a slightly higher chance of being picked up by search engines and you can configure them a bit more, on the %1$sBreadcrumbs settings page%2$s. To enable them, check the box below and the WooCommerce breadcrumbs will be replaced.', 'yoast-woo-seo' ),
 				'<a href="' . esc_url( admin_url( 'admin.php?page=wpseo_advanced&tab=breadcrumbs' ) ) . '">',
 				'</a>',
 				'Yoast SEO',
@@ -448,11 +450,11 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		echo '<br class="clear"/>';
-		echo '<h2>' . __( 'Admin', 'yoast-woo-seo' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Admin', 'yoast-woo-seo' ) . '</h2>';
 		echo '<p>';
 		printf(
 			/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce */
-			__( 'Both %2$s and %1$s add columns to the product page, to remove all but the SEO score column from %1$s on that page, check this box.', 'yoast-woo-seo' ),
+			esc_html__( 'Both %2$s and %1$s add columns to the product page, to remove all but the SEO score column from %1$s on that page, check this box.', 'yoast-woo-seo' ),
 			'Yoast SEO',
 			'WooCommerce'
 		);
@@ -470,7 +472,7 @@ class Yoast_WooCommerce_SEO {
 		echo '<p>';
 		printf(
 			/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce */
-			__( 'Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s to be above %1$s, check the box.', 'yoast-woo-seo' ),
+			esc_html__( 'Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s to be above %1$s, check the box.', 'yoast-woo-seo' ),
 			'Yoast SEO',
 			'WooCommerce'
 		);
@@ -503,7 +505,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		echo '<input class="checkbox" type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $this->short_name . '[' . $id . ']' ) . '" value="on" ' . checked( $current, 'on', false ) . '> ';
-		echo '<label for="' . esc_attr( $id ) . '" class="checkbox">' . $label . '</label> ';
+		echo '<label for="' . esc_attr( $id ) . '" class="checkbox">' . esc_html( $label ) . '</label> ';
 	}
 
 	/**
