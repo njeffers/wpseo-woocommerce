@@ -1,5 +1,7 @@
 <?php
 /**
+ * WooCommerce Yoast SEO plugin test file.
+ *
  * @package WPSEO/WooCommerce/Tests
  */
 
@@ -8,11 +10,15 @@
  */
 class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCase {
 
-	/** @var WPSEO_WooCommerce_Beacon_Setting */
+	/**
+	 * Instance of the class being tested.
+	 *
+	 * @var WPSEO_WooCommerce_Beacon_Setting
+	 */
 	protected $beacon_settings;
 
 	/**
-	 * Sets an instance of the WPSEO_WooCommerce_Beacon_Setting
+	 * Sets an instance of the WPSEO_WooCommerce_Beacon_Setting.
 	 */
 	public function setUp() {
 		parent::setUp();

@@ -1,5 +1,7 @@
 <?php
 /**
+ * WooCommerce Yoast SEO plugin file.
+ *
  * @package WPSEO/WooCommerce
  */
 
@@ -33,32 +35,42 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload_52.php' ) ) {
 class Yoast_WooCommerce_SEO {
 
 	/**
-	 * @const string Version of the plugin.
+	 * Version of the plugin.
+	 *
+	 * @var string
 	 */
 	const VERSION = '6.2';
 
 	/**
-	 * @var object $option_instance Instance of the WooCommerce_SEO option management class
+	 * Instance of the WooCommerce_SEO option management class.
+	 *
+	 * @var object
 	 */
 	public $option_instance;
 
 	/**
-	 * @var array $options
+	 * Cache of the current value of the WooCommerce_SEO option.
+	 *
+	 * @var array
 	 */
 	protected $options = array();
 
 	/**
-	 * @var string Name of the option to store plugins setting
+	 * Name of the option to store plugins setting.
+	 *
+	 * @var string
 	 */
 	public $short_name;
 
 	/**
+	 * Plugin Licence Manager.
+	 *
 	 * @var Yoast_Plugin_License_Manager
 	 */
 	private $license_manager;
 
 	/**
-	 * Return the plugin file
+	 * Return the plugin file.
 	 *
 	 * @return string
 	 */
@@ -319,7 +331,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 1.0
 	 *
-	 * @deprecated
+	 * @deprecated 5.6
 	 */
 	public function register_settings_page() {
 	}
@@ -656,7 +668,7 @@ class Yoast_WooCommerce_SEO {
 			}
 		}
 		/**
-		 * Filter: wpseo_woocommerce_og_price - Allow developers to prevent the output of the price in the OpenGraph tags
+		 * Filter: wpseo_woocommerce_og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
 		 *
 		 * @api bool unsigned Defaults to true.
 		 */
@@ -823,7 +835,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Filter the output of attributes and add schema.org attributes where possible
+	 * Filter the output of attributes and add schema.org attributes where possible.
 	 *
 	 * @since 1.0
 	 *
@@ -846,7 +858,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Filters the archive link on the product sitemap
+	 * Filters the archive link on the product sitemap.
 	 *
 	 * @param string $link      The archive link.
 	 * @param string $post_type The post type to check against.
@@ -917,7 +929,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Registers variable replacements for WooCommerce products
+	 * Registers variable replacements for WooCommerce products.
 	 */
 	public function register_replacements() {
 		wpseo_register_var_replacement(
@@ -988,7 +1000,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Returns the product for given product_id
+	 * Returns the product for given product_id.
 	 *
 	 * @since 4.9
 	 *
@@ -1009,7 +1021,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Retrieves the product price
+	 * Retrieves the product price.
 	 *
 	 * @since 5.9
 	 *
@@ -1040,7 +1052,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Retrieves the product SKU
+	 * Retrieves the product SKU.
 	 *
 	 * @since 5.9
 	 *
@@ -1060,7 +1072,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Retrieves the product brand
+	 * Retrieves the product brand.
 	 *
 	 * @since 5.9
 	 *
@@ -1252,12 +1264,12 @@ if ( ! wp_installing() ) {
 }
 
 /**
- * Class WPSEO_WooCommerce_Wrappers
+ * Class WPSEO_WooCommerce_Wrappers.
  */
 class WPSEO_WooCommerce_Wrappers {
 
 	/**
-	 * Fallback for admin_header
+	 * Fallback for admin_header.
 	 *
 	 * @param bool   $form             Using a form or not.
 	 * @param string $option_long_name The option long name.
@@ -1296,7 +1308,7 @@ class WPSEO_WooCommerce_Wrappers {
 	}
 
 	/**
-	 * Returns the wpseo_admin pages global variable
+	 * Returns the wpseo_admin pages global variable.
 	 *
 	 * @return mixed
 	 */
@@ -1312,7 +1324,7 @@ class WPSEO_WooCommerce_Wrappers {
 
 	/**
 	 * Returns the result of validate bool from WPSEO_Utils if this class exists, otherwise it will return the result from
-	 * validate_bool from WPSEO_Option_Woo
+	 * validate_bool from WPSEO_Option_Woo.
 	 *
 	 * @param mixed $bool_to_validate Variable to validate as bool.
 	 *
