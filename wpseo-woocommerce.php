@@ -1,11 +1,10 @@
 <?php
 /**
- * WooCommerce Yoast SEO plugin file.
+ * WooCommerce Yoast SEO plugin.
  *
  * @package WPSEO/WooCommerce
- */
-
-/**
+ *
+ * @wordpress-plugin
  * Plugin Name: Yoast SEO: WooCommerce
  * Version:     6.2
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
