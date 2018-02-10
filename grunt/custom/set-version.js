@@ -17,7 +17,7 @@ module.exports = function( grunt ) {
                 }
             );
 
-            var version = grunt.option( "new-version" ) || '';
+            let version = grunt.option( "new-version" ) || '';
             if ( version.toString().trim().length === 0 ) {
                 grunt.fail.fatal( 'Missing --new-version argument' );
             }
