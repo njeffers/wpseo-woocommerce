@@ -11,7 +11,7 @@
  * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
  * Author URI:  https://yoast.com
- * Depends:     WordPress SEO, WooCommerce
+ * Depends:     Yoast SEO, WooCommerce
  * Text Domain: yoast-woo-seo
  * Domain Path: /languages/
  *
