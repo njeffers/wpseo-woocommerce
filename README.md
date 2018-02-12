@@ -28,6 +28,13 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 7.0: March 6th, 2018
+Other:
+* Security hardening.
+* Requires Yoast SEO 7.0 or higher to be installed.
+* Requires WordPress 4.8 or higher to be installed.
+* Removes backfill for `wp_installing()` as this was introduced in WordPress 4.4.
+
 ### 6.3: February 13th, 2018
 * Compatibility with Yoast SEO 6.3
 
