@@ -55,6 +55,10 @@ install:
 before_script:
 - PLUGIN_SLUG=$(basename $(pwd))
 - export WP_DEVELOP_DIR=/tmp/wordpress/
+- export -f travis_fold
+- export -f travis_time_start
+- export -f travis_time_finish
+
 # Clone WordPress
 - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/wordpress
 
@@ -80,8 +84,32 @@ before_script:
 - phpenv rehash
 
 script:
-- if [[ "$PHPLINT" == "1" ]]; then find -L . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
-- if [[ "$PHPCS" == "1" ]]; then vendor/bin/phpcs -v; fi
-- if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then phpunit -c phpunit.xml; fi
-- if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then vendor/bin/phpunit -c phpunit.xml; fi
+# PHP Linting
+- |
+  if [[ "$PHPLINT" == "1" ]]; then
+    travis_fold start "PHP.check" && travis_time_start
+    find -L . -path ./vendor -prune -o -path ./node_modules -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+    travis_time_finish && travis_fold end "PHP.check"
+  fi
+# PHP CS
+- |
+  if [[ "$PHPCS" == "1" ]]; then
+    travis_fold start "PHP.code-style" && travis_time_start
+    vendor/bin/phpcs -q --runtime-set ignore_warnings_on_exit 1
+    travis_time_finish && travis_fold end "PHP.code-style"
+  fi
+# PHP Tests
+- |
+  if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then
+    travis_fold start "PHP.tests" && travis_time_start
+    phpunit -c phpunit.xml
+    travis_time_finish && travis_fold end "PHP.tests"
+  fi
+- |
+  if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then
+    travis_fold start "PHP.tests" && travis_time_start
+    vendor/bin/phpunit -c phpunit.xml
+    travis_time_finish && travis_fold end "PHP.tests"
+  fi
+
 - if [[ $TRAVIS_PHP_VERSION == "5.3" || $TRAVIS_PHP_VERSION == "7.2" ]]; then composer validate --no-check-all; fi
