@@ -19,7 +19,7 @@
 	<arg name="extensions" value="php"/>
 
 	<!-- Show progress, show the error codes for each message (source). -->
-	<arg value="nsp"/>
+	<arg value="sp"/>
 
 	<!-- Strip the filepaths down to the relevant bit. -->
 	<arg name="basepath" value="./"/>
