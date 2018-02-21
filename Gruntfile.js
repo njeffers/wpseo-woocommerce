@@ -6,12 +6,12 @@ module.exports = function( grunt ) {
 
 	require( "time-grunt" )( grunt );
 
-    const pkg = grunt.file.readJSON( "package.json" );
-    const pluginVersion = pkg.yoast.pluginVersion;
+	const pkg = grunt.file.readJSON( "package.json" );
+	const pluginVersion = pkg.yoast.pluginVersion;
 
 	// Define project configuration
 	var project = {
-        pluginVersion: pluginVersion,
+		pluginVersion: pluginVersion,
 		paths: {
 			get config() {
 				return this.grunt + "config/";
@@ -40,7 +40,7 @@ module.exports = function( grunt ) {
 		pkg: grunt.file.readJSON( "package.json" )
 	};
 
-    project.pluginVersionSlug = flattenVersionForFile( pluginVersion );
+	project.pluginVersionSlug = flattenVersionForFile( pluginVersion );
 
 	// Load Grunt configurations and tasks
 	require( "load-grunt-config" )( grunt, {
@@ -53,7 +53,7 @@ module.exports = function( grunt ) {
 				glotpress_download: "grunt-glotpress",
 				wpcss: "grunt-wp-css"
 			},
-            customTasksDir: "grunt/custom",
+			customTasksDir: "grunt/custom",
 		}
 	});
 };

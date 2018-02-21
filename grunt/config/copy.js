@@ -8,7 +8,7 @@ module.exports = {
 					// folders to copy
 					"classes/**",
 					"vendor/**",
-					"js/**",
+					"js/*.min.js",
 					"languages/**",
 					// files to copy
 					"wpseo-woocommerce.php",
