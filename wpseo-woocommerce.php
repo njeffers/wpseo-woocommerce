@@ -907,6 +907,10 @@ class Yoast_WooCommerce_SEO {
 	 * @return string
 	 */
 	public function schema_filter( $text, $attribute ) {
+		// Ideally this should be a strict comparison, but the $attribute array comes from
+		// WooCommerce, so this needs further investigation. JRF.
+		// Technical Debt Ticket: {@link https://github.com/Yoast/wpseo-woocommerce/issues/221}.
+		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( 1 == $attribute['is_taxonomy'] ) {
 			if ( $this->options['schema_brand'] === $attribute['name'] ) {
 				return str_replace( '<p', '<p itemprop="brand"', $text );
