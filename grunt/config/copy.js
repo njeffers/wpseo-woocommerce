@@ -11,8 +11,7 @@ module.exports = {
 					"js/*.min.js",
 					"languages/**",
 					// files to copy
-					"wpseo-woocommerce.php",
-					"index.php",
+					"*.php",
 				],
 				dest: "artifact",
 			},
