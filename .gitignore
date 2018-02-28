@@ -3,3 +3,5 @@ node_modules/*
 .idea
 artifact.zip
 artifact/
+.phpcs.xml
+phpcs.xml
