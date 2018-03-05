@@ -1,5 +1,7 @@
 <?php
 /**
+ * WooCommerce Yoast SEO plugin test file.
+ *
  * @package WPSEO/WooCommerce/Tests
  */
 
@@ -8,7 +10,11 @@
  */
 class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 
-	/** @var WPSEO_Option_Woo_Double */
+	/**
+	 * Instance of the class being tested.
+	 *
+	 * @var WPSEO_Option_Woo_Double
+	 */
 	protected $option;
 
 	/**
@@ -28,7 +34,10 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	public function test_constructor() {
 		$option = new WPSEO_Option_Woo_Double();
 		$this->assertEquals(
-			array( 'price' => 'Price', 'stock' => 'Stock' ),
+			array(
+				'price' => 'Price',
+				'stock' => 'Stock',
+			),
 			$option->valid_data_types
 		);
 	}
@@ -40,7 +49,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 *
 	 * @param string           $field_name The field name to validate.
 	 * @param string|bool      $expected   The expected value.
-	 * @param string|bool|null $dirty      The value for the dirty argument
+	 * @param string|bool|null $dirty      The value for the dirty argument.
 	 * @param string|bool      $clean      The value for the clean argument.
 	 * @param string|bool|null $old        The value for the old argument.
 	 * @param string           $short      Determines whether the short form should set or not.
@@ -75,17 +84,17 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * Provider for the test_validate_option.
 	 *
 	 * Formatting of each record that is provided:
-	 * field, expected, dirty, clean, old and short-form
+	 * field, expected, dirty, clean, old and short-form.
 	 *
 	 * @return array
 	 */
 	public function validate_option_values() {
 		return array(
 			// Tests a non defined value.
-			array( 'test', null, 123, null, null  ),
+			array( 'test', null, 123, null, null ),
 
 			// Tests the validation of the dbversion option.
-			array( 'dbversion', 2, 1, 3, ''  ),
+			array( 'dbversion', 2, 1, 3, '' ),
 
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
 			array( 'data1_type', 'price', 'price', 'price', null ),

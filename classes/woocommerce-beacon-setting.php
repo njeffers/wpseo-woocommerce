@@ -1,10 +1,12 @@
 <?php
 /**
+ * WooCommerce Yoast SEO plugin file.
+ *
  * @package WPSEO/WooCommerce
  */
 
 /**
- * Implements the helpscout beacon suggestions for wpseo WooCommerce
+ * Implements the helpscout beacon suggestions for wpseo WooCommerce.
  */
 class WPSEO_WooCommerce_Beacon_Setting implements Yoast_HelpScout_Beacon_Setting {
 
@@ -13,7 +15,7 @@ class WPSEO_WooCommerce_Beacon_Setting implements Yoast_HelpScout_Beacon_Setting
 	 *
 	 * @param string $page The current admin page we are on.
 	 *
-	 * @return array A list of suggestions for the beacon
+	 * @return array A list of suggestions for the beacon.
 	 */
 	public function get_suggestions( $page ) {
 		switch ( $page ) {
@@ -26,7 +28,6 @@ class WPSEO_WooCommerce_Beacon_Setting implements Yoast_HelpScout_Beacon_Setting
 					'5375e110e4b0d833740d5700',
 					// See: http://kb.yoast.com/article/16-my-sitemap-is-giving-a-404-error-what-should-i-do.
 				);
-				break;
 		}
 
 		return array();
@@ -37,13 +38,12 @@ class WPSEO_WooCommerce_Beacon_Setting implements Yoast_HelpScout_Beacon_Setting
 	 *
 	 * @param string $page The current admin page we are on.
 	 *
-	 * @return Yoast_Product[] A product to use for sending data to helpscout
+	 * @return Yoast_Product[] A product to use for sending data to helpscout.
 	 */
 	public function get_products( $page ) {
 		switch ( $page ) {
 			case 'wpseo_woo':
 				return array( new Yoast_Product_WPSEO_WooCommerce() );
-				break;
 		}
 
 		return array();
@@ -54,7 +54,7 @@ class WPSEO_WooCommerce_Beacon_Setting implements Yoast_HelpScout_Beacon_Setting
 	 *
 	 * @param string $page The current admin page we are on.
 	 *
-	 * @return array A list with configuration for the beacon
+	 * @return array A list with configuration for the beacon.
 	 */
 	public function get_config( $page ) {
 		return array();
