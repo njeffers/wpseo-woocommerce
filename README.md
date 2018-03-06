@@ -28,6 +28,9 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 7.1: March 20th, 2018
+* Compatibility with Yoast SEO 7.1
+
 ### 7.0: March 6th, 2018
 Other:
 * Removes backfill for `wp_installing()` as this was introduced in WordPress 4.4.
