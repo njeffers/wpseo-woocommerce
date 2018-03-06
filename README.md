@@ -1,7 +1,7 @@
 WooCommerce Yoast SEO
 =====================
 Requires at least: 4.8
-Tested up to: 4.9.2
+Tested up to: 4.9.4
 Stable tag: 7.0
 Requires PHP: 5.2.4
 Depends: wordpress-seo
@@ -30,10 +30,10 @@ Changelog
 =========
 ### 7.0: March 6th, 2018
 Other:
-* Security hardening.
-* Requires Yoast SEO 7.0 or higher to be installed.
-* Requires WordPress 4.8 or higher to be installed.
 * Removes backfill for `wp_installing()` as this was introduced in WordPress 4.4.
+* Requires WordPress 4.8 or higher to be installed.
+* Requires Yoast SEO 7.0 or higher to be installed.
+* Security hardening.
 
 ### 6.3: February 13th, 2018
 * Compatibility with Yoast SEO 6.3
