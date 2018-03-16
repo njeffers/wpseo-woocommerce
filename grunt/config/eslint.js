@@ -1,9 +1,9 @@
 // See https://github.com/sindresorhus/grunt-eslint
 module.exports = {
 	grunt: {
-		src: [ "Gruntfile.js", "grunt/**/*.js" ],
+		src: [ "<%= files.grunt %>", "<%= files.config %>" ],
 		options: {
-			maxWarnings: 50,
+			maxWarnings: 29,
 		},
 	},
 };

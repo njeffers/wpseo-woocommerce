@@ -5,14 +5,14 @@ module.exports = {
 	},
 	plugin: {
 		options: {
-			standard: 'ruleset.xml',
-			reportFile: '<%= paths.logs %>phpcs.log',
-			extensions: 'php'
+			standard: "ruleset.xml",
+			reportFile: "<%= paths.logs %>phpcs.log",
+			extensions: "php"
 		},
 		dir: [
-			'<%= files.php %>',
-			'!admin/license-manager/**',
-			'!admin/i18n-module/**'
+			"<%= files.php %>",
+			"!admin/license-manager/**",
+			"!admin/i18n-module/**"
 		]
 	}
 };

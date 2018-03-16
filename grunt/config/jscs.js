@@ -1,17 +1,17 @@
 // https://github.com/jscs-dev/grunt-jscs
 module.exports = {
 	options: {
-		config: '.jscsrc'
+		config: ".jscsrc"
 	},
 	grunt: {
 		options: {
 			// We have no control over task names that use underscores
-			requireCamelCaseOrUpperCaseIdentifiers: 'ignoreProperties'
+			requireCamelCaseOrUpperCaseIdentifiers: "ignoreProperties"
 		},
 		files: {
 			src: [
-				'<%= files.grunt %>',
-				'<%= files.config %>'
+				"<%= files.grunt %>",
+				"<%= files.config %>"
 			]
 		}
 	}

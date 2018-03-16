@@ -8,42 +8,42 @@ module.exports = {
 			reload: true
 		},
 		files: [
-			'<%= files.grunt %>',
-			'<%= files.config %>'
+			"<%= files.grunt %>",
+			"<%= files.config %>"
 		],
 		tasks: [
-			'jshint:grunt',
-			'jsvalidate:grunt',
-			'jscs:grunt'
+			"jshint:grunt",
+			"jsvalidate:grunt",
+			"jscs:grunt"
 		]
 	},
 	php: {
 		files: [
-			'<%= files.php %>'
+			"<%= files.php %>"
 		],
 		tasks: [
-			'phplint',
-			'phpcs',
-            'checktextdomain'
+			"phplint",
+			"phpcs",
+            "checktextdomain"
 		]
 	},
 	js: {
 		files: [
-			'<%= files.js %>'
+			"<%= files.js %>"
 		],
 		tasks: [
-			'build:js',
-			'jshint:plugin',
-			'jsvalidate:plugin',
-			'jscs:plugin'
+			"build:js",
+			"jshint:plugin",
+			"jsvalidate:plugin",
+			"jscs:plugin"
 		]
 	},
 	css: {
 		files: [
-			'css/*css'
+			"css/*css"
 		],
 		tasks: [
-			'build:css'
+			"build:css"
 		]
 	}
 };
