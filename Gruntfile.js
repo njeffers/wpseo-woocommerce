@@ -10,7 +10,7 @@ module.exports = function( grunt ) {
 	const pluginVersion = pkg.yoast.pluginVersion;
 
 	// Define project configuration
-	var project = {
+	let project = {
 		pluginVersion: pluginVersion,
 		paths: {
 			get config() {

@@ -15,9 +15,8 @@ build:
   - 'uglify'
 # Check health of the project
 check:
-  - 'jshint'
+  - 'eslint'
   - 'jsonlint'
-  - 'jsvalidate'
   - 'jscs'
   - 'phplint'
   - 'phpcs'
