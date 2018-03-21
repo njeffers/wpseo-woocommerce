@@ -6,4 +6,10 @@ module.exports = {
 			maxWarnings: 29,
 		},
 	},
+    js: {
+		src: [ "<%= files.js %>" ],
+		options: {
+			maxWarnings: 50,
+		},
+	},
 };

@@ -1,16 +1,16 @@
 (function() {
 
-	var AssessmentResult = require( 'yoastseo/js/values/AssessmentResult' );
+	var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 
 	/**
 	 * Adds eventlistener to load the Yoast WooCommerce plugin
 	 */
-	if ( typeof YoastSEO !== 'undefined' && typeof YoastSEO.app !== 'undefined' ) {
+	if ( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
 		new YoastWooCommercePlugin();
 	}
 	else {
 		jQuery( window ).on(
-			'YoastSEO:ready',
+			"YoastSEO:ready",
 			function() {
 				new YoastWooCommercePlugin();
 			}
@@ -21,13 +21,13 @@
 	 * Registers Plugin and Test for Yoast WooCommerce.
 	 */
 	function YoastWooCommercePlugin() {
-		YoastSEO.app.registerPlugin( 'YoastWooCommerce', { 'status': 'ready' } );
+		YoastSEO.app.registerPlugin( "YoastWooCommerce", { "status": "ready" } );
 
-		YoastSEO.app.registerAssessment( 'productTitle', { getResult: this.productDescription.bind( this ) }, 'YoastWooCommerce' );
+		YoastSEO.app.registerAssessment( "productTitle", { getResult: this.productDescription.bind( this ) }, "YoastWooCommerce" );
 
 		this.addCallback();
 
-		YoastSEO.app.registerPlugin( 'YoastWooCommercePlugin', { status: 'ready' } );
+		YoastSEO.app.registerPlugin( "YoastWooCommercePlugin", { status: "ready" } );
 
 		this.registerModifications();
 
@@ -43,13 +43,13 @@
 	var stripSpaces = function( text ) {
 
 		// Replace multiple spaces with single space
-		text = text.replace( /\s{2,}/g, ' ' );
+		text = text.replace( /\s{2,}/g, " " );
 
 		// Replace spaces followed by periods with only the period.
-		text = text.replace( /\s\./g, '.' );
+		text = text.replace( /\s\./g, "." );
 
 		// Remove first/last character if space
-		text = text.replace( /^\s+|\s+$/g, '' );
+		text = text.replace( /^\s+|\s+$/g, "" );
 
 		return text;
 	};
@@ -61,7 +61,7 @@
 	 * @returns {String} The text without HTML-tags.
 	 */
 	var stripTags = function( text ) {
-		text = text.replace( /(<([^>]+)>)/ig, ' ' );
+		text = text.replace( /(<([^>]+)>)/ig, " " );
 		text = stripSpaces( text );
 		return text;
 	};
@@ -74,13 +74,13 @@
 	 * @returns {object} an assessmentresult with the score and formatted text.
 	 */
 	YoastWooCommercePlugin.prototype.productDescription = function( paper, researcher, i18n ) {
-		var productDescription = document.getElementById( 'excerpt' ).value;
-		if (typeof tinyMCE !== 'undefined' && tinyMCE.get( 'excerpt') !== null) {
-			productDescription = tinyMCE.get( 'excerpt').getContent();
+		var productDescription = document.getElementById( "excerpt" ).value;
+		if (typeof tinyMCE !== "undefined" && tinyMCE.get( "excerpt") !== null) {
+			productDescription = tinyMCE.get( "excerpt").getContent();
 		}
 
 		productDescription = stripTags( productDescription );
-		var result = this.scoreProductDescription( productDescription.split( ' ' ).length );
+		var result = this.scoreProductDescription( productDescription.split( " " ).length );
 		var assessmentResult = new AssessmentResult();
 		assessmentResult.setScore( result.score );
 		assessmentResult.setText( result.text );
@@ -127,9 +127,9 @@
 	 * The tinyMCE triggers automatically since that inherets the binding from the content field tinyMCE.
 	 */
 	YoastWooCommercePlugin.prototype.addCallback = function() {
-		var elem = document.getElementById( 'excerpt' );
+		var elem = document.getElementById( "excerpt" );
 		if( elem !== null ){
-			elem.addEventListener( 'input', YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
+			elem.addEventListener( "input", YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
 		}
 
 	};
@@ -138,12 +138,12 @@
 	 * binds events to the add_product_images anchor.
 	 */
 	YoastWooCommercePlugin.prototype.bindEvents = function() {
-		jQuery( '.add_product_images' ).find( 'a' ).on( 'click', this.bindLinkEvent.bind( this ) );
+		jQuery( ".add_product_images" ).find( "a" ).on( "click", this.bindLinkEvent.bind( this ) );
 
 	};
 
 	/**
-	 * counters for the setTimeouts, used to make sure we don't end up in an infinite loop.
+	 * counters for the setTimeouts, used to make sure we don"t end up in an infinite loop.
 	 * @type {number}
 	 */
 	var buttonEventCounter = 0;
@@ -154,14 +154,14 @@
 	 * the modification.
 	 */
 	YoastWooCommercePlugin.prototype.bindLinkEvent = function() {
-		if (jQuery( '.media-modal-content' ).find( '.media-button' ).length === 0 ) {
+		if (jQuery( ".media-modal-content" ).find( ".media-button" ).length === 0 ) {
 			buttonEventCounter++;
 			if ( buttonEventCounter < 10 ) {
 				setTimeout( this.bindLinkEvent.bind( this ) );
 			}
 		} else {
 			buttonEventCounter = 0;
-			jQuery( '.media-modal-content' ).find( '.media-button' ).on( 'click', this.buttonCallback.bind( this )  );
+			jQuery( ".media-modal-content" ).find( ".media-button" ).on( "click", this.buttonCallback.bind( this )  );
 		}
 	};
 
@@ -179,14 +179,14 @@
 	 * so when a image is removed, the modification is run.
 	 */
 	YoastWooCommercePlugin.prototype.bindDeleteEvent = function() {
-		if ( jQuery( '#product_images_container' ).find( '.delete' ).length === 0 ){
+		if ( jQuery( "#product_images_container" ).find( ".delete" ).length === 0 ){
 			deleteEventCounter++;
 			if ( deleteEventCounter < 10 ) {
 				setTimeout( this.bindDeleteEvent.bind( this ) );
 			}
 		} else {
 			deleteEventCounter = 0;
-			jQuery( '#product_images_container' ).find( '.delete' ).on( 'click', YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
+			jQuery( "#product_images_container" ).find( ".delete" ).on( "click", YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
 		}
 	};
 
@@ -196,7 +196,7 @@
 	YoastWooCommercePlugin.prototype.registerModifications = function() {
 		var callback = this.addImageToContent.bind( this );
 
-		YoastSEO.app.registerModification( 'content', callback, 'YoastWooCommercePlugin', 10 );
+		YoastSEO.app.registerModification( "content", callback, "YoastWooCommercePlugin", 10 );
 	};
 
 	/**
@@ -205,7 +205,7 @@
 	 * @returns {String}
 	 */
 	YoastWooCommercePlugin.prototype.addImageToContent = function( data ) {
-		var images = jQuery( '#product_images_container' ).find( 'img' );
+		var images = jQuery( "#product_images_container" ).find( "img" );
 
 		for (var i = 0; i < images.length; i++ ){
 			data += images[ i ].outerHTML;
