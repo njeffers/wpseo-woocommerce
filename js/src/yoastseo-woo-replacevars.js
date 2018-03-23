@@ -1,7 +1,5 @@
 /* global jQuery, tinyMCE, YoastSEO, window.YoastReplaceVarPlugin.ReplaceVar, wpseoWooReplaceVarsL10n */
 ( function() {
-	"use strict";
-
 	var pluginName = "replaceWooVariablePlugin";
 	var ReplaceVar = window.YoastReplaceVarPlugin.ReplaceVar;
 	var placeholders = {};
@@ -43,7 +41,6 @@
 		if ( typeof tinyMCE !== "undefined" && tinyMCE.get( "excerpt" ) !== null ) {
 			productDescription = tinyMCE.get( "excerpt" ).getContent();
 		}
-
 		return productDescription;
 	}
 
@@ -93,7 +90,7 @@
 	/**
 	 * Returns the name of the first found brand name.
 	 *
-	 * @returns string The name of the brand.
+	 * @returns {string} The name of the brand.
 	 */
 	function getBrand() {
 		var brandContainers = [ "#product_brand-all", "#pwb-brand-all" ];
@@ -232,21 +229,20 @@
 	 * @returns {string} The text in which the placeholders have been replaced.
 	 */
 	YoastReplaceVarPlugin.prototype.replacePlaceholders = function( text ) {
-		for ( var placeholder in placeholders ) {
-			var replaceVar = placeholders[ placeholder ];
+		for ( var i = 0; i < placeholders.length; i++ ) {
+			var replaceVar = placeholders[ i ];
 
 			text = text.replace(
 				new RegExp( replaceVar.getPlaceholder( true ), "g" ), replaceVar.replacement
 			);
 		}
-
 		return text;
 	};
 
 	/**
 	 * Initializes the Yoast WooCommerce ReplaceVars plugin.
 	 *
-	 * @returns void
+	 * @returns {void}
 	 */
 	function initializeReplacevarPlugin() {
 		// When YoastSEO is available, just instantiate the plugin.

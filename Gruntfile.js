@@ -1,10 +1,11 @@
 /* global require, process */
 const { flattenVersionForFile } = require( "./grunt/modules/version.js" );
+const  timeGrunt = require( "time-grunt" );
+const loadGruntConfig = require( "load-grunt-config" );
+const path = require( "path" );
 
 module.exports = function( grunt ) {
-	"use strict";
-
-	require( "time-grunt" )( grunt );
+	timeGrunt( grunt );
 
 	const pkg = grunt.file.readJSON( "package.json" );
 	const pluginVersion = pkg.yoast.pluginVersion;
@@ -18,15 +19,15 @@ module.exports = function( grunt ) {
 			},
 			grunt: "grunt/",
 			languages: "languages/",
-			logs: "logs/"
+			logs: "logs/",
 		},
 		files: {
 			php: [
-				"*.php"
+				"*.php",
 			],
 			js: [
-				"js/*.js",
-				"!js/*.min.js"
+				"js/src/*.js",
+				"!js/*.min.js",
 			],
 			phptests: "tests/**/*.php",
 			get config() {
@@ -35,25 +36,25 @@ module.exports = function( grunt ) {
 			get changelog() {
 				return project.paths.theme + "changelog.txt";
 			},
-			grunt: "Gruntfile.js"
+			grunt: "Gruntfile.js",
 		},
-		pkg: grunt.file.readJSON( "package.json" )
+		pkg: grunt.file.readJSON( "package.json" ),
 	};
 
 	project.pluginVersionSlug = flattenVersionForFile( pluginVersion );
 
 	// Load Grunt configurations and tasks
-	require( "load-grunt-config" )( grunt, {
-		configPath: require( "path" ).join( process.cwd(), project.paths.config ),
+	loadGruntConfig( grunt, {
+		configPath: path.join( process.cwd(), project.paths.config ),
 		data: project,
 		jitGrunt: {
 			staticMappings: {
 				addtextdomain: "grunt-wp-i18n",
 				makepot: "grunt-wp-i18n",
 				glotpress_download: "grunt-glotpress",
-				wpcss: "grunt-wp-css"
+				wpcss: "grunt-wp-css",
 			},
 			customTasksDir: "grunt/custom",
-		}
-	});
+		},
+	} );
 };

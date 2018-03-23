@@ -1,11 +1,29 @@
-(function() {
+/* global YoastSEO, tinyMCE, wpseoWooL10n */
+var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
+( function() {
+	/**
+	 * Registers Plugin and Test for Yoast WooCommerce.
+	 * @returns {void}
+	 */
+	function YoastWooCommercePlugin() {
+		YoastSEO.app.registerPlugin( "YoastWooCommerce", { status: "ready" } );
 
-	var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
+		YoastSEO.app.registerAssessment( "productTitle", { getResult: this.productDescription.bind( this ) }, "YoastWooCommerce" );
+
+		this.addCallback();
+		this.addImageToContent();
+
+		YoastSEO.app.registerPlugin( "YoastWooCommercePlugin", { status: "ready" } );
+
+		this.registerModifications();
+
+		this.bindEvents();
+	}
 
 	/**
 	 * Adds eventlistener to load the Yoast WooCommerce plugin
 	 */
-	if ( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
+	if( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
 		new YoastWooCommercePlugin();
 	}
 	else {
@@ -18,30 +36,12 @@
 	}
 
 	/**
-	 * Registers Plugin and Test for Yoast WooCommerce.
-	 */
-	function YoastWooCommercePlugin() {
-		YoastSEO.app.registerPlugin( "YoastWooCommerce", { "status": "ready" } );
-
-		YoastSEO.app.registerAssessment( "productTitle", { getResult: this.productDescription.bind( this ) }, "YoastWooCommerce" );
-
-		this.addCallback();
-
-		YoastSEO.app.registerPlugin( "YoastWooCommercePlugin", { status: "ready" } );
-
-		this.registerModifications();
-
-		this.bindEvents();
-	}
-
-	/**
 	 * Strip double spaces from text
 	 *
 	 * @param {String} text The text to strip spaces from.
 	 * @returns {String} The text without double spaces
 	 */
 	var stripSpaces = function( text ) {
-
 		// Replace multiple spaces with single space
 		text = text.replace( /\s{2,}/g, " " );
 
@@ -75,8 +75,8 @@
 	 */
 	YoastWooCommercePlugin.prototype.productDescription = function( paper, researcher, i18n ) {
 		var productDescription = document.getElementById( "excerpt" ).value;
-		if (typeof tinyMCE !== "undefined" && tinyMCE.get( "excerpt") !== null) {
-			productDescription = tinyMCE.get( "excerpt").getContent();
+		if ( typeof tinyMCE !== "undefined" && tinyMCE.get( "excerpt" ) !== null ) {
+			productDescription = tinyMCE.get( "excerpt" ).getContent();
 		}
 
 		productDescription = stripTags( productDescription );
@@ -97,27 +97,27 @@
 		if ( length === 0 ) {
 			return {
 				score: 1,
-				text: wpseoWooL10n.woo_desc_none
+				text: wpseoWooL10n.woo_desc_none,
 			};
 		}
 
 		if ( length > 0 && length < 20 ) {
 			return {
 				score: 5,
-				text: wpseoWooL10n.woo_desc_short
+				text: wpseoWooL10n.woo_desc_short,
 			};
 		}
 
 		if ( length >= 20 && length <= 50 ) {
 			return {
 				score: 9,
-				text: wpseoWooL10n.woo_desc_good
+				text: wpseoWooL10n.woo_desc_good,
 			};
 		}
 		if ( length > 50 ) {
 			return {
 				score: 5,
-				text: wpseoWooL10n.woo_desc_long
+				text: wpseoWooL10n.woo_desc_long,
 			};
 		}
 	};
@@ -125,36 +125,37 @@
 	/**
 	 * Adds callback to the excerpt field to trigger the analyzeTimer when product description is updated.
 	 * The tinyMCE triggers automatically since that inherets the binding from the content field tinyMCE.
+	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.addCallback = function() {
 		var elem = document.getElementById( "excerpt" );
-		if( elem !== null ){
+		if( elem !== null ) {
 			elem.addEventListener( "input", YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
 		}
-
 	};
 
 	/**
-	 * binds events to the add_product_images anchor.
+	 * Binds events to the add_product_images anchor.
+	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.bindEvents = function() {
 		jQuery( ".add_product_images" ).find( "a" ).on( "click", this.bindLinkEvent.bind( this ) );
-
 	};
 
 	/**
-	 * counters for the setTimeouts, used to make sure we don"t end up in an infinite loop.
+	 * Counters for the setTimeouts, used to make sure we don"t end up in an infinite loop.
 	 * @type {number}
 	 */
 	var buttonEventCounter = 0;
 	var deleteEventCounter = 0;
 
 	/**
-	 * after the modal dialog is opened, check for the button that adds images to the gallery to trigger
+	 * After the modal dialog is opened, check for the button that adds images to the gallery to trigger
 	 * the modification.
+	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.bindLinkEvent = function() {
-		if (jQuery( ".media-modal-content" ).find( ".media-button" ).length === 0 ) {
+		if ( jQuery( ".media-modal-content" ).find( ".media-button" ).length === 0 ) {
 			buttonEventCounter++;
 			if ( buttonEventCounter < 10 ) {
 				setTimeout( this.bindLinkEvent.bind( this ) );
@@ -168,6 +169,7 @@
 	/**
 	 * After the gallery is added, call the analyzeTimer of the app, to add the modifications.
 	 * Also call the bindDeleteEvent, to bind the analyzerTimer when an image is deleted.
+	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.buttonCallback = function() {
 		YoastSEO.app.analyzeTimer();
@@ -177,9 +179,10 @@
 	/**
 	 * Checks if the delete buttons of the added images are available. When they are, bind the analyzeTimer function
 	 * so when a image is removed, the modification is run.
+	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.bindDeleteEvent = function() {
-		if ( jQuery( "#product_images_container" ).find( ".delete" ).length === 0 ){
+		if ( jQuery( "#product_images_container" ).find( ".delete" ).length === 0 ) {
 			deleteEventCounter++;
 			if ( deleteEventCounter < 10 ) {
 				setTimeout( this.bindDeleteEvent.bind( this ) );
@@ -192,6 +195,7 @@
 
 	/**
 	 * Registers the addImageToContent modification
+	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.registerModifications = function() {
 		var callback = this.addImageToContent.bind( this );
@@ -200,17 +204,17 @@
 	};
 
 	/**
-	 * Adds the images from the pagegallery to the content to be analyzed by the analyzer.
-	 * @param data {String}
-	 * @returns {String}
+	 * Adds the images from the page gallery to the content to be analyzed by the analyzer.
+	 * @param {String} data The data string that has to have the images outer html concatenated on.
+	 * @returns {String} The data string with the images outer html concatenated on.
 	 */
 	YoastWooCommercePlugin.prototype.addImageToContent = function( data ) {
 		var images = jQuery( "#product_images_container" ).find( "img" );
 
-		for (var i = 0; i < images.length; i++ ){
+		for( var i = 0; i < images.length; i++ ) {
 			data += images[ i ].outerHTML;
 		}
 		return data;
 	};
 }
-());
+() );

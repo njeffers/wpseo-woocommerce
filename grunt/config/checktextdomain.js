@@ -16,13 +16,13 @@ module.exports = {
 			"esc_attr_e:1,2d",
 			"esc_html_e:1,2d",
 			"esc_attr_x:1,2c,3d",
-			"esc_html_x:1,2c,3d"
-		]
+			"esc_html_x:1,2c,3d",
+		],
 	},
 	files: {
 		expand: true,
 		src: [
-			"<%= files.php %>"
-		]
-	}
+			"<%= files.php %>",
+		],
+	},
 };
