@@ -248,7 +248,6 @@
 		// When YoastSEO is available, just instantiate the plugin.
 		if ( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
 			var replacevarPlugin = new YoastReplaceVarPlugin();
-
 			return;
 		}
 

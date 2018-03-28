@@ -24,13 +24,12 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	 * Adds eventlistener to load the Yoast WooCommerce plugin
 	 */
 	if( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
-		new YoastWooCommercePlugin();
-	}
-	else {
+		( () => new YoastWooCommercePlugin() )();
+	} else {
 		jQuery( window ).on(
 			"YoastSEO:ready",
 			function() {
-				new YoastWooCommercePlugin();
+				( () => new YoastWooCommercePlugin() )();
 			}
 		);
 	}
@@ -93,7 +92,6 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	 * @returns {{score: number, text: *}} The result object with score and text.
 	 */
 	YoastWooCommercePlugin.prototype.scoreProductDescription = function( length ) {
-
 		if ( length === 0 ) {
 			return {
 				score: 1,
@@ -216,5 +214,4 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 		}
 		return data;
 	};
-}
-() );
+}() );
