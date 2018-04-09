@@ -4,6 +4,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 ( function() {
 	/**
 	 * Registers Plugin and Test for Yoast WooCommerce.
+	 *
 	 * @returns {void}
 	 */
 	function YoastWooCommercePlugin() {
@@ -12,7 +13,6 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 		YoastSEO.app.registerAssessment( "productTitle", { getResult: this.productDescription.bind( this ) }, "YoastWooCommerce" );
 
 		this.addCallback();
-		this.addImageToContent();
 
 		YoastSEO.app.registerPlugin( "YoastWooCommercePlugin", { status: "ready" } );
 
@@ -22,24 +22,25 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	}
 
 	/**
-	 * Adds eventlistener to load the Yoast WooCommerce plugin
+	 * Adds eventlistener to load the Yoast WooCommerce plugin.
 	 */
 	if( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
-		( () => new YoastWooCommercePlugin() )();
+		new YoastWooCommercePlugin(); // eslint-disable-line no-new
 	} else {
 		jQuery( window ).on(
 			"YoastSEO:ready",
 			function() {
-				( () => new YoastWooCommercePlugin() )();
+				new YoastWooCommercePlugin(); // eslint-disable-line no-new
 			}
 		);
 	}
 
 	/**
-	 * Strip double spaces from text
+	 * Strip double spaces from text.
 	 *
 	 * @param {String} text The text to strip spaces from.
-	 * @returns {String} The text without double spaces
+	 *
+	 * @returns {String} The text without double spaces.
 	 */
 	var stripSpaces = function( text ) {
 		// Replace multiple spaces with single space
@@ -58,6 +59,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	 * Strip HTML-tags from text
 	 *
 	 * @param {String} text The text to strip the HTML-tags from.
+	 *
 	 * @returns {String} The text without HTML-tags.
 	 */
 	var stripTags = function( text ) {
@@ -68,7 +70,8 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 
 	/**
 	 * Tests the length of the product description.
-	 * @returns {object} an assessment result with the score and formatted text.
+	 *
+	 * @returns {Object} An assessment result with the score and formatted text.
 	 */
 	YoastWooCommercePlugin.prototype.productDescription = function() {
 		var productDescription = document.getElementById( "excerpt" ).value;
@@ -86,7 +89,9 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 
 	/**
 	 * Returns the score based on the lengt of the product description.
+	 *
 	 * @param {number} length The length of the product description.
+	 *
 	 * @returns {{score: number, text: *}} The result object with score and text.
 	 */
 	YoastWooCommercePlugin.prototype.scoreProductDescription = function( length ) {
@@ -121,6 +126,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	/**
 	 * Adds callback to the excerpt field to trigger the analyzeTimer when product description is updated.
 	 * The tinyMCE triggers automatically since that inherets the binding from the content field tinyMCE.
+	 *
 	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.addCallback = function() {
@@ -132,6 +138,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 
 	/**
 	 * Binds events to the add_product_images anchor.
+	 *
 	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.bindEvents = function() {
@@ -139,7 +146,8 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	};
 
 	/**
-	 * Counters for the setTimeouts, used to make sure we don"t end up in an infinite loop.
+	 * Counters for the setTimeouts, used to make sure we don't end up in an infinite loop.
+	 *
 	 * @type {number}
 	 */
 	var buttonEventCounter = 0;
@@ -148,6 +156,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	/**
 	 * After the modal dialog is opened, check for the button that adds images to the gallery to trigger
 	 * the modification.
+	 *
 	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.bindLinkEvent = function() {
@@ -165,6 +174,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	/**
 	 * After the gallery is added, call the analyzeTimer of the app, to add the modifications.
 	 * Also call the bindDeleteEvent, to bind the analyzerTimer when an image is deleted.
+	 *
 	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.buttonCallback = function() {
@@ -175,6 +185,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	/**
 	 * Checks if the delete buttons of the added images are available. When they are, bind the analyzeTimer function
 	 * so when a image is removed, the modification is run.
+	 *
 	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.bindDeleteEvent = function() {
@@ -190,7 +201,8 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	};
 
 	/**
-	 * Registers the addImageToContent modification
+	 * Registers the addImageToContent modification.
+	 *
 	 * @returns {void}
 	 */
 	YoastWooCommercePlugin.prototype.registerModifications = function() {
@@ -201,8 +213,10 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 
 	/**
 	 * Adds the images from the page gallery to the content to be analyzed by the analyzer.
-	 * @param {String} data The data string that has to have the images outer html concatenated on.
-	 * @returns {String} The data string with the images outer html concatenated on.
+	 *
+	 * @param {String} data The data string that does not have the images outer html.
+	 *
+	 * @returns {String} The data string parameter with the images outer html.
 	 */
 	YoastWooCommercePlugin.prototype.addImageToContent = function( data ) {
 		var images = jQuery( "#product_images_container" ).find( "img" );

@@ -57,7 +57,7 @@
 		// Take the parent of checkbox with type label and clone it.
 		var clonedLabel = checkbox.parent( "label" ).clone();
 
-		// Finds child elements and removes them so we only get the label"s text left.
+		// Finds child elements and removes them so we only get the label's text left.
 		clonedLabel.children().remove();
 
 		// Returns the trimmed text value.
