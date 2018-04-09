@@ -17,7 +17,7 @@
     "url": "https://github.com/Yoast/wpseo-woocommerce"
   },
   "dependencies": {
-    "yoastseo": "^1.30"
+    "yoastseo": "^1.30.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
@@ -46,6 +46,6 @@
     "time-grunt": "^1.0.0"
   },
   "yoast": {
-    "pluginVersion": "7.0"
+    "pluginVersion": "7.1"
   }
 }
