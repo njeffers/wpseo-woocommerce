@@ -66,13 +66,10 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	};
 
 	/**
-	 * Tests the length of the productdescription.
-	 * @param {object} paper The paper to run this assessment on
-	 * @param {object} researcher The researcher used for the assessment
-	 * @param {object} i18n The i18n-object used for parsing translations
-	 * @returns {object} an assessmentresult with the score and formatted text.
+	 * Tests the length of the product description.
+	 * @returns {object} an assessment result with the score and formatted text.
 	 */
-	YoastWooCommercePlugin.prototype.productDescription = function( paper, researcher, i18n ) {
+	YoastWooCommercePlugin.prototype.productDescription = function() {
 		var productDescription = document.getElementById( "excerpt" ).value;
 		if ( typeof tinyMCE !== "undefined" && tinyMCE.get( "excerpt" ) !== null ) {
 			productDescription = tinyMCE.get( "excerpt" ).getContent();

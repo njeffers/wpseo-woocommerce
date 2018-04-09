@@ -1,4 +1,4 @@
-/* global jQuery, tinyMCE, YoastSEO, window.YoastReplaceVarPlugin.ReplaceVar, wpseoWooReplaceVarsL10n */
+/* global jQuery, tinyMCE, YoastSEO, wpseoWooReplaceVarsL10n */
 ( function() {
 	var pluginName = "replaceWooVariablePlugin";
 	var ReplaceVar = window.YoastReplaceVarPlugin.ReplaceVar;
@@ -247,7 +247,7 @@
 	function initializeReplacevarPlugin() {
 		// When YoastSEO is available, just instantiate the plugin.
 		if ( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
-			var replacevarPlugin = new YoastReplaceVarPlugin();
+			new YoastReplaceVarPlugin(); // eslint-disable-line no-new
 			return;
 		}
 
@@ -255,7 +255,7 @@
 		jQuery( window ).on(
 			"YoastSEO:ready",
 			function() {
-				var replacevarPlugin = new YoastReplaceVarPlugin();
+				new YoastReplaceVarPlugin(); // eslint-disable-line no-new
 			}
 		);
 	}

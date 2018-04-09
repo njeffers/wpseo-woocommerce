@@ -5,12 +5,12 @@ module.exports = {
 				expand: true,
 				cwd: ".",
 				src: [
-					// folders to copy
+					// Folders to copy
 					"classes/**",
 					"vendor/**",
 					"js/*.min.js",
 					"languages/**",
-					// files to copy
+					// Files to copy
 					"*.php",
 				],
 				dest: "artifact",
