@@ -1,6 +1,6 @@
 /* global require, process */
 const { flattenVersionForFile } = require( "./grunt/modules/version.js" );
-const  timeGrunt = require( "time-grunt" );
+const timeGrunt = require( "time-grunt" );
 const loadGruntConfig = require( "load-grunt-config" );
 const path = require( "path" );
 
