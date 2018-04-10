@@ -37,9 +37,9 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	/**
 	 * Strip double spaces from text.
 	 *
-	 * @param {String} text The text to strip spaces from.
+	 * @param {string} text The text to strip spaces from.
 	 *
-	 * @returns {String} The text without double spaces.
+	 * @returns {string} The text without double spaces.
 	 */
 	var stripSpaces = function( text ) {
 		// Replace multiple spaces with single space
@@ -57,9 +57,9 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	/**
 	 * Strip HTML-tags from text
 	 *
-	 * @param {String} text The text to strip the HTML-tags from.
+	 * @param {string} text The text to strip the HTML-tags from.
 	 *
-	 * @returns {String} The text without HTML-tags.
+	 * @returns {string} The text without HTML-tags.
 	 */
 	var stripTags = function( text ) {
 		text = text.replace( /(<([^>]+)>)/ig, " " );
@@ -87,7 +87,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	};
 
 	/**
-	 * Returns the score based on the lengt of the product description.
+	 * Returns the score based on the length of the product description.
 	 *
 	 * @param {number} length The length of the product description.
 	 *
@@ -124,7 +124,7 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 
 	/**
 	 * Adds callback to the excerpt field to trigger the analyzeTimer when product description is updated.
-	 * The tinyMCE triggers automatically since that inherets the binding from the content field tinyMCE.
+	 * The tinyMCE triggers automatically since that inherits the binding from the content field tinyMCE.
 	 *
 	 * @returns {void}
 	 */
@@ -213,9 +213,9 @@ var AssessmentResult = require( "yoastseo/js/values/AssessmentResult" );
 	/**
 	 * Adds the images from the page gallery to the content to be analyzed by the analyzer.
 	 *
-	 * @param {String} data The data string that does not have the images outer html.
+	 * @param {string} data The data string that does not have the images outer html.
 	 *
-	 * @returns {String} The data string parameter with the images outer html.
+	 * @returns {string} The data string parameter with the images outer html.
 	 */
 	YoastWooCommercePlugin.prototype.addImageToContent = function( data ) {
 		var images = jQuery( "#product_images_container" ).find( "img" );
