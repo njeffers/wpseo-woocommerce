@@ -230,8 +230,8 @@
 	 * @returns {string} The text in which the placeholders have been replaced.
 	 */
 	YoastReplaceVarPlugin.prototype.replacePlaceholders = function( text ) {
-		for ( var i = 0; i < placeholders.length; i++ ) {
-			var replaceVar = placeholders[ i ];
+			for ( var placeholder in placeholders ) {
+				var replaceVar = placeholders[ placeholder ];
 
 			text = text.replace(
 				new RegExp( replaceVar.getPlaceholder( true ), "g" ), replaceVar.replacement
