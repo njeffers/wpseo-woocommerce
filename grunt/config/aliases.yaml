@@ -17,7 +17,6 @@ build:
 check:
   - 'eslint'
   - 'jsonlint'
-  - 'jscs'
   - 'phplint'
   - 'phpcs'
   - 'checktextdomain'
