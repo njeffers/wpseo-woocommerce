@@ -7,9 +7,9 @@ module.exports = {
 			{
 				expand: true,
 				cwd: "artifact/",
-				src: ["**"],
+				src: [ "**" ],
 				dest: "./",
 			},
 		],
 	},
-}
+};

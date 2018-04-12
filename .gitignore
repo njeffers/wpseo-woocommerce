@@ -5,3 +5,4 @@ artifact.zip
 artifact/
 .phpcs.xml
 phpcs.xml
+yarn-error.log
