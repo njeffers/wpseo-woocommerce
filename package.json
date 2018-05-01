@@ -17,7 +17,7 @@
     "url": "https://github.com/Yoast/wpseo-woocommerce"
   },
   "dependencies": {
-    "yoastseo": "^1.30.2"
+    "yoastseo": "^1.31.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
