@@ -121,6 +121,7 @@
 	var YoastReplaceVarPlugin = function() {
 		this._app = YoastSEO.app;
 		this._app.registerPlugin( pluginName, { status: "ready" } );
+		this._store = YoastSEO.store;
 
 		this.registerReplacements();
 		this.registerModifications( this._app );
@@ -210,6 +211,11 @@
 	 */
 	YoastReplaceVarPlugin.prototype.addReplacement = function( replacement ) {
 		placeholders[ replacement.placeholder ] = replacement;
+		this._store.dispatch( {
+			type: "SNIPPET_EDITOR_UPDATE_REPLACEMENT_VARIABLE",
+			name: replacement.placeholder.replace( /^%%|%%$/g, "" ),
+			value: replacement.placeholder,
+		} );
 	};
 
 	/**
@@ -219,6 +225,7 @@
 	 */
 	YoastReplaceVarPlugin.prototype.declareReloaded = function() {
 		this._app.pluginReloaded( pluginName );
+		this._store.dispatch( { type: "SNIPPET_EDITOR_REFRESH" } );
 	};
 
 	/**
