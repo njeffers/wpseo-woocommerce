@@ -28,7 +28,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 7.6: May 29th, 2018
+### 7.6: June 5th, 2018
 * Compatibility with Yoast SEO 7.6
 
 ### 7.5: May 15th, 2018
