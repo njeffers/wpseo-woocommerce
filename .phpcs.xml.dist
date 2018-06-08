@@ -49,16 +49,24 @@
 	<!-- Verify that all gettext calls use the correct text domain. -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="yoast-woo-seo"/>
+			<property name="text_domain" type="array">
+				<element value="yoast-woo-seo"/>
+			</property>
 		</properties>
 	</rule>
 
 	<rule ref="Yoast.Files.FileName">
 		<properties>
 			<!-- Don't trigger on the main file as renaming it would deactivate the plugin. -->
-			<property name="exclude" type="array" value="wpseo-woocommerce.php"/>
+			<property name="exclude" type="array">
+				<element value="wpseo-woocommerce.php"/>
+			</property>
+
 			<!-- Remove the following prefixes from the names of object structures. -->
-			<property name="prefixes" type="array" value="wpseo,yoast"/>
+			<property name="prefixes" type="array">
+				<element value="wpseo"/>
+				<element value="yoast"/>
+			</property>
 		</properties>
 	</rule>
 
@@ -66,9 +74,17 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<!-- Provide the prefixes to look for. -->
-			<property name="prefixes" type="array" value="wpseo,yoast,initialize_yoast"/>
+			<property name="prefixes" type="array">
+				<element value="wpseo"/>
+				<element value="yoast"/>
+				<element value="initialize_yoast"/>
+			</property>
+
 			<!-- Test classes do not need to be prefixed as they won't go into production. -->
-			<property name="custom_test_class_whitelist" type="array" value="WPSEO_UnitTestCase,WPSEO_WooCommerce_UnitTestCase"/>
+			<property name="custom_test_class_whitelist" type="array">
+				<element value="WPSEO_UnitTestCase"/>
+				<element value="WPSEO_WooCommerce_UnitTestCase"/>
+			</property>
 		</properties>
 
 		<!-- Valid usage: For testing purposes, some non-prefixed globals are being created. -->
@@ -79,7 +95,10 @@
 	<rule ref="WordPress.Variables.GlobalVariables">
 		<properties>
 			<!-- To that end, make the sniff aware of the WPSEO unit test base class. -->
-			<property name="custom_test_class_whitelist" type="array" value="WPSEO_UnitTestCase,WPSEO_WooCommerce_UnitTestCase"/>
+			<property name="custom_test_class_whitelist" type="array">
+				<element value="WPSEO_UnitTestCase"/>
+				<element value="WPSEO_WooCommerce_UnitTestCase"/>
+			</property>
 		</properties>
 	</rule>
 
