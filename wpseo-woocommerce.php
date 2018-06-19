@@ -226,6 +226,25 @@ class Yoast_WooCommerce_SEO {
 		if ( $this->license_manager ) {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
 		}
+
+		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
+	}
+
+	/**
+	 * Adds the page ids fro the WooCommerce core pages to the excluded post ids.
+	 *
+	 * @param array $excluded_posts_ids The excluded post ids.
+	 *
+	 * @return array The post ids with the added page ids.
+	 */
+	public function filter_woocommerce_pages( $excluded_posts_ids ) {
+		$woocommerce_pages   = array();
+		$woocommerce_pages[] = wc_get_page_id( 'cart' );
+		$woocommerce_pages[] = wc_get_page_id( 'checkout' );
+		$woocommerce_pages[] = wc_get_page_id( 'myaccount' );
+		$woocommerce_pages   = array_filter( $woocommerce_pages );
+
+		return array_merge( $excluded_posts_ids, $woocommerce_pages );
 	}
 
 	/**
