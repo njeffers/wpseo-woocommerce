@@ -222,10 +222,35 @@ class Yoast_WooCommerce_SEO {
 		// Make sure the primary category will be used in the permalink.
 		add_filter( 'wc_product_post_type_link_product_cat', array( $this, 'add_primary_category_permalink' ), 10, 3 );
 
+		// Adds recommended replacevars.
+		add_filter( 'wpseo_recommended_replace_vars', array( $this, 'add_recommended_replacevars' ) );
+
 		// Only initialize beacon when the License Manager is present.
 		if ( $this->license_manager ) {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
 		}
+	}
+
+	/**
+	 * Adds the recommended WooCommerce replacevars to Yoast SEO.
+	 *
+	 * @param array $replacevars Array with replacevars.
+	 *
+	 * @return array Array with the added replacevars.
+	 */
+	public function add_recommended_replacevars( $replacevars ) {
+		if ( ! class_exists( 'WooCommerce', false ) ) {
+			return $replacevars;
+		}
+
+		$replacevars['product']                 = array( 'sitename', 'title', 'sep', 'primary_category' );
+		$replacevars['product_cat']             = array( 'sitename', 'title', 'sep' );
+		$replacevars['product_tag']             = array( 'sitename', 'title', 'sep' );
+		$replacevars['product_shipping_class']  = array( 'sitename', 'title', 'sep', 'page' );
+		$replacevars['product_brand']           = array( 'sitename', 'title', 'sep' );
+		$replacevars['pwb-brand']               = array( 'sitename', 'title', 'sep' );
+
+		return $replacevars;
 	}
 
 	/**
