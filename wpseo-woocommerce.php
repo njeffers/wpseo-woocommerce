@@ -244,11 +244,11 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		$replacevars['product']                = array( 'sitename', 'title', 'sep', 'primary_category' );
-		$replacevars['product_cat']            = array( 'sitename', 'title', 'sep' );
-		$replacevars['product_tag']            = array( 'sitename', 'title', 'sep' );
-		$replacevars['product_shipping_class'] = array( 'sitename', 'title', 'sep', 'page' );
-		$replacevars['product_brand']          = array( 'sitename', 'title', 'sep' );
-		$replacevars['pwb-brand']              = array( 'sitename', 'title', 'sep' );
+		$replacevars['product_cat']            = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['product_tag']            = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['product_shipping_class'] = array( 'sitename', 'term_title', 'sep', 'page' );
+		$replacevars['product_brand']          = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['pwb-brand']              = array( 'sitename', 'term_title', 'sep' );
 		$replacevars['product_archive']        = array( 'sitename', 'sep', 'page', 'pt_plural' );
 
 		return $replacevars;
