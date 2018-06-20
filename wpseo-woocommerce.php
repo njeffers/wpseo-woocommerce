@@ -266,7 +266,7 @@ class Yoast_WooCommerce_SEO {
 		static $excluded_from_catalog;
 
 		if ( $excluded_from_catalog === null ) {
-			$query                 = new WP_Query(
+			$query = new WP_Query(
 				array(
 					'fields'    => 'ids',
 					'post_type' => 'product',
