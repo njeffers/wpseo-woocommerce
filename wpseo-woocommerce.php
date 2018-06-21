@@ -244,6 +244,10 @@ class Yoast_WooCommerce_SEO {
 			return $url;
 		}
 
+		if ( $post instanceof WP_Post === false ) {
+			return $url;
+		}
+
 		if ( $post->post_type !== 'product' ) {
 			return $url;
 		}
@@ -254,7 +258,6 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return $url;
-
 	}
 
 	/**
