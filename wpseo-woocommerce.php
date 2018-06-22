@@ -287,7 +287,7 @@ class Yoast_WooCommerce_SEO {
 			$excluded_from_catalog = $query->get_posts();
 		}
 
-		return $excluded_from_catalog;		
+		return $excluded_from_catalog;
 	}
 
 	/**
