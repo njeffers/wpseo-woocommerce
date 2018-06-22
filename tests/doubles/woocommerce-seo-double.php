@@ -22,7 +22,7 @@ class Yoast_WooCommerce_SEO_Double extends Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * @inheritdoc
+	 * @inheritDoc
 	 */
 	public function filter_hidden_product( $url, $type, $post ) {
 		return parent::filter_hidden_product( $url, $type, $post );
