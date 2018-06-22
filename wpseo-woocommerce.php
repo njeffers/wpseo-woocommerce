@@ -228,6 +228,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		add_filter( 'wpseo_sitemap_entry', array( $this, 'filter_hidden_product' ), 10, 3 );
+    add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
 	}
 
 	/**
@@ -286,7 +287,24 @@ class Yoast_WooCommerce_SEO {
 			$excluded_from_catalog = $query->get_posts();
 		}
 
-		return $excluded_from_catalog;
+		return $excluded_from_catalog;		
+	}
+
+	/**
+	 * Adds the page ids from the WooCommerce core pages to the excluded post ids.
+	 *
+	 * @param array $excluded_posts_ids The excluded post ids.
+	 *
+	 * @return array The post ids with the added page ids.
+	 */
+	public function filter_woocommerce_pages( $excluded_posts_ids ) {
+		$woocommerce_pages   = array();
+		$woocommerce_pages[] = wc_get_page_id( 'cart' );
+		$woocommerce_pages[] = wc_get_page_id( 'checkout' );
+		$woocommerce_pages[] = wc_get_page_id( 'myaccount' );
+		$woocommerce_pages   = array_filter( $woocommerce_pages );
+
+		return array_merge( $excluded_posts_ids, $woocommerce_pages );
 	}
 
 	/**
