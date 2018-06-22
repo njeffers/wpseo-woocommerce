@@ -228,7 +228,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		add_filter( 'wpseo_sitemap_entry', array( $this, 'filter_hidden_product' ), 10, 3 );
-    add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
+		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
 	}
 
 	/**
