@@ -78,7 +78,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 		$instance
 			->expects( $this->once() )
 			->method( 'excluded_from_catalog' )
-			->will( $this->returnValue( array(  ) ) );
+			->will( $this->returnValue( array() ) );
 
 		$this->assertEquals(
 			array( 'loc' => 'http://shop.site/product' ),
