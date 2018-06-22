@@ -227,7 +227,67 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
 		}
 
+		add_filter( 'wpseo_sitemap_entry', array( $this, 'filter_hidden_product' ), 10, 3 );
 		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
+	}
+
+	/**
+	 * Prevents a hidden product from being added to the sitemap.
+	 *
+	 * @param array   $url  The url data.
+	 * @param string  $type The object type.
+	 * @param WP_Post $post The post object.
+	 *
+	 * @return bool|array False when entry is hidden.
+	 */
+	public function filter_hidden_product( $url, $type, $post ) {
+		if ( empty( $url['loc'] ) ) {
+			return $url;
+		}
+
+		if ( ! is_object( $post ) || ! property_exists( $post, 'post_type' ) ) {
+			return $url;
+		}
+
+		if ( $post->post_type !== 'product' ) {
+			return $url;
+		}
+
+		$excluded_from_catalog = $this->excluded_from_catalog();
+		if ( in_array( $post->ID, $excluded_from_catalog, true ) ) {
+			return false;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Retrieves the products that are excluded from the catalog.
+	 *
+	 * @return array Excluded product ids.
+	 */
+	protected function excluded_from_catalog() {
+		static $excluded_from_catalog;
+
+		if ( $excluded_from_catalog === null ) {
+			$query                 = new WP_Query(
+				array(
+					'fields'    => 'ids',
+					'post_type' => 'product',
+					// phpcs:ignore WordPress.VIP.SlowDBQuery.slow_db_query_tax_query
+					'tax_query' => array(
+						array(
+							'taxonomy' => 'product_visibility',
+							'field'    => 'name',
+							'terms'    => array( 'exclude-from-catalog' ),
+						),
+					),
+				)
+			);
+			$excluded_from_catalog = $query->get_posts();
+		}
+
+		return $excluded_from_catalog;
 	}
 
 	/**
