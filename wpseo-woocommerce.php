@@ -241,11 +241,12 @@ class Yoast_WooCommerce_SEO {
 	 * @return bool|array False when entry is hidden.
 	 */
 	public function filter_hidden_product( $url, $type, $post ) {
+
 		if ( empty( $url['loc'] ) ) {
 			return $url;
 		}
-
-		if ( $post instanceof WP_Post === false ) {
+		
+		if ( ! is_object( $post ) || ! property_exists( $post, 'post_type' ) ) {
 			return $url;
 		}
 
