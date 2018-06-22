@@ -231,7 +231,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Adds the page ids fro the WooCommerce core pages to the excluded post ids.
+	 * Adds the page ids from the WooCommerce core pages to the excluded post ids.
 	 *
 	 * @param array $excluded_posts_ids The excluded post ids.
 	 *
