@@ -53,8 +53,9 @@ module.exports = function( grunt ) {
 				makepot: "grunt-wp-i18n",
 				glotpress_download: "grunt-glotpress",
 				wpcss: "grunt-wp-css",
+				"update-version": "@yoast/grunt-plugin-tasks",
+				"set-version": "@yoast/grunt-plugin-tasks"
 			},
-			customTasksDir: "grunt/custom",
 		},
 	} );
 };
