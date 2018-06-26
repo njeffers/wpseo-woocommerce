@@ -1,7 +1,7 @@
 /* global jQuery, tinyMCE, YoastSEO, wpseoWooReplaceVarsL10n */
 ( function() {
 	var pluginName = "replaceWooVariablePlugin";
-	var ReplaceVar = window.YoastReplaceVarPlugin.ReplaceVar;
+	var ReplaceVar = window.YoastReplaceVarPlugin && window.YoastReplaceVarPlugin.ReplaceVar;
 	var placeholders = {};
 
 	var modifiableFields = [

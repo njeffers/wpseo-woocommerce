@@ -6,7 +6,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     7.6
+ * Version:     7.7
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -38,7 +38,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var string
 	 */
-	const VERSION = '7.6';
+	const VERSION = '7.7';
 
 	/**
 	 * Instance of the WooCommerce_SEO option management class.
@@ -222,6 +222,9 @@ class Yoast_WooCommerce_SEO {
 		// Make sure the primary category will be used in the permalink.
 		add_filter( 'wc_product_post_type_link_product_cat', array( $this, 'add_primary_category_permalink' ), 10, 3 );
 
+		// Adds recommended replacevars.
+		add_filter( 'wpseo_recommended_replace_vars', array( $this, 'add_recommended_replacevars' ) );
+
 		// Only initialize beacon when the License Manager is present.
 		if ( $this->license_manager ) {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
@@ -305,6 +308,29 @@ class Yoast_WooCommerce_SEO {
 		$woocommerce_pages   = array_filter( $woocommerce_pages );
 
 		return array_merge( $excluded_posts_ids, $woocommerce_pages );
+	}
+
+	/**
+	 * Adds the recommended WooCommerce replacevars to Yoast SEO.
+	 *
+	 * @param array $replacevars Array with replacevars.
+	 *
+	 * @return array Array with the added replacevars.
+	 */
+	public function add_recommended_replacevars( $replacevars ) {
+		if ( ! class_exists( 'WooCommerce', false ) ) {
+			return $replacevars;
+		}
+
+		$replacevars['product']                = array( 'sitename', 'title', 'sep', 'primary_category' );
+		$replacevars['product_cat']            = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['product_tag']            = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['product_shipping_class'] = array( 'sitename', 'term_title', 'sep', 'page' );
+		$replacevars['product_brand']          = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['pwb-brand']              = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['product_archive']        = array( 'sitename', 'sep', 'page', 'pt_plural' );
+
+		return $replacevars;
 	}
 
 	/**
