@@ -28,6 +28,9 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 7.9: July 24th, 2018
+* Compatibility with Yoast SEO 7.9
+
 ### 7.8: July 10th, 2018
 * Excludes the WooCommerce core pages from the sitemap, as they are set to `noindex` by WooCommerce.
 * Hides excluded catalog products from the products sitemap.
