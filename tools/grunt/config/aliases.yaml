@@ -23,7 +23,7 @@ check:
 # Create a zipped artifact from a fresh build
 'create:artifact':
   - 'update-version'
-  - 'build'
+  - 'release'
   - 'copy:artifact'
   - 'compress:artifact'
 # Copy the needed files to the ./artifact folder

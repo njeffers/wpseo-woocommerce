@@ -1107,7 +1107,7 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		$version = $this->flatten_version( $this::VERSION );
+		$version = $this->flatten_version( Yoast_WooCommerce_SEO::VERSION );
 
 		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
 		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
