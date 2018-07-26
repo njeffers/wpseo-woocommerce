@@ -1082,6 +1082,23 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Flattens a version number for use in a filename
+	 *
+	 * @param string $version The original version number.
+	 *
+	 * @return string The flattened version number.
+	 */
+	public function flatten_version( $version ) {
+		$parts = explode( '.', $version );
+
+		if ( count( $parts ) === 2 && preg_match( '/^\d+$/', $parts[1] ) === 1 ) {
+			$parts[] = '0';
+		}
+
+		return implode( '', $parts );
+	}
+
+	/**
 	 * Enqueues the pluginscripts.
 	 */
 	public function enqueue_scripts() {
@@ -1090,7 +1107,7 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		$version = '590';
+		$version = $this->flatten_version( $this::VERSION );
 
 		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
 		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
