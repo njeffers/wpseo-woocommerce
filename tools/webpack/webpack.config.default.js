@@ -6,15 +6,13 @@ const { flattenVersionForFile } = require( "../version.js" );
 const webpack = require( 'webpack' );
 
 const externals = {
-	yoastseo: {
-		this: ['yoast', 'analysis']
-	}
+	yoastseo: "yoast.analysis",
 };
 
 const pluginVersionSlug = flattenVersionForFile( pkg.yoast.pluginVersion );
 
 const defaultConfig = {
-	mode: "none",
+	mode: "production",
 	devtool: "cheap-module-eval-source-map",
 	entry: {
 		'yoastseo-woo-plugin': path.join( __dirname, "../../", 'js/src/yoastseo-woo-plugin.js'),

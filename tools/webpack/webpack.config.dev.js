@@ -3,7 +3,6 @@ const defaults = require( "./webpack.config.default" ).defaults;
 const webpack = require( "webpack" );
 
 const devConfig = {
-	mode: "development",
 	devtool: "eval",
 	plugins: [
 		new webpack.DefinePlugin( {
