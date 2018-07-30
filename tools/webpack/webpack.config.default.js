@@ -3,7 +3,7 @@ const path = require( "path" );
 const pkg = require( "../../package.json" );
 const UnminifiedWebpackPlugin = require( "unminified-webpack-plugin" );
 const { flattenVersionForFile } = require( "../version.js" );
-const webpack = require( 'webpack' );
+const webpack = require( "webpack" );
 
 const externals = {
 	yoastseo: "yoast.analysis",
@@ -15,11 +15,11 @@ const defaultConfig = {
 	mode: "production",
 	devtool: "cheap-module-eval-source-map",
 	entry: {
-		'yoastseo-woo-plugin': path.join( __dirname, "../../", 'js/src/yoastseo-woo-plugin.js'),
-		'yoastseo-woo-replacevars': path.join( __dirname, "../../", 'js/src/yoastseo-woo-replacevars.js')
+		'yoastseo-woo-plugin': path.join( __dirname, "../../", "js/src/yoastseo-woo-plugin.js" ),
+		'yoastseo-woo-replacevars': path.join( __dirname, "../../", "js/src/yoastseo-woo-replacevars.js" )
 	},
 	output: {
-		path: path.join( __dirname, '../../', 'js'),
+		path: path.join( __dirname, "../../", "js" ),
 		filename: "[name]-" + pluginVersionSlug + ".min.js"
 	},
 	externals: externals,
