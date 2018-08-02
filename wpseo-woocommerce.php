@@ -280,7 +280,7 @@ class Yoast_WooCommerce_SEO {
 				array(
 					'fields'    => 'ids',
 					'post_type' => 'product',
-					// phpcs:ignore WordPress.VIP.SlowDBQuery.slow_db_query_tax_query
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 					'tax_query' => array(
 						array(
 							'taxonomy' => 'product_visibility',
