@@ -356,7 +356,6 @@ class Yoast_WooCommerce_SEO {
 		return $term;
 	}
 
-
 	/**
 	 * Overrides the Woo breadcrumb functionality when the WP SEO breadcrumb functionality is enabled.
 	 *
@@ -1335,7 +1334,6 @@ class Yoast_WooCommerce_SEO {
 			'woo_desc_long'  => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
 		);
 	}
-
 }
 
 

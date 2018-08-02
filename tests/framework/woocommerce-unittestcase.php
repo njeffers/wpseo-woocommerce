@@ -47,5 +47,4 @@ class WPSEO_WooCommerce_UnitTestCase extends WP_UnitTestCase {
 		ob_clean();
 		$this->assertEquals( $output, $string );
 	}
-
 }

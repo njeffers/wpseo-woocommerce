@@ -89,7 +89,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		 */
 		public $valid_data_types = array();
 
-
 		/**
 		 * Add the actions and filters for the option.
 		 *
@@ -105,7 +104,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			);
 		}
 
-
 		/**
 		 * Get the singleton instance of this class
 		 *
@@ -118,7 +116,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 
 			return self::$instance;
 		}
-
 
 		/**
 		 * Validates the option.
