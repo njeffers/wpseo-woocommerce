@@ -1,5 +1,5 @@
 /* global require, process */
-const { flattenVersionForFile } = require( "./grunt/modules/version.js" );
+const { flattenVersionForFile } = require( "./tools/version.js" );
 const timeGrunt = require( "time-grunt" );
 const loadGruntConfig = require( "load-grunt-config" );
 const path = require( "path" );
@@ -17,7 +17,7 @@ module.exports = function( grunt ) {
 			get config() {
 				return this.grunt + "config/";
 			},
-			grunt: "grunt/",
+			grunt: "tools/grunt/",
 			languages: "languages/",
 			logs: "logs/",
 		},
