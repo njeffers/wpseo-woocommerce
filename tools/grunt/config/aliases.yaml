@@ -11,8 +11,8 @@ build:
   - 'glotpress_download'
 # Build JSplugin files
 'build:js':
-  - 'browserify'
-  - 'uglify'
+  - 'clean:jsDistFiles'
+  - 'webpack:buildDev'
 # Check health of the project
 check:
   - 'eslint'
@@ -23,7 +23,7 @@ check:
 # Create a zipped artifact from a fresh build
 'create:artifact':
   - 'update-version'
-  - 'build'
+  - 'release'
   - 'copy:artifact'
   - 'compress:artifact'
 # Copy the needed files to the ./artifact folder
@@ -34,6 +34,12 @@ check:
   - 'compress:artifactFiles'
 'artifact':
   - 'create:artifact'
+'release':
+  - 'release:js'
+  - 'build:i18n'
+'release:js':
+  - 'clean:jsDistFiles'
+  - 'webpack:buildProd'
 # Default task
 default:
   - build

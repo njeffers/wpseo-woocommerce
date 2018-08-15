@@ -6,16 +6,16 @@
  *
  * @wordpress-plugin
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     7.3
+ * Version:     8.0
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
- * Description: This extension to WooCommerce and WordPress SEO by Yoast makes sure there's perfect communication between the two plugins.
+ * Description: This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
  * Author URI:  https://yoast.com
  * Depends:     Yoast SEO, WooCommerce
  * Text Domain: yoast-woo-seo
  * Domain Path: /languages/
  *
- * Copyright 2017 Yoast BV (email: supportyoast.com)
+ * Copyright 2014-2018 Yoast BV (email: supportyoast.com)
  */
 
 if ( ! function_exists( 'add_filter' ) ) {
@@ -38,7 +38,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var string
 	 */
-	const VERSION = '7.3';
+	const VERSION = '8.0';
 
 	/**
 	 * Instance of the WooCommerce_SEO option management class.
@@ -222,10 +222,115 @@ class Yoast_WooCommerce_SEO {
 		// Make sure the primary category will be used in the permalink.
 		add_filter( 'wc_product_post_type_link_product_cat', array( $this, 'add_primary_category_permalink' ), 10, 3 );
 
+		// Adds recommended replacevars.
+		add_filter( 'wpseo_recommended_replace_vars', array( $this, 'add_recommended_replacevars' ) );
+
 		// Only initialize beacon when the License Manager is present.
 		if ( $this->license_manager ) {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
 		}
+
+		add_filter( 'wpseo_sitemap_entry', array( $this, 'filter_hidden_product' ), 10, 3 );
+		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
+	}
+
+	/**
+	 * Prevents a hidden product from being added to the sitemap.
+	 *
+	 * @param array   $url  The url data.
+	 * @param string  $type The object type.
+	 * @param WP_Post $post The post object.
+	 *
+	 * @return bool|array False when entry is hidden.
+	 */
+	public function filter_hidden_product( $url, $type, $post ) {
+		if ( empty( $url['loc'] ) ) {
+			return $url;
+		}
+
+		if ( ! is_object( $post ) || ! property_exists( $post, 'post_type' ) ) {
+			return $url;
+		}
+
+		if ( $post->post_type !== 'product' ) {
+			return $url;
+		}
+
+		$excluded_from_catalog = $this->excluded_from_catalog();
+		if ( in_array( $post->ID, $excluded_from_catalog, true ) ) {
+			return false;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Retrieves the products that are excluded from the catalog.
+	 *
+	 * @return array Excluded product ids.
+	 */
+	protected function excluded_from_catalog() {
+		static $excluded_from_catalog;
+
+		if ( $excluded_from_catalog === null ) {
+			$query                 = new WP_Query(
+				array(
+					'fields'    => 'ids',
+					'post_type' => 'product',
+					// phpcs:ignore WordPress.VIP.SlowDBQuery.slow_db_query_tax_query
+					'tax_query' => array(
+						array(
+							'taxonomy' => 'product_visibility',
+							'field'    => 'name',
+							'terms'    => array( 'exclude-from-catalog' ),
+						),
+					),
+				)
+			);
+			$excluded_from_catalog = $query->get_posts();
+		}
+
+		return $excluded_from_catalog;
+	}
+
+	/**
+	 * Adds the page ids from the WooCommerce core pages to the excluded post ids.
+	 *
+	 * @param array $excluded_posts_ids The excluded post ids.
+	 *
+	 * @return array The post ids with the added page ids.
+	 */
+	public function filter_woocommerce_pages( $excluded_posts_ids ) {
+		$woocommerce_pages   = array();
+		$woocommerce_pages[] = wc_get_page_id( 'cart' );
+		$woocommerce_pages[] = wc_get_page_id( 'checkout' );
+		$woocommerce_pages[] = wc_get_page_id( 'myaccount' );
+		$woocommerce_pages   = array_filter( $woocommerce_pages );
+
+		return array_merge( $excluded_posts_ids, $woocommerce_pages );
+	}
+
+	/**
+	 * Adds the recommended WooCommerce replacevars to Yoast SEO.
+	 *
+	 * @param array $replacevars Array with replacevars.
+	 *
+	 * @return array Array with the added replacevars.
+	 */
+	public function add_recommended_replacevars( $replacevars ) {
+		if ( ! class_exists( 'WooCommerce', false ) ) {
+			return $replacevars;
+		}
+
+		$replacevars['product']                = array( 'sitename', 'title', 'sep', 'primary_category' );
+		$replacevars['product_cat']            = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['product_tag']            = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['product_shipping_class'] = array( 'sitename', 'term_title', 'sep', 'page' );
+		$replacevars['product_brand']          = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['pwb-brand']              = array( 'sitename', 'term_title', 'sep' );
+		$replacevars['product_archive']        = array( 'sitename', 'sep', 'page', 'pt_plural' );
+
+		return $replacevars;
 	}
 
 	/**
@@ -985,7 +1090,8 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		$version = '590';
+		$asset_manager = new WPSEO_Admin_Asset_Manager();
+		$version       = $asset_manager->flatten_version( Yoast_WooCommerce_SEO::VERSION );
 
 		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
 		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );

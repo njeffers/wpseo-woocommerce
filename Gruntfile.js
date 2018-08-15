@@ -1,5 +1,5 @@
 /* global require, process */
-const { flattenVersionForFile } = require( "./grunt/modules/version.js" );
+const { flattenVersionForFile } = require( "./tools/version.js" );
 const timeGrunt = require( "time-grunt" );
 const loadGruntConfig = require( "load-grunt-config" );
 const path = require( "path" );
@@ -17,7 +17,7 @@ module.exports = function( grunt ) {
 			get config() {
 				return this.grunt + "config/";
 			},
-			grunt: "grunt/",
+			grunt: "tools/grunt/",
 			languages: "languages/",
 			logs: "logs/",
 		},
@@ -53,8 +53,9 @@ module.exports = function( grunt ) {
 				makepot: "grunt-wp-i18n",
 				glotpress_download: "grunt-glotpress",
 				wpcss: "grunt-wp-css",
+				"update-version": "@yoast/grunt-plugin-tasks",
+				"set-version": "@yoast/grunt-plugin-tasks"
 			},
-			customTasksDir: "grunt/custom",
 		},
 	} );
 };

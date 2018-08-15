@@ -1,8 +1,8 @@
 WooCommerce Yoast SEO
 =====================
 Requires at least: 4.8
-Tested up to: 4.9.5
-Stable tag: 7.3
+Tested up to: 4.9.8
+Stable tag: 8.0
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -28,6 +28,33 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 8.0: August 14th, 2018
+* Compatibility with Yoast SEO 8.0
+
+### 7.9.1: August 7th, 2018
+* Compatibility with Yoast SEO 7.9.1
+
+### 7.9: July 24th, 2018
+* Compatibility with Yoast SEO 7.9
+
+### 7.8: July 10th, 2018
+* Excludes the WooCommerce core pages from the sitemap, as they are set to `noindex` by WooCommerce.
+* Hides excluded catalog products from the products sitemap.
+* Compatibility with Yoast SEO 7.8
+
+### 7.7: June 26th, 2018
+* Adds recommended templates with replacements variables for WooCommerce pages.
+* Compatibility with Yoast SEO 7.7
+
+### 7.6: June 5th, 2018
+* Compatibility with Yoast SEO 7.6
+
+### 7.5: May 15th, 2018
+* Compatibility with Yoast SEO 7.5
+
+### 7.4: May 1st, 2018
+* Compatibility with Yoast SEO 7.4
+
 ### 7.3: April 17th, 2018
 * Compatibility with Yoast SEO 7.3
 
