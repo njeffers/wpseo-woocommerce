@@ -32,6 +32,8 @@ check:
 # Create a compressed zip from the ./artifact folder
 'compress:artifact':
   - 'compress:artifactFiles'
+'artifact':
+  - 'create:artifact'
 'release':
   - 'release:js'
   - 'build:i18n'
