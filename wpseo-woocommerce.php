@@ -15,7 +15,10 @@
  * Text Domain: yoast-woo-seo
  * Domain Path: /languages/
  *
- * Copyright 2014-2018 Yoast BV (email: supportyoast.com)
+ * WC requires at least: 3.0
+ * WC tested up to: 3.4
+ *
+ * Copyright 2014-2018 Yoast BV (email: support@yoast.com)
  */
 
 if ( ! function_exists( 'add_filter' ) ) {
