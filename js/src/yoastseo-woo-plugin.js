@@ -1,38 +1,6 @@
-/* global YoastSEO, tinyMCE, wpseoWooL10n */
-import { AssessmentResult } from 'yoastseo';
+/* global YoastSEO, wpseoWooL10n */
 
-/**
- * Strip double spaces from text.
- *
- * @param {string} text The text to strip spaces from.
- *
- * @returns {string} The text without double spaces.
- */
-var stripSpaces = function( text ) {
-	// Replace multiple spaces with single space
-	text = text.replace( /\s{2,}/g, " " );
-
-	// Replace spaces followed by periods with only the period.
-	text = text.replace( /\s\./g, "." );
-
-	// Remove first/last character if space
-	text = text.replace( /^\s+|\s+$/g, "" );
-
-	return text;
-};
-
-/**
- * Strip HTML-tags from text
- *
- * @param {string} text The text to strip the HTML-tags from.
- *
- * @returns {string} The text without HTML-tags.
- */
-var stripTags = function( text ) {
-	text = text.replace( /(<([^>]+)>)/ig, " " );
-	text = stripSpaces( text );
-	return text;
-};
+const PLUGIN_NAME = "YoastWooCommerce";
 
 /**
  * Counters for the setTimeouts, used to make sure we don't end up in an infinite loop.
@@ -49,11 +17,7 @@ class YoastWooCommercePlugin {
 	 * @returns {void}
 	 */
 	constructor() {
-		YoastSEO.app.registerPlugin( "YoastWooCommerce", { status: "ready" } );
-
-		YoastSEO.app.registerAssessment( "productTitle", { getResult: this.productDescription.bind( this ) }, "YoastWooCommerce" );
-
-		this.addCallback();
+		this.loadWorkerScript();
 
 		YoastSEO.app.registerPlugin( "YoastWooCommercePlugin", { status: "ready" } );
 
@@ -63,72 +27,61 @@ class YoastWooCommercePlugin {
 	}
 
 	/**
-	 * Tests the length of the product description.
-	 *
-	 * @returns {Object} An assessment result with the score and formatted text.
-	 */
-	productDescription() {
-		var productDescription = document.getElementById( "excerpt" ).value;
-		if ( typeof tinyMCE !== "undefined" && tinyMCE.get( "excerpt" ) !== null ) {
-			productDescription = tinyMCE.get( "excerpt" ).getContent();
-		}
-
-		productDescription = stripTags( productDescription );
-		var result = this.scoreProductDescription( productDescription.split( " " ).length );
-		var assessmentResult = new AssessmentResult();
-		assessmentResult.setScore( result.score );
-		assessmentResult.setText( result.text );
-		return assessmentResult;
-	};
-
-	/**
-	 * Returns the score based on the length of the product description.
-	 *
-	 * @param {number} length The length of the product description.
-	 *
-	 * @returns {{score: number, text: *}} The result object with score and text.
-	 */
-	scoreProductDescription( length ) {
-		if ( length === 0 ) {
-			return {
-				score: 1,
-				text: wpseoWooL10n.woo_desc_none,
-			};
-		}
-
-		if ( length > 0 && length < 20 ) {
-			return {
-				score: 5,
-				text: wpseoWooL10n.woo_desc_short,
-			};
-		}
-
-		if ( length >= 20 && length <= 50 ) {
-			return {
-				score: 9,
-				text: wpseoWooL10n.woo_desc_good,
-			};
-		}
-		if ( length > 50 ) {
-			return {
-				score: 5,
-				text: wpseoWooL10n.woo_desc_long,
-			};
-		}
-	};
-
-	/**
-	 * Adds callback to the excerpt field to trigger the analyzeTimer when product description is updated.
-	 * The tinyMCE triggers automatically since that inherits the binding from the content field tinyMCE.
+	 * Loads our worker script into the analysis worker.
 	 *
 	 * @returns {void}
 	 */
-	addCallback() {
-		var elem = document.getElementById( "excerpt" );
-		if( elem !== null ) {
-			elem.addEventListener( "input", YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
+	loadWorkerScript() {
+		if ( typeof YoastSEO === "undefined" || typeof YoastSEO.analysisWorker === "undefined" ) {
+			return;
 		}
-	};
+
+		const worker = YoastSEO.analysisWorker;
+		const productDescription = YoastWooCommercePlugin.getProductDescription();
+
+		worker.loadScript( wpseoWooL10n.script_url )
+			.then( () => worker.sendMessage( "initialize", { l10n: wpseoWooL10n, productDescription }, PLUGIN_NAME ) )
+			.then( YoastSEO.app.refresh );
+
+		this.addExcerptEventHandler( worker );
+	}
+
+	/**
+	 * Adds an event handler to the excerpt field to send a new product description to the worker.
+	 *
+	 * @param {AnalysisWebWorker} worker The worker to the the message to.
+	 *
+	 * @returns {void}
+	 */
+	addExcerptEventHandler( worker ) {
+		const excerptElement = document.getElementById( "excerpt" );
+		if ( excerptElement === null ) {
+			return;
+		}
+
+
+		excerptElement.addEventListener( "input", ( event ) => {
+			const excerpt = event.target.value;
+
+			worker.sendMessage( "updateProductDescription", excerpt, PLUGIN_NAME );
+
+			YoastSEO.app.refresh();
+		} );
+	}
+
+	/**
+	 * Retrieves the product description from the DOM element.
+	 *
+	 * @returns {string} The value of the production description.
+	 */
+	static getProductDescription() {
+		const excerptElement = document.getElementById( "excerpt" );
+		if ( excerptElement === null ) {
+			return "";
+		}
+
+		return excerptElement.value;
+	}
 
 	/**
 	 * Binds events to the add_product_images anchor.
@@ -137,7 +90,7 @@ class YoastWooCommercePlugin {
 	 */
 	bindEvents() {
 		jQuery( ".add_product_images" ).find( "a" ).on( "click", this.bindLinkEvent.bind( this ) );
-	};
+	}
 
 	/**
 	 * After the modal dialog is opened, check for the button that adds images to the gallery to trigger
@@ -155,7 +108,7 @@ class YoastWooCommercePlugin {
 			buttonEventCounter = 0;
 			jQuery( ".media-modal-content" ).find( ".media-button" ).on( "click", this.buttonCallback.bind( this )  );
 		}
-	};
+	}
 
 	/**
 	 * After the gallery is added, call the analyzeTimer of the app, to add the modifications.
@@ -166,7 +119,7 @@ class YoastWooCommercePlugin {
 	buttonCallback() {
 		YoastSEO.app.analyzeTimer();
 		this.bindDeleteEvent();
-	};
+	}
 
 	/**
 	 * Checks if the delete buttons of the added images are available. When they are, bind the analyzeTimer function
@@ -184,7 +137,7 @@ class YoastWooCommercePlugin {
 			deleteEventCounter = 0;
 			jQuery( "#product_images_container" ).find( ".delete" ).on( "click", YoastSEO.app.analyzeTimer.bind( YoastSEO.app ) );
 		}
-	};
+	}
 
 	/**
 	 * Registers the addImageToContent modification.
@@ -195,7 +148,7 @@ class YoastWooCommercePlugin {
 		var callback = this.addImageToContent.bind( this );
 
 		YoastSEO.app.registerModification( "content", callback, "YoastWooCommercePlugin", 10 );
-	};
+	}
 
 	/**
 	 * Adds the images from the page gallery to the content to be analyzed by the analyzer.
@@ -211,7 +164,7 @@ class YoastWooCommercePlugin {
 			data += images[ i ].outerHTML;
 		}
 		return data;
-	};
+	}
 }
 
 /**

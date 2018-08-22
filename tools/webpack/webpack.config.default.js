@@ -16,7 +16,8 @@ const defaultConfig = {
 	devtool: "cheap-module-eval-source-map",
 	entry: {
 		'yoastseo-woo-plugin': path.join( __dirname, "../../", "js/src/yoastseo-woo-plugin.js" ),
-		'yoastseo-woo-replacevars': path.join( __dirname, "../../", "js/src/yoastseo-woo-replacevars.js" )
+		'yoastseo-woo-replacevars': path.join( __dirname, "../../", "js/src/yoastseo-woo-replacevars.js" ),
+		'yoastseo-woo-worker': path.join( __dirname, "../../", "js/src/yoastseo-woo-worker.js" ),
 	},
 	output: {
 		path: path.join( __dirname, "../../", "js" ),

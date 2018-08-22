@@ -26,7 +26,7 @@ module.exports = function( grunt ) {
 				"*.php",
 			],
 			js: [
-				"js/src/*.js",
+				"js/src/**/*.js",
 				"!js/*.min.js",
 			],
 			phptests: "tests/**/*.php",
@@ -54,7 +54,7 @@ module.exports = function( grunt ) {
 				glotpress_download: "grunt-glotpress",
 				wpcss: "grunt-wp-css",
 				"update-version": "@yoast/grunt-plugin-tasks",
-				"set-version": "@yoast/grunt-plugin-tasks"
+				"set-version": "@yoast/grunt-plugin-tasks",
 			},
 		},
 	} );

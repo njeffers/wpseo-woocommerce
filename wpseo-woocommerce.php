@@ -1325,7 +1325,11 @@ class Yoast_WooCommerce_SEO {
 	 * @return array
 	 */
 	private function localize_woo_script() {
+		$asset_manager = new WPSEO_Admin_Asset_Manager();
+		$version       = $asset_manager->flatten_version( Yoast_WooCommerce_SEO::VERSION );
+
 		return array(
+			'script_url'     => plugins_url( 'js/yoastseo-woo-worker-' . $version . WPSEO_CSSJS_SUFFIX . '.js', self::get_plugin_file() ),
 			'woo_desc_none'  => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
 			'woo_desc_short' => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
 			'woo_desc_good'  => __( 'Your short description has a good length.', 'yoast-woo-seo' ),
