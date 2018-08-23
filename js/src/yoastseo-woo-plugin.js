@@ -1,4 +1,6 @@
-/* global YoastSEO, wpseoWooL10n */
+/* global YoastSEO, wpseoWooL10n, tinyMCE */
+
+import isUndefined from "lodash/isUndefined";
 
 const PLUGIN_NAME = "YoastWooCommerce";
 
@@ -32,11 +34,11 @@ class YoastWooCommercePlugin {
 	 * @returns {void}
 	 */
 	loadWorkerScript() {
-		if ( typeof YoastSEO === "undefined" || typeof YoastSEO.analysisWorker === "undefined" ) {
+		if ( typeof YoastSEO === "undefined" || typeof YoastSEO.analysis === "undefined" || typeof YoastSEO.analysis.worker === "undefined" ) {
 			return;
 		}
 
-		const worker = YoastSEO.analysisWorker;
+		const worker = YoastSEO.analysis.worker;
 		const productDescription = YoastWooCommercePlugin.getProductDescription();
 
 		worker.loadScript( wpseoWooL10n.script_url )
@@ -54,19 +56,32 @@ class YoastWooCommercePlugin {
 	 * @returns {void}
 	 */
 	addExcerptEventHandler( worker ) {
-		const excerptElement = document.getElementById( "excerpt" );
-		if ( excerptElement === null ) {
+		if ( isUndefined( tinyMCE ) ) {
 			return;
 		}
 
+		const excerptElement = tinyMCE.get( "excerpt" );
+		if ( ! excerptElement ) {
+			return;
+		}
 
-		excerptElement.addEventListener( "input", ( event ) => {
-			const excerpt = event.target.value;
+		excerptElement.on( "change", () => this.handleProductDescriptionChange( worker ) );
+		excerptElement.on( "input", () => this.handleProductDescriptionChange( worker ) );
+	}
 
-			worker.sendMessage( "updateProductDescription", excerpt, PLUGIN_NAME );
+	/**
+	 * Sends a new product description to the worker.
+	 *
+	 * @param {AnalysisWebWorker} worker The worker to the the message to.
+	 *
+	 * @returns {void}
+	 */
+	handleProductDescriptionChange( worker ) {
+		const excerpt = YoastWooCommercePlugin.getProductDescription();
 
-			YoastSEO.app.refresh();
-		} );
+		worker.sendMessage( "updateProductDescription", excerpt, PLUGIN_NAME );
+
+		YoastSEO.app.refresh();
 	}
 
 	/**
@@ -75,12 +90,16 @@ class YoastWooCommercePlugin {
 	 * @returns {string} The value of the production description.
 	 */
 	static getProductDescription() {
-		const excerptElement = document.getElementById( "excerpt" );
-		if ( excerptElement === null ) {
-			return "";
+		if ( isUndefined( tinyMCE ) ) {
+			return;
 		}
 
-		return excerptElement.value;
+		const excerptElement = tinyMCE.get( "excerpt" );
+		if ( ! excerptElement ) {
+			return;
+		}
+
+		return excerptElement.getContent();
 	}
 
 	/**
