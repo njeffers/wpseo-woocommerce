@@ -33,13 +33,6 @@ check:
   - 'copy:artifact'
   - 'compress:artifact'
 
-# Copy the needed files to the ./artifact folder
-'copy:artifact':
-  - 'copy:artifactFiles'
-
-# Create a compressed zip from the ./artifact folder
-'compress:artifact':
-  - 'compress:artifactFiles'
 'release':
   - 'release:js'
   - 'build:i18n'
