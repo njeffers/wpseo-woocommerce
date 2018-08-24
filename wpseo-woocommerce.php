@@ -1093,7 +1093,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
-		$version       = $asset_manager->flatten_version( Yoast_WooCommerce_SEO::VERSION );
+		$version       = $asset_manager->flatten_version( self::VERSION );
 
 		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
 		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
