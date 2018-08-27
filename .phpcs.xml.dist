@@ -92,7 +92,7 @@
 	</rule>
 
 	<!-- Overwriting WP globals can be perfectly valid in test situations. -->
-	<rule ref="WordPress.Variables.GlobalVariables">
+	<rule ref="WordPress.WP.GlobalVariablesOverride">
 		<properties>
 			<!-- To that end, make the sniff aware of the WPSEO unit test base class. -->
 			<property name="custom_test_class_whitelist" type="array">
@@ -116,30 +116,9 @@
 	</rule>
 
 	<!-- Allow for the unit test case file to make changes to the superglobals. -->
-	<rule ref="WordPress.VIP.SuperGlobalInputUsage">
-		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.CSRF.NonceVerification">
-		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.VIP.ValidatedSanitizedInput">
+	<rule ref="WordPress.Security">
 		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
 	</rule>
 
-
-	<!--
-	#############################################################################
-	TEMPORARY ADJUSTMENTS
-	Adjustments which should be removed once the associated issue has been resolved.
-	#############################################################################
-	-->
-
-	<!-- Temporarily excluded due to a bug in WPCS.
-		 The bug has been addressed and will be fixed in WPCS 1.0.0.
-		 WPCS PR: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/pull/1293
-	-->
-	<rule ref="WordPress.XSS.EscapeOutput.OutputNotEscaped">
-		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
-	</rule>
 
 </ruleset>

@@ -280,7 +280,7 @@ class Yoast_WooCommerce_SEO {
 				array(
 					'fields'    => 'ids',
 					'post_type' => 'product',
-					// phpcs:ignore WordPress.VIP.SlowDBQuery.slow_db_query_tax_query
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 					'tax_query' => array(
 						array(
 							'taxonomy' => 'product_visibility',
@@ -355,7 +355,6 @@ class Yoast_WooCommerce_SEO {
 
 		return $term;
 	}
-
 
 	/**
 	 * Overrides the Woo breadcrumb functionality when the WP SEO breadcrumb functionality is enabled.
@@ -1094,7 +1093,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
-		$version       = $asset_manager->flatten_version( Yoast_WooCommerce_SEO::VERSION );
+		$version       = $asset_manager->flatten_version( self::VERSION );
 
 		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
 		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
@@ -1335,7 +1334,6 @@ class Yoast_WooCommerce_SEO {
 			'woo_desc_long'  => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
 		);
 	}
-
 }
 
 
