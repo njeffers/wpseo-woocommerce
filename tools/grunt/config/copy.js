@@ -1,5 +1,5 @@
 module.exports = {
-	artifactFiles: {
+	artifact: {
 		files: [
 			{
 				expand: true,

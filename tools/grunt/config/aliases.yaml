@@ -4,15 +4,18 @@
 build:
   - 'build:i18n'
   - 'build:js'
+
 # Build internationalisation features
 'build:i18n':
   - 'addtextdomain'
   - 'makepot'
   - 'glotpress_download'
+
 # Build JSplugin files
 'build:js':
   - 'clean:jsDistFiles'
   - 'webpack:buildDev'
+
 # Check health of the project
 check:
   - 'eslint'
@@ -20,20 +23,16 @@ check:
   - 'phplint'
   - 'phpcs'
   - 'checktextdomain'
+
 # Create a zipped artifact from a fresh build
-'create:artifact':
+'artifact':
+  - 'shell:production-composer-install'
   - 'update-version'
   - 'release'
+  - 'clean:artifact'
   - 'copy:artifact'
   - 'compress:artifact'
-# Copy the needed files to the ./artifact folder
-'copy:artifact':
-  - 'copy:artifactFiles'
-# Create a compressed zip from the ./artifact folder
-'compress:artifact':
-  - 'compress:artifactFiles'
-'artifact':
-  - 'create:artifact'
+
 'release':
   - 'release:js'
   - 'build:i18n'

@@ -1,14 +1,13 @@
 module.exports = {
-	artifactFiles: {
+	artifact: {
 		options: {
 			archive: "artifact.zip",
 		},
 		files: [
 			{
-				expand: true,
 				cwd: "artifact/",
 				src: [ "**" ],
-				dest: "./",
+				dest: "wpseo-woocommerce",
 			},
 		],
 	},

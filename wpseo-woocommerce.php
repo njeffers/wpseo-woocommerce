@@ -6,7 +6,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     8.0
+ * Version:     8.1
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -41,7 +41,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var string
 	 */
-	const VERSION = '8.0';
+	const VERSION = '8.1';
 
 	/**
 	 * Instance of the WooCommerce_SEO option management class.
@@ -116,8 +116,8 @@ class Yoast_WooCommerce_SEO {
 			return false;
 		}
 
-		// Make sure Yoast SEO is at least 7.0, including the RC versions, so bigger than 6.9.
-		if ( ! version_compare( $wordpress_seo_version, '6.9', '>' ) ) {
+		// Make sure Yoast SEO is at least 8.1, including the RC versions.
+		if ( ! version_compare( $wordpress_seo_version, '8.1-RC0', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_upgrade_error' );
 
 			return false;
@@ -1327,7 +1327,11 @@ class Yoast_WooCommerce_SEO {
 	 * @return array
 	 */
 	private function localize_woo_script() {
+		$asset_manager = new WPSEO_Admin_Asset_Manager();
+		$version       = $asset_manager->flatten_version( Yoast_WooCommerce_SEO::VERSION );
+
 		return array(
+			'script_url'     => plugins_url( 'js/yoastseo-woo-worker-' . $version . WPSEO_CSSJS_SUFFIX . '.js', self::get_plugin_file() ),
 			'woo_desc_none'  => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
 			'woo_desc_short' => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
 			'woo_desc_good'  => __( 'Your short description has a good length.', 'yoast-woo-seo' ),
