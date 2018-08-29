@@ -1328,7 +1328,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	private function localize_woo_script() {
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
-		$version       = $asset_manager->flatten_version( Yoast_WooCommerce_SEO::VERSION );
+		$version       = $asset_manager->flatten_version( self::VERSION );
 
 		return array(
 			'script_url'     => plugins_url( 'js/yoastseo-woo-worker-' . $version . WPSEO_CSSJS_SUFFIX . '.js', self::get_plugin_file() ),
