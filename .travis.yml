@@ -9,7 +9,7 @@ branches:
     - /^release\/\d+\.\d+(\.\d+)?(-\S*)?$/
     - /^hotfix\/\d+\.\d+(\.\d+)?(-\S*)?$/
     # Also build tags like 1.1.1 or 1.1 for deployment.
-    - /(\d+\.)?(\d+\.)?(\*|\d+)/
+    - /^\d+\.\d+(\.\d+)?(-\S*)?$/
 
 jobs:
   fast_finish: true
@@ -35,6 +35,7 @@ jobs:
     - php: nightly
       env: WP_VERSION=master
     - stage: deploy
+      env: WP_VERSION=4.9
       if: tag IS present
       before_install:
         - openssl aes-256-cbc -K $encrypted_2b922af4d08d_key -iv $encrypted_2b922af4d08d_iv -in ./deploy_keys/wpseo_woo_deploy.enc -out ./deploy_keys/wpseo_woo_deploy -d
