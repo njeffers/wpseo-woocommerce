@@ -1,4 +1,4 @@
-const _defaultsDeep = require( "lodash.defaultsDeep" );
+const _defaultsDeep = require( "lodash/defaultsDeep" );
 const path = require( "path" );
 const pkg = require( "../../package.json" );
 const UnminifiedWebpackPlugin = require( "unminified-webpack-plugin" );
