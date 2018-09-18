@@ -20,7 +20,7 @@ if ( ! class_exists( 'Yoast_Product_WPSEO_WooCommerce', false ) && class_exists(
 			$slug = dirname( $file );
 
 			parent::__construct(
-				'http://my.yoast.com/edd-sl-api',
+				'https://my.yoast.com/edd-sl-api',
 				'WooCommerce Yoast SEO',
 				$slug,
 				Yoast_WooCommerce_SEO::VERSION,
