@@ -214,7 +214,6 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'woocommerce_attribute', array( $this, 'schema_filter' ), 10, 2 );
 
 				// Fix breadcrumbs.
-
 				if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
 					$this->handle_breadcrumbs_replacements();
 				}
@@ -375,6 +374,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return void
 	 */
 	public function show_yoast_breadcrumbs() {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- There is no reason to escape HTML here.
 		echo $this->override_woo_breadcrumbs();
 	}
 
