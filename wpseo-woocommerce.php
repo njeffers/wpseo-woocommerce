@@ -214,9 +214,9 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'woocommerce_attribute', array( $this, 'schema_filter' ), 10, 2 );
 
 				// Fix breadcrumbs.
+
 				if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
-					add_filter( 'woo_breadcrumbs', array( $this, 'override_woo_breadcrumbs' ) );
-					add_filter( 'wpseo_breadcrumb_links', array( $this, 'add_attribute_to_breadcrumbs' ) );
+					$this->handle_breadcrumbs_replacements();
 				}
 			}
 		} // End if.
@@ -367,6 +367,15 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function override_woo_breadcrumbs() {
 		return yoast_breadcrumb( '<div class="breadcrumb breadcrumbs woo-breadcrumbs"><div class="breadcrumb-trail">', '</div></div>', false );
+	}
+
+	/**
+	 * Shows the Yoast SEO breadcrumbs.
+	 *
+	 * @return void
+	 */
+	public function show_yoast_breadcrumbs() {
+		echo $this->override_woo_breadcrumbs();
 	}
 
 	/**
@@ -1337,6 +1346,21 @@ class Yoast_WooCommerce_SEO {
 			'woo_desc_good'  => __( 'Your short description has a good length.', 'yoast-woo-seo' ),
 			'woo_desc_long'  => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
 		);
+	}
+
+	/**
+	 * Handles the WooCommerce breadcrumbs replacements.
+	 *
+	 * @return void
+	 */
+	protected function handle_breadcrumbs_replacements() {
+		// Replaces the WooCommerce breadcrumbs.
+		if ( has_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb' ) ) {
+			remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0 );
+			add_action( 'woocommerce_before_main_content', array( $this, 'show_yoast_breadcrumbs' ), 20, 0 );
+		}
+
+		add_filter( 'wpseo_breadcrumb_links', array( $this, 'add_attribute_to_breadcrumbs' ) );
 	}
 }
 
