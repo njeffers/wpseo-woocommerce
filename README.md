@@ -32,6 +32,7 @@ Changelog
 ### 9.1: November 6th, 2018
 Bugfixes:
 * Fixes a bug where the `Yoast SEO Breadcrumbs` settings page link did not go to the correct page.
+* Fixes a bug where a PHP warning would be displayed when `php_uname` has been disabled for security reasons.
 
 Other:
 * Compatibility with Yoast SEO 9.1
