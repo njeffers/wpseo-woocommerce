@@ -1,6 +1,6 @@
-/* global YoastSEO, wpseoWooL10n, tinyMCE */
+/* global YoastSEO, wpseoWooL10n */
 
-import isUndefined from "lodash/isUndefined";
+import { getExcerpt, addExcerptEventHandlers } from "./yoastseo-woo-tinymce";
 
 const PLUGIN_NAME = "YoastWooCommerce";
 
@@ -39,67 +39,13 @@ class YoastWooCommercePlugin {
 		}
 
 		const worker = YoastSEO.analysis.worker;
-		const productDescription = YoastWooCommercePlugin.getProductDescription();
+		const productDescription = getExcerpt();
 
 		worker.loadScript( wpseoWooL10n.script_url )
 			.then( () => worker.sendMessage( "initialize", { l10n: wpseoWooL10n, productDescription }, PLUGIN_NAME ) )
 			.then( YoastSEO.app.refresh );
 
-		this.addExcerptEventHandler( worker );
-	}
-
-	/**
-	 * Adds an event handler to the excerpt field to send a new product description to the worker.
-	 *
-	 * @param {AnalysisWebWorker} worker The worker to the the message to.
-	 *
-	 * @returns {void}
-	 */
-	addExcerptEventHandler( worker ) {
-		if ( isUndefined( tinyMCE ) ) {
-			return;
-		}
-
-		const excerptElement = tinyMCE.get( "excerpt" );
-		if ( ! excerptElement ) {
-			return;
-		}
-
-		excerptElement.on( "change", () => this.handleProductDescriptionChange( worker ) );
-		excerptElement.on( "input", () => this.handleProductDescriptionChange( worker ) );
-	}
-
-	/**
-	 * Sends a new product description to the worker.
-	 *
-	 * @param {AnalysisWebWorker} worker The worker to the the message to.
-	 *
-	 * @returns {void}
-	 */
-	handleProductDescriptionChange( worker ) {
-		const excerpt = YoastWooCommercePlugin.getProductDescription();
-
-		worker.sendMessage( "updateProductDescription", excerpt, PLUGIN_NAME );
-
-		YoastSEO.app.refresh();
-	}
-
-	/**
-	 * Retrieves the product description from the DOM element.
-	 *
-	 * @returns {string} The value of the production description.
-	 */
-	static getProductDescription() {
-		if ( isUndefined( tinyMCE ) ) {
-			return;
-		}
-
-		const excerptElement = tinyMCE.get( "excerpt" );
-		if ( ! excerptElement ) {
-			return;
-		}
-
-		return excerptElement.getContent();
+		addExcerptEventHandlers( worker );
 	}
 
 	/**

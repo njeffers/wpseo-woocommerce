@@ -49,6 +49,7 @@ export default class ProductDescriptionAssessment extends Assessment {
 		const assessmentResult = new AssessmentResult();
 		assessmentResult.setScore( result.score );
 		assessmentResult.setText( result.text );
+
 		return assessmentResult;
 	}
 
