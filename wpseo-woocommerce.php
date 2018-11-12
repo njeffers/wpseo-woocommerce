@@ -374,7 +374,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return void
 	 */
 	public function show_yoast_breadcrumbs() {
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- There is no reason to escape HTML here.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- We need to output HTML. If we escape this we break it.
 		echo $this->override_woo_breadcrumbs();
 	}
 
