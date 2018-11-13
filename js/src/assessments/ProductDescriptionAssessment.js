@@ -32,10 +32,6 @@ export default class ProductDescriptionAssessment extends Assessment {
 	/**
 	 * Tests the length of the product description.
 	 *
-	 * @param {object} paper The paper to run this assessment on.
-	 * @param {object} researcher The researcher used for the assessment.
-	 * @param {object} i18n The i18n-object used for parsing translations.
-	 *
 	 * @returns {object} an assessment result with the score and formatted text.
 	 */
 	getResult() {
