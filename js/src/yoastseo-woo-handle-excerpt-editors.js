@@ -45,12 +45,8 @@ function isTinyMCEAvailable( editorID ) {
 	if ( ! isTinyMCELoaded() ) {
 		return false;
 	}
-
 	const editor = tinyMCE.get( editorID );
-
-	return (
-		editor !== null && ! editor.isHidden()
-	);
+	return editor !== null && ! editor.isHidden();
 }
 
 /**
