@@ -39,7 +39,7 @@ function getTextEditorContent( elementID ) {
  *
  * @param {string} editorID The ID of the TinyMCE editor.
  *
- * @returns {boolean} whether TinyMCE is available.
+ * @returns {boolean} Whether TinyMCE is available.
  */
 function isTinyMCEAvailable( editorID ) {
 	if ( ! isTinyMCELoaded() ) {
