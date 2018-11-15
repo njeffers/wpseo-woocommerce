@@ -28,7 +28,7 @@ function isTinyMCELoaded() {
 /**
  * Gets content from the Text editor field by element id.
  *
- * @param {String} elementID The (HTML) id attribute of the Text editor to get the contents from.
+ * @param {string} elementID The (HTML) id attribute of the Text editor to get the contents from.
  *
  * @returns {String} The editor's content.
  */
