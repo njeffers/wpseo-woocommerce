@@ -8,19 +8,17 @@
  * Handles the Visual- as well as the Text editor.
  */
 
-import isUndefined from "lodash/isUndefined";
-
 const EXCERPT_EDITOR_ID = "excerpt";
 
 /**
- * Returns whether or not the tinyMCE script is available on the page.
+ * Returns whether or not the TinyMCE script is available on the page.
  *
- * @returns {boolean} True when tinyMCE is loaded.
+ * @returns {boolean} True when TinyMCE is loaded.
  */
 function isTinyMCELoaded() {
 	return (
-		isUndefined( tinyMCE ) === false &&
-		isUndefined( tinyMCE.editors ) === false &&
+		typeof tinyMCE !== "undefined" &&
+		typeof tinyMCE.editors !== "undefined" &&
 		tinyMCE.editors.length >= 0
 	);
 }
@@ -28,18 +26,18 @@ function isTinyMCELoaded() {
 /**
  * Gets content from the Text editor field by element id.
  *
- * @param {String} elementID The (HTML) id attribute of the Text editor to get the contents from.
+ * @param {string} elementID The (HTML) id attribute of the Text editor to get the contents from.
  *
- * @returns {String} The editor's content.
+ * @returns {string} The editor's content.
  */
 function getTextEditorContent( elementID ) {
 	return document.getElementById( elementID ) && document.getElementById( elementID ).value || "";
 }
 
 /**
- * Returns whether or not a tinyMCE editor with the given ID is available.
+ * Returns whether or not a TinyMCE editor with the given ID is available.
  *
- * @param {string} editorID The ID of the tinyMCE editor.
+ * @param {string} editorID The ID of the TinyMCE editor.
  *
  * @returns {boolean} whether TinyMCE is available.
  */
