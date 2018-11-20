@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.8
 Tested up to: 5.0
-Stable tag: 9.2
+Stable tag: 9.3-beta1
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -28,6 +28,16 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 9.3: December 11th, 2018
+Enhancements:
+* The short product description assessment in the SEO analysis is now updated whenever the description gets changed inside the Text-based editor (previously only in the Visual editor).
+
+Bugfixes:
+* Fixes a bug where the WooCommerce breadcrumbs were not replaced by the Yoast SEO breadcrumbs.
+
+Other:
+* Compatibility with Yoast SEO 9.3
+
 ### 9.2: November 20th, 2018
 * Compatibility with Yoast SEO 9.2
 

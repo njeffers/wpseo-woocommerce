@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -93,8 +93,7 @@ module.exports = yoast.analysis;
 /***/ }),
 /* 1 */,
 /* 2 */,
-/* 3 */,
-/* 4 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -138,10 +137,6 @@ class ProductDescriptionAssessment_ProductDescriptionAssessment extends external
 	/**
 	 * Tests the length of the product description.
 	 *
-	 * @param {object} paper The paper to run this assessment on.
-	 * @param {object} researcher The researcher used for the assessment.
-	 * @param {object} i18n The i18n-object used for parsing translations.
-	 *
 	 * @returns {object} an assessment result with the score and formatted text.
 	 */
 	getResult() {
@@ -155,6 +150,7 @@ class ProductDescriptionAssessment_ProductDescriptionAssessment extends external
 		const assessmentResult = new external_yoast_analysis_["AssessmentResult"]();
 		assessmentResult.setScore( result.score );
 		assessmentResult.setText( result.text );
+
 		return assessmentResult;
 	}
 
