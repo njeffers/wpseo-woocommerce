@@ -73,7 +73,6 @@ export function getExcerpt() {
  */
 function handleExcerptChange( worker ) {
 	const excerpt = getExcerpt();
-	console.log( `excerpt: ${excerpt}` );
 
 	worker.sendMessage( "updateProductDescription", excerpt, "YoastWooCommerce" );
 
