@@ -73,6 +73,7 @@ export function getExcerpt() {
  */
 function handleExcerptChange( worker ) {
 	const excerpt = getExcerpt();
+	console.log( `excerpt: ${excerpt}` );
 
 	worker.sendMessage( "updateProductDescription", excerpt, "YoastWooCommerce" );
 
@@ -131,9 +132,11 @@ export function addExcerptEventHandlers( worker ) {
 	}
 
 	if ( isTinyMCELoaded() ) {
-		tinyMCE.on( "AddEditor", () => {
-			// Switched to Visual editor.
-			addVisualEditorEventHandlers( worker );
+		tinyMCE.on( "AddEditor", ( event ) => {
+			// Switched to excerpt Visual editor.
+			if ( event.editor.id === "excerpt" ) {
+				addVisualEditorEventHandlers( worker );
+			}
 		} );
 	}
 }
