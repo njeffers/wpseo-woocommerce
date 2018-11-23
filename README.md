@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.8
 Tested up to: 5.0
-Stable tag: 9.3-beta1
+Stable tag: 9.3-beta2
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -34,6 +34,7 @@ Enhancements:
 
 Bugfixes:
 * Fixes a bug where the WooCommerce breadcrumbs were not replaced by the Yoast SEO breadcrumbs.
+* Fixes a bug where switching to the visual editor with the text editor active could cause the Product editor to crash. 
 
 Other:
 * Compatibility with Yoast SEO 9.3
