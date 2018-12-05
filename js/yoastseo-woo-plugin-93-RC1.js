@@ -84,44 +84,159 @@
 /******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */,
-/* 1 */
-/***/ (function(module, exports) {
+/******/ ({
 
-/**
- * Checks if `value` is `undefined`.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
- * @example
- *
- * _.isUndefined(void 0);
- * // => true
- *
- * _.isUndefined(null);
- * // => false
- */
-function isUndefined(value) {
-  return value === undefined;
-}
-
-module.exports = isUndefined;
-
-
-/***/ }),
-/* 2 */
+/***/ 2:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var lodash_isUndefined__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var lodash_isUndefined__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_isUndefined__WEBPACK_IMPORTED_MODULE_0__);
-/* global YoastSEO, wpseoWooL10n, tinyMCE */
+
+// CONCATENATED MODULE: ./js/src/yoastseo-woo-handle-excerpt-editors.js
+/* global YoastSEO tinyMCE jQuery */
+
+/*
+ * This module handles getting the excerpt/short product description
+ * from the excerpt editor and sending the updated
+ * excerpt to the analysis web worker when it changes.
+ *
+ * Handles the Visual- as well as the Text editor.
+ */
+
+const EXCERPT_EDITOR_ID = "excerpt";
+
+/**
+ * Returns whether or not the TinyMCE script is available on the page.
+ *
+ * @returns {boolean} True when TinyMCE is loaded.
+ */
+function isTinyMCELoaded() {
+	return (
+		typeof tinyMCE !== "undefined" &&
+		typeof tinyMCE.editors !== "undefined" &&
+		tinyMCE.editors.length >= 0
+	);
+}
+
+/**
+ * Gets content from the Text editor field by element id.
+ *
+ * @param {string} elementID The (HTML) id attribute of the Text editor to get the contents from.
+ *
+ * @returns {string} The editor's content.
+ */
+function getTextEditorContent( elementID ) {
+	return document.getElementById( elementID ) && document.getElementById( elementID ).value || "";
+}
+
+/**
+ * Returns whether or not a TinyMCE editor with the given ID is available.
+ *
+ * @param {string} editorID The ID of the TinyMCE editor.
+ *
+ * @returns {boolean} Whether TinyMCE is available.
+ */
+function isTinyMCEAvailable( editorID ) {
+	if ( ! isTinyMCELoaded() ) {
+		return false;
+	}
+	const editor = tinyMCE.get( editorID );
+	return editor !== null && ! editor.isHidden();
+}
+
+/**
+ * Returns the excerpt/short product description.
+ *
+ * @returns {string} The excerpt.
+ */
+function getExcerpt() {
+	if ( isTinyMCEAvailable( EXCERPT_EDITOR_ID ) ) {
+		// User has Visual editor activated.
+		const excerptElement = tinyMCE.get( EXCERPT_EDITOR_ID );
+		return excerptElement.getContent();
+	}
+	// User has Text editor activated.
+	return getTextEditorContent( EXCERPT_EDITOR_ID );
+}
+
+/**
+ * Sends a new short product description to the worker.
+ *
+ * @param {AnalysisWebWorker} worker The worker to send the the message to.
+ *
+ * @returns {void}
+ */
+function handleExcerptChange( worker ) {
+	const excerpt = getExcerpt();
+
+	worker.sendMessage( "updateProductDescription", excerpt, "YoastWooCommerce" );
+
+	YoastSEO.app.refresh();
+}
+
+/**
+ * Adds event handlers for when the text in the excerpt Visual editor changes.
+ * A new excerpt/short product description gets sent to the web worker when it does.
+ *
+ * @param {AnalysisWebWorker} worker The web worker to which to send the excerpts.
+ * @returns {void}
+ */
+function addVisualEditorEventHandlers( worker ) {
+	const excerptElement = tinyMCE.get( EXCERPT_EDITOR_ID );
+	excerptElement.on( "change", () => handleExcerptChange( worker ) );
+	excerptElement.on( "input", () => handleExcerptChange( worker ) );
+}
+
+/**
+ * Adds event handlers for when the text in the excerpt raw Text editor changes.
+ * A new excerpt/short product description gets sent to the web worker when it does.
+ *
+ * @param {AnalysisWebWorker} worker The web worker to which to send the excerpts.
+ * @returns {void}
+ */
+function addTextEditorEventHandlers( worker ) {
+	const excerptElement = jQuery( "#excerpt" );
+	excerptElement.on( "change", () => handleExcerptChange( worker ) );
+	excerptElement.on( "input", () => handleExcerptChange( worker ) );
+}
+
+/**
+ * Adds event handlers for when the excerpt/short product description changes
+ * in either the Text- or the Visual editor.
+ *
+ * A new excerpt/short product description gets sent to the web worker when the
+ * text changes.
+ *
+ * @param {AnalysisWebWorker} worker The analysis web worker to send messages to.
+ * @returns {void}
+ */
+function addExcerptEventHandlers( worker ) {
+	/*
+	  Text editor is always available, but hidden.
+	  So we can add event handlers on startup.
+	 */
+	addTextEditorEventHandlers( worker );
+
+	/*
+	  Visual editor is added / removed on switch,
+	  so check if we are in Visual mode on startup.
+	 */
+	if ( isTinyMCEAvailable( EXCERPT_EDITOR_ID ) ) {
+		addVisualEditorEventHandlers( worker );
+	}
+
+	if ( isTinyMCELoaded() ) {
+		tinyMCE.on( "AddEditor", ( event ) => {
+			// Switched to excerpt Visual editor.
+			if ( event.editor.id === "excerpt" ) {
+				addVisualEditorEventHandlers( worker );
+			}
+		} );
+	}
+}
+
+// CONCATENATED MODULE: ./js/src/yoastseo-woo-plugin.js
+/* global YoastSEO, wpseoWooL10n */
 
 
 
@@ -135,7 +250,7 @@ const PLUGIN_NAME = "YoastWooCommerce";
 var buttonEventCounter = 0;
 var deleteEventCounter = 0;
 
-class YoastWooCommercePlugin {
+class yoastseo_woo_plugin_YoastWooCommercePlugin {
 	/**
 	 * Registers Plugin and Test for Yoast WooCommerce.
 	 *
@@ -162,67 +277,13 @@ class YoastWooCommercePlugin {
 		}
 
 		const worker = YoastSEO.analysis.worker;
-		const productDescription = YoastWooCommercePlugin.getProductDescription();
+		const productDescription = getExcerpt();
 
 		worker.loadScript( wpseoWooL10n.script_url )
 			.then( () => worker.sendMessage( "initialize", { l10n: wpseoWooL10n, productDescription }, PLUGIN_NAME ) )
 			.then( YoastSEO.app.refresh );
 
-		this.addExcerptEventHandler( worker );
-	}
-
-	/**
-	 * Adds an event handler to the excerpt field to send a new product description to the worker.
-	 *
-	 * @param {AnalysisWebWorker} worker The worker to the the message to.
-	 *
-	 * @returns {void}
-	 */
-	addExcerptEventHandler( worker ) {
-		if ( lodash_isUndefined__WEBPACK_IMPORTED_MODULE_0___default()( tinyMCE ) ) {
-			return;
-		}
-
-		const excerptElement = tinyMCE.get( "excerpt" );
-		if ( ! excerptElement ) {
-			return;
-		}
-
-		excerptElement.on( "change", () => this.handleProductDescriptionChange( worker ) );
-		excerptElement.on( "input", () => this.handleProductDescriptionChange( worker ) );
-	}
-
-	/**
-	 * Sends a new product description to the worker.
-	 *
-	 * @param {AnalysisWebWorker} worker The worker to the the message to.
-	 *
-	 * @returns {void}
-	 */
-	handleProductDescriptionChange( worker ) {
-		const excerpt = YoastWooCommercePlugin.getProductDescription();
-
-		worker.sendMessage( "updateProductDescription", excerpt, PLUGIN_NAME );
-
-		YoastSEO.app.refresh();
-	}
-
-	/**
-	 * Retrieves the product description from the DOM element.
-	 *
-	 * @returns {string} The value of the production description.
-	 */
-	static getProductDescription() {
-		if ( lodash_isUndefined__WEBPACK_IMPORTED_MODULE_0___default()( tinyMCE ) ) {
-			return;
-		}
-
-		const excerptElement = tinyMCE.get( "excerpt" );
-		if ( ! excerptElement ) {
-			return;
-		}
-
-		return excerptElement.getContent();
+		addExcerptEventHandlers( worker );
 	}
 
 	/**
@@ -313,16 +374,17 @@ class YoastWooCommercePlugin {
  * Adds eventlistener to load the Yoast WooCommerce plugin.
  */
 if( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
-	new YoastWooCommercePlugin(); // eslint-disable-line no-new
+	new yoastseo_woo_plugin_YoastWooCommercePlugin(); // eslint-disable-line no-new
 } else {
 	jQuery( window ).on(
 		"YoastSEO:ready",
 		function() {
-			new YoastWooCommercePlugin(); // eslint-disable-line no-new
+			new yoastseo_woo_plugin_YoastWooCommercePlugin(); // eslint-disable-line no-new
 		}
 	);
 }
 
 
 /***/ })
-/******/ ]);
+
+/******/ });

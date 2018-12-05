@@ -81,12 +81,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 3:
+/******/ ([
+/* 0 */,
+/* 1 */
 /***/ (function(module, exports) {
 
 /* global jQuery, tinyMCE, YoastSEO, wpseoWooReplaceVarsL10n */
@@ -361,5 +361,4 @@ initializeReplacevarPlugin();
 
 
 /***/ })
-
-/******/ });
+/******/ ]);
