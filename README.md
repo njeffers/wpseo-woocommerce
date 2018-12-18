@@ -1,8 +1,8 @@
 WooCommerce Yoast SEO
 =====================
-Requires at least: 4.8
-Tested up to: 5.0
-Stable tag: 9.3-RC1
+Requires at least: 4.9
+Tested up to: 5.0.1
+Stable tag: 9.3
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -28,7 +28,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 9.3: December 11th, 2018
+### 9.3: December 18th, 2018
 Enhancements:
 * The short product description assessment in the SEO analysis is now updated whenever the description gets changed inside the Text-based editor (previously only in the Visual editor).
 
