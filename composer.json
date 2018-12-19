@@ -24,8 +24,7 @@
         "yoast/i18n-module": "^3.0"
     },
     "require-dev": {
-        "yoast/yoastcs": "^1.0",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
+        "yoast/yoastcs": "^1.1.0",
         "roave/security-advisories": "dev-master"
     },
     "scripts": {
