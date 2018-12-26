@@ -78,9 +78,13 @@
 		<properties>
 			<!-- Provide the prefixes to look for. -->
 			<property name="prefixes" type="array">
+				<!-- Temporarily allowed until the prefixes are fixed. -->
 				<element value="wpseo"/>
 				<element value="yoast"/>
 				<element value="initialize_yoast"/>
+				<!-- These are the new prefixes which all code should comply with in the future. -->
+				<element value="yoast_woocommerce"/>
+				<element value="Yoast\WP\Woocommerce"/>
 			</property>
 
 			<!-- Test classes do not need to be prefixed as they won't go into production. -->
