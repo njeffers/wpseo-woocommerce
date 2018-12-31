@@ -779,7 +779,7 @@ class Yoast_WooCommerce_SEO {
 			if ( is_array( $terms ) && count( $terms ) > 0 ) {
 				$term_values = array_values( $terms );
 				$term        = array_shift( $term_values );
-				echo '<meta property="og:brand" content="' . esc_attr( $term->name ) . "\"/>\n";
+				echo '<meta property="product:brand" content="' . esc_attr( $term->name ) . '"/>' . "\n";
 			}
 		}
 		/**
