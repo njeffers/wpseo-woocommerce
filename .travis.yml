@@ -130,13 +130,13 @@ script:
 - |
   if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then
     travis_fold start "PHP.tests" && travis_time_start
-    phpunit -c phpunit.xml
+    phpunit
     travis_time_finish && travis_fold end "PHP.tests"
   fi
 - |
   if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then
     travis_fold start "PHP.tests" && travis_time_start
-    vendor/bin/phpunit -c phpunit.xml
+    vendor/bin/phpunit
     travis_time_finish && travis_fold end "PHP.tests"
   fi
 

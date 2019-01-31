@@ -5,4 +5,5 @@ artifact.zip
 artifact/
 .phpcs.xml
 phpcs.xml
+phpunit.xml
 yarn-error.log
