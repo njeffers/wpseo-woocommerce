@@ -32,6 +32,10 @@ Changelog
 Other:
 * Compatibility with Yoast SEO 9.7
 
+### 9.6.1: February 12th, 2019
+Other:
+* Compatibility with Yoast SEO 9.6.1
+
 ### 9.6: February 12th, 2019
 Other:
 * Compatibility with Yoast SEO 9.6
