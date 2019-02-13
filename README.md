@@ -28,6 +28,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 9.8: March 12th, 2019
+Other:
+* Compatibility with Yoast SEO 9.8
+
 ### 9.7: February 26th, 2019
 Other:
 * Compatibility with Yoast SEO 9.7
