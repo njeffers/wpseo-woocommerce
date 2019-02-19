@@ -1389,7 +1389,7 @@ function initialize_yoast_woocommerce_seo() {
  * @deprecated 10.1
  */
 function yoast_woocommerce_seo_activate_license() {
-	__deprecated_function( __FUNCTION__, '10.1' );
+	_deprecated_function( __FUNCTION__, '10.1' );
 }
 
 if ( ! wp_installing() ) {
