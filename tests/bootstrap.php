@@ -18,7 +18,7 @@ if ( false !== getenv( 'WP_PLUGIN_DIR' ) ) {
 }
 
 $GLOBALS['wp_tests_options'] = array(
-	'active_plugins' => array( 'wpseo-woocommerce/wpseo-woocommerce.php' ),
+	'active_plugins' => array( 'wpseo-woocommerce/wpseo-woocommerce.php', 'wordpress-seo/wp-seo.php' ),
 );
 
 if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
