@@ -1384,6 +1384,8 @@ function initialize_yoast_woocommerce_seo() {
 /**
  * Instantiate the plugin license manager for the current plugin and activate it's license.
  *
+ * @codeCoverageIgnore
+ *
  * @deprecated 10.1
  */
 function yoast_woocommerce_seo_activate_license() {
