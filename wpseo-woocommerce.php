@@ -65,13 +65,6 @@ class Yoast_WooCommerce_SEO {
 	public $short_name;
 
 	/**
-	 * Plugin Licence Manager.
-	 *
-	 * @var Yoast_Plugin_License_Manager
-	 */
-	private $license_manager;
-
-	/**
 	 * Return the plugin file.
 	 *
 	 * @return string
@@ -160,9 +153,6 @@ class Yoast_WooCommerce_SEO {
 		add_action( 'add_option_' . $this->short_name, array( $this, 'refresh_options_property' ) );
 		add_action( 'update_option_' . $this->short_name, array( $this, 'refresh_options_property' ) );
 
-		// Load License Manager class (on admin req only).
-		$this->license_manager = $this->load_license_manager();
-
 		// Check if the options need updating.
 		if ( $this->option_instance->db_version > $this->options['dbversion'] ) {
 			$this->upgrade();
@@ -172,10 +162,6 @@ class Yoast_WooCommerce_SEO {
 			// Add subitem to menu.
 			add_filter( 'wpseo_submenu_pages', array( $this, 'add_submenu_pages' ) );
 			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
-
-			if ( $this->license_manager ) {
-				add_action( 'wpseo_licenses_forms', array( $this->license_manager, 'show_license_form' ) );
-			}
 
 			// Products tab columns.
 			if ( $this->options['hide_columns'] === true ) {
@@ -228,7 +214,7 @@ class Yoast_WooCommerce_SEO {
 		add_filter( 'wpseo_recommended_replace_vars', array( $this, 'add_recommended_replacevars' ) );
 
 		// Only initialize beacon when the License Manager is present.
-		if ( $this->license_manager ) {
+		if ( class_exists( 'Yoast_Plugin_License_Manager' ) ) {
 			add_action( 'admin_init', array( $this, 'init_beacon' ) );
 		}
 
@@ -419,32 +405,6 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Loads the License Manager class.
-	 *
-	 * Takes care of remote license (de)activation and plugin updates.
-	 *
-	 * @return Yoast_Plugin_License_Manager|null
-	 */
-	private function load_license_manager() {
-		/*
-		 * We only need this on admin pages.
-		 * We don't need this in AJAX requests.
-		 */
-		if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-			return null;
-		}
-
-		if ( ! class_exists( 'Yoast_Plugin_License_Manager' ) ) {
-			return null;
-		}
-
-		$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
-		$license_manager->setup_hooks();
-
-		return $license_manager;
-	}
-
-	/**
 	 * Refresh the options property on add/update of the option to ensure it's always current.
 	 */
 	public function refresh_options_property() {
@@ -485,19 +445,6 @@ class Yoast_WooCommerce_SEO {
 	 * Perform upgrade procedures to the settings.
 	 */
 	public function upgrade() {
-
-		// Upgrade license options.
-		if ( $this->license_manager && $this->license_manager->license_is_valid() === false ) {
-
-			if ( isset( $this->options['license-status'] ) ) {
-				$this->license_manager->set_license_status( $this->options['license-status'] );
-			}
-
-			if ( isset( $this->options['license'] ) ) {
-				$this->license_manager->set_license_key( $this->options['license'] );
-			}
-		}
-
 		// Upgrade to new wp seo option class.
 		$this->option_instance->clean();
 	}
@@ -1436,24 +1383,15 @@ function initialize_yoast_woocommerce_seo() {
 
 /**
  * Instantiate the plugin license manager for the current plugin and activate it's license.
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated 10.1
  */
 function yoast_woocommerce_seo_activate_license() {
-	if ( ! class_exists( 'Yoast_Plugin_License_Manager' ) ) {
-		return;
-	}
-
-	// Activate license.
-	$license_manager = new Yoast_Plugin_License_Manager( new Yoast_Product_WPSEO_WooCommerce() );
-	$license_manager->activate_license();
+	_deprecated_function( __FUNCTION__, '10.1' );
 }
 
 if ( ! wp_installing() ) {
 	add_action( 'plugins_loaded', 'initialize_yoast_woocommerce_seo', 20 );
-
-	/*
-	 * When the plugin is deactivated and activated again, the license have to be activated. This is mostly the case
-	 * during a update of the plugin. To solve this, we hook into the activation process by calling a method that will
-	 * activate the license.
-	 */
-	register_activation_hook( __FILE__, 'yoast_woocommerce_seo_activate_license' );
 }
