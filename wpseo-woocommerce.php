@@ -94,7 +94,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return bool True whether the dependencies are okay.
 	 */
 	protected function check_dependencies( $wp_version ) {
-		if ( ! version_compare( $wp_version, '4.8', '>=' ) ) {
+		if ( ! version_compare( $wp_version, '5.0', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_wordpress_upgrade_error' );
 
 			return false;
@@ -109,8 +109,8 @@ class Yoast_WooCommerce_SEO {
 			return false;
 		}
 
-		// Make sure Yoast SEO is at least 8.1, including the RC versions.
-		if ( ! version_compare( $wordpress_seo_version, '8.1-RC0', '>=' ) ) {
+		// At least 10.1, in which we've removed the License Manager code from this addon. With older YoastSEO versions, this addon won't get any updates.
+		if ( ! version_compare( $wordpress_seo_version, '10.1-beta0', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_upgrade_error' );
 
 			return false;

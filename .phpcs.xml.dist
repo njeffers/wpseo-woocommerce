@@ -47,7 +47,7 @@
 	-->
 
 	<!-- Set the minimum supported WP version. This is used by several sniffs. -->
-	<config name="minimum_supported_wp_version" value="4.8"/>
+	<config name="minimum_supported_wp_version" value="5.0"/>
 
 	<!-- Verify that all gettext calls use the correct text domain. -->
 	<rule ref="WordPress.WP.I18n">
