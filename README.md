@@ -30,7 +30,7 @@ Changelog
 =========
 ### 10.1: March 26th, 2019
 Other:
-* Compatibility with Yoast SEO 10.1
+* Sets the minimum required Yoast SEO version to 10.1.
 
 ### 10.0: March 12th, 2019
 Other:
