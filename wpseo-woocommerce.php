@@ -1299,19 +1299,6 @@ class Yoast_WooCommerce_SEO {
 
 		add_filter( 'wpseo_breadcrumb_links', array( $this, 'add_attribute_to_breadcrumbs' ) );
 	}
-
-	/* ********************* DEPRECATED METHODS ********************* */
-
-	/**
-	 * Registers the settings page in the WP SEO menu.
-	 *
-	 * @since 1.0
-	 *
-	 * @deprecated 5.6
-	 * @codeCoverageIgnore
-	 */
-	public function register_settings_page() {
-	}
 }
 
 
