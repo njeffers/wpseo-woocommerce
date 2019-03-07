@@ -133,11 +133,15 @@ script:
 - |
   travis_fold start "PHP.tests" && travis_time_start
   if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then
+    travis_fold start "PHP.tests" && travis_time_start
     phpunit
+    travis_time_finish && travis_fold end "PHP.tests"
   fi
 - |
   if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then
+    travis_fold start "PHP.tests" && travis_time_start
     vendor/bin/phpunit
+    travis_time_finish && travis_fold end "PHP.tests"
   fi
   travis_time_finish && travis_fold end "PHP.tests"
 - if [[ $TRAVIS_PHP_VERSION == "7.3" ]]; then composer validate --no-check-all; fi
