@@ -779,7 +779,7 @@ class Yoast_WooCommerce_SEO {
 			if ( is_array( $terms ) && count( $terms ) > 0 ) {
 				$term_values = array_values( $terms );
 				$term        = array_shift( $term_values );
-				echo '<meta property="og:brand" content="' . esc_attr( $term->name ) . "\"/>\n";
+				echo '<meta property="product:brand" content="' . esc_attr( $term->name ) . '"/>' . "\n";
 			}
 		}
 		/**
@@ -788,8 +788,8 @@ class Yoast_WooCommerce_SEO {
 		 * @api bool unsigned Defaults to true.
 		 */
 		if ( apply_filters( 'wpseo_woocommerce_og_price', true ) ) {
-			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . "\"/>\n";
-			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . "\"/>\n";
+			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '"/>' . "\n";
+			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '"/>' . "\n";
 		}
 
 		if ( $product->is_in_stock() ) {
