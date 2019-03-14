@@ -20,10 +20,6 @@ jobs:
       # As 'trusty' is not supporting PHP 5.2/5.3 anymore, we need to force using 'precise'.
       dist: precise
       env: WP_VERSION=4.8 WP_MULTISITE=1 PHPLINT=1
-    - php: 5.3
-      # As 'trusty' is not supporting PHP 5.2/5.3 anymore, we need to force using 'precise'.
-      dist: precise
-      env: WP_VERSION=4.9
     - php: 5.6
       env: WP_VERSION=5.0
     - php: 7.0
@@ -75,10 +71,17 @@ before_install:
 - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
 
 install:
-- if [[ $TRAVIS_PHP_VERSION == "5.2" || $TRAVIS_PHP_VERSION == "5.3" ]]; then phpenv local 5.6.13; fi
-- if [[ $TRAVIS_PHP_VERSION == "5.2" || $TRAVIS_PHP_VERSION == "5.3" ]]; then composer remove --dev yoast/yoastcs dealerdirect/phpcodesniffer-composer-installer; fi
+- if [[ $TRAVIS_PHP_VERSION == "5.2" ]]; then phpenv local 5.6.13; fi
+- |
+  if [[ "$PHPCS" == "1" ]]; then
+    composer install --no-interaction
+    composer config-yoastcs
+  else
+    composer install --no-dev --no-interaction
+  fi
+- if [[ $TRAVIS_PHP_VERSION == "5.2" ]]; then composer remove --dev yoast/yoastcs dealerdirect/phpcodesniffer-composer-installer; fi
 - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" || $TRAVIS_PHP_VERSION == "nightly" ]]; then composer require --dev phpunit/phpunit ^5.7; fi
-- composer install --no-interaction
+- composer dump-autoload
 - phpenv local --unset
 
 before_script:
@@ -94,8 +97,8 @@ before_script:
 # Clone WPSEO and its submodule
 - git clone --depth=50 --branch="trunk" https://github.com/Yoast/wordpress-seo.git $WP_DEVELOP_DIR/src/wp-content/plugins/wordpress-seo
 - cd /tmp/wordpress/src/wp-content/plugins/wordpress-seo
-- if [[ $TRAVIS_PHP_VERSION == "5.2" || $TRAVIS_PHP_VERSION == "5.3" ]]; then phpenv local 5.6.13; fi
-- composer install --no-dev --no-interaction
+- if [[ $TRAVIS_PHP_VERSION == "5.2" ]]; then phpenv local 5.6.13; fi
+- composer install --no-dev --no-interaction --ignore-platform-reqs
 - phpenv local --unset
 - cd -
 
@@ -128,6 +131,7 @@ script:
   fi
 # PHP Tests
 - |
+  travis_fold start "PHP.tests" && travis_time_start
   if [[ ${TRAVIS_PHP_VERSION:0:1} == "5" ]]; then
     travis_fold start "PHP.tests" && travis_time_start
     phpunit
@@ -139,5 +143,5 @@ script:
     vendor/bin/phpunit
     travis_time_finish && travis_fold end "PHP.tests"
   fi
-
-- if [[ $TRAVIS_PHP_VERSION == "5.3" || $TRAVIS_PHP_VERSION == "7.3" ]]; then composer validate --no-check-all; fi
+  travis_time_finish && travis_fold end "PHP.tests"
+- if [[ $TRAVIS_PHP_VERSION == "7.3" ]]; then composer validate --no-check-all; fi
