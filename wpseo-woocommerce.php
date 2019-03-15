@@ -6,7 +6,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     10.1-beta2
+ * Version:     10.1-RC2
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -41,7 +41,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var string
 	 */
-	const VERSION = '10.1-beta2';
+	const VERSION = '10.1-RC2';
 
 	/**
 	 * Instance of the WooCommerce_SEO option management class.
@@ -94,7 +94,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return bool True whether the dependencies are okay.
 	 */
 	protected function check_dependencies( $wp_version ) {
-		if ( ! version_compare( $wp_version, '5.0', '>=' ) ) {
+		if ( ! version_compare( $wp_version, '4.9', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_wordpress_upgrade_error' );
 
 			return false;
@@ -779,7 +779,7 @@ class Yoast_WooCommerce_SEO {
 			if ( is_array( $terms ) && count( $terms ) > 0 ) {
 				$term_values = array_values( $terms );
 				$term        = array_shift( $term_values );
-				echo '<meta property="og:brand" content="' . esc_attr( $term->name ) . "\"/>\n";
+				echo '<meta property="product:brand" content="' . esc_attr( $term->name ) . '"/>' . "\n";
 			}
 		}
 		/**
@@ -788,8 +788,8 @@ class Yoast_WooCommerce_SEO {
 		 * @api bool unsigned Defaults to true.
 		 */
 		if ( apply_filters( 'wpseo_woocommerce_og_price', true ) ) {
-			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . "\"/>\n";
-			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . "\"/>\n";
+			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '"/>' . "\n";
+			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '"/>' . "\n";
 		}
 
 		if ( $product->is_in_stock() ) {
