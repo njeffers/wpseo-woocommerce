@@ -144,6 +144,8 @@ class Yoast_WooCommerce_SEO {
 			$this->register_i18n_promo_class();
 		}
 
+		$schema = new WPSEO_Schema_WooCommerce();
+
 		// Initialize the options.
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
 		$this->short_name      = $this->option_instance->option_name;
