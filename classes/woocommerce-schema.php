@@ -9,6 +9,7 @@
  * Class WPSEO_Schema_WooCommerce
  */
 class WPSEO_Schema_WooCommerce {
+
 	/**
 	 * WPSEO_Schema_WooCommerce constructor.
 	 */
