@@ -6,12 +6,12 @@
  */
 
 /**
- * Class WPSEO_Schema_WooCommerce
+ * Class WPSEO_WooCommerce_Schema
  */
-class WPSEO_Schema_WooCommerce {
+class WPSEO_WooCommerce_Schema {
 
 	/**
-	 * WPSEO_Schema_WooCommerce constructor.
+	 * WPSEO_WooCommerce_Schema constructor.
 	 */
 	public function __construct() {
 		add_filter( 'woocommerce_structured_data_product', array( $this, 'change_main_entity' ) );
