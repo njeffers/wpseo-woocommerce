@@ -63,7 +63,7 @@ class WPSEO_WooCommerce_Schema {
 			$data['@type'] = 'ItemPage';
 		}
 		if ( is_checkout() || is_checkout_pay_page() ) {
-			$data['$type'] = 'CheckoutPage';
+			$data['@type'] = 'CheckoutPage';
 		}
 		return $data;
 	}
