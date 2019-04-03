@@ -13,7 +13,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	/**
 	 * Tests the filtering of Yoast SEO columns.
 	 *
-	 * @covers Yoast_WooCommerce_SEO::column_heading()
+	 * @covers Yoast_WooCommerce_SEO::column_heading
 	 */
 	public function test_column_heading() {
 		$woocommerce = new Yoast_WooCommerce_SEO();
@@ -40,7 +40,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * @param string $wordpress_version     The WordPress version to check.
 	 * @param string $message               Message given by PHPUnit after assertion.
 	 *
-	 * @covers Yoast_WooCommerce_SEO::check_dependencies()
+	 * @covers Yoast_WooCommerce_SEO::check_dependencies
 	 */
 	public function test_check_dependencies( $expected, $wordpress_seo_version, $wordpress_version, $message ) {
 		$class_instance = $this
@@ -61,7 +61,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	/**
 	 * Tests the sitemap filtering of a product that is not hidden.
 	 *
-	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product()
+	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product
 	 */
 	public function test_filter_hidden_product_for_product_that_is_visible() {
 		$product = self::factory()->post->create_and_get(
@@ -89,7 +89,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	/**
 	 * Tests the sitemap filtering of a product that is hidden from the catalog.
 	 *
-	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product()
+	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product
 	 */
 	public function test_filter_hidden_product_for_product_that_is_hidden() {
 		$product = self::factory()->post->create_and_get(
@@ -116,7 +116,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	/**
 	 * Tests the sitemap filtering of a product that is not a product
 	 *
-	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product()
+	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product
 	 */
 	public function test_filter_hidden_product_for_a_non_product() {
 		$product = self::factory()->post->create_and_get(
@@ -143,7 +143,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	/**
 	 * Tests the sitemap filtering of a product when a invalid post object is given.
 	 *
-	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product()
+	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product
 	 */
 	public function test_filter_hidden_product_when_invalid_post_object_is_given() {
 		$instance = $this
@@ -164,7 +164,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	/**
 	 * Tests the sitemap filtering when no url loc is given to the url data.
 	 *
-	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product()
+	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product
 	 */
 	public function test_filter_hidden_product_when_no_url_loc_is_present() {
 		$instance = $this
