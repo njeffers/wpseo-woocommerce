@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.9
 Tested up to: 5.1.1
-Stable tag: 10.1
+Stable tag: 11.0-RC1
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -28,6 +28,15 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 11.0: April 16th, 2019
+Enhancements:
+* Improves integration of Woo & Yoast's Schema output, bringing it to a whole new level.
+* Schema: Changes page type on Checkout to `CheckoutPage`.
+
+Other:
+* Removes Woo breadcrumbs Schema output.
+* Sets the minimum required Yoast SEO version to 11.0.
+
 ### 10.1: April 2nd, 2019
 Enhancements:
 * Changes `og:brand` to `product:brand` to match the OpenGraph specifications better.
