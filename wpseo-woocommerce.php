@@ -109,8 +109,8 @@ class Yoast_WooCommerce_SEO {
 			return false;
 		}
 
-		// At least 10.1, in which we've removed the License Manager code from this addon. With older YoastSEO versions, this addon won't get any updates.
-		if ( ! version_compare( $wordpress_seo_version, '10.1-beta0', '>=' ) ) {
+		// At least 10.2, in which we've introduced the new WPSEO_Schema_IDs functionality.
+		if ( ! version_compare( $wordpress_seo_version, '10.2-rc0', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_upgrade_error' );
 
 			return false;
@@ -143,6 +143,8 @@ class Yoast_WooCommerce_SEO {
 		if ( $this->is_woocommerce_page( filter_input( INPUT_GET, 'page' ) ) ) {
 			$this->register_i18n_promo_class();
 		}
+
+		$schema = new WPSEO_WooCommerce_Schema();
 
 		// Initialize the options.
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
