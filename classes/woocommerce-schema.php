@@ -9,14 +9,16 @@
  * Class WPSEO_WooCommerce_Schema
  */
 class WPSEO_WooCommerce_Schema {
+	const PRODUCT_HASH = '#product';
 
 	/**
 	 * WPSEO_WooCommerce_Schema constructor.
 	 */
 	public function __construct() {
-		add_filter( 'woocommerce_structured_data_product', array( $this, 'change_main_entity' ) );
+		add_filter( 'woocommerce_structured_data_review', array( $this, 'change_reviewed_entity' ) );
+		add_filter( 'woocommerce_structured_data_product', array( $this, 'change_product' ) );
 		add_filter( 'woocommerce_structured_data_type_for_page', array( $this, 'remove_woo_breadcrumbs' ) );
-		add_filter( 'wpseo_schema_webpage', array( $this, 'change_page_type' ) );
+		add_filter( 'wpseo_schema_webpage', array( $this, 'filter_webpage' ) );
 	}
 
 	/**
@@ -26,10 +28,49 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @return array $data Product Schema data.
 	 */
-	public function change_main_entity( $data ) {
-		$data['mainEntityOfPage'] = array(
-			'@id' => WPSEO_Frontend::get_instance()->canonical( false ) . WPSEO_Schema_IDs::WEBPAGE_HASH,
-		);
+	public function filter_webpage( $data ) {
+		if ( is_product() ) {
+			$data['@type'] = 'ItemPage';
+		}
+		if ( is_checkout() || is_checkout_pay_page() ) {
+			$data['@type'] = 'CheckoutPage';
+		}
+
+		$data['mainEntity'] = $this->return_product_reference();
+
+		return $data;
+	}
+
+	/**
+	 * Changes the Review output to point to Product as the reviewed Item.
+	 *
+	 * @param array $data Review Schema data.
+	 *
+	 * @return array $data Review Schema data.
+	 */
+	public function change_reviewed_entity( $data ) {
+		$data['itemReviewed'] = $this->return_product_reference();
+
+		return $data;
+	}
+
+	/**
+	 * Filter Schema Product data to work.
+	 *
+	 * @param array $data Schema Product data.
+	 *
+	 * @return array $data Schema Product data.
+	 */
+	public function change_product( $data ) {
+		// Make seller refer to the Organization.
+		foreach( $data['offers'] as $key => $val ) {
+			$data['offers'][$key]['seller'] = array(
+				'@id' => trailingslashit( WPSEO_Utils::get_home_url() ) . WPSEO_Schema_IDs::ORGANIZATION_HASH
+			);
+		}
+
+		// This review data always only contains the first review for a product and is therefor useless.
+		unset( $data['review'] );
 
 		return $data;
 	}
@@ -52,19 +93,13 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Change the page type on applicable pages.
+	 * Returns a reference to the Product.
 	 *
-	 * @param array $data WebPage Schema data.
-	 *
-	 * @return array $data WebPage Schema data.
+	 * @return array Reference to the product.
 	 */
-	public function change_page_type( $data ) {
-		if ( is_product() ) {
-			$data['@type'] = 'ItemPage';
-		}
-		if ( is_checkout() || is_checkout_pay_page() ) {
-			$data['@type'] = 'CheckoutPage';
-		}
-		return $data;
+	private function return_product_reference() {
+		return array(
+			'@id' => WPSEO_Frontend::get_instance()->canonical( false ) . self::PRODUCT_HASH,
+		);
 	}
 }
