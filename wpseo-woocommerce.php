@@ -199,8 +199,6 @@ class Yoast_WooCommerce_SEO {
 				add_filter( 'post_type_archive_link', array( $this, 'xml_post_type_archive_link' ), 10, 2 );
 				add_filter( 'wpseo_sitemap_urlimages', array( $this, 'add_product_images_to_xml_sitemap' ), 10, 2 );
 
-				add_filter( 'woocommerce_attribute', array( $this, 'schema_filter' ), 10, 2 );
-
 				// Fix breadcrumbs.
 				if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
 					$this->handle_breadcrumbs_replacements();
@@ -949,33 +947,6 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return $product->post->post_excerpt;
-	}
-
-	/**
-	 * Filter the output of attributes and add schema.org attributes where possible.
-	 *
-	 * @since 1.0
-	 *
-	 * @param string $text      The text of the attribute.
-	 * @param array  $attribute The array containing the attributes.
-	 *
-	 * @return string
-	 */
-	public function schema_filter( $text, $attribute ) {
-		// Ideally this should be a strict comparison, but the $attribute array comes from
-		// WooCommerce, so this needs further investigation. JRF.
-		// Technical Debt Ticket: {@link https://github.com/Yoast/wpseo-woocommerce/issues/221}.
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		if ( 1 == $attribute['is_taxonomy'] ) {
-			if ( $this->options['schema_brand'] === $attribute['name'] ) {
-				return str_replace( '<p', '<p itemprop="brand"', $text );
-			}
-			if ( $this->options['schema_manufacturer'] === $attribute['name'] ) {
-				return str_replace( '<p', '<p itemprop="manufacturer"', $text );
-			}
-		}
-
-		return $text;
 	}
 
 	/**
