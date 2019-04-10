@@ -30,7 +30,7 @@ Changelog
 =========
 ### 11.0: April 16th, 2019
 Enhancements:
-* Improves integration of Woo & Yoast's Schema output, bringing it to a whole new level.
+* Improves the integration of Woo & Yoast's Schema output, bringing it to a whole new level.
 * Schema: Changes page type on Checkout to `CheckoutPage`.
 
 Other:
