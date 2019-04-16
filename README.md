@@ -32,6 +32,7 @@ Changelog
 Enhancements:
 * Improves the integration of Woo & Yoast's Schema output, bringing it to a whole new level.
 * Schema: Changes page type on Checkout to `CheckoutPage`.
+* Schema: Changes page type on Product to `ItemPage`.
 
 Other:
 * Removes Woo breadcrumbs Schema output.
