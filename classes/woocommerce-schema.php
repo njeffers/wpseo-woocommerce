@@ -40,6 +40,9 @@ class WPSEO_WooCommerce_Schema {
 	 * Outputs the Woo Schema blob in the footer.
 	 */
 	public function output_schema_footer() {
+		if ( empty( $this->data ) || $this->data === array() ) {
+			return;
+		}
 		WPSEO_Utils::schema_output( array( $this->data ), 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
 	}
 
