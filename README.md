@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.9
 Tested up to: 5.1.1
-Stable tag: 11.0
+Stable tag: 11.1-RC1
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -28,6 +28,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 11.1: April 16th, 2019
+Other:
+* Compatibility with Yoast SEO 11.1
+
 ### 11.0: April 16th, 2019
 Enhancements:
 * Improves the integration of Woo & Yoast's Schema output, bringing it to a whole new level.
