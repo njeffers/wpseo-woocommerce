@@ -1333,6 +1333,9 @@ function yoast_wpseo_woocommerce_upgrade_error() {
  * @return void
  */
 function initialize_yoast_woocommerce_seo() {
+	/**
+	 * Don't initialize the plugin when WooCommerce is not active.
+	 */
 	if ( ! class_exists( 'WooCommerce', false ) ) {
 		return;
 	}
