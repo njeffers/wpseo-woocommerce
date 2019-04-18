@@ -144,7 +144,7 @@ class Yoast_WooCommerce_SEO {
 			$this->register_i18n_promo_class();
 		}
 
-		$schema = new WPSEO_WooCommerce_Schema();
+		new WPSEO_WooCommerce_Schema();
 
 		// Initialize the options.
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
@@ -1333,6 +1333,13 @@ function yoast_wpseo_woocommerce_upgrade_error() {
  * @return void
  */
 function initialize_yoast_woocommerce_seo() {
+	/**
+	 * Don't initialize the plugin when WooCommerce is not active.
+	 */
+	if ( ! class_exists( 'WooCommerce', false ) ) {
+		return;
+	}
+
 	global $yoast_woo_seo;
 
 	load_plugin_textdomain( 'yoast-woo-seo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
