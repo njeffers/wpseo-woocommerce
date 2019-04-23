@@ -92,10 +92,12 @@ class WPSEO_WooCommerce_Schema {
 		$canonical = WPSEO_Frontend::get_instance()->canonical( false );
 
 		// Make seller refer to the Organization.
-		foreach ( $data['offers'] as $key => $val ) {
-			$data['offers'][ $key ]['seller'] = array(
-				'@id' => trailingslashit( WPSEO_Utils::get_home_url() ) . WPSEO_Schema_IDs::ORGANIZATION_HASH,
-			);
+		if ( ! empty( $data['offers'] ) ) {
+			foreach ( $data['offers'] as $key => $val ) {
+				$data['offers'][ $key ]['seller'] = array(
+					'@id' => trailingslashit( WPSEO_Utils::get_home_url() ) . WPSEO_Schema_IDs::ORGANIZATION_HASH,
+				);
+			}
 		}
 
 		$data['image'] = array(
