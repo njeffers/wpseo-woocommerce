@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.9
 Tested up to: 5.1.1
-Stable tag: 11.1-RC2
+Stable tag: 11.1-RC3
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -28,8 +28,9 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 11.1: April 16th, 2019
+### 11.1: April 30th, 2019
 Bugfixes:
+* Fixes a bug where a PHP warning would occur on a product page when a review is added.
 * Fixes bug where a fatal crash would occur on the checkout page when WooCommerce is not active.
 
 Other:
