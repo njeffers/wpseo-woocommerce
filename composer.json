@@ -18,6 +18,11 @@
             "tests/"
         ]
     },
+    "config": {
+        "platform": {
+            "php": "5.6.40"
+        }
+    },
     "require": {
         "xrstf/composer-php52": "^1.0.20",
         "yoast/wp-helpscout": "^1.0||^2.0",
