@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d27eb9495722bb1add09c4c5afe9bc58",
+    "content-hash": "56ef3293106cdfcc0896e48a8691accb",
     "packages": [
         {
             "name": "xrstf/composer-php52",
@@ -39,16 +39,16 @@
         },
         {
             "name": "yoast/i18n-module",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Yoast/i18n-module.git",
-                "reference": "50c69961805a8d79699eed745a65e9e4a76538eb"
+                "reference": "9d0a2f6daea6fb42376b023e7778294d19edd85d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Yoast/i18n-module/zipball/50c69961805a8d79699eed745a65e9e4a76538eb",
-                "reference": "50c69961805a8d79699eed745a65e9e4a76538eb",
+                "url": "https://api.github.com/repos/Yoast/i18n-module/zipball/9d0a2f6daea6fb42376b023e7778294d19edd85d",
+                "reference": "9d0a2f6daea6fb42376b023e7778294d19edd85d",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2019-05-06T08:29:33+00:00"
+            "time": "2019-05-07T06:45:05+00:00"
         },
         {
             "name": "yoast/wp-helpscout",
