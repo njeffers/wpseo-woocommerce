@@ -27,7 +27,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 		);
 		$expected = array( 'another-column' => '' );
 
-		$this->assertEquals( $expected, $actual );
+		$this->assertSame( $expected, $actual );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 			->will( $this->returnValue( $wordpress_seo_version ) );
 
 
-		$this->assertEquals( $expected, $class_instance->check_dependencies( $wordpress_version ), $message );
+		$this->assertSame( $expected, $class_instance->check_dependencies( $wordpress_version ), $message );
 	}
 
 	/**
@@ -80,7 +80,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 			->method( 'excluded_from_catalog' )
 			->will( $this->returnValue( array() ) );
 
-		$this->assertEquals(
+		$this->assertSame(
 			array( 'loc' => 'http://shop.site/product' ),
 			$instance->filter_hidden_product( array( 'loc' => 'http://shop.site/product' ), 'post', $product )
 		);
@@ -134,7 +134,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 			->expects( $this->never() )
 			->method( 'excluded_from_catalog' );
 
-		$this->assertEquals(
+		$this->assertSame(
 			array( 'loc' => 'http://shop.site/product' ),
 			$instance->filter_hidden_product( array( 'loc' => 'http://shop.site/product' ), 'post', $product )
 		);
@@ -155,7 +155,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 			->expects( $this->never() )
 			->method( 'excluded_from_catalog' );
 
-		$this->assertEquals(
+		$this->assertSame(
 			array( 'loc' => 'http://shop.site/product' ),
 			$instance->filter_hidden_product( array( 'loc' => 'http://shop.site/product' ), 'post', null )
 		);
@@ -176,7 +176,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 			->expects( $this->never() )
 			->method( 'excluded_from_catalog' );
 
-		$this->assertEquals(
+		$this->assertSame(
 			array( 'no-loc' => 'http://shop.site/product' ),
 			$instance->filter_hidden_product( array( 'no-loc' => 'http://shop.site/product' ), 'post', null )
 		);
