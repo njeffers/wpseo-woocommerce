@@ -34,7 +34,7 @@ class WPSEO_WooCommerce_Beacon_Setting implements Yoast_HelpScout_Beacon_Setting
 	}
 
 	/**
-	 * Returns a product for a a certain admin page.
+	 * Returns a product for a certain admin page.
 	 *
 	 * @param string $page The current admin page we are on.
 	 *
