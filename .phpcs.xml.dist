@@ -14,10 +14,6 @@
 
 	<file>.</file>
 
-	<exclude-pattern>vendor/*</exclude-pattern>
-	<exclude-pattern>node_modules/*</exclude-pattern>
-	<exclude-pattern>languages/*</exclude-pattern>
-
 	<!-- Only check PHP files. -->
 	<arg name="extensions" value="php"/>
 
@@ -27,7 +23,7 @@
 	<!-- Strip the filepaths down to the relevant bit. -->
 	<arg name="basepath" value="./"/>
 
-	<!-- Check 20 files simultanously. -->
+	<!-- Check 20 files simultaneously. -->
 	<arg name="parallel" value="20"/>
 
 
@@ -37,7 +33,17 @@
 	#############################################################################
 	-->
 
-	<rule ref="Yoast"/>
+	<rule ref="Yoast">
+		<!-- Set the custom test class whitelist for all sniffs which use it in one go.
+			 Ref: https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties#custom-unit-test-classes
+		-->
+		<properties>
+			<property name="custom_test_class_whitelist" type="array">
+				<element value="WPSEO_UnitTestCase"/>
+				<element value="WPSEO_WooCommerce_UnitTestCase"/>
+			</property>
+		</properties>
+	</rule>
 
 
 	<!--
@@ -45,9 +51,6 @@
 	SNIFF SPECIFIC CONFIGURATION
 	#############################################################################
 	-->
-
-	<!-- Set the minimum supported WP version. This is used by several sniffs. -->
-	<config name="minimum_supported_wp_version" value="4.9"/>
 
 	<!-- Verify that all gettext calls use the correct text domain. -->
 	<rule ref="WordPress.WP.I18n">
@@ -86,28 +89,11 @@
 				<element value="yoast_woocommerce"/>
 				<element value="Yoast\WP\Woocommerce"/>
 			</property>
-
-			<!-- Test classes do not need to be prefixed as they won't go into production. -->
-			<property name="custom_test_class_whitelist" type="array">
-				<element value="WPSEO_UnitTestCase"/>
-				<element value="WPSEO_WooCommerce_UnitTestCase"/>
-			</property>
 		</properties>
 
 		<!-- Valid usage: For testing purposes, some non-prefixed globals are being created. -->
 		<exclude-pattern>/integration-tests/bootstrap\.php$</exclude-pattern>
 		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
-	</rule>
-
-	<!-- Overwriting WP globals can be perfectly valid in test situations. -->
-	<rule ref="WordPress.WP.GlobalVariablesOverride">
-		<properties>
-			<!-- To that end, make the sniff aware of the WPSEO unit test base class. -->
-			<property name="custom_test_class_whitelist" type="array">
-				<element value="WPSEO_UnitTestCase"/>
-				<element value="WPSEO_WooCommerce_UnitTestCase"/>
-			</property>
-		</properties>
 	</rule>
 
 	<!-- Temporary work-around for upstream bug: squizlabs/PHP_CodeSniffer#2228 -->
