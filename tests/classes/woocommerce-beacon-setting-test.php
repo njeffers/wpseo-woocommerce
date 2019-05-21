@@ -32,10 +32,10 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_suggestions()
 	 */
 	public function test_get_suggestions_for_the_woocommerce_seo_page() {
-		$this->assertNotEquals(
-			array(),
-			$this->beacon_settings->get_suggestions( 'wpseo_woo' )
-		);
+		$result = $this->beacon_settings->get_suggestions( 'wpseo_woo' );
+
+		$this->assertInternalType( 'array', $result );
+		$this->assertNotEmpty( $result );
 	}
 
 	/**
@@ -44,7 +44,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_suggestions()
 	 */
 	public function test_get_suggestions_for_a_non_woocommerce_seo_page() {
-		$this->assertEquals(
+		$this->assertSame(
 			array(),
 			$this->beacon_settings->get_suggestions( 'wpseo_another_one' )
 		);
@@ -56,10 +56,15 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_products()
 	 */
 	public function test_get_products_for_the_woocommerce_seo_page() {
-		$this->assertEquals(
-			array( new Yoast_Product_WPSEO_WooCommerce() ),
-			$this->beacon_settings->get_products( 'wpseo_woo' )
-		);
+		$expected = array( new Yoast_Product_WPSEO_WooCommerce() );
+		$result   = $this->beacon_settings->get_products( 'wpseo_woo' );
+
+		if ( method_exists( $this, 'assertContainsOnlyInstancesOf' ) ) {
+			// The method assertContainsOnlyInstancesOf() was added in PHPUnit 4.x.
+			$this->assertContainsOnlyInstancesOf( 'Yoast_Product_WPSEO_WooCommerce', $result );
+		}
+
+		$this->assertEquals( $expected, $result );
 	}
 
 	/**
@@ -68,7 +73,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_products()
 	 */
 	public function test_get_products_for_a_non_woocommerce_seo_page() {
-		$this->assertEquals(
+		$this->assertSame(
 			array(),
 			$this->beacon_settings->get_products( 'wpseo_another_page' )
 		);
@@ -80,7 +85,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_config()
 	 */
 	public function test_get_config() {
-		$this->assertEquals(
+		$this->assertSame(
 			array(),
 			$this->beacon_settings->get_config( 'wpseo_woo' )
 		);

@@ -33,7 +33,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 */
 	public function test_constructor() {
 		$option = new WPSEO_Option_Woo_Double();
-		$this->assertEquals(
+		$this->assertSame(
 			array(
 				'price' => 'Price',
 				'stock' => 'Stock',
@@ -70,14 +70,13 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 		$dirty = ( $dirty !== null ) ? array( $field_name => $dirty ) : array();
 		$old   = ( $old !== null ) ? array( $field_name => $old ) : array();
 
-		$this->assertEquals(
-			array( $field_name => $expected ),
-			$option->validate_option(
-				array_merge( array( 'short_form' => $short ), $dirty ),
-				array( $field_name => $clean ),
-				$old
-			)
+		$result = $option->validate_option(
+			array_merge( array( 'short_form' => $short ), $dirty ),
+			array( $field_name => $clean ),
+			$old
 		);
+
+		$this->assertSame( array( $field_name => $expected ), $result );
 	}
 
 	/**
