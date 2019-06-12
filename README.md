@@ -28,6 +28,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 11.5: June 25th, 2019
+Other:
+* Compatibility with Yoast SEO 11.5
+
 ### 11.4: June 12th, 2019
 Other:
 * Compatibility with Yoast SEO 11.4
