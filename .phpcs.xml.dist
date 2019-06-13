@@ -122,8 +122,9 @@
 		<exclude-pattern>/tests/doubles/*\.php$</exclude-pattern>
 	</rule>
 
-	<!-- Allow for the unit test case file to make changes to the superglobals. -->
+	<!-- Allow for select unit test files to use less secure code. -->
 	<rule ref="WordPress.Security">
+		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
 		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
 	</rule>
 
