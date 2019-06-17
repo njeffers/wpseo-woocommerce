@@ -741,7 +741,7 @@ class Yoast_WooCommerce_SEO {
 		if ( ! function_exists( 'is_product_category' ) || is_product_category() ) {
 			global $wp_query;
 			$cat          = $wp_query->get_queried_object();
-			$thumbnail_id = get_woocommerce_term_meta( $cat->term_id, 'thumbnail_id', true );
+			$thumbnail_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
 			$img_url      = wp_get_attachment_url( $thumbnail_id );
 			if ( $img_url ) {
 				$opengraph_image->add_image( $img_url );
