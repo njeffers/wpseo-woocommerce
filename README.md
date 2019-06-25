@@ -28,6 +28,11 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 11.6: July 7th, 2019
+Other:
+* Fixes a deprecation notice when calling `get_woocommerce_term_meta`.
+* Compatibility with Yoast SEO 11.6
+
 ### 11.5: June 25th, 2019
 Other:
 * Compatibility with Yoast SEO 11.5
