@@ -29,7 +29,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	/**
 	 * Tests the constructor.
 	 *
-	 * @covers WPSEO_Option_Woo::__construct()
+	 * @covers WPSEO_Option_Woo::__construct
 	 */
 	public function test_constructor() {
 		$option = new WPSEO_Option_Woo_Double();
@@ -54,7 +54,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * @param string|bool|null $old        The value for the old argument.
 	 * @param string           $short      Determines whether the short form should set or not.
 	 *
-	 * @covers WPSEO_Option_Woo::validate_option()
+	 * @covers WPSEO_Option_Woo::validate_option
 	 */
 	public function test_validate_option( $field_name, $expected, $dirty, $clean, $old, $short = 'off' ) {
 		$option = $this

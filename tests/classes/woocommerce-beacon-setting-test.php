@@ -29,7 +29,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	/**
 	 * Tests the situation where we get a non empty array when calling get_suggestions for the WooCommerce SEO page.
 	 *
-	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_suggestions()
+	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_suggestions
 	 */
 	public function test_get_suggestions_for_the_woocommerce_seo_page() {
 		$result = $this->beacon_settings->get_suggestions( 'wpseo_woo' );
@@ -41,7 +41,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	/**
 	 * Tests the situation where an empty array is returned when calling get_suggestions for the WooCommerce SEO page.
 	 *
-	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_suggestions()
+	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_suggestions
 	 */
 	public function test_get_suggestions_for_a_non_woocommerce_seo_page() {
 		$this->assertSame(
@@ -53,7 +53,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	/**
 	 * Tests the situations where an array with the product will be returned on the WooCommerce SEO Page.
 	 *
-	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_products()
+	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_products
 	 */
 	public function test_get_products_for_the_woocommerce_seo_page() {
 		$expected = array( new Yoast_Product_WPSEO_WooCommerce() );
@@ -70,7 +70,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	/**
 	 * Tests the situations where an empty array will be returned on a non WooCommerce SEO Page.
 	 *
-	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_products()
+	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_products
 	 */
 	public function test_get_products_for_a_non_woocommerce_seo_page() {
 		$this->assertSame(
@@ -82,7 +82,7 @@ class WPSEO_WooCommerce_Beacon_Setting_Test extends WPSEO_WooCommerce_UnitTestCa
 	/**
 	 * Tests the situations where an empty array will be returned.
 	 *
-	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_config()
+	 * @covers WPSEO_WooCommerce_Beacon_Setting::get_config
 	 */
 	public function test_get_config() {
 		$this->assertSame(
