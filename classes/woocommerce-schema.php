@@ -37,12 +37,22 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
+	 * Should the yoast schema output be used.
+	 *
+	 * @return boolean Whether or not the Yoast SEO schema should be output.
+	 */
+	public static function should_output_yoast_schema() {
+		return apply_filters( 'wpseo_json_ld_output', true );
+	}
+
+	/**
 	 * Outputs the Woo Schema blob in the footer.
 	 */
 	public function output_schema_footer() {
 		if ( empty( $this->data ) || $this->data === array() ) {
 			return;
 		}
+
 		WPSEO_Utils::schema_output( array( $this->data ), 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
 	}
 
