@@ -144,8 +144,6 @@ class Yoast_WooCommerce_SEO {
 			$this->register_i18n_promo_class();
 		}
 
-		new WPSEO_WooCommerce_Schema();
-
 		// Initialize the options.
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
 		$this->short_name      = $this->option_instance->option_name;
@@ -176,33 +174,34 @@ class Yoast_WooCommerce_SEO {
 			}
 		}
 		else {
-			if ( class_exists( 'WooCommerce', false ) ) {
-				$wpseo_options = WPSEO_Options::get_all();
+			$wpseo_options = WPSEO_Options::get_all();
 
-				// Add metadescription filter.
-				add_filter( 'wpseo_metadesc', array( $this, 'metadesc' ) );
+			// Initialize schema.
+			add_action( 'init', array( $this, 'initialize_schema' ) );
 
-				// OpenGraph.
-				add_filter( 'language_attributes', array( $this, 'og_product_namespace' ), 11 );
-				add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
-				add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
-				add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
-				add_action( 'wpseo_register_extra_replacements', array( $this, 'register_replacements' ) );
+			// Add metadescription filter.
+			add_filter( 'wpseo_metadesc', array( $this, 'metadesc' ) );
 
-				if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
-					add_action( 'wpseo_add_opengraph_additional_images', array( $this, 'set_opengraph_image' ) );
-				}
+			// OpenGraph.
+			add_filter( 'language_attributes', array( $this, 'og_product_namespace' ), 11 );
+			add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
+			add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
+			add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
+			add_action( 'wpseo_register_extra_replacements', array( $this, 'register_replacements' ) );
 
-				add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
-				add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'xml_sitemap_taxonomies' ), 10, 2 );
+			if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
+				add_action( 'wpseo_add_opengraph_additional_images', array( $this, 'set_opengraph_image' ) );
+			}
 
-				add_filter( 'post_type_archive_link', array( $this, 'xml_post_type_archive_link' ), 10, 2 );
-				add_filter( 'wpseo_sitemap_urlimages', array( $this, 'add_product_images_to_xml_sitemap' ), 10, 2 );
+			add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
+			add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'xml_sitemap_taxonomies' ), 10, 2 );
 
-				// Fix breadcrumbs.
-				if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
-					$this->handle_breadcrumbs_replacements();
-				}
+			add_filter( 'post_type_archive_link', array( $this, 'xml_post_type_archive_link' ), 10, 2 );
+			add_filter( 'wpseo_sitemap_urlimages', array( $this, 'add_product_images_to_xml_sitemap' ), 10, 2 );
+
+			// Fix breadcrumbs.
+			if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
+				$this->handle_breadcrumbs_replacements();
 			}
 		} // End if.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -220,6 +219,15 @@ class Yoast_WooCommerce_SEO {
 
 		add_filter( 'wpseo_sitemap_entry', array( $this, 'filter_hidden_product' ), 10, 3 );
 		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
+	}
+
+	/**
+	 * Initializes the schema functionality.
+	 */
+	public function initialize_schema() {
+		if ( WPSEO_WooCommerce_Schema::should_output_yoast_schema() ) {
+			new WPSEO_WooCommerce_Schema();
+		}
 	}
 
 	/**
