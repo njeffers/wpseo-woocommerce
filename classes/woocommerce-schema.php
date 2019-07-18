@@ -110,10 +110,6 @@ class WPSEO_WooCommerce_Schema {
 			}
 		}
 
-		$data['image'] = array(
-			'@id' => $canonical . WPSEO_Schema_IDs::PRIMARY_IMAGE_HASH,
-		);
-
 		// We're going to replace the single review here with an array of reviews taken from the other filter.
 		$data['review'] = array();
 
@@ -125,6 +121,7 @@ class WPSEO_WooCommerce_Schema {
 		// Now let's add this data to our overall output.
 		$this->data = $data;
 
+		$this->add_image( $canonical );
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
 
@@ -188,5 +185,25 @@ class WPSEO_WooCommerce_Schema {
 				'name'  => $term->name,
 			);
 		}
+	}
+
+	/**
+	 * Add image schema.
+	 *
+	 * @param string $canonical The product canonical.
+	 */
+	private function add_image( $canonical ) {
+		// WooCommerce will set the image to false if non is available. This is incorrect schema.
+		if ( $this->data['image'] === false ) {
+			unset( $this->data['image'] );
+		}
+
+		if ( ! has_post_thumbnail() ) {
+			return;
+		}
+
+		$this->data['image'] = array(
+			'@id' => $canonical . WPSEO_Schema_IDs::PRIMARY_IMAGE_HASH,
+		);
 	}
 }
