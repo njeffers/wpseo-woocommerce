@@ -193,7 +193,12 @@ class WPSEO_WooCommerce_Schema {
 	 * @param string $canonical The product canonical.
 	 */
 	private function add_image( $canonical ) {
-		// WooCommerce will set the image to false if non is available. This is incorrect schema.
+		/**
+		 * WooCommerce will set the image to false if non is available. This is incorrect schema and we should fix it
+		 * for our users for now.
+		 *
+		 * See https://github.com/woocommerce/woocommerce/issues/24188.
+		 */
 		if ( $this->data['image'] === false ) {
 			unset( $this->data['image'] );
 		}
