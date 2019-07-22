@@ -20,7 +20,7 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/"
+            "integration-tests/"
         ]
     },
     "config": {

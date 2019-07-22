@@ -23,7 +23,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
 
-		require_once './tests/doubles/option-woo-double.php';
+		require_once './integration-tests/doubles/option-woo-double.php';
 	}
 
 	/**

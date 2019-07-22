@@ -95,7 +95,7 @@
 		</properties>
 
 		<!-- Valid usage: For testing purposes, some non-prefixed globals are being created. -->
-		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
+		<exclude-pattern>/integration-tests/bootstrap\.php$</exclude-pattern>
 	</rule>
 
 	<!-- Overwriting WP globals can be perfectly valid in test situations. -->
@@ -109,6 +109,14 @@
 		</properties>
 	</rule>
 
+	<!-- Temporary work-around for upstream bug: squizlabs/PHP_CodeSniffer#2228 -->
+	<rule ref="Yoast.Files.TestDoubles">
+		<properties>
+			<property name="doubles_path" type="array">
+				<element value="/integration-tests/doubles"/>
+			</property>
+		</properties>
+	</rule>
 
 	<!--
 	#############################################################################
@@ -119,13 +127,13 @@
 
 	<!-- Allow for the double/mock classes to override methods just to change the visibility. -->
 	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
-		<exclude-pattern>/tests/doubles/*\.php$</exclude-pattern>
+		<exclude-pattern>/integration-tests/doubles/*\.php$</exclude-pattern>
 	</rule>
 
 	<!-- Allow for select unit test files to use less secure code. -->
 	<rule ref="WordPress.Security">
-		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
-		<exclude-pattern>/tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
+		<exclude-pattern>/integration-tests/bootstrap\.php$</exclude-pattern>
+		<exclude-pattern>/integration-tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
 	</rule>
 
 
