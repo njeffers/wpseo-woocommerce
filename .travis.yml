@@ -20,9 +20,9 @@ jobs:
     - php: 5.2
       # As 'trusty' is not supporting PHP 5.2/5.3 anymore, we need to force using 'precise'.
       dist: precise
-      env: WP_VERSION=4.8 WP_MULTISITE=1 PHPLINT=1
+      env: WP_VERSION=4.8 WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1
     - php: 5.6
-      env: WP_VERSION=5.0
+      env: WP_VERSION=5.0 PHPUNIT=1
     - php: 7.0
       env: WP_VERSION=4.9
     - php: 5.2
@@ -84,6 +84,10 @@ install:
   else
     composer install --no-dev --no-interaction
   fi
+- |
+  if [[ "$PHPUNIT" == "1" ]]; then
+    composer install --no-interaction
+  fi
 - composer dump-autoload
 - phpenv local --unset
 - if [[ "$SECURITY" == "1" ]]; then wget -P $SECURITYCHECK_DIR https://get.sensiolabs.org/security-checker.phar && chmod +x $SECURITYCHECK_DIR/security-checker.phar;fi
@@ -141,19 +145,19 @@ script:
 # PHP Tests
 - |
   travis_fold start "PHP.tests" && travis_time_start
-  if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then
+  if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" && "$PHPUNIT" == "1" ]]; then
     travis_fold start "PHP.tests" && travis_time_start
     phpunit -c phpunit-integration.xml.dist
     travis_time_finish && travis_fold end "PHP.tests"
   fi
 - |
-  if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then
+  if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" && "$PHPUNIT" == "1"  ]]; then
     travis_fold start "PHP.tests" && travis_time_start
     vendor/bin/phpunit -c phpunit-integration.xml.dist
     travis_time_finish && travis_fold end "PHP.tests"
   fi
 - |
-  if [[ ${TRAVIS_PHP_VERSION:0:3} > "5.5" ]]; then
+  if [[ ${TRAVIS_PHP_VERSION:0:3} > "5.5" && "$PHPUNIT" == "1"  ]]; then
     travis_fold start "PHP.tests" && travis_time_start
     phpunit -c phpunit.xml.dist
     travis_time_finish && travis_fold end "PHP.tests"
