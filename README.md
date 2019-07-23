@@ -28,6 +28,13 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 
+### 11.8: August 6th, 2019
+Bugfixes:
+* Fixes a bug where the Yoast SEO WooCommerce schema was output when the `wpseo_json_ld_output` filter was set to false.
+
+Other:
+* Compatibility with Yoast SEO 11.8
+
 ### 11.7: July 23rd, 2019
 Other:
 * Compatibility with Yoast SEO 11.7
