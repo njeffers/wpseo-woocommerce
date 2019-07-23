@@ -203,12 +203,16 @@ class WPSEO_WooCommerce_Schema {
 			unset( $this->data['image'] );
 		}
 
-		if ( ! has_post_thumbnail() ) {
-			return;
+		if ( has_post_thumbnail() ) {
+			$this->data['image'] = array(
+				'@id' => $canonical . WPSEO_Schema_IDs::PRIMARY_IMAGE_HASH,
+			);
 		}
 
-		$this->data['image'] = array(
-			'@id' => $canonical . WPSEO_Schema_IDs::PRIMARY_IMAGE_HASH,
-		);
+		// Fallback to WooCommerce placeholder image.
+		if ( function_exists( 'wc_placeholder_img_src' ) ) {
+			$image_schema        = new WPSEO_Schema_Image( $canonical . '#woocommerceimageplaceholder' );
+			$this->data['image'] = $image_schema->generate_from_url( wc_placeholder_img_src() );
+		}
 	}
 }
