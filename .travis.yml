@@ -126,7 +126,7 @@ script:
     find -L . -path ./vendor -prune -o -path ./tests -prune -o -path ./node_modules -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
     travis_time_finish && travis_fold end "PHP.check"
   fi
-  if [[ "$PHPLINT" == "1" && ${TRAVIS_PHP_VERSION:0:3} -ge "5.6" ]]; then
+  if [[ "$PHPLINT" == "1" && ${TRAVIS_PHP_VERSION:0:3} > "5.5" ]]; then
     travis_fold start "PHP.check" && travis_time_start
     find -L . -path ./vendor -prune -o -path ./node_modules -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
     travis_time_finish && travis_fold end "PHP.check"
@@ -153,7 +153,7 @@ script:
     travis_time_finish && travis_fold end "PHP.tests"
   fi
 - |
-  if [[ ${TRAVIS_PHP_VERSION:0:3} -ge "5.6" ]]; then
+  if [[ ${TRAVIS_PHP_VERSION:0:3} > "5.5" ]]; then
     travis_fold start "PHP.tests" && travis_time_start
     phpunit -c phpunit.xml.dist
     travis_time_finish && travis_fold end "PHP.tests"
