@@ -110,62 +110,6 @@
 		</properties>
 	</rule>
 
-	<!--
-	#############################################################################
-	Disable PHP < 5.6 sniffs for tests directory
-	#############################################################################
-	-->
-
-	<rule ref="PHPCompatibility.LanguageConstructs.NewLanguageConstructs.t_ns_separatorFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Keywords.NewKeywords.t_useFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Keywords.NewKeywords.t_dirFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Keywords.NewKeywords.t_traitFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.FunctionUse.NewFunctionParameters.spl_autoload_register_prependFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.FunctionNameRestrictions.NewMagicMethods.__invokeFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Classes.NewLateStaticBinding.Found">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Keywords.NewKeywords.t_namespaceFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.FunctionUse.NewFunctions.get_called_classFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Syntax.NewDynamicAccessToStatic.Found">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.FunctionDeclarations.NewClosure.Found">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Syntax.NewShortArray.Found">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Syntax.NewFunctionArrayDereferencing.Found">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.FunctionUse.NewFunctions.class_aliasFound">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<rule ref="PHPCompatibility.Constants.NewMagicClassConstant.Found">
-		<exclude-pattern>/tests</exclude-pattern>
-	</rule>
-	<!-- Disable filename sniff for TestCase.php for consistency with wordpress-seo -->
-	<rule ref="Yoast.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>/tests/TestCase\.php$</exclude-pattern>
-	</rule>
-
 	<!-- Temporary work-around for upstream bug: squizlabs/PHP_CodeSniffer#2228 -->
 	<rule ref="Yoast.Files.TestDoubles">
 		<properties>
@@ -191,6 +135,11 @@
 	<rule ref="WordPress.Security">
 		<exclude-pattern>/integration-tests/bootstrap\.php$</exclude-pattern>
 		<exclude-pattern>/integration-tests/framework/woocommerce-unittestcase\.php$</exclude-pattern>
+	</rule>
+
+	<!-- Disable filename sniff for TestCase.php for consistency with wordpress-seo -->
+	<rule ref="Yoast.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>/tests/TestCase\.php$</exclude-pattern>
 	</rule>
 
 </ruleset>

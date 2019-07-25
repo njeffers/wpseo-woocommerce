@@ -49,7 +49,8 @@
             "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set default_standard Yoast"
         ],
         "check-cs": [
-            "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs"
+            "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --ignore=*/tests/*",
+            "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs ./tests/ --runtime-set testVersion 5.6-"
         ],
         "fix-cs": [
             "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
