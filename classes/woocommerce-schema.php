@@ -110,10 +110,6 @@ class WPSEO_WooCommerce_Schema {
 			}
 		}
 
-		$data['image'] = array(
-			'@id' => $canonical . WPSEO_Schema_IDs::PRIMARY_IMAGE_HASH,
-		);
-
 		// We're going to replace the single review here with an array of reviews taken from the other filter.
 		$data['review'] = array();
 
@@ -125,6 +121,7 @@ class WPSEO_WooCommerce_Schema {
 		// Now let's add this data to our overall output.
 		$this->data = $data;
 
+		$this->add_image( $canonical );
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
 
@@ -187,6 +184,37 @@ class WPSEO_WooCommerce_Schema {
 				'@type' => 'Organization',
 				'name'  => $term->name,
 			);
+		}
+	}
+
+	/**
+	 * Adds image schema.
+	 *
+	 * @param string $canonical The product canonical.
+	 */
+	private function add_image( $canonical ) {
+		/**
+		 * WooCommerce will set the image to false if none is available. This is incorrect schema and we should fix it
+		 * for our users for now.
+		 *
+		 * See https://github.com/woocommerce/woocommerce/issues/24188.
+		 */
+		if ( $this->data['image'] === false ) {
+			unset( $this->data['image'] );
+		}
+
+		if ( has_post_thumbnail() ) {
+			$this->data['image'] = array(
+				'@id' => $canonical . WPSEO_Schema_IDs::PRIMARY_IMAGE_HASH,
+			);
+
+			return;
+		}
+
+		// Fallback to WooCommerce placeholder image.
+		if ( function_exists( 'wc_placeholder_img_src' ) ) {
+			$image_schema        = new WPSEO_Schema_Image( $canonical . '#woocommerceimageplaceholder' );
+			$this->data['image'] = $image_schema->generate_from_url( wc_placeholder_img_src() );
 		}
 	}
 }
