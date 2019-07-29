@@ -20,7 +20,8 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/"
+            "tests/",
+            "integration-tests/"
         ]
     },
     "config": {
@@ -36,7 +37,9 @@
     },
     "require-dev": {
         "yoast/yoastcs": "^1.2.2",
-        "phpunit/phpunit": "^4.5 || ^5.7 || ^6.0 || ^7.0"
+        "phpunit/phpunit": "^4.5 || ^5.7 || ^6.0 || ^7.0",
+        "brain/monkey": "^2.2"
+
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -46,13 +49,17 @@
             "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set default_standard Yoast"
         ],
         "check-cs": [
-            "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs"
+            "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --ignore=*/tests/*",
+            "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs ./tests/ --runtime-set testVersion 5.6-"
         ],
         "fix-cs": [
             "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
         ],
+        "integration-test": [
+            "@php ./vendor/phpunit/phpunit/phpunit -c phpunit-integration.xml.dist"
+        ],
         "test": [
-            "@php ./vendor/phpunit/phpunit/phpunit"
+            "@php ./vendor/phpunit/phpunit/phpunit -c phpunit.xml.dist"
         ],
         "post-install-cmd": [
             "xrstf\\Composer52\\Generator::onPostInstallCmd"
