@@ -188,13 +188,13 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Add image schema.
+	 * Adds image schema.
 	 *
 	 * @param string $canonical The product canonical.
 	 */
 	private function add_image( $canonical ) {
 		/**
-		 * WooCommerce will set the image to false if non is available. This is incorrect schema and we should fix it
+		 * WooCommerce will set the image to false if none is available. This is incorrect schema and we should fix it
 		 * for our users for now.
 		 *
 		 * See https://github.com/woocommerce/woocommerce/issues/24188.
@@ -207,6 +207,8 @@ class WPSEO_WooCommerce_Schema {
 			$this->data['image'] = array(
 				'@id' => $canonical . WPSEO_Schema_IDs::PRIMARY_IMAGE_HASH,
 			);
+
+			return;
 		}
 
 		// Fallback to WooCommerce placeholder image.
