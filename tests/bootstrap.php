@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package Wordpress_Seo
+ * @package WPSEO/WooCommerce/Tests
  */
 
 define( 'ABSPATH', true );
