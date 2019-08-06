@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.9
 Tested up to: 5.2.2
-Stable tag: 11.8
+Stable tag: 11.9-RC1
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -27,6 +27,13 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+
+### 11.9: August 20th, 2019
+Bugfixes:
+* Fixes a bug where invalid schema was output when a product uses the placeholder image.
+
+Other:
+* Compatibility with Yoast SEO 11.9
 
 ### 11.8: August 6th, 2019
 Bugfixes:
