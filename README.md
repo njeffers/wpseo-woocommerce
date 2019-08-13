@@ -30,7 +30,7 @@ Changelog
 
 ### 11.9: August 20th, 2019
 Bugfixes:
-* Fixes a bug where invalid schema was output when a product uses the placeholder image.
+* Fixes a bug where invalid schema would be output when a product used the placeholder image.
 
 Other:
 * Compatibility with Yoast SEO 11.9
