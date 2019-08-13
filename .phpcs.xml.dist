@@ -115,6 +115,7 @@
 		<properties>
 			<property name="doubles_path" type="array">
 				<element value="/integration-tests/doubles"/>
+				<element value="/tests/doubles"/>
 			</property>
 		</properties>
 	</rule>
@@ -129,6 +130,7 @@
 	<!-- Allow for the double/mock classes to override methods just to change the visibility. -->
 	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
 		<exclude-pattern>/integration-tests/doubles/*\.php$</exclude-pattern>
+		<exclude-pattern>/tests/doubles/*\.php$</exclude-pattern>
 	</rule>
 
 	<!-- Allow for select unit test files to use less secure code. -->
