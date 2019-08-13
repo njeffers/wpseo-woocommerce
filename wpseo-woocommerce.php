@@ -18,7 +18,7 @@
  * WC requires at least: 3.0
  * WC tested up to: 3.7
  *
- * Copyright 2014-2018 Yoast BV (email: support@yoast.com)
+ * Copyright 2014-2019 Yoast BV (email: support@yoast.com)
  */
 
 if ( ! function_exists( 'add_filter' ) ) {
