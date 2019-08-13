@@ -1,6 +1,6 @@
 <?php
 
-namespace Yoast\WP\Woocommerce\Tests;
+namespace Yoast\WP\WooCommerce\Tests;
 
 use PHPUnit_Framework_TestCase;
 use Brain\Monkey;
