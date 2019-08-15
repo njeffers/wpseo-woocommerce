@@ -11,6 +11,8 @@ Description
 
 This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins.
 
+This repository uses [the Yoast grunt tasks plugin](https://github.com/Yoast/plugin-grunt-tasks).
+
 Installation
 ------------
 
