@@ -174,11 +174,19 @@ class Schema_Test extends TestCase {
 		$primary_term = Mockery::mock( 'overload:WPSEO_Primary_Term' );
 		$primary_term->expects( 'get_primary_term' )->once()->with()->andReturn( false );
 
-		Functions\expect( 'get_term' )->never()->withAnyArgs();
-		Functions\expect( 'get_the_terms' )->once()->with( $id, $taxonomy_name )->andReturn( [
-			$wp_term,
-			'other term',
-		] );
+		Functions\expect( 'get_term' )
+			->never()
+			->withAnyArgs();
+
+		Functions\expect( 'get_the_terms' )
+			->once()
+			->with( $id, $taxonomy_name )
+			->andReturn(
+				[
+					$wp_term,
+					'other term',
+				]
+			);
 
 		$instance = new Schema_Double();
 		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
