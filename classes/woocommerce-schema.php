@@ -14,14 +14,14 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @var array
 	 */
-	private $data;
+	protected $data;
 
 	/**
 	 * WooCommerce SEO Options.
 	 *
 	 * @var array
 	 */
-	private $options;
+	protected $options;
 
 	/**
 	 * WPSEO_WooCommerce_Schema constructor.
@@ -99,7 +99,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @return array $data Schema Product data.
 	 */
 	public function change_product( $data, $product ) {
-		$canonical = WPSEO_Frontend::get_instance()->canonical( false );
+		$canonical = $this->get_canonical();
 
 		// Make seller refer to the Organization.
 		if ( ! empty( $data['offers'] ) ) {
@@ -175,11 +175,9 @@ class WPSEO_WooCommerce_Schema {
 	 * @param string      $taxonomy  The taxonomy to get the attribute's value from.
 	 */
 	private function add_organization_for_attribute( $attribute, $product, $taxonomy ) {
-		$terms = get_the_terms( $product->get_id(), $taxonomy );
+		$term = $this->get_primary_term_or_first_term( $taxonomy, $product->get_id() );
 
-		if ( is_array( $terms ) && count( $terms ) > 0 ) {
-			$term_values              = array_values( $terms );
-			$term                     = array_shift( $term_values );
+		if ( $term !== null ) {
 			$this->data[ $attribute ] = array(
 				'@type' => 'Organization',
 				'name'  => $term->name,
@@ -216,5 +214,44 @@ class WPSEO_WooCommerce_Schema {
 			$image_schema        = new WPSEO_Schema_Image( $canonical . '#woocommerceimageplaceholder' );
 			$this->data['image'] = $image_schema->generate_from_url( wc_placeholder_img_src() );
 		}
+	}
+
+	/**
+	 * Tries to get the primary term, then the first term, null if none found.
+	 *
+	 * @param string $taxonomy_name Taxonomy name for the term.
+	 * @param int    $post_id       Post ID for the term.
+	 *
+	 * @return WP_Term|null The primary term, the first term or null.
+	 */
+	protected function get_primary_term_or_first_term( $taxonomy_name, $post_id ) {
+		$primary_term    = new WPSEO_Primary_Term( $taxonomy_name, $post_id );
+		$primary_term_id = $primary_term->get_primary_term();
+
+		if ( $primary_term_id !== false ) {
+			$primary_term = get_term( $primary_term_id );
+			if ( $primary_term instanceof WP_Term ) {
+				return $primary_term;
+			}
+		}
+
+		$terms = get_the_terms( $post_id, $taxonomy_name );
+
+		if ( is_array( $terms ) && count( $terms ) > 0 ) {
+			return $terms[0];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Retrieves the canonical URL for the current page.
+	 *
+	 * @codeCoverageIgnore
+	 *
+	 * @return string The canonical URL.
+	 */
+	protected function get_canonical() {
+		return WPSEO_Frontend::get_instance()->canonical( false );
 	}
 }
