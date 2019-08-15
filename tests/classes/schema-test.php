@@ -3,6 +3,7 @@
 namespace Yoast\WP\WooComerce\Tests\Classes;
 
 use Brain\Monkey;
+use Brain\Monkey\Functions;
 use Mockery;
 use WPSEO_WooCommerce_Schema;
 use Yoast\WP\WooCommerce\Tests\Doubles\Schema_Double;
@@ -31,7 +32,7 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
-	 * Tests that should_output_yoast_schema returns the right value.
+	 * Tests that the schema data after change product is as expected.
 	 *
 	 * @covers \WPSEO_WooCommerce_Schema::change_product
 	 * @covers \WPSEO_WooCommerce_Schema::get_canonical
@@ -62,7 +63,7 @@ class Schema_Test extends TestCase {
 		);
 		Mockery::mock( 'alias:WPSEO_Schema_IDs' );
 
-		Monkey\Functions\stubs(
+		Functions\stubs(
 			[
 				'has_post_thumbnail' => true,
 			]
@@ -136,5 +137,73 @@ class Schema_Test extends TestCase {
 
 		$instance->change_product( $data, $product );
 		$this->assertEquals( $expected, $instance->data );
+	}
+
+	/**
+	 * Tests that get_primary_term_or_first_term returns the primary term.
+	 *
+	 * @covers \WPSEO_WooCommerce_Schema::get_primary_term_or_first_term
+	 */
+	public function test_get_primary_term_or_first_term_expecting_primary_term() {
+		$id            = 1;
+		$taxonomy_name = 'product_cat';
+		$wp_term       = Mockery::mock( 'WP_Term' );
+
+		$primary_term = Mockery::mock( 'overload:WPSEO_Primary_Term' );
+		$primary_term->expects( 'get_primary_term' )->once()->with()->andReturn( $id );
+
+		Functions\expect( 'get_term' )->once()->with( $id )->andReturn( $wp_term );
+		Functions\expect( 'get_the_terms' )->never()->withAnyArgs();
+
+		$instance = new Schema_Double();
+		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
+
+		$this->assertEquals( $wp_term, $actual );
+	}
+
+	/**
+	 * Tests that get_primary_term_or_first_term returns the first term.
+	 *
+	 * @covers \WPSEO_WooCommerce_Schema::get_primary_term_or_first_term
+	 */
+	public function test_get_primary_term_or_first_term_expecting_first_term() {
+		$id            = 1;
+		$taxonomy_name = 'product_cat';
+		$wp_term       = Mockery::mock( 'WP_Term' );
+
+		$primary_term = Mockery::mock( 'overload:WPSEO_Primary_Term' );
+		$primary_term->expects( 'get_primary_term' )->once()->with()->andReturn( false );
+
+		Functions\expect( 'get_term' )->never()->withAnyArgs();
+		Functions\expect( 'get_the_terms' )->once()->with( $id, $taxonomy_name )->andReturn( [
+			$wp_term,
+			'other term',
+		] );
+
+		$instance = new Schema_Double();
+		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
+
+		$this->assertEquals( $wp_term, $actual );
+	}
+
+	/**
+	 * Tests that get_primary_term_or_first_term returns the first term.
+	 *
+	 * @covers \WPSEO_WooCommerce_Schema::get_primary_term_or_first_term
+	 */
+	public function test_get_primary_term_or_first_term_without_terms() {
+		$id            = 1;
+		$taxonomy_name = 'product_cat';
+
+		$primary_term = Mockery::mock( 'overload:WPSEO_Primary_Term' );
+		$primary_term->expects( 'get_primary_term' )->once()->with()->andReturn( false );
+
+		Functions\expect( 'get_term' )->never()->withAnyArgs();
+		Functions\expect( 'get_the_terms' )->once()->with( $id, $taxonomy_name )->andReturn( [] );
+
+		$instance = new Schema_Double();
+		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
+
+		$this->assertEquals( null, $actual );
 	}
 }

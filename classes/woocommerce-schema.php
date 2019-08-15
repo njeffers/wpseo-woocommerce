@@ -219,8 +219,6 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Tries to get the primary term, then the first term, null if none found.
 	 *
-	 * @codeCoverageIgnore
-	 *
 	 * @param string $taxonomy_name Taxonomy name for the term.
 	 * @param int    $post_id       Post ID for the term.
 	 *
