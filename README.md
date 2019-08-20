@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.9
 Tested up to: 5.2.2
-Stable tag: 11.9
+Stable tag: 12.0-RC1
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -29,6 +29,13 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+
+### 12.0: September 3rd, 2019
+Bugfixes:
+* Fixes a bug where the primary category would not be reflected correctly in the product schema output when it was being used to set the manufacturer or brand.
+
+Other:
+* Compatibility with Yoast SEO 12.0
 
 ### 11.9: August 20th, 2019
 Bugfixes:
