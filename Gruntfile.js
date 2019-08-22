@@ -11,9 +11,14 @@ module.exports = function( grunt ) {
 	const pluginVersion = pkg.yoast.pluginVersion;
 
 	// Define project configuration
-	let project = {
+	const project = {
 		pluginVersion: pluginVersion,
 		paths: {
+			/**
+			 * Gets the config path.
+			 *
+			 * @returns {string} Config path.
+			 */
 			get config() {
 				return this.grunt + "config/";
 			},
@@ -31,9 +36,19 @@ module.exports = function( grunt ) {
 				"!js/*.min.js",
 			],
 			phptests: "tests/**/*.php",
+			/**
+			 * Gets the config path.
+			 *
+			 * @returns {string} Config path.
+			 */
 			get config() {
 				return project.paths.config + "*.js";
 			},
+			/**
+			 * Gets the changelog path file.
+			 *
+			 * @returns {string} Changelog path file.
+			 */
 			get changelog() {
 				return project.paths.theme + "changelog.txt";
 			},

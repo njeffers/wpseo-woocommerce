@@ -2,6 +2,9 @@ import { string, Assessment, AssessmentResult } from "yoastseo";
 
 const { stripHTMLTags } = string;
 
+/**
+ * Represents the assessment for the product description.
+ */
 export default class ProductDescriptionAssessment extends Assessment {
 	/**
 	 * Constructs a product description assessment.
