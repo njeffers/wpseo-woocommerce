@@ -22,6 +22,7 @@ module.exports = function( grunt ) {
 			logs: "logs/",
 		},
 		files: {
+			artifact: "artifact",
 			php: [
 				"*.php",
 			],

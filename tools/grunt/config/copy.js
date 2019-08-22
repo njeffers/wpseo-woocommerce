@@ -8,6 +8,7 @@ module.exports = {
 					// Folders to copy
 					"classes/**",
 					"vendor/**",
+					"!vendor/bin",
 					"js/*.min.js",
 					"languages/**",
 					// Files to copy

@@ -26,12 +26,13 @@ check:
 
 # Create a zipped artifact from a fresh build
 'artifact':
-  - 'shell:production-composer-install'
+  - 'shell:composer-install-production'
   - 'update-version'
   - 'release'
   - 'clean:artifact'
   - 'copy:artifact'
   - 'compress:artifact'
+  - 'shell:composer-install-dev'
 
 'release':
   - 'release:js'
