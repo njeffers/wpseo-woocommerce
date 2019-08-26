@@ -5,24 +5,10 @@ build:
   - 'build:i18n'
   - 'build:js'
 
-# Build internationalisation features
-'build:i18n':
-  - 'addtextdomain'
-  - 'makepot'
-  - 'glotpress_download'
-
-# Build JSplugin files
+# Build JavaScript from assets to production
 'build:js':
   - 'clean:jsDistFiles'
   - 'webpack:buildDev'
-
-# Check health of the project
-check:
-  - 'eslint'
-  - 'jsonlint'
-  - 'phplint'
-  - 'phpcs'
-  - 'checktextdomain'
 
 # Create a zipped artifact from a fresh build
 'artifact':

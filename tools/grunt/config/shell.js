@@ -1,12 +1,8 @@
 // See https://github.com/sindresorhus/grunt-shell
-module.exports = function() {
+module.exports = function( grunt ) {
 	return {
-		"composer-install-production": {
-			command: "composer install --prefer-dist --optimize-autoloader --no-dev",
-		},
-
-		"composer-install-dev": {
-			command: "composer install",
-		},
+		"phpcs": {
+			command: "php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+		}
 	};
 };
