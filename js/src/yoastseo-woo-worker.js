@@ -5,6 +5,9 @@ import ProductDescriptionAssessment from "./assessments/ProductDescriptionAssess
 const PLUGIN_NAME = "YoastWooCommerce";
 const ASSESSMENT_NAME = "productTitle";
 
+/**
+ * Represents the WooCommerce worker.
+ */
 class WooCommerceWorker {
 	/**
 	 * Constructs a worker to be run inside the analysis web worker.
