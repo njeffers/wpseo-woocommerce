@@ -107,6 +107,9 @@ var external_yoast_analysis_ = __webpack_require__(0);
 
 const { stripHTMLTags } = external_yoast_analysis_["string"];
 
+/**
+ * Represents the assessment for the product description.
+ */
 class ProductDescriptionAssessment_ProductDescriptionAssessment extends external_yoast_analysis_["Assessment"] {
 	/**
 	 * Constructs a product description assessment.
@@ -198,6 +201,9 @@ class ProductDescriptionAssessment_ProductDescriptionAssessment extends external
 const PLUGIN_NAME = "YoastWooCommerce";
 const ASSESSMENT_NAME = "productTitle";
 
+/**
+ * Represents the WooCommerce worker.
+ */
 class yoastseo_woo_worker_WooCommerceWorker {
 	/**
 	 * Constructs a worker to be run inside the analysis web worker.

@@ -250,6 +250,9 @@ const PLUGIN_NAME = "YoastWooCommerce";
 var buttonEventCounter = 0;
 var deleteEventCounter = 0;
 
+/**
+ * Represents the Yoast Woocommerce plugin.
+ */
 class yoastseo_woo_plugin_YoastWooCommercePlugin {
 	/**
 	 * Registers Plugin and Test for Yoast WooCommerce.
@@ -363,7 +366,7 @@ class yoastseo_woo_plugin_YoastWooCommercePlugin {
 	addImageToContent( data ) {
 		var images = jQuery( "#product_images_container" ).find( "img" );
 
-		for( var i = 0; i < images.length; i++ ) {
+		for ( var i = 0; i < images.length; i++ ) {
 			data += images[ i ].outerHTML;
 		}
 		return data;
@@ -373,7 +376,7 @@ class yoastseo_woo_plugin_YoastWooCommercePlugin {
 /**
  * Adds eventlistener to load the Yoast WooCommerce plugin.
  */
-if( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
+if ( typeof YoastSEO !== "undefined" && typeof YoastSEO.app !== "undefined" ) {
 	new yoastseo_woo_plugin_YoastWooCommercePlugin(); // eslint-disable-line no-new
 } else {
 	jQuery( window ).on(

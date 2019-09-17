@@ -186,7 +186,7 @@ function getBrand() {
 	var brandContainers = [ "#product_brand-all", "#pwb-brand-all" ];
 	var totalBrandContainers = brandContainers.length;
 
-	for( var i = 0; i < totalBrandContainers; i++ ) {
+	for ( var i = 0; i < totalBrandContainers; i++ ) {
 		var brandContainer = jQuery( brandContainers[ i ] );
 
 		if ( brandContainer.length === 0 ) {
