@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 4.9
 Tested up to: 5.2.3
-Stable tag: 12.2-RC1
+Stable tag: 12.2-RC2
 Requires PHP: 5.2.4
 Depends: Yoast SEO, WooCommerce
 
@@ -32,6 +32,7 @@ Changelog
 
 ### 12.2: October 1st, 2019
 Other:
+* Removes the colon from the form labels in the settings.
 * Compatibility with Yoast SEO 12.2
 
 ### 12.1: September 17th, 2019
