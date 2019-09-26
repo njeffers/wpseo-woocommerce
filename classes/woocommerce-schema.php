@@ -9,6 +9,7 @@
  * Class WPSEO_WooCommerce_Schema
  */
 class WPSEO_WooCommerce_Schema {
+
 	/**
 	 * The schema data we're going to output.
 	 *
