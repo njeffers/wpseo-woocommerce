@@ -74,7 +74,7 @@ before_install:
 
 install:
 - if [[ $TRAVIS_PHP_VERSION == "5.2" ]]; then phpenv local 5.6.13; fi
-- if [[ $TRAVIS_PHP_VERSION == "5.2" ]]; then composer remove --dev --no-update --no-scripts yoast/yoastcs dealerdirect/phpcodesniffer-composer-installer; fi
+- if [[ $TRAVIS_PHP_VERSION == "5.2" ]]; then composer remove --dev --no-update --no-scripts yoast/yoastcs; fi
 - |
   if [[ "$PHPCS" == "1" ]]; then
     composer install --no-interaction
