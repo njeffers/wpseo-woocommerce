@@ -31,6 +31,9 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 
 ### 12.2: October 15th, 2019
+Enhancements:
+* Shows a floating `Save changes` button on the Yoast SEO for WooCommerce admin page when the normal button is not visible in the browser window.
+
 Other:
 * Removes the colon from the form labels in the settings.
 * Compatibility with Yoast SEO 12.2
