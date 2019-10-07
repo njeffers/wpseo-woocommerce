@@ -30,7 +30,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 
-### 12.2: October 1st, 2019
+### 12.2: October 15th, 2019
 Other:
 * Removes the colon from the form labels in the settings.
 * Compatibility with Yoast SEO 12.2
