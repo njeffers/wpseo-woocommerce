@@ -47,6 +47,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @return boolean Whether or not the Yoast SEO schema should be output.
 	 */
 	public static function should_output_yoast_schema() {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Using WPSEO hook.
 		return apply_filters( 'wpseo_json_ld_output', true );
 	}
 

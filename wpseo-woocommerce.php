@@ -437,6 +437,7 @@ class Yoast_WooCommerce_SEO {
 			foreach ( $attachments as $attachment_id ) {
 				$image_src = wp_get_attachment_image_src( $attachment_id );
 				$image     = array(
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Using WPSEO hook.
 					'src'   => apply_filters( 'wpseo_xml_sitemap_img_src', $image_src[0], $post_id ),
 					'title' => get_the_title( $attachment_id ),
 					'alt'   => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
