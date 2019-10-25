@@ -1,13 +1,13 @@
 <?php
 
-namespace Yoast\WP\WooComerce\Tests\Classes;
+namespace Yoast\WP\Woocommerce\Tests\Classes;
 
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 use Mockery;
 use WPSEO_WooCommerce_Schema;
-use Yoast\WP\WooCommerce\Tests\Doubles\Schema_Double;
-use Yoast\WP\WooCommerce\Tests\TestCase;
+use Yoast\WP\Woocommerce\Tests\Doubles\Schema_Double;
+use Yoast\WP\Woocommerce\Tests\TestCase;
 
 /**
  * Class WooCommerce_Schema_Test.
