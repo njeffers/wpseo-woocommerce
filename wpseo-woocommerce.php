@@ -792,12 +792,31 @@ class Yoast_WooCommerce_SEO {
 				echo '<meta property="product:brand" content="' . esc_attr( $term->name ) . '"/>' . "\n";
 			}
 		}
+
 		/**
 		 * Filter: wpseo_woocommerce_og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
 		 *
+		 * @deprecated 12.5.0. Use the {@see 'Yoast\WP\Woocommerce\og_price'} filter instead.
+		 *
 		 * @api bool unsigned Defaults to true.
 		 */
-		if ( apply_filters( 'wpseo_woocommerce_og_price', true ) ) {
+		$show_price = apply_filters_deprecated(
+			'wpseo_woocommerce_og_price',
+			array( true ),
+			'Yoast WooCommerce 12.5.0',
+			'Yoast\WP\Woocommerce\og_price'
+		);
+
+		/**
+		 * Filter: Yoast\WP\Woocommerce\og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
+		 *
+		 * @since 12.5.0
+		 *
+		 * @api bool unsigned Defaults to true.
+		 */
+		$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', $show_price );
+
+		if ( $show_price === true ) {
 			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '"/>' . "\n";
 			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '"/>' . "\n";
 		}
