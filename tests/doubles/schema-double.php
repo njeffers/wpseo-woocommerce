@@ -1,6 +1,6 @@
 <?php
 
-namespace Yoast\WP\WooCommerce\Tests\Doubles;
+namespace Yoast\WP\Woocommerce\Tests\Doubles;
 
 use WPSEO_WooCommerce_Schema;
 
