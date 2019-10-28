@@ -23,12 +23,12 @@ class Schema_Test extends TestCase {
 		Monkey\Filters\expectApplied( 'wpseo_json_ld_output' )->once()->andReturn( true );
 
 		$actual = WPSEO_WooCommerce_Schema::should_output_yoast_schema();
-		$this->assertEquals( true, $actual );
+		$this->assertTrue( $actual );
 
 		Monkey\Filters\expectApplied( 'wpseo_json_ld_output' )->once()->andReturn( false );
 
 		$actual = WPSEO_WooCommerce_Schema::should_output_yoast_schema();
-		$this->assertEquals( false, $actual );
+		$this->assertFalse( $actual );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Schema_Test extends TestCase {
 		$instance = new Schema_Double();
 		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
 
-		$this->assertEquals( $wp_term, $actual );
+		$this->assertSame( $wp_term, $actual );
 	}
 
 	/**
@@ -191,7 +191,7 @@ class Schema_Test extends TestCase {
 		$instance = new Schema_Double();
 		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
 
-		$this->assertEquals( $wp_term, $actual );
+		$this->assertSame( $wp_term, $actual );
 	}
 
 	/**
@@ -212,6 +212,6 @@ class Schema_Test extends TestCase {
 		$instance = new Schema_Double();
 		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
 
-		$this->assertEquals( null, $actual );
+		$this->assertNull( $actual );
 	}
 }
