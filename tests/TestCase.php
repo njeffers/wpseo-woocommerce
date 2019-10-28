@@ -2,13 +2,13 @@
 
 namespace Yoast\WP\Woocommerce\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
 use Brain\Monkey;
 
 /**
  * TestCase base class.
  */
-abstract class TestCase extends PHPUnit_Framework_TestCase {
+abstract class TestCase extends PHPUnit_TestCase {
 
 	/**
 	 * Test setup.
