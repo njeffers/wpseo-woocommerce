@@ -42,7 +42,7 @@ else {
 	exit( 1 );
 }
 
-if ( file_exists( dirname( dirname( __FILE__ ) ) . '/vendor/autoload_52.php' ) === false ) {
+if ( file_exists( dirname( dirname( __FILE__ ) ) . '/vendor/autoload.php' ) === false ) {
 	echo PHP_EOL, 'ERROR: Run `composer install` to generate the autoload files before running the unit tests.', PHP_EOL;
 	exit( 1 );
 }
