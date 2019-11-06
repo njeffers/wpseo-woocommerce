@@ -271,10 +271,11 @@ class Yoast_WooCommerce_SEO {
 		if ( $excluded_from_catalog === null ) {
 			$query                 = new WP_Query(
 				array(
-					'fields'    => 'ids',
-					'post_type' => 'product',
+					'fields'         => 'ids',
+					'posts_per_page' => '-1',
+					'post_type'      => 'product',
 					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-					'tax_query' => array(
+					'tax_query'      => array(
 						array(
 							'taxonomy' => 'product_visibility',
 							'field'    => 'name',
