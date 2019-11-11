@@ -30,6 +30,13 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 
+### 12.3: November 13th, 2019
+Bugfixes:
+* Fixes a bug where hidden products would show in the XML sitemap.
+
+Other:
+* Sets the minimum required WordPress version to 5.2, and the minimum PHP version to 5.6.20.
+
 ### 12.2: October 15th, 2019
 Enhancements:
 * Shows a floating `Save changes` button on the Yoast SEO for WooCommerce admin page when the normal button is not visible in the browser window.
