@@ -72,6 +72,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 
 		$instance = $this
 			->getMockBuilder( 'Yoast_WooCommerce_SEO_Double' )
+			->disableOriginalConstructor()
 			->setMethods( array( 'excluded_from_catalog' ) )
 			->getMock();
 
@@ -100,6 +101,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 
 		$instance = $this
 			->getMockBuilder( 'Yoast_WooCommerce_SEO_Double' )
+			->disableOriginalConstructor()
 			->setMethods( array( 'excluded_from_catalog' ) )
 			->getMock();
 
@@ -127,6 +129,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 
 		$instance = $this
 			->getMockBuilder( 'Yoast_WooCommerce_SEO_Double' )
+			->disableOriginalConstructor()
 			->setMethods( array( 'excluded_from_catalog' ) )
 			->getMock();
 
@@ -148,6 +151,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	public function test_filter_hidden_product_when_invalid_post_object_is_given() {
 		$instance = $this
 			->getMockBuilder( 'Yoast_WooCommerce_SEO_Double' )
+			->disableOriginalConstructor()
 			->setMethods( array( 'excluded_from_catalog' ) )
 			->getMock();
 
@@ -169,6 +173,7 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	public function test_filter_hidden_product_when_no_url_loc_is_present() {
 		$instance = $this
 			->getMockBuilder( 'Yoast_WooCommerce_SEO_Double' )
+			->disableOriginalConstructor()
 			->setMethods( array( 'excluded_from_catalog' ) )
 			->getMock();
 
