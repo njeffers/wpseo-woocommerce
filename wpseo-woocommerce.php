@@ -986,8 +986,8 @@ class Yoast_WooCommerce_SEO {
 	public function init_beacon() {
 		$helpscout = new WPSEO_HelpScout(
 			'8535d745-4e80-48b9-b211-087880aa857d',
-			[ 'wpseo_woo' ],
-			[ WPSEO_Addon_Manager::WOOCOMMERCE_SLUG ]
+			array( 'wpseo_woo' ),
+			array( WPSEO_Addon_Manager::WOOCOMMERCE_SLUG )
 		);
 
 		$helpscout->register_hooks();
