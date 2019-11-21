@@ -94,7 +94,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return bool True whether the dependencies are okay.
 	 */
 	protected function check_dependencies( $wp_version ) {
-		if ( ! version_compare( $wp_version, '4.9', '>=' ) ) {
+		if ( ! version_compare( $wp_version, '5.2', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_wordpress_upgrade_error' );
 
 			return false;
@@ -109,8 +109,8 @@ class Yoast_WooCommerce_SEO {
 			return false;
 		}
 
-		// At least 10.2, in which we've introduced the new WPSEO_Schema_IDs functionality.
-		if ( ! version_compare( $wordpress_seo_version, '10.2-rc0', '>=' ) ) {
+		// At least 12.6, in which we've implemented the new HelpScout Beacon.
+		if ( ! version_compare( $wordpress_seo_version, '12.6-RC0', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_upgrade_error' );
 
 			return false;
