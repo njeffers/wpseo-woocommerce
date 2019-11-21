@@ -27,7 +27,7 @@
     "webpack-cli": "^3.1.0"
   },
   "yoast": {
-    "pluginVersion": "12.3"
+    "pluginVersion": "12.4-RC1"
   },
   "dependencies": {
     "lodash": "^4.17.10"
