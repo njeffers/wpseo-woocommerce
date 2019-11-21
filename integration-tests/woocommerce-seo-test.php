@@ -199,12 +199,12 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 */
 	public function check_dependencies_data() {
 		return array(
-			array( false, '7.0', '3.0', 'WordPress is below the minimal required version.' ),
-			array( false, '7.0', '4.9', 'WordPress is below the minimal required version.' ),
-			array( false, false, '5.0', 'WordPress SEO is not installed.' ),
-			array( false, '8.1', '5.0', 'WordPress SEO is below the minimal required version.' ),
-			array( true, '10.2-RC1', '4.9', 'WordPress and WordPress SEO have the minimal required versions.' ),
-			array( true, '10.2', '5.0', 'WordPress and WordPress SEO have the minimal required versions.' ),
+			array( false, '12.7', '3.0', 'WordPress is below the minimal required version.' ),
+			array( false, '12.7', '5.1', 'WordPress is below the minimal required version.' ),
+			array( false, false, '5.3', 'WordPress SEO is not installed.' ),
+			array( false, '8.1', '5.1', 'WordPress SEO is below the minimal required version.' ),
+			array( true, '12.6-RC1', '5.2', 'WordPress and WordPress SEO have the minimal required versions.' ),
+			array( true, '12.7', '5.3', 'WordPress and WordPress SEO have the minimal required versions.' ),
 		);
 	}
 }
