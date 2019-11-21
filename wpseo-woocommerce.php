@@ -6,7 +6,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     12.2
+ * Version:     12.3
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -27,8 +27,8 @@ if ( ! function_exists( 'add_filter' ) ) {
 	exit();
 }
 
-if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload_52.php' ) ) {
-	require dirname( __FILE__ ) . '/vendor/autoload_52.php';
+if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
+	require dirname( __FILE__ ) . '/vendor/autoload.php';
 }
 
 /**
@@ -41,7 +41,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var string
 	 */
-	const VERSION = '12.2';
+	const VERSION = '12.3';
 
 	/**
 	 * Instance of the WooCommerce_SEO option management class.
@@ -213,10 +213,7 @@ class Yoast_WooCommerce_SEO {
 		// Adds recommended replacevars.
 		add_filter( 'wpseo_recommended_replace_vars', array( $this, 'add_recommended_replacevars' ) );
 
-		// Only initialize beacon when the License Manager is present.
-		if ( class_exists( 'Yoast_Plugin_License_Manager' ) ) {
-			add_action( 'admin_init', array( $this, 'init_beacon' ) );
-		}
+		add_action( 'admin_init', array( $this, 'init_beacon' ) );
 
 		add_filter( 'wpseo_sitemap_entry', array( $this, 'filter_hidden_product' ), 10, 3 );
 		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
@@ -1002,18 +999,16 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Initialize the Yoast SEO WooCommerce helpscout beacon.
+	 * Initializes the Yoast SEO WooCommerce HelpScout beacon.
 	 */
 	public function init_beacon() {
-		$page      = filter_input( INPUT_GET, 'page' );
-		$query_var = ( ! empty( $page ) ) ? $page : '';
+		$helpscout = new WPSEO_HelpScout(
+			'8535d745-4e80-48b9-b211-087880aa857d',
+			array( 'wpseo_woo' ),
+			array( WPSEO_Addon_Manager::WOOCOMMERCE_SLUG )
+		);
 
-		// Only add the helpscout beacon on Yoast SEO pages.
-		if ( $query_var === 'wpseo_woo' ) {
-			$beacon = yoast_get_helpscout_beacon( $query_var );
-			$beacon->add_setting( new WPSEO_WooCommerce_Beacon_Setting() );
-			$beacon->register_hooks();
-		}
+		$helpscout->register_hooks();
 	}
 
 	/**

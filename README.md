@@ -2,8 +2,8 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3
-Stable tag: 12.2
-Requires PHP: 5.6.10
+Stable tag: 12.3
+Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
 Description
@@ -29,6 +29,13 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+
+### 12.3: November 13th, 2019
+Bugfixes:
+* Fixes a bug where hidden products would show in the XML sitemap.
+
+Other:
+* Sets the minimum required WordPress version to 5.2, and the minimum PHP version to 5.6.20.
 
 ### 12.2: October 15th, 2019
 Enhancements:
