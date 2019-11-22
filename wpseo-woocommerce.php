@@ -153,6 +153,9 @@ class Yoast_WooCommerce_SEO {
 		add_action( 'add_option_' . $this->short_name, array( $this, 'refresh_options_property' ) );
 		add_action( 'update_option_' . $this->short_name, array( $this, 'refresh_options_property' ) );
 
+		// Enable Yoast usage tracking.
+		add_filter( 'wpseo_enable_tracking', '__return_true' );
+
 		// Check if the options need updating.
 		if ( $this->option_instance->db_version > $this->options['dbversion'] ) {
 			$this->upgrade();
