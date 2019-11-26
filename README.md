@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3
-Stable tag: 12.4-RC1
+Stable tag: 12.4
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -32,7 +32,7 @@ Changelog
 
 ### 12.4: November 26th, 2019
 Other:
-* Sets the minimum WordPress version to 5.2 and the minimum YoastSEO version to 12.6.
+* Sets the minimum WordPress version to 5.2 and the minimum Yoast SEO version to 12.6.
 * Replaces the HelpScout beacon on the WooCommerce SEO admin page.
 
 ### 12.3: November 13th, 2019

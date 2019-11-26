@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Yoast SEO: WooCommerce package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Yoast SEO: WooCommerce 12.4-RC1\n"
+"Project-Id-Version: Yoast SEO: WooCommerce 12.4\n"
 "Report-Msgid-Bugs-To: https://github.com/yoast/wpseo-woocommerce/issues\n"
-"POT-Creation-Date: 2019-11-21 09:49:23+00:00\n"
+"POT-Creation-Date: 2019-11-26 13:58:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -74,35 +74,35 @@ msgstr ""
 msgid "Translation of %s"
 msgstr ""
 
-#: wpseo-woocommerce.php:472
+#: wpseo-woocommerce.php:475
 #. translators: %1$s resolves to WooCommerce SEO
 msgid "%1$s Settings"
 msgstr ""
 
-#: wpseo-woocommerce.php:516
+#: wpseo-woocommerce.php:519
 msgid "Schema & OpenGraph additions"
 msgstr ""
 
-#: wpseo-woocommerce.php:517
+#: wpseo-woocommerce.php:520
 msgid ""
 "If you have product attributes for the following types, select them here, "
 "the plugin will make sure they're used for the appropriate Schema.org and "
 "OpenGraph markup."
 msgstr ""
 
-#: wpseo-woocommerce.php:518
+#: wpseo-woocommerce.php:521
 msgid "Brand"
 msgstr ""
 
-#: wpseo-woocommerce.php:533
+#: wpseo-woocommerce.php:536
 msgid "Manufacturer"
 msgstr ""
 
-#: wpseo-woocommerce.php:550
+#: wpseo-woocommerce.php:553
 msgid "Breadcrumbs"
 msgstr ""
 
-#: wpseo-woocommerce.php:554
+#: wpseo-woocommerce.php:557
 #. translators: %1$s resolves to internal links options page, %2$s resolves to
 #. closing link tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
 msgid ""
@@ -113,56 +113,56 @@ msgid ""
 "replaced."
 msgstr ""
 
-#: wpseo-woocommerce.php:565
+#: wpseo-woocommerce.php:568
 #. translators: %1$s resolves to WooCommerce
 msgid "Replace %1$s Breadcrumbs"
 msgstr ""
 
-#: wpseo-woocommerce.php:572
+#: wpseo-woocommerce.php:575
 msgid "Admin"
 msgstr ""
 
-#: wpseo-woocommerce.php:576
+#: wpseo-woocommerce.php:579
 #. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce
 msgid ""
 "Both %2$s and %1$s add columns to the product page, to remove all but the "
 "SEO score column from %1$s on that page, check this box."
 msgstr ""
 
-#: wpseo-woocommerce.php:585
+#: wpseo-woocommerce.php:588
 #. translators: %1$s resolves to Yoast SEO
 msgid "Remove %1$s columns"
 msgstr ""
 
-#: wpseo-woocommerce.php:594
+#: wpseo-woocommerce.php:597
 #. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce
 msgid ""
 "Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s "
 "to be above %1$s, check the box."
 msgstr ""
 
-#: wpseo-woocommerce.php:603
+#: wpseo-woocommerce.php:606
 #. translators: %1$s resolves to WooCommerce
 msgid "Move %1$s up"
 msgstr ""
 
-#: wpseo-woocommerce.php:1258
+#: wpseo-woocommerce.php:1261
 msgid "You should write a short description for this product."
 msgstr ""
 
-#: wpseo-woocommerce.php:1259
+#: wpseo-woocommerce.php:1262
 msgid "The short description for this product is too short."
 msgstr ""
 
-#: wpseo-woocommerce.php:1260
+#: wpseo-woocommerce.php:1263
 msgid "Your short description has a good length."
 msgstr ""
 
-#: wpseo-woocommerce.php:1261
+#: wpseo-woocommerce.php:1264
 msgid "The short description for this product is too long."
 msgstr ""
 
-#: wpseo-woocommerce.php:1291
+#: wpseo-woocommerce.php:1294
 #. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
 #. to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
 #. SEO
@@ -171,14 +171,14 @@ msgid ""
 "functionality to allow the %4$s module to work."
 msgstr ""
 
-#: wpseo-woocommerce.php:1309
+#: wpseo-woocommerce.php:1312
 #. translators: %1$s resolves to WooCommerce SEO
 msgid ""
 "Please upgrade WordPress to the latest version to allow WordPress and the "
 "%1$s module to work properly."
 msgstr ""
 
-#: wpseo-woocommerce.php:1324
+#: wpseo-woocommerce.php:1327
 #. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce SEO
 msgid ""
 "Please upgrade the %1$s plugin to the latest version to allow the %2$s "
