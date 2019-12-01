@@ -988,7 +988,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function xml_post_type_archive_link( $link, $post_type ) {
 
-		if ( 'product' !== $post_type ) {
+		if ( $post_type !== 'product' ) {
 			return $link;
 		}
 
@@ -1034,7 +1034,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function enqueue_scripts() {
 		// Only do this on product pages.
-		if ( 'product' !== get_post_type() ) {
+		if ( get_post_type() !== 'product' ) {
 			return;
 		}
 
