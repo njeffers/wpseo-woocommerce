@@ -92,7 +92,7 @@ class WPSEO_WooCommerce_Schema {
 
 		$this->data['review'][] = $data;
 
-		return $data;
+		return array();
 	}
 
 	/**
