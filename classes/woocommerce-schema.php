@@ -30,11 +30,15 @@ class WPSEO_WooCommerce_Schema {
 	public function __construct() {
 		$this->options = get_option( 'wpseo_woo' );
 
-		add_filter( 'woocommerce_structured_data_review', array( $this, 'change_reviewed_entity' ) );
 		add_filter( 'woocommerce_structured_data_product', array( $this, 'change_product' ), 10, 2 );
 		add_filter( 'woocommerce_structured_data_type_for_page', array( $this, 'remove_woo_breadcrumbs' ) );
 		add_filter( 'wpseo_schema_webpage', array( $this, 'filter_webpage' ) );
 		add_action( 'wp_footer', array( $this, 'output_schema_footer' ) );
+
+		// Only needed for WooCommerce versions before 3.8.1.
+		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
+			add_filter( 'woocommerce_structured_data_review', array( $this, 'change_reviewed_entity' ) );
+		}
 	}
 
 	/**
@@ -88,7 +92,7 @@ class WPSEO_WooCommerce_Schema {
 
 		$this->data['review'][] = $data;
 
-		return array();
+		return $data;
 	}
 
 	/**
@@ -111,8 +115,11 @@ class WPSEO_WooCommerce_Schema {
 			}
 		}
 
-		// We're going to replace the single review here with an array of reviews taken from the other filter.
-		$data['review'] = array();
+		// Only needed for WooCommerce versions before 3.8.1.
+		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
+			// We're going to replace the single review here with an array of reviews taken from the other filter.
+			$data['review'] = array();
+		}
 
 		// This product is the main entity of this page, so we set it as such.
 		$data['mainEntityOfPage'] = array(
