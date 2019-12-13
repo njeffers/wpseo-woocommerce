@@ -15,6 +15,14 @@ use Yoast\WP\Woocommerce\Tests\TestCase;
 class Schema_Test extends TestCase {
 
 	/**
+	 * Test setup.
+	 */
+	public function setUp() {
+		// This constant is always defined by WooCommerce.
+		define( 'WC_VERSION', '3.8.1' );
+	}
+
+	/**
 	 * Tests that should_output_yoast_schema returns the right value.
 	 *
 	 * @covers \WPSEO_WooCommerce_Schema::should_output_yoast_schema
