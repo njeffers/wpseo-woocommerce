@@ -192,9 +192,7 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
 			add_action( 'wpseo_register_extra_replacements', array( $this, 'register_replacements' ) );
 
-			if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
-				add_action( 'wpseo_add_opengraph_additional_images', array( $this, 'set_opengraph_image' ) );
-			}
+			add_action( 'wpseo_add_opengraph_additional_images', array( $this, 'set_opengraph_image' ) );
 
 			add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
 			add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'xml_sitemap_taxonomies' ), 10, 2 );
@@ -741,11 +739,11 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Adds the opengraph images.
 	 *
-	 * @since 4.3
+	 * @param \Yoast\WP\Free\Values\Open_Graph\Images $opengraph_image The OpenGraph image to use.
 	 *
-	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image to use.
+	 * @since 4.3
 	 */
-	public function set_opengraph_image( WPSEO_OpenGraph_Image $opengraph_image ) {
+	public function set_opengraph_image( \Yoast\WP\Free\Values\Open_Graph\Images $opengraph_image ) {
 
 		if ( ! function_exists( 'is_product_category' ) || is_product_category() ) {
 			global $wp_query;
