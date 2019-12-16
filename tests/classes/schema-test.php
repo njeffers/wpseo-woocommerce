@@ -133,7 +133,6 @@ class Schema_Test extends TestCase {
 					],
 				],
 			],
-			'review'           => [],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
 			'brand'            => [
 				'@type' => 'Organization',
