@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3
-Stable tag: 12.4.1
+Stable tag: 12.4.1-RC1
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -31,9 +31,8 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 
 ### 12.4.1: December 17th, 2019
-
 Bugfixes:
-* In 3.8.1 WooCommerce tweaked the Product Schema output, this tweak broke our Schema integration, this release fixes that.
+* Fixes a bug where reviews weren't output in the Product schema when WooCommerce 3.8.1 was installed.
 
 ### 12.4: November 26th, 2019
 Other:
