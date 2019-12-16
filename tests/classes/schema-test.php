@@ -19,8 +19,9 @@ class Schema_Test extends TestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-		// This constant is always defined by WooCommerce.
-		define( 'WC_VERSION', '3.8.1' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+		if ( ! defined( 'WC_VERSION' ) ) {
+			define( 'WC_VERSION', '3.8.1' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+		}
 	}
 
 	/**
