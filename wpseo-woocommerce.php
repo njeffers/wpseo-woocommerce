@@ -6,7 +6,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: Yoast SEO: WooCommerce
- * Version:     12.3
+ * Version:     12.4
  * Plugin URI:  https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/
  * Description: This extension to WooCommerce and Yoast SEO makes sure there's perfect communication between the two plugins.
  * Author:      Team Yoast
@@ -27,8 +27,8 @@ if ( ! function_exists( 'add_filter' ) ) {
 	exit();
 }
 
-if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload_52.php' ) ) {
-	require dirname( __FILE__ ) . '/vendor/autoload_52.php';
+if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
+	require dirname( __FILE__ ) . '/vendor/autoload.php';
 }
 
 /**
@@ -41,7 +41,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var string
 	 */
-	const VERSION = '12.3';
+	const VERSION = '12.4';
 
 	/**
 	 * Instance of the WooCommerce_SEO option management class.
@@ -94,7 +94,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return bool True whether the dependencies are okay.
 	 */
 	protected function check_dependencies( $wp_version ) {
-		if ( ! version_compare( $wp_version, '4.9', '>=' ) ) {
+		if ( ! version_compare( $wp_version, '5.2', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_wordpress_upgrade_error' );
 
 			return false;
@@ -109,8 +109,8 @@ class Yoast_WooCommerce_SEO {
 			return false;
 		}
 
-		// At least 10.2, in which we've introduced the new WPSEO_Schema_IDs functionality.
-		if ( ! version_compare( $wordpress_seo_version, '10.2-rc0', '>=' ) ) {
+		// At least 12.6, in which we've implemented the new HelpScout Beacon.
+		if ( ! version_compare( $wordpress_seo_version, '12.6-RC0', '>=' ) ) {
 			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_upgrade_error' );
 
 			return false;
@@ -152,6 +152,9 @@ class Yoast_WooCommerce_SEO {
 		// Make sure the options property is always current.
 		add_action( 'add_option_' . $this->short_name, array( $this, 'refresh_options_property' ) );
 		add_action( 'update_option_' . $this->short_name, array( $this, 'refresh_options_property' ) );
+
+		// Enable Yoast usage tracking.
+		add_filter( 'wpseo_enable_tracking', '__return_true' );
 
 		// Check if the options need updating.
 		if ( $this->option_instance->db_version > $this->options['dbversion'] ) {
@@ -212,10 +215,7 @@ class Yoast_WooCommerce_SEO {
 		// Adds recommended replacevars.
 		add_filter( 'wpseo_recommended_replace_vars', array( $this, 'add_recommended_replacevars' ) );
 
-		// Only initialize beacon when the License Manager is present.
-		if ( class_exists( 'Yoast_Plugin_License_Manager' ) ) {
-			add_action( 'admin_init', array( $this, 'init_beacon' ) );
-		}
+		add_action( 'admin_init', array( $this, 'init_beacon' ) );
 
 		add_filter( 'wpseo_sitemap_entry', array( $this, 'filter_hidden_product' ), 10, 3 );
 		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
@@ -984,18 +984,16 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Initialize the Yoast SEO WooCommerce helpscout beacon.
+	 * Initializes the Yoast SEO WooCommerce HelpScout beacon.
 	 */
 	public function init_beacon() {
-		$page      = filter_input( INPUT_GET, 'page' );
-		$query_var = ( ! empty( $page ) ) ? $page : '';
+		$helpscout = new WPSEO_HelpScout(
+			'8535d745-4e80-48b9-b211-087880aa857d',
+			array( 'wpseo_woo' ),
+			array( WPSEO_Addon_Manager::WOOCOMMERCE_SLUG )
+		);
 
-		// Only add the helpscout beacon on Yoast SEO pages.
-		if ( $query_var === 'wpseo_woo' ) {
-			$beacon = yoast_get_helpscout_beacon( $query_var );
-			$beacon->add_setting( new WPSEO_WooCommerce_Beacon_Setting() );
-			$beacon->register_hooks();
-		}
+		$helpscout->register_hooks();
 	}
 
 	/**
