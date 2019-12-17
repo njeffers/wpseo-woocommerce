@@ -15,6 +15,16 @@ use Yoast\WP\Woocommerce\Tests\TestCase;
 class Schema_Test extends TestCase {
 
 	/**
+	 * Test setup.
+	 */
+	public function setUp() {
+		parent::setUp();
+		if ( ! defined( 'WC_VERSION' ) ) {
+			define( 'WC_VERSION', '3.8.1' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+		}
+	}
+
+	/**
 	 * Tests that should_output_yoast_schema returns the right value.
 	 *
 	 * @covers \WPSEO_WooCommerce_Schema::should_output_yoast_schema
@@ -123,7 +133,6 @@ class Schema_Test extends TestCase {
 					],
 				],
 			],
-			'review'           => [],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
 			'brand'            => [
 				'@type' => 'Organization',
