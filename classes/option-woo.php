@@ -68,7 +68,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		 *
 		 * @var array
 		 */
-		protected $defaults = array(
+		protected $defaults = [
 			// Non-form fields, set via validation routine.
 			'dbversion'           => 0, // Leave default as 0 to ensure activation/upgrade works.
 
@@ -80,14 +80,14 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			'breadcrumbs'         => true,
 			'hide_columns'        => true,
 			'metabox_woo_top'     => true,
-		);
+		];
 
 		/**
 		 * Array of pre-defined valid data types, will be enriched with taxonomies.
 		 *
 		 * @var array
 		 */
-		public $valid_data_types = array();
+		public $valid_data_types = [];
 
 		/**
 		 * Add the actions and filters for the option.
@@ -98,10 +98,10 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			parent::__construct();
 
 			// Set and translate the valid data types.
-			$this->valid_data_types = array(
+			$this->valid_data_types = [
 				'price' => __( 'Price', 'yoast-woo-seo' ),
 				'stock' => __( 'Stock', 'yoast-woo-seo' ),
-			);
+			];
 		}
 
 		/**
@@ -233,10 +233,10 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			$taxonomies = get_object_taxonomies( 'product', 'objects' );
 
 			if ( ! is_array( $taxonomies ) || empty( $taxonomies ) ) {
-				return array();
+				return [];
 			}
 
-			$processed_taxonomies = array();
+			$processed_taxonomies = [];
 			foreach ( $taxonomies as $taxonomy ) {
 				$processed_taxonomies[] = strtolower( $taxonomy->name );
 			}

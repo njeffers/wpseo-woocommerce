@@ -55,7 +55,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var array
 	 */
-	protected $options = array();
+	protected $options = [];
 
 	/**
 	 * Name of the option to store plugins setting.
@@ -150,8 +150,8 @@ class Yoast_WooCommerce_SEO {
 		$this->options         = get_option( $this->short_name );
 
 		// Make sure the options property is always current.
-		add_action( 'add_option_' . $this->short_name, array( $this, 'refresh_options_property' ) );
-		add_action( 'update_option_' . $this->short_name, array( $this, 'refresh_options_property' ) );
+		add_action( 'add_option_' . $this->short_name, [ $this, 'refresh_options_property' ] );
+		add_action( 'update_option_' . $this->short_name, [ $this, 'refresh_options_property' ] );
 
 		// Enable Yoast usage tracking.
 		add_filter( 'wpseo_enable_tracking', '__return_true' );
@@ -163,62 +163,62 @@ class Yoast_WooCommerce_SEO {
 
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 			// Add subitem to menu.
-			add_filter( 'wpseo_submenu_pages', array( $this, 'add_submenu_pages' ) );
-			add_action( 'admin_print_styles', array( $this, 'config_page_styles' ) );
+			add_filter( 'wpseo_submenu_pages', [ $this, 'add_submenu_pages' ] );
+			add_action( 'admin_print_styles', [ $this, 'config_page_styles' ] );
 
 			// Products tab columns.
 			if ( $this->options['hide_columns'] === true ) {
-				add_filter( 'manage_product_posts_columns', array( $this, 'column_heading' ), 11, 1 );
+				add_filter( 'manage_product_posts_columns', [ $this, 'column_heading' ], 11, 1 );
 			}
 
 			// Move Woo box above SEO box.
 			if ( $this->options['metabox_woo_top'] === true ) {
-				add_action( 'admin_footer', array( $this, 'footer_js' ) );
+				add_action( 'admin_footer', [ $this, 'footer_js' ] );
 			}
 		}
 		else {
 			$wpseo_options = WPSEO_Options::get_all();
 
 			// Initialize schema.
-			add_action( 'init', array( $this, 'initialize_schema' ) );
+			add_action( 'init', [ $this, 'initialize_schema' ] );
 
 			// Add metadescription filter.
-			add_filter( 'wpseo_metadesc', array( $this, 'metadesc' ) );
+			add_filter( 'wpseo_metadesc', [ $this, 'metadesc' ] );
 
 			// OpenGraph.
-			add_filter( 'language_attributes', array( $this, 'og_product_namespace' ), 11 );
-			add_filter( 'wpseo_opengraph_type', array( $this, 'return_type_product' ) );
-			add_filter( 'wpseo_opengraph_desc', array( $this, 'og_desc_enhancement' ) );
-			add_action( 'wpseo_opengraph', array( $this, 'og_enhancement' ), 50 );
-			add_action( 'wpseo_register_extra_replacements', array( $this, 'register_replacements' ) );
+			add_filter( 'language_attributes', [ $this, 'og_product_namespace' ], 11 );
+			add_filter( 'wpseo_opengraph_type', [ $this, 'return_type_product' ] );
+			add_filter( 'wpseo_opengraph_desc', [ $this, 'og_desc_enhancement' ] );
+			add_action( 'wpseo_opengraph', [ $this, 'og_enhancement' ], 50 );
+			add_action( 'wpseo_register_extra_replacements', [ $this, 'register_replacements' ] );
 
 			if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
-				add_action( 'wpseo_add_opengraph_additional_images', array( $this, 'set_opengraph_image' ) );
+				add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
 			}
 
-			add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
-			add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'xml_sitemap_taxonomies' ), 10, 2 );
+			add_filter( 'wpseo_sitemap_exclude_post_type', [ $this, 'xml_sitemap_post_types' ], 10, 2 );
+			add_filter( 'wpseo_sitemap_post_type_archive_link', [ $this, 'xml_sitemap_taxonomies' ], 10, 2 );
 
-			add_filter( 'post_type_archive_link', array( $this, 'xml_post_type_archive_link' ), 10, 2 );
-			add_filter( 'wpseo_sitemap_urlimages', array( $this, 'add_product_images_to_xml_sitemap' ), 10, 2 );
+			add_filter( 'post_type_archive_link', [ $this, 'xml_post_type_archive_link' ], 10, 2 );
+			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
 
 			// Fix breadcrumbs.
 			if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
 				$this->handle_breadcrumbs_replacements();
 			}
 		} // End if.
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
 		// Make sure the primary category will be used in the permalink.
-		add_filter( 'wc_product_post_type_link_product_cat', array( $this, 'add_primary_category_permalink' ), 10, 3 );
+		add_filter( 'wc_product_post_type_link_product_cat', [ $this, 'add_primary_category_permalink' ], 10, 3 );
 
 		// Adds recommended replacevars.
-		add_filter( 'wpseo_recommended_replace_vars', array( $this, 'add_recommended_replacevars' ) );
+		add_filter( 'wpseo_recommended_replace_vars', [ $this, 'add_recommended_replacevars' ] );
 
-		add_action( 'admin_init', array( $this, 'init_beacon' ) );
+		add_action( 'admin_init', [ $this, 'init_beacon' ] );
 
-		add_filter( 'wpseo_sitemap_entry', array( $this, 'filter_hidden_product' ), 10, 3 );
-		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( $this, 'filter_woocommerce_pages' ) );
+		add_filter( 'wpseo_sitemap_entry', [ $this, 'filter_hidden_product' ], 10, 3 );
+		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', [ $this, 'filter_woocommerce_pages' ] );
 	}
 
 	/**
@@ -270,19 +270,19 @@ class Yoast_WooCommerce_SEO {
 
 		if ( $excluded_from_catalog === null ) {
 			$query                 = new WP_Query(
-				array(
+				[
 					'fields'         => 'ids',
 					'posts_per_page' => '-1',
 					'post_type'      => 'product',
 					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-					'tax_query'      => array(
-						array(
+					'tax_query'      => [
+						[
 							'taxonomy' => 'product_visibility',
 							'field'    => 'name',
-							'terms'    => array( 'exclude-from-catalog' ),
-						),
-					),
-				)
+							'terms'    => [ 'exclude-from-catalog' ],
+						],
+					],
+				]
 			);
 			$excluded_from_catalog = $query->get_posts();
 		}
@@ -298,7 +298,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return array The post ids with the added page ids.
 	 */
 	public function filter_woocommerce_pages( $excluded_posts_ids ) {
-		$woocommerce_pages   = array();
+		$woocommerce_pages   = [];
 		$woocommerce_pages[] = wc_get_page_id( 'cart' );
 		$woocommerce_pages[] = wc_get_page_id( 'checkout' );
 		$woocommerce_pages[] = wc_get_page_id( 'myaccount' );
@@ -319,13 +319,13 @@ class Yoast_WooCommerce_SEO {
 			return $replacevars;
 		}
 
-		$replacevars['product']                = array( 'sitename', 'title', 'sep', 'primary_category' );
-		$replacevars['product_cat']            = array( 'sitename', 'term_title', 'sep' );
-		$replacevars['product_tag']            = array( 'sitename', 'term_title', 'sep' );
-		$replacevars['product_shipping_class'] = array( 'sitename', 'term_title', 'sep', 'page' );
-		$replacevars['product_brand']          = array( 'sitename', 'term_title', 'sep' );
-		$replacevars['pwb-brand']              = array( 'sitename', 'term_title', 'sep' );
-		$replacevars['product_archive']        = array( 'sitename', 'sep', 'page', 'pt_plural' );
+		$replacevars['product']                = [ 'sitename', 'title', 'sep', 'primary_category' ];
+		$replacevars['product_cat']            = [ 'sitename', 'term_title', 'sep' ];
+		$replacevars['product_tag']            = [ 'sitename', 'term_title', 'sep' ];
+		$replacevars['product_shipping_class'] = [ 'sitename', 'term_title', 'sep', 'page' ];
+		$replacevars['product_brand']          = [ 'sitename', 'term_title', 'sep' ];
+		$replacevars['pwb-brand']              = [ 'sitename', 'term_title', 'sep' ];
+		$replacevars['product_archive']        = [ 'sitename', 'sep', 'page', 'pt_plural' ];
 
 		return $replacevars;
 	}
@@ -403,9 +403,9 @@ class Yoast_WooCommerce_SEO {
 				$term = get_term( (int) $att, array_shift( $att_keys ) );
 
 				if ( is_object( $term ) ) {
-					$crumbs[] = array(
+					$crumbs[] = [
 						'term' => $term,
-					);
+					];
 				}
 			}
 		}
@@ -436,12 +436,12 @@ class Yoast_WooCommerce_SEO {
 
 			foreach ( $attachments as $attachment_id ) {
 				$image_src = wp_get_attachment_image_src( $attachment_id );
-				$image     = array(
+				$image     = [
 					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Using WPSEO hook.
 					'src'   => apply_filters( 'wpseo_xml_sitemap_img_src', $image_src[0], $post_id ),
 					'title' => get_the_title( $attachment_id ),
 					'alt'   => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
-				);
+				];
 				$images[]  = $image;
 
 				unset( $image, $image_src );
@@ -469,7 +469,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return array All submenu pages including our own.
 	 */
 	public function add_submenu_pages( $submenu_pages ) {
-		$submenu_pages[] = array(
+		$submenu_pages[] = [
 			'wpseo_dashboard',
 			sprintf(
 				/* translators: %1$s resolves to WooCommerce SEO */
@@ -479,8 +479,8 @@ class Yoast_WooCommerce_SEO {
 			'WooCommerce SEO',
 			'wpseo_manage_options',
 			$this->short_name,
-			array( $this, 'admin_panel' ),
-		);
+			[ $this, 'admin_panel' ],
+		];
 
 		return $submenu_pages;
 	}
@@ -522,7 +522,7 @@ class Yoast_WooCommerce_SEO {
 		<label class="select" for="schema_brand">' . esc_html__( 'Brand', 'yoast-woo-seo' ) . '</label>
 		<select class="select" id="schema_brand" name="' . esc_attr( $this->short_name . '[schema_brand]' ) . '">
 			<option value="">-</option>' . "\n";
-		if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
+		if ( is_array( $taxonomies ) && $taxonomies !== [] ) {
 			foreach ( $taxonomies as $tax ) {
 				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"'
 					. selected( strtolower( $tax->name ), $this->options['schema_brand'], false ) . '>'
@@ -537,7 +537,7 @@ class Yoast_WooCommerce_SEO {
 		<label class="select" for="schema_manufacturer">' . esc_html__( 'Manufacturer', 'yoast-woo-seo' ) . '</label>
 		<select class="select" id="schema_manufacturer" name="' . esc_attr( $this->short_name . '[schema_manufacturer]' ) . '">
 			<option value="">-</option>' . "\n";
-		if ( is_array( $taxonomies ) && $taxonomies !== array() ) {
+		if ( is_array( $taxonomies ) && $taxonomies !== [] ) {
 			foreach ( $taxonomies as $tax ) {
 				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"'
 					. selected( strtolower( $tax->name ), $this->options['schema_manufacturer'], false ) . '>'
@@ -659,7 +659,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return array Array with the filtered columns.
 	 */
 	public function column_heading( $columns ) {
-		$keys_to_remove = array( 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-score', 'wpseo-score-readability' );
+		$keys_to_remove = [ 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-score', 'wpseo-score-readability' ];
 
 		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
 			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS;
@@ -765,7 +765,7 @@ class Yoast_WooCommerce_SEO {
 
 		$img_ids = $this->get_image_ids( $product );
 
-		if ( is_array( $img_ids ) && $img_ids !== array() ) {
+		if ( is_array( $img_ids ) && $img_ids !== [] ) {
 			foreach ( $img_ids as $img_id ) {
 				$img_url = wp_get_attachment_url( $img_id );
 				$opengraph_image->add_image( $img_url );
@@ -802,7 +802,7 @@ class Yoast_WooCommerce_SEO {
 		 */
 		$show_price = apply_filters_deprecated(
 			'wpseo_woocommerce_og_price',
-			array( true ),
+			[ true ],
 			'Yoast WooCommerce 12.5.0',
 			'Yoast\WP\Woocommerce\og_price'
 		);
@@ -1009,8 +1009,8 @@ class Yoast_WooCommerce_SEO {
 	public function init_beacon() {
 		$helpscout = new WPSEO_HelpScout(
 			'8535d745-4e80-48b9-b211-087880aa857d',
-			array( 'wpseo_woo' ),
-			array( WPSEO_Addon_Manager::WOOCOMMERCE_SLUG )
+			[ 'wpseo_woo' ],
+			[ WPSEO_Addon_Manager::WOOCOMMERCE_SLUG ]
 		);
 
 		$helpscout->register_hooks();
@@ -1024,7 +1024,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return bool
 	 */
 	protected function is_woocommerce_page( $page ) {
-		$woo_pages = array( 'wpseo_woo' );
+		$woo_pages = [ 'wpseo_woo' ];
 
 		return in_array( $page, $woo_pages, true );
 	}
@@ -1041,8 +1041,8 @@ class Yoast_WooCommerce_SEO {
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
 		$version       = $asset_manager->flatten_version( self::VERSION );
 
-		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
-		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), array(), WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), [], WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), [], WPSEO_VERSION, true );
 
 		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
 		wp_localize_script( 'wp-seo-woo-replacevars', 'wpseoWooReplaceVarsL10n', $this->localize_woo_replacevars_script() );
@@ -1054,28 +1054,28 @@ class Yoast_WooCommerce_SEO {
 	public function register_replacements() {
 		wpseo_register_var_replacement(
 			'wc_price',
-			array( $this, 'get_product_var_price' ),
+			[ $this, 'get_product_var_price' ],
 			'basic',
 			'The product\'s price.'
 		);
 
 		wpseo_register_var_replacement(
 			'wc_sku',
-			array( $this, 'get_product_var_sku' ),
+			[ $this, 'get_product_var_sku' ],
 			'basic',
 			'The product\'s SKU.'
 		);
 
 		wpseo_register_var_replacement(
 			'wc_shortdesc',
-			array( $this, 'get_product_var_short_description' ),
+			[ $this, 'get_product_var_short_description' ],
 			'basic',
 			'The product\'s short description.'
 		);
 
 		wpseo_register_var_replacement(
 			'wc_brand',
-			array( $this, 'get_product_var_brand' ),
+			[ $this, 'get_product_var_brand' ],
 			'basic',
 			'The product\'s brand.'
 		);
@@ -1088,7 +1088,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	protected function register_i18n_promo_class() {
 		new Yoast_I18n_v3(
-			array(
+			[
 				'textdomain'     => 'yoast-woo-seo',
 				'project_slug'   => 'woocommerce-seo',
 				'plugin_name'    => 'Yoast WooCommerce SEO',
@@ -1097,7 +1097,7 @@ class Yoast_WooCommerce_SEO {
 				'glotpress_name' => 'Yoast Translate',
 				'glotpress_logo' => 'http://translate.yoast.com/gp-templates/images/Yoast_Translate.svg',
 				'register_url'   => 'http://translate.yoast.com/gp/projects#utm_source=plugin&utm_medium=promo-box&utm_campaign=wpseo-woo-i18n-promo',
-			)
+			]
 		);
 	}
 
@@ -1204,10 +1204,10 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		$brand_taxonomies = array(
+		$brand_taxonomies = [
 			'product_brand',
 			'pwb-brand',
-		);
+		];
 
 		$brand_taxonomies = array_filter( $brand_taxonomies, 'taxonomy_exists' );
 
@@ -1259,12 +1259,12 @@ class Yoast_WooCommerce_SEO {
 	 * @return array The localized values.
 	 */
 	protected function localize_woo_replacevars_script() {
-		return array(
+		return [
 			'currency'       => get_woocommerce_currency(),
 			'currencySymbol' => get_woocommerce_currency_symbol(),
 			'decimals'       => wc_get_price_decimals(),
 			'locale'         => str_replace( '_', '-', get_locale() ),
-		);
+		];
 	}
 
 	/**
@@ -1276,13 +1276,13 @@ class Yoast_WooCommerce_SEO {
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
 		$version       = $asset_manager->flatten_version( self::VERSION );
 
-		return array(
+		return [
 			'script_url'     => plugins_url( 'js/yoastseo-woo-worker-' . $version . WPSEO_CSSJS_SUFFIX . '.js', self::get_plugin_file() ),
 			'woo_desc_none'  => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
 			'woo_desc_short' => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
 			'woo_desc_good'  => __( 'Your short description has a good length.', 'yoast-woo-seo' ),
 			'woo_desc_long'  => __( 'The short description for this product is too long.', 'yoast-woo-seo' ),
-		);
+		];
 	}
 
 	/**
@@ -1294,10 +1294,10 @@ class Yoast_WooCommerce_SEO {
 		// Replaces the WooCommerce breadcrumbs.
 		if ( has_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb' ) ) {
 			remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0 );
-			add_action( 'woocommerce_before_main_content', array( $this, 'show_yoast_breadcrumbs' ), 20, 0 );
+			add_action( 'woocommerce_before_main_content', [ $this, 'show_yoast_breadcrumbs' ], 20, 0 );
 		}
 
-		add_filter( 'wpseo_breadcrumb_links', array( $this, 'add_attribute_to_breadcrumbs' ) );
+		add_filter( 'wpseo_breadcrumb_links', [ $this, 'add_attribute_to_breadcrumbs' ] );
 	}
 }
 

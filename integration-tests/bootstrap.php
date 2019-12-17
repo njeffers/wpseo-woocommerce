@@ -21,9 +21,9 @@ if ( false !== getenv( 'WP_PLUGIN_DIR' ) ) {
 	define( 'WP_PLUGIN_DIR', getenv( 'WP_PLUGIN_DIR' ) );
 }
 
-$GLOBALS['wp_tests_options'] = array(
-	'active_plugins' => array( 'wpseo-woocommerce/wpseo-woocommerce.php', 'wordpress-seo/wp-seo.php' ),
-);
+$GLOBALS['wp_tests_options'] = [
+	'active_plugins' => [ 'wpseo-woocommerce/wpseo-woocommerce.php', 'wordpress-seo/wp-seo.php' ],
+];
 
 if ( defined( 'WP_DEVELOP_DIR' ) ) {
 	if ( file_exists( WP_DEVELOP_DIR . 'tests/phpunit/includes/bootstrap.php' ) ) {

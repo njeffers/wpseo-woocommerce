@@ -34,10 +34,10 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	public function test_constructor() {
 		$option = new WPSEO_Option_Woo_Double();
 		$this->assertSame(
-			array(
+			[
 				'price' => 'Price',
 				'stock' => 'Stock',
-			),
+			],
 			$option->valid_data_types
 		);
 	}
@@ -59,24 +59,24 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	public function test_validate_option( $field_name, $expected, $dirty, $clean, $old, $short = 'off' ) {
 		$option = $this
 			->getMockBuilder( 'WPSEO_Option_Woo_Double' )
-			->setMethods( array( 'get_taxonomies' ) )
+			->setMethods( [ 'get_taxonomies' ] )
 			->getMock();
 
 		$option
 			->expects( $this->once() )
 			->method( 'get_taxonomies' )
-			->will( $this->returnValue( array( 'yoast' ) ) );
+			->will( $this->returnValue( [ 'yoast' ] ) );
 
-		$dirty = ( $dirty !== null ) ? array( $field_name => $dirty ) : array();
-		$old   = ( $old !== null ) ? array( $field_name => $old ) : array();
+		$dirty = ( $dirty !== null ) ? [ $field_name => $dirty ] : [];
+		$old   = ( $old !== null ) ? [ $field_name => $old ] : [];
 
 		$result = $option->validate_option(
-			array_merge( array( 'short_form' => $short ), $dirty ),
-			array( $field_name => $clean ),
+			array_merge( [ 'short_form' => $short ], $dirty ),
+			[ $field_name => $clean ],
 			$old
 		);
 
-		$this->assertSame( array( $field_name => $expected ), $result );
+		$this->assertSame( [ $field_name => $expected ], $result );
 	}
 
 	/**
@@ -88,63 +88,63 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * @return array
 	 */
 	public function validate_option_values() {
-		return array(
+		return [
 			// Tests a non defined value.
-			array( 'test', null, 123, null, null ),
+			[ 'test', null, 123, null, null ],
 
 			// Tests the validation of the dbversion option.
-			array( 'dbversion', 2, 1, 3, '' ),
+			[ 'dbversion', 2, 1, 3, '' ],
 
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
-			array( 'data1_type', 'price', 'price', 'price', null ),
-			array( 'data2_type', 'price', 'price', 'price', null ),
-			array( 'schema_brand', 'yoast', 'yoast', 'yoast', null ),
-			array( 'schema_manufacturer', 'yoast', 'yoast', 'yoast', null ),
-			array( 'breadcrumbs', true, true, true, '' ),
-			array( 'hide_columns', true, true, true, '' ),
-			array( 'metabox_woo_top', true, true, true, '' ),
+			[ 'data1_type', 'price', 'price', 'price', null ],
+			[ 'data2_type', 'price', 'price', 'price', null ],
+			[ 'schema_brand', 'yoast', 'yoast', 'yoast', null ],
+			[ 'schema_manufacturer', 'yoast', 'yoast', 'yoast', null ],
+			[ 'breadcrumbs', true, true, true, '' ],
+			[ 'hide_columns', true, true, true, '' ],
+			[ 'metabox_woo_top', true, true, true, '' ],
 
 			// Validation where the dirty value is not in the validate data types.
-			array( 'data1_type', 'foo', 'foo', 'price', null ),
-			array( 'data2_type', 'foo', 'foo', 'price', null ),
-			array( 'schema_brand', 'bar', 'bar', 'yoast', null ),
-			array( 'schema_manufacturer', 'bar', 'bar', 'yoast', null ),
-			array( 'breadcrumbs', false, null, true, '' ),
-			array( 'hide_columns', false, null, true, '' ),
-			array( 'metabox_woo_top', false, null, true, '' ),
+			[ 'data1_type', 'foo', 'foo', 'price', null ],
+			[ 'data2_type', 'foo', 'foo', 'price', null ],
+			[ 'schema_brand', 'bar', 'bar', 'yoast', null ],
+			[ 'schema_manufacturer', 'bar', 'bar', 'yoast', null ],
+			[ 'breadcrumbs', false, null, true, '' ],
+			[ 'hide_columns', false, null, true, '' ],
+			[ 'metabox_woo_top', false, null, true, '' ],
 
 			// Validation where the old value is in the validate data types with short form enabled.
-			array( 'data1_type', 'price', null, 'price', 'price', 'on' ),
-			array( 'data2_type', 'price', null, 'price', 'price', 'on' ),
-			array( 'schema_brand', 'yoast', null, 'yoast', 'yoast,', 'on' ),
-			array( 'schema_manufacturer', 'yoast', null, 'yoast', 'yoast', 'on' ),
+			[ 'data1_type', 'price', null, 'price', 'price', 'on' ],
+			[ 'data2_type', 'price', null, 'price', 'price', 'on' ],
+			[ 'schema_brand', 'yoast', null, 'yoast', 'yoast,', 'on' ],
+			[ 'schema_manufacturer', 'yoast', null, 'yoast', 'yoast', 'on' ],
 
 			// Validation where the old value isn't in the validate data types with short form enabled.
-			array( 'data1_type', 'foo', null, 'price', 'foo', 'on' ),
-			array( 'data2_type', 'foo', null, 'price', 'foo', 'on' ),
-			array( 'schema_brand', 'bar', null, 'yoast', 'bar', 'on' ),
-			array( 'schema_manufacturer', 'bar', null, 'yoast', 'bar', 'on' ),
+			[ 'data1_type', 'foo', null, 'price', 'foo', 'on' ],
+			[ 'data2_type', 'foo', null, 'price', 'foo', 'on' ],
+			[ 'schema_brand', 'bar', null, 'yoast', 'bar', 'on' ],
+			[ 'schema_manufacturer', 'bar', null, 'yoast', 'bar', 'on' ],
 
 			// Validation where the old value isn't in the validate data types with short form not enabled.
-			array( 'data1_type', 'price', null, 'price', 'foo', 'off' ),
-			array( 'data2_type', 'price', null, 'price', 'foo', 'off' ),
-			array( 'schema_brand', 'yoast', null, 'yoast', 'bar', 'off' ),
-			array( 'schema_manufacturer', 'yoast', null, 'yoast', 'bar', 'off' ),
+			[ 'data1_type', 'price', null, 'price', 'foo', 'off' ],
+			[ 'data2_type', 'price', null, 'price', 'foo', 'off' ],
+			[ 'schema_brand', 'yoast', null, 'yoast', 'bar', 'off' ],
+			[ 'schema_manufacturer', 'yoast', null, 'yoast', 'bar', 'off' ],
 
 			// Validation where the boolean old value is set with short form enabled.
-			array( 'breadcrumbs', true, null, true, true, 'on' ),
-			array( 'hide_columns', true, null, true, true, 'on' ),
-			array( 'metabox_woo_top', true, null, true, true, 'on' ),
+			[ 'breadcrumbs', true, null, true, true, 'on' ],
+			[ 'hide_columns', true, null, true, true, 'on' ],
+			[ 'metabox_woo_top', true, null, true, true, 'on' ],
 
 			// Validation where the boolean old value is not set with short form enabled.
-			array( 'breadcrumbs', false, null, true, null, 'on' ),
-			array( 'hide_columns', false, null, true, null, 'on' ),
-			array( 'metabox_woo_top', false, null, true, null, 'on' ),
+			[ 'breadcrumbs', false, null, true, null, 'on' ],
+			[ 'hide_columns', false, null, true, null, 'on' ],
+			[ 'metabox_woo_top', false, null, true, null, 'on' ],
 
 			// Validation where the boolean old value is not set with short form not enabled.
-			array( 'breadcrumbs', false, null, true, true, 'off' ),
-			array( 'hide_columns', false, null, true, true, 'off' ),
-			array( 'metabox_woo_top', false, null, true, true, 'off' ),
-		);
+			[ 'breadcrumbs', false, null, true, true, 'off' ],
+			[ 'hide_columns', false, null, true, true, 'off' ],
+			[ 'metabox_woo_top', false, null, true, true, 'off' ],
+		];
 	}
 }
