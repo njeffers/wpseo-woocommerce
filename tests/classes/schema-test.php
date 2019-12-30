@@ -83,12 +83,12 @@ class Schema_Test extends TestCase {
 		$instance->expects( 'get_canonical' )->once()->with()->andReturn( $canonical );
 		$instance->expects( 'get_primary_term_or_first_term' )->twice()->with( 'product_cat', 1 )->andReturn( (object) [ 'name' => $product_name ] );
 		$instance->options = [
-			'dbversion'           => 2,
-			'schema_brand'        => 'product_cat',
-			'schema_manufacturer' => 'product_cat',
-			'breadcrumbs'         => false,
-			'hide_columns'        => true,
-			'metabox_woo_top'     => true,
+			'woo_dbversion'           => 2,
+			'woo_schema_brand'        => 'product_cat',
+			'woo_schema_manufacturer' => 'product_cat',
+			'woo_breadcrumbs'         => false,
+			'woo_hide_columns'        => true,
+			'woo_metabox_top'     => true,
 		];
 
 		$data = [

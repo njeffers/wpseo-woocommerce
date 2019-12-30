@@ -77,48 +77,48 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'test', null, 123, null, null ],
 
 			// Tests the validation of the dbversion option.
-			[ 'dbversion', 2, 1, 3, '' ],
+			[ 'woo_dbversion', 2, 1, 3, '' ],
 
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
-			[ 'schema_brand', 'yoast', 'yoast', 'yoast', null ],
-			[ 'schema_manufacturer', 'yoast', 'yoast', 'yoast', null ],
-			[ 'breadcrumbs', true, true, true, '' ],
-			[ 'hide_columns', true, true, true, '' ],
-			[ 'metabox_woo_top', true, true, true, '' ],
+			[ 'woo_schema_brand', 'yoast', 'yoast', 'yoast', null ],
+			[ 'woo_schema_manufacturer', 'yoast', 'yoast', 'yoast', null ],
+			[ 'woo_breadcrumbs', true, true, true, '' ],
+			[ 'woo_hide_columns', true, true, true, '' ],
+			[ 'woo_metabox_top', true, true, true, '' ],
 
 			// Validation where the dirty value is not in the validate data types.
-			[ 'schema_brand', 'bar', 'bar', 'yoast', null ],
-			[ 'schema_manufacturer', 'bar', 'bar', 'yoast', null ],
-			[ 'breadcrumbs', false, null, true, '' ],
-			[ 'hide_columns', false, null, true, '' ],
-			[ 'metabox_woo_top', false, null, true, '' ],
+			[ 'woo_schema_brand', 'bar', 'bar', 'yoast', null ],
+			[ 'woo_schema_manufacturer', 'bar', 'bar', 'yoast', null ],
+			[ 'woo_breadcrumbs', false, null, true, '' ],
+			[ 'woo_hide_columns', false, null, true, '' ],
+			[ 'woo_metabox_top', false, null, true, '' ],
 
 			// Validation where the old value is in the validate data types with short form enabled.
-			[ 'schema_brand', 'yoast', null, 'yoast', 'yoast,', 'on' ],
-			[ 'schema_manufacturer', 'yoast', null, 'yoast', 'yoast', 'on' ],
+			[ 'woo_schema_brand', 'yoast', null, 'yoast', 'yoast,', 'on' ],
+			[ 'woo_schema_manufacturer', 'yoast', null, 'yoast', 'yoast', 'on' ],
 
 			// Validation where the old value isn't in the validate data types with short form enabled.
-			[ 'schema_brand', 'bar', null, 'yoast', 'bar', 'on' ],
-			[ 'schema_manufacturer', 'bar', null, 'yoast', 'bar', 'on' ],
+			[ 'woo_schema_brand', 'bar', null, 'yoast', 'bar', 'on' ],
+			[ 'woo_schema_manufacturer', 'bar', null, 'yoast', 'bar', 'on' ],
 
 			// Validation where the old value isn't in the validate data types with short form not enabled.
-			[ 'schema_brand', 'yoast', null, 'yoast', 'bar', 'off' ],
-			[ 'schema_manufacturer', 'yoast', null, 'yoast', 'bar', 'off' ],
+			[ 'woo_schema_brand', 'yoast', null, 'yoast', 'bar', 'off' ],
+			[ 'woo_schema_manufacturer', 'yoast', null, 'yoast', 'bar', 'off' ],
 
 			// Validation where the boolean old value is set with short form enabled.
-			[ 'breadcrumbs', true, null, true, true, 'on' ],
-			[ 'hide_columns', true, null, true, true, 'on' ],
-			[ 'metabox_woo_top', true, null, true, true, 'on' ],
+			[ 'woo_breadcrumbs', true, null, true, true, 'on' ],
+			[ 'woo_hide_columns', true, null, true, true, 'on' ],
+			[ 'woo_metabox_top', true, null, true, true, 'on' ],
 
 			// Validation where the boolean old value is not set with short form enabled.
-			[ 'breadcrumbs', false, null, true, null, 'on' ],
-			[ 'hide_columns', false, null, true, null, 'on' ],
-			[ 'metabox_woo_top', false, null, true, null, 'on' ],
+			[ 'woo_breadcrumbs', false, null, true, null, 'on' ],
+			[ 'woo_hide_columns', false, null, true, null, 'on' ],
+			[ 'woo_metabox_top', false, null, true, null, 'on' ],
 
 			// Validation where the boolean old value is not set with short form not enabled.
-			[ 'breadcrumbs', false, null, true, true, 'off' ],
-			[ 'hide_columns', false, null, true, true, 'off' ],
-			[ 'metabox_woo_top', false, null, true, true, 'off' ],
+			[ 'woo_breadcrumbs', false, null, true, true, 'off' ],
+			[ 'woo_hide_columns', false, null, true, true, 'off' ],
+			[ 'woo_metabox_top', false, null, true, true, 'off' ],
 		];
 	}
 }

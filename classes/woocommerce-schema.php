@@ -151,7 +151,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @param \WC_Product $product Product object.
 	 */
 	private function add_brand( $product ) {
-		$schema_brand = WPSEO_Options::get( 'schema_brand' );
+		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
 		if ( ! empty( $schema_brand ) ) {
 			$this->add_organization_for_attribute( 'brand', $product, $schema_brand );
 		}
@@ -163,7 +163,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @param \WC_Product $product Product object.
 	 */
 	private function add_manufacturer( $product ) {
-		$schema_manufacturer = WPSEO_Options::get( 'schema_manufacturer' );
+		$schema_manufacturer = WPSEO_Options::get( 'woo_schema_manufacturer' );
 		if ( ! empty( $schema_manufacturer ) ) {
 			$this->add_organization_for_attribute( 'manufacturer', $product, $schema_manufacturer );
 		}
