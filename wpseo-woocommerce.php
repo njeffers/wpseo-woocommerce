@@ -51,13 +51,6 @@ class Yoast_WooCommerce_SEO {
 	public $option_instance;
 
 	/**
-	 * Cache of the current value of the WooCommerce_SEO option.
-	 *
-	 * @var array
-	 */
-	protected $options = [];
-
-	/**
 	 * Name of the option to store plugins setting.
 	 *
 	 * @var string
@@ -150,8 +143,6 @@ class Yoast_WooCommerce_SEO {
 		// Initialize the options.
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
 		$this->short_name      = $this->option_instance->option_name;
-		$this->options         = get_option( $this->short_name );
-
 		// Make sure the options property is always current.
 		add_action( 'add_option_' . $this->short_name, [ $this, 'refresh_options_property' ] );
 		add_action( 'update_option_' . $this->short_name, [ $this, 'refresh_options_property' ] );
@@ -160,7 +151,7 @@ class Yoast_WooCommerce_SEO {
 		add_filter( 'wpseo_enable_tracking', '__return_true' );
 
 		// Check if the options need updating.
-		if ( $this->option_instance->db_version > $this->options['dbversion'] ) {
+		if ( $this->option_instance->db_version > WPSEO_Options::get( 'dbversion' ) ) {
 			$this->upgrade();
 		}
 
@@ -170,18 +161,16 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'admin_print_styles', [ $this, 'config_page_styles' ] );
 
 			// Products tab columns.
-			if ( $this->options['hide_columns'] === true ) {
+			if ( WPSEO_Options::get( 'hide_columns' ) === true ) {
 				add_filter( 'manage_product_posts_columns', [ $this, 'column_heading' ], 11, 1 );
 			}
 
 			// Move Woo box above SEO box.
-			if ( $this->options['metabox_woo_top'] === true ) {
+			if ( WPSEO_Options::get( 'metabox_woo_top' ) === true ) {
 				add_action( 'admin_footer', [ $this, 'footer_js' ] );
 			}
 		}
 		else {
-			$wpseo_options = WPSEO_Options::get_all();
-
 			// Initialize schema.
 			add_action( 'init', [ $this, 'initialize_schema' ] );
 
@@ -206,7 +195,7 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
 
 			// Fix breadcrumbs.
-			if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
+			if ( WPSEO_Options::get( 'breadcrumbs' ) === true && WPSEO_Options::get( 'breadcrumbs-enable' ) === true ) {
 				$this->handle_breadcrumbs_replacements();
 			}
 		} // End if.
@@ -626,7 +615,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function checkbox( $id, $label ) {
 		$current = false;
-		if ( isset( $this->options[ $id ] ) && $this->options[ $id ] === true ) {
+		if ( WPSEO_Options::get( $id ) === true ) {
 			$current = 'on';
 		}
 
@@ -787,8 +776,9 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		if ( $this->options['schema_brand'] !== '' ) {
-			$terms = get_the_terms( get_the_ID(), $this->options['schema_brand'] );
+		$schema_brand = WPSEO_Options::get( 'schema_brand' );
+		if ( $schema_brand !== '' ) {
+			$terms = get_the_terms( get_the_ID(), $schema_brand );
 			if ( is_array( $terms ) && count( $terms ) > 0 ) {
 				$term_values = array_values( $terms );
 				$term        = array_shift( $term_values );
