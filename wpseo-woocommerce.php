@@ -149,14 +149,10 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'admin_print_styles', [ $this, 'config_page_styles' ] );
 
 			// Products tab columns.
-			if ( WPSEO_Options::get( 'woo_hide_columns' ) === true ) {
-				add_filter( 'manage_product_posts_columns', [ $this, 'column_heading' ], 11, 1 );
-			}
+			add_filter( 'manage_product_posts_columns', [ $this, 'column_heading' ], 11, 1 );
 
 			// Move Woo box above SEO box.
-			if ( WPSEO_Options::get( 'woo_metabox_top' ) === true ) {
-				add_action( 'admin_footer', [ $this, 'footer_js' ] );
-			}
+			add_action( 'admin_footer', [ $this, 'footer_js' ] );
 		}
 		else {
 			// Initialize schema.
@@ -183,9 +179,8 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
 
 			// Fix breadcrumbs.
-			if ( WPSEO_Options::get( 'woo_breadcrumbs' ) === true && WPSEO_Options::get( 'breadcrumbs-enable' ) === true ) {
-				$this->handle_breadcrumbs_replacements();
-			}
+			$this->handle_breadcrumbs_replacements();
+
 		} // End if.
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
@@ -562,6 +557,9 @@ class Yoast_WooCommerce_SEO {
 	 * @since 1.0
 	 */
 	public function footer_js() {
+		if ( WPSEO_Options::get( 'woo_metabox_top' ) !== true ) {
+			return;
+		}
 		?>
 		<script type="text/javascript">
 			jQuery( document ).ready( function( $ ) {
@@ -584,6 +582,10 @@ class Yoast_WooCommerce_SEO {
 	 * @return array Array with the filtered columns.
 	 */
 	public function column_heading( $columns ) {
+		if ( WPSEO_Options::get( 'woo_hide_columns' ) !== true ) {
+			return $columns;
+		}
+
 		$keys_to_remove = [ 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-score', 'wpseo-score-readability' ];
 
 		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
@@ -1217,6 +1219,10 @@ class Yoast_WooCommerce_SEO {
 	 * @return void
 	 */
 	protected function handle_breadcrumbs_replacements() {
+		if ( WPSEO_Options::get( 'woo_breadcrumbs' ) !== true || WPSEO_Options::get( 'breadcrumbs-enable' ) !== true ) {
+			return;
+		}
+
 		// Replaces the WooCommerce breadcrumbs.
 		if ( has_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb' ) ) {
 			remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0 );
