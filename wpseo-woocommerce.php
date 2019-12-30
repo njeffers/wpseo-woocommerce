@@ -143,9 +143,6 @@ class Yoast_WooCommerce_SEO {
 		// Initialize the options.
 		$this->option_instance = WPSEO_Option_Woo::get_instance();
 		$this->short_name      = $this->option_instance->option_name;
-		// Make sure the options property is always current.
-		add_action( 'add_option_' . $this->short_name, [ $this, 'refresh_options_property' ] );
-		add_action( 'update_option_' . $this->short_name, [ $this, 'refresh_options_property' ] );
 
 		// Enable Yoast usage tracking.
 		add_filter( 'wpseo_enable_tracking', '__return_true' );
@@ -400,12 +397,6 @@ class Yoast_WooCommerce_SEO {
 		return $crumbs;
 	}
 
-	/**
-	 * Refresh the options property on add/update of the option to ensure it's always current.
-	 */
-	public function refresh_options_property() {
-		$this->options = get_option( $this->short_name );
-	}
 
 	/**
 	 * Add the product gallery images to the XML sitemap.
@@ -1278,6 +1269,17 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		add_filter( 'wpseo_breadcrumb_links', [ $this, 'add_attribute_to_breadcrumbs' ] );
+	}
+
+
+	/**
+	 * Refresh the options property on add/update of the option to ensure it's always current.
+	 *
+	 * @deprecated 12.5
+	 * @codeCoverageIgnore
+	 */
+	public function refresh_options_property() {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
 	}
 
 	/**
