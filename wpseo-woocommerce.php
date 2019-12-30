@@ -46,7 +46,7 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Instance of the WooCommerce_SEO option management class.
 	 *
-	 * @var object
+	 * @var WPSEO_Option_Woo
 	 */
 	public $option_instance;
 
@@ -143,6 +143,9 @@ class Yoast_WooCommerce_SEO {
 		if ( $this->is_woocommerce_page( filter_input( INPUT_GET, 'page' ) ) ) {
 			$this->register_i18n_promo_class();
 		}
+
+		// Make sure the options property is always current.
+		add_action( 'init', [ 'WPSEO_Option_Woo', 'register_option' ] );
 
 		// Initialize the options.
 		$this->option_instance = WPSEO_Option_Woo::get_instance();

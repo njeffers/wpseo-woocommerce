@@ -41,20 +41,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		public $group_name = 'wpseo_woo_options';
 
 		/**
-		 * Whether to include the option in the return for WPSEO_Options::get_all().
-		 *
-		 * @var bool
-		 */
-		public $include_in_all = false;
-
-		/**
-		 * Whether this option is only for when the install is multisite.
-		 *
-		 * @var bool
-		 */
-		public $multisite_only = false;
-
-		/**
 		 * Database version to check whether the plugins options need updating.
 		 *
 		 * @var int
@@ -107,7 +93,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		/**
 		 * Get the singleton instance of this class
 		 *
-		 * @return object
+		 * @return self
 		 */
 		public static function get_instance() {
 			if ( ! ( self::$instance instanceof self ) ) {
@@ -115,6 +101,13 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			}
 
 			return self::$instance;
+		}
+
+		/**
+		 * Registers the option to the WPSEO Options framework.
+		 */
+		public static function register_option() {
+			WPSEO_Options::register_option( self::get_instance() );
 		}
 
 		/**
