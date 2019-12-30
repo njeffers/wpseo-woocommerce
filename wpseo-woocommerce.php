@@ -482,45 +482,21 @@ class Yoast_WooCommerce_SEO {
 	 * @since 1.0
 	 */
 	public function admin_panel() {
-		WPSEO_WooCommerce_Wrappers::admin_header( true, $this->option_instance->group_name, $this->short_name, false );
+		Yoast_Form::get_instance()->admin_header( true, 'wpseo_woo' );
 
-		// @todo [JRF => whomever] change the form fields so they use the methods as defined in WPSEO_Admin_Pages.
-		$taxonomies = get_object_taxonomies( 'product', 'objects' );
+		$object_taxonomies = get_object_taxonomies( 'product', 'objects' );
+		$taxonomies        = [];
+		foreach ( $object_taxonomies as $object_taxonomy ) {
+			$taxonomies[ strtolower( $object_taxonomy->name ) ] = esc_html( $object_taxonomy->labels->name );
+		}
 
 		echo '<h2>' . esc_html__( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
-		<p>' . esc_html__( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>
-		<label class="select" for="schema_brand">' . esc_html__( 'Brand', 'yoast-woo-seo' ) . '</label>
-		<select class="select" id="schema_brand" name="' . esc_attr( $this->short_name . '[schema_brand]' ) . '">
-			<option value="">-</option>' . "\n";
-		if ( is_array( $taxonomies ) && $taxonomies !== [] ) {
-			foreach ( $taxonomies as $tax ) {
-				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"'
-					. selected( strtolower( $tax->name ), $this->options['schema_brand'], false ) . '>'
-					. esc_html( $tax->labels->name ) . "</option>\n";
-			}
-		}
-		unset( $tax, $sel );
-		echo '
-		</select>
-		<br class="clear"/>
+		<p>' . esc_html__( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>';
 
-		<label class="select" for="schema_manufacturer">' . esc_html__( 'Manufacturer', 'yoast-woo-seo' ) . '</label>
-		<select class="select" id="schema_manufacturer" name="' . esc_attr( $this->short_name . '[schema_manufacturer]' ) . '">
-			<option value="">-</option>' . "\n";
-		if ( is_array( $taxonomies ) && $taxonomies !== [] ) {
-			foreach ( $taxonomies as $tax ) {
-				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"'
-					. selected( strtolower( $tax->name ), $this->options['schema_manufacturer'], false ) . '>'
-					. esc_html( $tax->labels->name ) . "</option>\n";
-			}
-		}
-		unset( $tax, $sel );
-		echo '
-		</select>
-		<br class="clear"/>';
+		Yoast_Form::get_instance()->select( 'schema_manufacturer', esc_html__( 'Manufacturer', 'yoast-woo-seo' ) , $taxonomies  );
+		Yoast_Form::get_instance()->select( 'schema_brand', esc_html__( 'Brand', 'yoast-woo-seo' ) , $taxonomies  );
 
-		$wpseo_options = WPSEO_Options::get_all();
-		if ( $wpseo_options['breadcrumbs-enable'] === true ) {
+		if ( WPSEO_Options::get( 'breadcrumbs-enable' ) === true ) {
 			echo '<h2>' . esc_html__( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
 			echo '<p>';
 			printf(
@@ -532,17 +508,17 @@ class Yoast_WooCommerce_SEO {
 				'WooCommerce'
 			);
 			echo "</p>\n";
-			$this->checkbox(
+
+			Yoast_Form::get_instance()->checkbox(
 				'breadcrumbs',
 				sprintf(
 					/* translators: %1$s resolves to WooCommerce */
-					__( 'Replace %1$s Breadcrumbs', 'yoast-woo-seo' ),
+					esc_html__( 'Replace %1$s Breadcrumbs', 'yoast-woo-seo' ),
 					'WooCommerce'
 				)
 			);
 		}
 
-		echo '<br class="clear"/>';
 		echo '<h2>' . esc_html__( 'Admin', 'yoast-woo-seo' ) . '</h2>';
 		echo '<p>';
 		printf(
@@ -552,16 +528,16 @@ class Yoast_WooCommerce_SEO {
 			'WooCommerce'
 		);
 		echo "</p>\n";
-		$this->checkbox(
+
+		Yoast_Form::get_instance()->checkbox(
 			'hide_columns',
 			sprintf(
 				/* translators: %1$s resolves to Yoast SEO */
-				__( 'Remove %1$s columns', 'yoast-woo-seo' ),
+				esc_html__( 'Remove %1$s columns', 'yoast-woo-seo' ),
 				'Yoast SEO'
 			)
 		);
 
-		echo '<br class="clear"/>';
 		echo '<p>';
 		printf(
 			/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce */
@@ -570,35 +546,18 @@ class Yoast_WooCommerce_SEO {
 			'WooCommerce'
 		);
 		echo "</p>\n";
-		$this->checkbox(
+
+		Yoast_Form::get_instance()->checkbox(
 			'metabox_woo_top',
 			sprintf(
 				/* translators: %1$s resolves to WooCommerce */
-				__( 'Move %1$s up', 'yoast-woo-seo' ),
+				esc_html__( 'Move %1$s up', 'yoast-woo-seo' ),
 				'WooCommerce'
 			)
 		);
 
-		echo '<br class="clear"/>';
-
 		// Submit button and debug info.
-		WPSEO_WooCommerce_Wrappers::admin_footer( true, false );
-	}
-
-	/**
-	 * Simple helper function to show a checkbox.
-	 *
-	 * @param string $id    The ID and option name for the checkbox.
-	 * @param string $label The label for the checkbox.
-	 */
-	public function checkbox( $id, $label ) {
-		$current = false;
-		if ( WPSEO_Options::get( $id ) === true ) {
-			$current = 'on';
-		}
-
-		echo '<input class="checkbox" type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $this->short_name . '[' . $id . ']' ) . '" value="on" ' . checked( $current, 'on', false ) . '> ';
-		echo '<label for="' . esc_attr( $id ) . '" class="checkbox">' . esc_html( $label ) . '</label> ';
+		Yoast_Form::get_instance()->admin_footer( true, false );
 	}
 
 	/**
@@ -1289,6 +1248,19 @@ class Yoast_WooCommerce_SEO {
 	 * @codeCoverageIgnore
 	 */
 	public function upgrade() {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
+	}
+
+	/**
+	 * Simple helper function to show a checkbox.
+	 *
+	 * @param string $id    The ID and option name for the checkbox.
+	 * @param string $label The label for the checkbox.
+	 *
+	 * @deprecated 12.5
+	 * @codeCoverageIgnore
+	 */
+	public function checkbox( $id, $label ) {
 		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
 	}
 }
