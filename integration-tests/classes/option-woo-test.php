@@ -27,22 +27,6 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	}
 
 	/**
-	 * Tests the constructor.
-	 *
-	 * @covers WPSEO_Option_Woo::__construct
-	 */
-	public function test_constructor() {
-		$option = new WPSEO_Option_Woo_Double();
-		$this->assertSame(
-			[
-				'price' => 'Price',
-				'stock' => 'Stock',
-			],
-			$option->valid_data_types
-		);
-	}
-
-	/**
 	 * Gets the data from the data provider.
 	 *
 	 * @dataProvider validate_option_values
@@ -96,8 +80,6 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'dbversion', 2, 1, 3, '' ],
 
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
-			[ 'data1_type', 'price', 'price', 'price', null ],
-			[ 'data2_type', 'price', 'price', 'price', null ],
 			[ 'schema_brand', 'yoast', 'yoast', 'yoast', null ],
 			[ 'schema_manufacturer', 'yoast', 'yoast', 'yoast', null ],
 			[ 'breadcrumbs', true, true, true, '' ],
@@ -105,8 +87,6 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'metabox_woo_top', true, true, true, '' ],
 
 			// Validation where the dirty value is not in the validate data types.
-			[ 'data1_type', 'foo', 'foo', 'price', null ],
-			[ 'data2_type', 'foo', 'foo', 'price', null ],
 			[ 'schema_brand', 'bar', 'bar', 'yoast', null ],
 			[ 'schema_manufacturer', 'bar', 'bar', 'yoast', null ],
 			[ 'breadcrumbs', false, null, true, '' ],
@@ -114,20 +94,14 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'metabox_woo_top', false, null, true, '' ],
 
 			// Validation where the old value is in the validate data types with short form enabled.
-			[ 'data1_type', 'price', null, 'price', 'price', 'on' ],
-			[ 'data2_type', 'price', null, 'price', 'price', 'on' ],
 			[ 'schema_brand', 'yoast', null, 'yoast', 'yoast,', 'on' ],
 			[ 'schema_manufacturer', 'yoast', null, 'yoast', 'yoast', 'on' ],
 
 			// Validation where the old value isn't in the validate data types with short form enabled.
-			[ 'data1_type', 'foo', null, 'price', 'foo', 'on' ],
-			[ 'data2_type', 'foo', null, 'price', 'foo', 'on' ],
 			[ 'schema_brand', 'bar', null, 'yoast', 'bar', 'on' ],
 			[ 'schema_manufacturer', 'bar', null, 'yoast', 'bar', 'on' ],
 
 			// Validation where the old value isn't in the validate data types with short form not enabled.
-			[ 'data1_type', 'price', null, 'price', 'foo', 'off' ],
-			[ 'data2_type', 'price', null, 'price', 'foo', 'off' ],
 			[ 'schema_brand', 'yoast', null, 'yoast', 'bar', 'off' ],
 			[ 'schema_manufacturer', 'yoast', null, 'yoast', 'bar', 'off' ],
 

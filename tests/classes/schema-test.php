@@ -84,8 +84,6 @@ class Schema_Test extends TestCase {
 		$instance->expects( 'get_primary_term_or_first_term' )->twice()->with( 'product_cat', 1 )->andReturn( (object) [ 'name' => $product_name ] );
 		$instance->options = [
 			'dbversion'           => 2,
-			'data1_type'          => 'price',
-			'data2_type'          => 'stock',
 			'schema_brand'        => 'product_cat',
 			'schema_manufacturer' => 'product_cat',
 			'breadcrumbs'         => false,

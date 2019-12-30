@@ -59,8 +59,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			'dbversion'           => 0, // Leave default as 0 to ensure activation/upgrade works.
 
 			// Form fields.
-			'data1_type'          => 'price',
-			'data2_type'          => 'stock',
 			'schema_brand'        => '',
 			'schema_manufacturer' => '',
 			'breadcrumbs'         => true,
@@ -149,34 +147,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 				switch ( $key ) {
 					case 'dbversion':
 						$clean[ $key ] = $this->db_version;
-						break;
-
-					case 'data1_type':
-					case 'data2_type':
-						if ( isset( $dirty[ $key ] ) ) {
-							if ( in_array( $dirty[ $key ], $valid_data_types, true ) ) {
-								$clean[ $key ] = $dirty[ $key ];
-							}
-							else {
-								if ( sanitize_title_with_dashes( $dirty[ $key ] ) === $dirty[ $key ] ) {
-									// Allow taxonomies which may not be registered yet.
-									$clean[ $key ] = $dirty[ $key ];
-								}
-							}
-						}
-						else {
-							if ( $short && isset( $old[ $key ] ) ) {
-								if ( in_array( $old[ $key ], $valid_data_types, true ) ) {
-									$clean[ $key ] = $old[ $key ];
-								}
-								else {
-									if ( sanitize_title_with_dashes( $old[ $key ] ) === $old[ $key ] ) {
-										// Allow taxonomies which may not be registered yet.
-										$clean[ $key ] = $old[ $key ];
-									}
-								}
-							}
-						}
 						break;
 
 					case 'schema_brand':
