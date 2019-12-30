@@ -67,28 +67,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		];
 
 		/**
-		 * Array of pre-defined valid data types, will be enriched with taxonomies.
-		 *
-		 * @var array
-		 */
-		public $valid_data_types = [];
-
-		/**
-		 * Add the actions and filters for the option.
-		 *
-		 * @return \WPSEO_Option_Woo
-		 */
-		protected function __construct() {
-			parent::__construct();
-
-			// Set and translate the valid data types.
-			$this->valid_data_types = [
-				'price' => __( 'Price', 'yoast-woo-seo' ),
-				'stock' => __( 'Stock', 'yoast-woo-seo' ),
-			];
-		}
-
-		/**
 		 * Get the singleton instance of this class
 		 *
 		 * @return self
@@ -137,11 +115,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			$short = ( isset( $dirty['short_form'] ) && $dirty['short_form'] === 'on' );
 
 			// Prepare an array of valid data types and taxonomies to validate against.
-			$valid_data_types = array_keys( $this->valid_data_types );
 			$valid_taxonomies = $this->get_taxonomies();
-			if ( ! empty( $valid_taxonomies ) ) {
-				$valid_data_types = array_merge( $valid_data_types, $valid_taxonomies );
-			}
 
 			foreach ( $clean as $key => $value ) {
 				switch ( $key ) {
