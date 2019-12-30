@@ -111,6 +111,18 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		}
 
 		/**
+		 * WPSEO_Option_Woo constructor.
+		 */
+		protected function __construct() {
+			parent::__construct();
+
+			// Check if the options need updating.
+			if ( $this->db_version > WPSEO_Options::get( 'dbversion' ) ) {
+				$this->clean();
+			}
+		}
+
+		/**
 		 * Validates the option.
 		 *
 		 * @param  array $dirty New value for the option.

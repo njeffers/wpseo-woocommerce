@@ -150,11 +150,6 @@ class Yoast_WooCommerce_SEO {
 		// Enable Yoast usage tracking.
 		add_filter( 'wpseo_enable_tracking', '__return_true' );
 
-		// Check if the options need updating.
-		if ( $this->option_instance->db_version > WPSEO_Options::get( 'dbversion' ) ) {
-			$this->upgrade();
-		}
-
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 			// Add subitem to menu.
 			add_filter( 'wpseo_submenu_pages', [ $this, 'add_submenu_pages' ] );
@@ -441,14 +436,6 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return $images;
-	}
-
-	/**
-	 * Perform upgrade procedures to the settings.
-	 */
-	public function upgrade() {
-		// Upgrade to new wp seo option class.
-		$this->option_instance->clean();
 	}
 
 	/**
@@ -1291,6 +1278,16 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		add_filter( 'wpseo_breadcrumb_links', [ $this, 'add_attribute_to_breadcrumbs' ] );
+	}
+
+	/**
+	 * Perform upgrade procedures to the settings.
+	 *
+	 * @deprecated 12.5
+	 * @codeCoverageIgnore
+	 */
+	public function upgrade() {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
 	}
 }
 
