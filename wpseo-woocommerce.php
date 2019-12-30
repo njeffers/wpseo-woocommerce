@@ -140,10 +140,6 @@ class Yoast_WooCommerce_SEO {
 		// Make sure the options property is always current.
 		add_action( 'init', [ 'WPSEO_Option_Woo', 'register_option' ] );
 
-		// Initialize the options.
-		$this->option_instance = WPSEO_Option_Woo::get_instance();
-		$this->short_name      = $this->option_instance->option_name;
-
 		// Enable Yoast usage tracking.
 		add_filter( 'wpseo_enable_tracking', '__return_true' );
 
@@ -448,7 +444,7 @@ class Yoast_WooCommerce_SEO {
 			),
 			'WooCommerce SEO',
 			'wpseo_manage_options',
-			$this->short_name,
+			'wpseo_woo',
 			[ $this, 'admin_panel' ],
 		];
 
