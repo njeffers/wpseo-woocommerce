@@ -11,13 +11,6 @@
 class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 
 	/**
-	 * Instance of the class being tested.
-	 *
-	 * @var WPSEO_Option_Woo_Double
-	 */
-	protected $option;
-
-	/**
 	 * Requires the test double.
 	 */
 	public static function setUpBeforeClass() {
@@ -41,15 +34,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * @covers WPSEO_Option_Woo::validate_option
 	 */
 	public function test_validate_option( $field_name, $expected, $dirty, $clean, $old, $short = 'off' ) {
-		$option = $this
-			->getMockBuilder( 'WPSEO_Option_Woo_Double' )
-			->setMethods( [ 'get_taxonomies' ] )
-			->getMock();
-
-		$option
-			->expects( $this->once() )
-			->method( 'get_taxonomies' )
-			->will( $this->returnValue( [ 'yoast' ] ) );
+		$option = new WPSEO_Option_Woo_Double();
 
 		$dirty = ( $dirty !== null ) ? [ $field_name => $dirty ] : [];
 		$old   = ( $old !== null ) ? [ $field_name => $old ] : [];
@@ -77,7 +62,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'test', null, 123, null, null ],
 
 			// Tests the validation of the dbversion option.
-			[ 'woo_dbversion', 2, 1, 3, '' ],
+			[ 'woo_dbversion', 3, 1, 3, '' ],
 
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
 			[ 'woo_schema_brand', 'yoast', 'yoast', 'yoast', null ],
