@@ -388,7 +388,6 @@ class Yoast_WooCommerce_SEO {
 		return $crumbs;
 	}
 
-
 	/**
 	 * Add the product gallery images to the XML sitemap.
 	 *
@@ -484,8 +483,8 @@ class Yoast_WooCommerce_SEO {
 		echo '<h2>' . esc_html__( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
 		<p>' . esc_html__( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>';
 
-		Yoast_Form::get_instance()->select( 'woo_schema_manufacturer', esc_html__( 'Manufacturer', 'yoast-woo-seo' ) , $taxonomies  );
-		Yoast_Form::get_instance()->select( 'woo_schema_brand', esc_html__( 'Brand', 'yoast-woo-seo' ) , $taxonomies  );
+		Yoast_Form::get_instance()->select( 'woo_schema_manufacturer', esc_html__( 'Manufacturer', 'yoast-woo-seo' ), $taxonomies );
+		Yoast_Form::get_instance()->select( 'woo_schema_brand', esc_html__( 'Brand', 'yoast-woo-seo' ), $taxonomies );
 
 		if ( WPSEO_Options::get( 'breadcrumbs-enable' ) === true ) {
 			echo '<h2>' . esc_html__( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
@@ -1232,7 +1231,6 @@ class Yoast_WooCommerce_SEO {
 		add_filter( 'wpseo_breadcrumb_links', [ $this, 'add_attribute_to_breadcrumbs' ] );
 	}
 
-
 	/**
 	 * Refresh the options property on add/update of the option to ensure it's always current.
 	 *
@@ -1256,13 +1254,10 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Simple helper function to show a checkbox.
 	 *
-	 * @param string $id    The ID and option name for the checkbox.
-	 * @param string $label The label for the checkbox.
-	 *
 	 * @deprecated 12.5
 	 * @codeCoverageIgnore
 	 */
-	public function checkbox( $id, $label ) {
+	public function checkbox() {
 		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
 	}
 }

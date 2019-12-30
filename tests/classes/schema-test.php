@@ -86,7 +86,7 @@ class Schema_Test extends TestCase {
 		$instance = Mockery::mock( Schema_Double::class )->makePartial();
 		$instance->expects( 'get_canonical' )->once()->with()->andReturn( $canonical );
 		$instance->expects( 'get_primary_term_or_first_term' )->twice()->with( 'product_cat', 1 )->andReturn( (object) [ 'name' => $product_name ] );
-		
+
 		$data = [
 			'@type'       => 'Product',
 			'@id'         => $canonical . '#product',

@@ -62,8 +62,8 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			'woo_schema_brand'        => '',
 			'woo_schema_manufacturer' => '',
 			'woo_breadcrumbs'         => true,
-			'woo_hide_columns'    => true,
-			'woo_metabox_top'     => true,
+			'woo_hide_columns'        => true,
+			'woo_metabox_top'         => true,
 		];
 
 		/**
@@ -104,7 +104,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		 *
 		 * @return  array      Validated clean value for the option to be saved to the database.
 		 * @todo remove code using $short, there is no "short form" anymore.
-		 *
 		 */
 		protected function validate_option( $dirty, $clean, $old ) {
 
@@ -125,17 +124,20 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 						if ( isset( $dirty[ $key ] ) ) {
 							if ( in_array( $dirty[ $key ], $valid_taxonomies, true ) ) {
 								$clean[ $key ] = $dirty[ $key ];
-							} else {
+							}
+							else {
 								if ( sanitize_title_with_dashes( $dirty[ $key ] ) === $dirty[ $key ] ) {
 									// Allow taxonomies which may not be registered yet.
 									$clean[ $key ] = $dirty[ $key ];
 								}
 							}
-						} else {
+						}
+						else {
 							if ( $short && isset( $old[ $key ] ) ) {
 								if ( in_array( $old[ $key ], $valid_taxonomies, true ) ) {
 									$clean[ $key ] = $old[ $key ];
-								} else {
+								}
+								else {
 									if ( sanitize_title_with_dashes( $old[ $key ] ) === $old[ $key ] ) {
 										// Allow taxonomies which may not be registered yet.
 										$clean[ $key ] = $old[ $key ];
@@ -151,10 +153,12 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 					case 'woo_metabox_top':
 						if ( isset( $dirty[ $key ] ) ) {
 							$clean[ $key ] = WPSEO_Utils::validate_bool( $dirty[ $key ] );
-						} else {
+						}
+						else {
 							if ( $short && isset( $old[ $key ] ) ) {
 								$clean[ $key ] = WPSEO_Utils::validate_bool( $old[ $key ] );
-							} else {
+							}
+							else {
 								$clean[ $key ] = false;
 							}
 						}
@@ -213,7 +217,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 				];
 
 				foreach ( $fields_to_convert as $current_field => $new_field ) {
-					if ( ! isset ( $option[ $current_field ] ) ) {
+					if ( ! isset( $option[ $current_field ] ) ) {
 						continue;
 					}
 
@@ -224,7 +228,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			}
 
 			$this->clean();
-
 		}
 	}
 }
