@@ -204,11 +204,21 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 
 			// Convert to the new prefixed option names.
 			if ( $this->db_version === 3 ) {
-				$option['woo_schema_brand']        = $option['schema_brand'];
-				$option['woo_schema_manufacturer'] = $option['schema_manufacturer'];
-				$option['woo_breadcrumbs']         = $option['breadcrumbs'];
-				$option['woo_hide_columns']        = $option['hide_columns'];
-				$option['woo_metabox_top']         = $option['metabox_woo_top'];
+				$fields_to_convert = [
+					'schema_brand'        => 'woo_schema_brand',
+					'schema_manufacturer' => 'woo_schema_manufacturer',
+					'breadcrumbs'         => 'woo_breadcrumbs',
+					'hide_columns'        => 'woo_hide_columns',
+					'metabox_woo_top'     => 'woo_metabox_top',
+				];
+
+				foreach ( $fields_to_convert as $current_field => $new_field ) {
+					if ( ! isset ( $option[ $current_field ] ) ) {
+						continue;
+					}
+
+					$option[ $new_field ] = $option[ $current_field ];
+				}
 
 				update_option( $this->option_name, $option );
 			}
