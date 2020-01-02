@@ -18,18 +18,9 @@ class WPSEO_WooCommerce_Schema {
 	protected $data;
 
 	/**
-	 * WooCommerce SEO Options.
-	 *
-	 * @var array
-	 */
-	protected $options;
-
-	/**
 	 * WPSEO_WooCommerce_Schema constructor.
 	 */
 	public function __construct() {
-		$this->options = get_option( 'wpseo_woo' );
-
 		add_filter( 'woocommerce_structured_data_product', [ $this, 'change_product' ], 10, 2 );
 		add_filter( 'woocommerce_structured_data_type_for_page', [ $this, 'remove_woo_breadcrumbs' ] );
 		add_filter( 'wpseo_schema_webpage', [ $this, 'filter_webpage' ] );
@@ -160,8 +151,9 @@ class WPSEO_WooCommerce_Schema {
 	 * @param \WC_Product $product Product object.
 	 */
 	private function add_brand( $product ) {
-		if ( ! empty( $this->options['schema_brand'] ) ) {
-			$this->add_organization_for_attribute( 'brand', $product, $this->options['schema_brand'] );
+		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
+		if ( ! empty( $schema_brand ) ) {
+			$this->add_organization_for_attribute( 'brand', $product, $schema_brand );
 		}
 	}
 
@@ -171,8 +163,9 @@ class WPSEO_WooCommerce_Schema {
 	 * @param \WC_Product $product Product object.
 	 */
 	private function add_manufacturer( $product ) {
-		if ( ! empty( $this->options['schema_manufacturer'] ) ) {
-			$this->add_organization_for_attribute( 'manufacturer', $product, $this->options['schema_manufacturer'] );
+		$schema_manufacturer = WPSEO_Options::get( 'woo_schema_manufacturer' );
+		if ( ! empty( $schema_manufacturer ) ) {
+			$this->add_organization_for_attribute( 'manufacturer', $product, $schema_manufacturer );
 		}
 	}
 

@@ -46,16 +46,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Instance of the WooCommerce_SEO option management class.
 	 *
-	 * @var object
+	 * @var WPSEO_Option_Woo
 	 */
 	public $option_instance;
-
-	/**
-	 * Cache of the current value of the WooCommerce_SEO option.
-	 *
-	 * @var array
-	 */
-	protected $options = [];
 
 	/**
 	 * Name of the option to store plugins setting.
@@ -144,22 +137,11 @@ class Yoast_WooCommerce_SEO {
 			$this->register_i18n_promo_class();
 		}
 
-		// Initialize the options.
-		$this->option_instance = WPSEO_Option_Woo::get_instance();
-		$this->short_name      = $this->option_instance->option_name;
-		$this->options         = get_option( $this->short_name );
-
 		// Make sure the options property is always current.
-		add_action( 'add_option_' . $this->short_name, [ $this, 'refresh_options_property' ] );
-		add_action( 'update_option_' . $this->short_name, [ $this, 'refresh_options_property' ] );
+		add_action( 'init', [ 'WPSEO_Option_Woo', 'register_option' ] );
 
 		// Enable Yoast usage tracking.
 		add_filter( 'wpseo_enable_tracking', '__return_true' );
-
-		// Check if the options need updating.
-		if ( $this->option_instance->db_version > $this->options['dbversion'] ) {
-			$this->upgrade();
-		}
 
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 			// Add subitem to menu.
@@ -167,18 +149,12 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'admin_print_styles', [ $this, 'config_page_styles' ] );
 
 			// Products tab columns.
-			if ( $this->options['hide_columns'] === true ) {
-				add_filter( 'manage_product_posts_columns', [ $this, 'column_heading' ], 11, 1 );
-			}
+			add_filter( 'manage_product_posts_columns', [ $this, 'column_heading' ], 11, 1 );
 
 			// Move Woo box above SEO box.
-			if ( $this->options['metabox_woo_top'] === true ) {
-				add_action( 'admin_footer', [ $this, 'footer_js' ] );
-			}
+			add_action( 'admin_footer', [ $this, 'footer_js' ] );
 		}
 		else {
-			$wpseo_options = WPSEO_Options::get_all();
-
 			// Initialize schema.
 			add_action( 'init', [ $this, 'initialize_schema' ] );
 
@@ -203,9 +179,8 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
 
 			// Fix breadcrumbs.
-			if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
-				$this->handle_breadcrumbs_replacements();
-			}
+			$this->handle_breadcrumbs_replacements();
+
 		} // End if.
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
@@ -414,13 +389,6 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Refresh the options property on add/update of the option to ensure it's always current.
-	 */
-	public function refresh_options_property() {
-		$this->options = get_option( $this->short_name );
-	}
-
-	/**
 	 * Add the product gallery images to the XML sitemap.
 	 *
 	 * @param array $images  The array of images for the post.
@@ -452,14 +420,6 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Perform upgrade procedures to the settings.
-	 */
-	public function upgrade() {
-		// Upgrade to new wp seo option class.
-		$this->option_instance->clean();
-	}
-
-	/**
 	 * Registers the settings page in the WP SEO menu.
 	 *
 	 * @since 5.6
@@ -478,7 +438,7 @@ class Yoast_WooCommerce_SEO {
 			),
 			'WooCommerce SEO',
 			'wpseo_manage_options',
-			$this->short_name,
+			'wpseo_woo',
 			[ $this, 'admin_panel' ],
 		];
 
@@ -512,45 +472,21 @@ class Yoast_WooCommerce_SEO {
 	 * @since 1.0
 	 */
 	public function admin_panel() {
-		WPSEO_WooCommerce_Wrappers::admin_header( true, $this->option_instance->group_name, $this->short_name, false );
+		Yoast_Form::get_instance()->admin_header( true, 'wpseo_woo' );
 
-		// @todo [JRF => whomever] change the form fields so they use the methods as defined in WPSEO_Admin_Pages.
-		$taxonomies = get_object_taxonomies( 'product', 'objects' );
+		$object_taxonomies = get_object_taxonomies( 'product', 'objects' );
+		$taxonomies        = [ '' => '-' ];
+		foreach ( $object_taxonomies as $object_taxonomy ) {
+			$taxonomies[ strtolower( $object_taxonomy->name ) ] = esc_html( $object_taxonomy->labels->name );
+		}
 
 		echo '<h2>' . esc_html__( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
-		<p>' . esc_html__( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>
-		<label class="select" for="schema_brand">' . esc_html__( 'Brand', 'yoast-woo-seo' ) . '</label>
-		<select class="select" id="schema_brand" name="' . esc_attr( $this->short_name . '[schema_brand]' ) . '">
-			<option value="">-</option>' . "\n";
-		if ( is_array( $taxonomies ) && $taxonomies !== [] ) {
-			foreach ( $taxonomies as $tax ) {
-				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"'
-					. selected( strtolower( $tax->name ), $this->options['schema_brand'], false ) . '>'
-					. esc_html( $tax->labels->name ) . "</option>\n";
-			}
-		}
-		unset( $tax, $sel );
-		echo '
-		</select>
-		<br class="clear"/>
+		<p>' . esc_html__( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>';
 
-		<label class="select" for="schema_manufacturer">' . esc_html__( 'Manufacturer', 'yoast-woo-seo' ) . '</label>
-		<select class="select" id="schema_manufacturer" name="' . esc_attr( $this->short_name . '[schema_manufacturer]' ) . '">
-			<option value="">-</option>' . "\n";
-		if ( is_array( $taxonomies ) && $taxonomies !== [] ) {
-			foreach ( $taxonomies as $tax ) {
-				echo '<option value="' . esc_attr( strtolower( $tax->name ) ) . '"'
-					. selected( strtolower( $tax->name ), $this->options['schema_manufacturer'], false ) . '>'
-					. esc_html( $tax->labels->name ) . "</option>\n";
-			}
-		}
-		unset( $tax, $sel );
-		echo '
-		</select>
-		<br class="clear"/>';
+		Yoast_Form::get_instance()->select( 'woo_schema_manufacturer', esc_html__( 'Manufacturer', 'yoast-woo-seo' ), $taxonomies );
+		Yoast_Form::get_instance()->select( 'woo_schema_brand', esc_html__( 'Brand', 'yoast-woo-seo' ), $taxonomies );
 
-		$wpseo_options = WPSEO_Options::get_all();
-		if ( $wpseo_options['breadcrumbs-enable'] === true ) {
+		if ( WPSEO_Options::get( 'breadcrumbs-enable' ) === true ) {
 			echo '<h2>' . esc_html__( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
 			echo '<p>';
 			printf(
@@ -562,17 +498,17 @@ class Yoast_WooCommerce_SEO {
 				'WooCommerce'
 			);
 			echo "</p>\n";
-			$this->checkbox(
-				'breadcrumbs',
+
+			Yoast_Form::get_instance()->checkbox(
+				'woo_breadcrumbs',
 				sprintf(
 					/* translators: %1$s resolves to WooCommerce */
-					__( 'Replace %1$s Breadcrumbs', 'yoast-woo-seo' ),
+					esc_html__( 'Replace %1$s Breadcrumbs', 'yoast-woo-seo' ),
 					'WooCommerce'
 				)
 			);
 		}
 
-		echo '<br class="clear"/>';
 		echo '<h2>' . esc_html__( 'Admin', 'yoast-woo-seo' ) . '</h2>';
 		echo '<p>';
 		printf(
@@ -582,16 +518,16 @@ class Yoast_WooCommerce_SEO {
 			'WooCommerce'
 		);
 		echo "</p>\n";
-		$this->checkbox(
-			'hide_columns',
+
+		Yoast_Form::get_instance()->checkbox(
+			'woo_hide_columns',
 			sprintf(
 				/* translators: %1$s resolves to Yoast SEO */
-				__( 'Remove %1$s columns', 'yoast-woo-seo' ),
+				esc_html__( 'Remove %1$s columns', 'yoast-woo-seo' ),
 				'Yoast SEO'
 			)
 		);
 
-		echo '<br class="clear"/>';
 		echo '<p>';
 		printf(
 			/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce */
@@ -600,35 +536,18 @@ class Yoast_WooCommerce_SEO {
 			'WooCommerce'
 		);
 		echo "</p>\n";
-		$this->checkbox(
-			'metabox_woo_top',
+
+		Yoast_Form::get_instance()->checkbox(
+			'woo_metabox_top',
 			sprintf(
 				/* translators: %1$s resolves to WooCommerce */
-				__( 'Move %1$s up', 'yoast-woo-seo' ),
+				esc_html__( 'Move %1$s up', 'yoast-woo-seo' ),
 				'WooCommerce'
 			)
 		);
 
-		echo '<br class="clear"/>';
-
 		// Submit button and debug info.
-		WPSEO_WooCommerce_Wrappers::admin_footer( true, false );
-	}
-
-	/**
-	 * Simple helper function to show a checkbox.
-	 *
-	 * @param string $id    The ID and option name for the checkbox.
-	 * @param string $label The label for the checkbox.
-	 */
-	public function checkbox( $id, $label ) {
-		$current = false;
-		if ( isset( $this->options[ $id ] ) && $this->options[ $id ] === true ) {
-			$current = 'on';
-		}
-
-		echo '<input class="checkbox" type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $this->short_name . '[' . $id . ']' ) . '" value="on" ' . checked( $current, 'on', false ) . '> ';
-		echo '<label for="' . esc_attr( $id ) . '" class="checkbox">' . esc_html( $label ) . '</label> ';
+		Yoast_Form::get_instance()->admin_footer( true, false );
 	}
 
 	/**
@@ -637,6 +556,9 @@ class Yoast_WooCommerce_SEO {
 	 * @since 1.0
 	 */
 	public function footer_js() {
+		if ( WPSEO_Options::get( 'woo_metabox_top' ) !== true ) {
+			return;
+		}
 		?>
 		<script type="text/javascript">
 			jQuery( document ).ready( function( $ ) {
@@ -659,6 +581,10 @@ class Yoast_WooCommerce_SEO {
 	 * @return array Array with the filtered columns.
 	 */
 	public function column_heading( $columns ) {
+		if ( WPSEO_Options::get( 'woo_hide_columns' ) !== true ) {
+			return $columns;
+		}
+
 		$keys_to_remove = [ 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-score', 'wpseo-score-readability' ];
 
 		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
@@ -784,8 +710,9 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 
-		if ( $this->options['schema_brand'] !== '' ) {
-			$terms = get_the_terms( get_the_ID(), $this->options['schema_brand'] );
+		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
+		if ( $schema_brand !== '' ) {
+			$terms = get_the_terms( get_the_ID(), $schema_brand );
 			if ( is_array( $terms ) && count( $terms ) > 0 ) {
 				$term_values = array_values( $terms );
 				$term        = array_shift( $term_values );
@@ -1291,6 +1218,10 @@ class Yoast_WooCommerce_SEO {
 	 * @return void
 	 */
 	protected function handle_breadcrumbs_replacements() {
+		if ( WPSEO_Options::get( 'woo_breadcrumbs' ) !== true || WPSEO_Options::get( 'breadcrumbs-enable' ) !== true ) {
+			return;
+		}
+
 		// Replaces the WooCommerce breadcrumbs.
 		if ( has_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb' ) ) {
 			remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20, 0 );
@@ -1298,6 +1229,36 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		add_filter( 'wpseo_breadcrumb_links', [ $this, 'add_attribute_to_breadcrumbs' ] );
+	}
+
+	/**
+	 * Refresh the options property on add/update of the option to ensure it's always current.
+	 *
+	 * @deprecated 12.5
+	 * @codeCoverageIgnore
+	 */
+	public function refresh_options_property() {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
+	}
+
+	/**
+	 * Perform upgrade procedures to the settings.
+	 *
+	 * @deprecated 12.5
+	 * @codeCoverageIgnore
+	 */
+	public function upgrade() {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
+	}
+
+	/**
+	 * Simple helper function to show a checkbox.
+	 *
+	 * @deprecated 12.5
+	 * @codeCoverageIgnore
+	 */
+	public function checkbox() {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
 	}
 }
 

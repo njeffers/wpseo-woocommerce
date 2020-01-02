@@ -73,6 +73,10 @@ class Schema_Test extends TestCase {
 		);
 		Mockery::mock( 'alias:WPSEO_Schema_IDs' );
 
+		$mock = Mockery::mock( 'alias:WPSEO_Options' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'product_cat' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
+
 		Functions\stubs(
 			[
 				'has_post_thumbnail' => true,
@@ -82,16 +86,6 @@ class Schema_Test extends TestCase {
 		$instance = Mockery::mock( Schema_Double::class )->makePartial();
 		$instance->expects( 'get_canonical' )->once()->with()->andReturn( $canonical );
 		$instance->expects( 'get_primary_term_or_first_term' )->twice()->with( 'product_cat', 1 )->andReturn( (object) [ 'name' => $product_name ] );
-		$instance->options = [
-			'dbversion'           => 2,
-			'data1_type'          => 'price',
-			'data2_type'          => 'stock',
-			'schema_brand'        => 'product_cat',
-			'schema_manufacturer' => 'product_cat',
-			'breadcrumbs'         => false,
-			'hide_columns'        => true,
-			'metabox_woo_top'     => true,
-		];
 
 		$data = [
 			'@type'       => 'Product',

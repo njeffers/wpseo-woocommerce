@@ -16,7 +16,11 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * @covers Yoast_WooCommerce_SEO::column_heading
 	 */
 	public function test_column_heading() {
+		WPSEO_Option_Woo::register_option();
+
 		$woocommerce = new Yoast_WooCommerce_SEO();
+
+		WPSEO_Options::set( 'woo_hide_columns', true );
 
 		$actual   = $woocommerce->column_heading(
 			[

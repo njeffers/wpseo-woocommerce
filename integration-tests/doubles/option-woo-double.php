@@ -31,4 +31,13 @@ class WPSEO_Option_Woo_Double extends WPSEO_Option_Woo {
 	public function validate_option( $dirty, $clean, $old ) {
 		return parent::validate_option( $dirty, $clean, $old );
 	}
+
+	/**
+	 * Retrieves the taxonomies.
+	 *
+	 * @return array The taxonomies.
+	 */
+	public function get_taxonomies() {
+		return [ 'yoast' ];
+	}
 }
