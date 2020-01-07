@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Yoast SEO: WooCommerce package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Yoast SEO: WooCommerce 12.3\n"
+"Project-Id-Version: Yoast SEO: WooCommerce 12.4.1\n"
 "Report-Msgid-Bugs-To: https://github.com/yoast/wpseo-woocommerce/issues\n"
-"POT-Creation-Date: 2019-11-13 08:46:00+00:00\n"
+"POT-Creation-Date: 2019-12-17 07:58:20+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,9 +32,7 @@ msgstr ""
 msgid "Stock"
 msgstr ""
 
-#: vendor/yoast/i18n-module/src/i18n-v3.php:233
-#. translators: 1: language name; 3: completion percentage; 4: link to
-#. translation platform.
+#: vendor/yoast/i18n-module/src/i18n-module.php:226
 msgid ""
 "As you can see, there is a translation of this plugin in %1$s. This "
 "translation is currently %3$d%% complete. We need your help to make it "
@@ -42,35 +40,31 @@ msgid ""
 "the translation to %1$s!"
 msgstr ""
 
-#: vendor/yoast/i18n-module/src/i18n-v3.php:237
-#. translators: 1: language name; 2: plugin name; 3: completion percentage; 4:
-#. link to translation platform.
+#: vendor/yoast/i18n-module/src/i18n-module.php:228
 msgid ""
 "You're using WordPress in %1$s. While %2$s has been translated to %1$s for "
 "%3$d%%, it's not been shipped with the plugin yet. You can help! Register "
 "at %4$s to help complete the translation to %1$s!"
 msgstr ""
 
-#: vendor/yoast/i18n-module/src/i18n-v3.php:241
-#. translators: 2: plugin name; 4: link to translation platform.
+#: vendor/yoast/i18n-module/src/i18n-module.php:230
 msgid ""
 "You're using WordPress in a language we don't support yet. We'd love for "
 "%2$s to be translated in that language too, but unfortunately, it isn't "
 "right now. You can change that! Register at %4$s to help translate it!"
 msgstr ""
 
-#: vendor/yoast/i18n-module/src/i18n-v3.php:259
+#: vendor/yoast/i18n-module/src/i18n-module.php:237
 msgid "Register now &raquo;"
 msgstr ""
 
-#: vendor/yoast/i18n-module/src/i18n-v3.php:275
+#: vendor/yoast/i18n-module/src/i18n-module.php:253
 #. translators: %1$s is the notification dismissal link start tag, %2$s is the
 #. link closing tag.
 msgid "%1$sPlease don't show me this notification anymore%2$s"
 msgstr ""
 
-#: vendor/yoast/i18n-module/src/i18n-v3.php:295
-#. translators: %s: plugin name.
+#: vendor/yoast/i18n-module/src/i18n-module.php:272
 msgid "Translation of %s"
 msgstr ""
 
@@ -237,23 +231,23 @@ msgstr ""
 msgid "Move %1$s up"
 msgstr ""
 
-#: wpseo-woocommerce.php:1263
+#: wpseo-woocommerce.php:1261
 msgid "You should write a short description for this product."
 msgstr ""
 
-#: wpseo-woocommerce.php:1264
+#: wpseo-woocommerce.php:1262
 msgid "The short description for this product is too short."
 msgstr ""
 
-#: wpseo-woocommerce.php:1265
+#: wpseo-woocommerce.php:1263
 msgid "Your short description has a good length."
 msgstr ""
 
-#: wpseo-woocommerce.php:1266
+#: wpseo-woocommerce.php:1264
 msgid "The short description for this product is too long."
 msgstr ""
 
-#: wpseo-woocommerce.php:1296
+#: wpseo-woocommerce.php:1294
 #. translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves
 #. to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce
 #. SEO
@@ -262,14 +256,14 @@ msgid ""
 "functionality to allow the %4$s module to work."
 msgstr ""
 
-#: wpseo-woocommerce.php:1314
+#: wpseo-woocommerce.php:1312
 #. translators: %1$s resolves to WooCommerce SEO
 msgid ""
 "Please upgrade WordPress to the latest version to allow WordPress and the "
 "%1$s module to work properly."
 msgstr ""
 
-#: wpseo-woocommerce.php:1329
+#: wpseo-woocommerce.php:1327
 #. translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce SEO
 msgid ""
 "Please upgrade the %1$s plugin to the latest version to allow the %2$s "

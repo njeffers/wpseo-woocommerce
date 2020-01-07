@@ -18,23 +18,18 @@ class WPSEO_WooCommerce_Schema {
 	protected $data;
 
 	/**
-	 * WooCommerce SEO Options.
-	 *
-	 * @var array
-	 */
-	protected $options;
-
-	/**
 	 * WPSEO_WooCommerce_Schema constructor.
 	 */
 	public function __construct() {
-		$this->options = get_option( 'wpseo_woo' );
+		add_filter( 'woocommerce_structured_data_product', [ $this, 'change_product' ], 10, 2 );
+		add_filter( 'woocommerce_structured_data_type_for_page', [ $this, 'remove_woo_breadcrumbs' ] );
+		add_filter( 'wpseo_schema_webpage', [ $this, 'filter_webpage' ] );
+		add_action( 'wp_footer', [ $this, 'output_schema_footer' ] );
 
-		add_filter( 'woocommerce_structured_data_review', array( $this, 'change_reviewed_entity' ) );
-		add_filter( 'woocommerce_structured_data_product', array( $this, 'change_product' ), 10, 2 );
-		add_filter( 'woocommerce_structured_data_type_for_page', array( $this, 'remove_woo_breadcrumbs' ) );
-		add_filter( 'wpseo_schema_webpage', array( $this, 'filter_webpage' ) );
-		add_action( 'wp_footer', array( $this, 'output_schema_footer' ) );
+		// Only needed for WooCommerce versions before 3.8.1.
+		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
+			add_filter( 'woocommerce_structured_data_review', [ $this, 'change_reviewed_entity' ] );
+		}
 	}
 
 	/**
@@ -43,6 +38,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @return boolean Whether or not the Yoast SEO schema should be output.
 	 */
 	public static function should_output_yoast_schema() {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Using WPSEO hook.
 		return apply_filters( 'wpseo_json_ld_output', true );
 	}
 
@@ -50,11 +46,11 @@ class WPSEO_WooCommerce_Schema {
 	 * Outputs the Woo Schema blob in the footer.
 	 */
 	public function output_schema_footer() {
-		if ( empty( $this->data ) || $this->data === array() ) {
+		if ( empty( $this->data ) || $this->data === [] ) {
 			return;
 		}
 
-		WPSEO_Utils::schema_output( array( $this->data ), 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
+		WPSEO_Utils::schema_output( [ $this->data ], 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
 	}
 
 	/**
@@ -88,7 +84,7 @@ class WPSEO_WooCommerce_Schema {
 
 		$this->data['review'][] = $data;
 
-		return array();
+		return [];
 	}
 
 	/**
@@ -105,19 +101,22 @@ class WPSEO_WooCommerce_Schema {
 		// Make seller refer to the Organization.
 		if ( ! empty( $data['offers'] ) ) {
 			foreach ( $data['offers'] as $key => $val ) {
-				$data['offers'][ $key ]['seller'] = array(
+				$data['offers'][ $key ]['seller'] = [
 					'@id' => trailingslashit( WPSEO_Utils::get_home_url() ) . WPSEO_Schema_IDs::ORGANIZATION_HASH,
-				);
+				];
 			}
 		}
 
-		// We're going to replace the single review here with an array of reviews taken from the other filter.
-		$data['review'] = array();
+		// Only needed for WooCommerce versions before 3.8.1.
+		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
+			// We're going to replace the single review here with an array of reviews taken from the other filter.
+			$data['review'] = [];
+		}
 
 		// This product is the main entity of this page, so we set it as such.
-		$data['mainEntityOfPage'] = array(
+		$data['mainEntityOfPage'] = [
 			'@id' => $canonical . WPSEO_Schema_IDs::WEBPAGE_HASH,
-		);
+		];
 
 		// Now let's add this data to our overall output.
 		$this->data = $data;
@@ -126,7 +125,7 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
 
-		return array();
+		return [];
 	}
 
 	/**
@@ -152,8 +151,9 @@ class WPSEO_WooCommerce_Schema {
 	 * @param \WC_Product $product Product object.
 	 */
 	private function add_brand( $product ) {
-		if ( ! empty( $this->options['schema_brand'] ) ) {
-			$this->add_organization_for_attribute( 'brand', $product, $this->options['schema_brand'] );
+		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
+		if ( ! empty( $schema_brand ) ) {
+			$this->add_organization_for_attribute( 'brand', $product, $schema_brand );
 		}
 	}
 
@@ -163,8 +163,9 @@ class WPSEO_WooCommerce_Schema {
 	 * @param \WC_Product $product Product object.
 	 */
 	private function add_manufacturer( $product ) {
-		if ( ! empty( $this->options['schema_manufacturer'] ) ) {
-			$this->add_organization_for_attribute( 'manufacturer', $product, $this->options['schema_manufacturer'] );
+		$schema_manufacturer = WPSEO_Options::get( 'woo_schema_manufacturer' );
+		if ( ! empty( $schema_manufacturer ) ) {
+			$this->add_organization_for_attribute( 'manufacturer', $product, $schema_manufacturer );
 		}
 	}
 
@@ -179,10 +180,10 @@ class WPSEO_WooCommerce_Schema {
 		$term = $this->get_primary_term_or_first_term( $taxonomy, $product->get_id() );
 
 		if ( $term !== null ) {
-			$this->data[ $attribute ] = array(
+			$this->data[ $attribute ] = [
 				'@type' => 'Organization',
 				'name'  => $term->name,
-			);
+			];
 		}
 	}
 
@@ -203,9 +204,9 @@ class WPSEO_WooCommerce_Schema {
 		}
 
 		if ( has_post_thumbnail() ) {
-			$this->data['image'] = array(
+			$this->data['image'] = [
 				'@id' => $canonical . WPSEO_Schema_IDs::PRIMARY_IMAGE_HASH,
-			);
+			];
 
 			return;
 		}

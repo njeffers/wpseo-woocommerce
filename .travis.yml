@@ -15,13 +15,15 @@ jobs:
   fast_finish: true
   include:
     - php: 7.3
-      env: WP_VERSION=5.2 WP_MULTISITE=1 PHPLINT=1 PHPUNIT=1 PHPCS=1 SECURITY=1
+      env: WP_VERSION=5.3 WP_MULTISITE=1 PHPUNIT=1 PHPCS=1 SECURITY=1
     - php: 5.6
       env: WP_VERSION=5.2 PHPLINT=1 PHPUNIT=1
+    - php: "7.4snapshot"
+      env: WP_VERSION=5.3 PHPLINT=1 PHPUNIT=1
     - php: 7.0
       env: WP_VERSION=master WP_MULTISITE=1 PHPUNIT=1
-    - php: "7.4snapshot"
-      env: WP_VERSION=master PHPUNIT=1
+    - php: "nightly"
+      env: PHPLINT=1
     - stage: deploy
       env: WP_VERSION=5.2
       if: tag IS present
@@ -51,8 +53,9 @@ jobs:
           all_branches: true
   allow_failures:
     # Allow failures for unstable builds.
-    - php: "7.4snapshot"
-    - env: WP_VERSION=master WP_MULTISITE=1 PHPUNIT=1
+    - php: "nightly"
+    - php: 7.0
+      env: WP_VERSION=master WP_MULTISITE=1 PHPUNIT=1
 
 cache:
   directories:
@@ -70,10 +73,7 @@ install:
   elif [[ "$TRAVIS_BUILD_STAGE_NAME" == "deploy" ]]; then
     composer install --no-dev --no-interaction
   fi
-- |
-  if [[ "$PHPCS" == "1" ]]; then
-    composer config-yoastcs
-  fi
+
 - if [[ "$SECURITY" == "1" ]]; then wget -P $SECURITYCHECK_DIR https://get.sensiolabs.org/security-checker.phar && chmod +x $SECURITYCHECK_DIR/security-checker.phar;fi
 
 before_script:
