@@ -61,6 +61,7 @@ class Schema_Test extends TestCase {
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->twice()->with()->andReturn( 1 );
+		$product->expects( 'get_sku' )->once()->with()->andReturn( 'sku1234' );
 
 		Mockery::getConfiguration()->setConstantsMap(
 			[
@@ -94,7 +95,7 @@ class Schema_Test extends TestCase {
 			'url'         => $canonical,
 			'image'       => false,
 			'description' => '',
-			'sku'         => 1234,
+			'sku'         => 'sku1234',
 			'offers'      => [
 				[
 					'@type'  => 'Offer',
@@ -116,7 +117,7 @@ class Schema_Test extends TestCase {
 			'url'              => $canonical,
 			'image'            => [ '@id' => $canonical . '#primaryimage' ],
 			'description'      => '',
-			'sku'              => 1234,
+			'sku'              => 'sku1234',
 			'offers'           => [
 				[
 					'@type'  => 'Offer',
@@ -136,6 +137,7 @@ class Schema_Test extends TestCase {
 				'@type' => 'Organization',
 				'name'  => $product_name,
 			],
+			'productID'        => 'sku1234',
 		];
 
 		$instance->change_product( $data, $product );
