@@ -760,7 +760,7 @@ class Yoast_WooCommerce_SEO {
 		 */
 		$product_condition = apply_filters( 'Yoast\WP\Woocommerce\product_condition', 'new', $product );
 		if ( ! empty( $product_condition ) ) {
-			echo '<meta property="product:condition" content="' . $product_condition . '"/>' . "\n";
+			echo '<meta property="product:condition" content="' . esc_attr( $product_condition ) . '"/>' . "\n";
 		}
 	}
 
