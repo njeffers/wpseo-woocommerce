@@ -941,7 +941,7 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function xml_post_type_archive_page_id( $page_id, $post_type ) {
 
-		if ( 'product' === $post_type && function_exists( 'wc_get_page_id' ) ) {
+		if ( $post_type === 'product' && function_exists( 'wc_get_page_id' ) ) {
 			$page_id = wc_get_page_id( 'shop' );
 		}
 
