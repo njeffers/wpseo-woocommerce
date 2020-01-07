@@ -133,7 +133,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Filters the offers array to enrich it.
 	 *
-	 * @param array $data Schema Product data.
+	 * @param array       $data    Schema Product data.
 	 * @param \WC_Product $product The product.
 	 *
 	 * @return mixed
@@ -142,10 +142,10 @@ class WPSEO_WooCommerce_Schema {
 		$home_url = trailingslashit( home_url() );
 		foreach ( $data['offers'] as $key => $val ) {
 			// Remove this value as it makes no sense.
-			unset( $data['offers'][$key]['priceValidUntil'] );
+			unset( $data['offers'][ $key ]['priceValidUntil'] );
 
 			// Add an @id to the offer.
-			$data['offers'][$key]['@id'] = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+			$data['offers'][ $key ]['@id'] = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
 		}
 		return $data;
 	}
