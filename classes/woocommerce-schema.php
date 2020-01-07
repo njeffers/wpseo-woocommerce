@@ -141,7 +141,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Update the seller attribute to reference the Organization, when it is set.
 	 *
-	 * @param array       $data    Schema Product data.
+	 * @param array $data Schema Product data.
 	 *
 	 * @return array $data Schema Product data.
 	 */
