@@ -98,7 +98,7 @@ class WPSEO_WooCommerce_Schema {
 	public function change_product( $data, $product ) {
 		$canonical = $this->get_canonical();
 
-		$this->change_seller_in_offers( $data );
+		$data = $this->change_seller_in_offers( $data );
 
 		// Only needed for WooCommerce versions before 3.8.1.
 		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
