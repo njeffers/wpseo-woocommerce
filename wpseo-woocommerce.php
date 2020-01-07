@@ -751,6 +751,17 @@ class Yoast_WooCommerce_SEO {
 		if ( $product->is_in_stock() ) {
 			echo '<meta property="product:availability" content="instock"/>' . "\n";
 		}
+
+		/**
+		 * Filter: Yoast\WP\Woocommerce\product_condition - Allow developers to prevent or change the output of the product condition in the OpenGraph tags.
+		 *
+		 * @api string Defaults to 'new'.
+		 * @param \WC_Product $product The product we're outputting.
+		 */
+		$product_condition = apply_filters( 'Yoast\WP\Woocommerce\product_condition', 'new', $product );
+		if ( ! empty( $product_condition ) ) {
+			echo '<meta property="product:condition" content="' . $product_condition . '"/>' . "\n";
+		}
 	}
 
 	/**
