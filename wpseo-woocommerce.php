@@ -328,11 +328,11 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Overrides the Woo breadcrumb functionality when the WP SEO breadcrumb functionality is enabled.
 	 *
-	 * @return string
 	 * @since 1.1.3
 	 *
 	 * @uses  woo_breadcrumbs filter
 	 *
+	 * @return string
 	 */
 	public function override_woo_breadcrumbs() {
 		return yoast_breadcrumb( '<div class="breadcrumb breadcrumbs woo-breadcrumbs"><div class="breadcrumb-trail">', '</div></div>', false );
@@ -424,9 +424,9 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @param array $submenu_pages List of current submenus.
 	 *
-	 * @return array All submenu pages including our own.
 	 * @since 5.6
 	 *
+	 * @return array All submenu pages including our own.
 	 */
 	public function add_submenu_pages( $submenu_pages ) {
 		$submenu_pages[] = [
@@ -620,9 +620,9 @@ class Yoast_WooCommerce_SEO {
 	 * @param bool   $bool      Whether or not to include this post type in the XML sitemap.
 	 * @param string $post_type The post type of the post.
 	 *
-	 * @return bool
 	 * @since 1.0
 	 *
+	 * @return bool
 	 */
 	public function xml_sitemap_post_types( $bool, $post_type ) {
 		if ( $post_type === 'product_variation' || $post_type === 'shop_coupon' ) {
@@ -784,9 +784,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Returns the product object when the current page is the product page.
 	 *
-	 * @return null|WC_Product
 	 * @since 4.3
 	 *
+	 * @return null|WC_Product
 	 */
 	private function get_product() {
 		if ( ! is_singular( 'product' ) || ! function_exists( 'wc_get_product' ) ) {
