@@ -922,7 +922,7 @@ class Yoast_WooCommerce_SEO {
 		if ( function_exists( 'wc_get_page_id' ) ) {
 			$shop_page_id = wc_get_page_id( 'shop' );
 			$home_page_id = (int) get_option( 'page_on_front' );
-			if ( $home_page_id === $shop_page_id ) {
+			if ( $shop_page_id === -1 || $home_page_id === $shop_page_id ) {
 				return false;
 			}
 		}
