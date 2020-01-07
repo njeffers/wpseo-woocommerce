@@ -172,9 +172,9 @@ class Yoast_WooCommerce_SEO {
 				add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
 			}
 
-			add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'xml_sitemap_post_types' ), 10, 2 );
-			add_filter( 'wpseo_sitemap_post_type_archive_link', array( $this, 'xml_sitemap_taxonomies' ), 10, 2 );
-			add_filter( 'wpseo_sitemap_page_for_post_type_archive', array( $this, 'xml_post_type_archive_page_id' ), 10, 2 );
+			add_filter( 'wpseo_sitemap_exclude_post_type', [ $this, 'xml_sitemap_post_types' ], 10, 2 );
+			add_filter( 'wpseo_sitemap_post_type_archive_link', [ $this, 'xml_sitemap_taxonomies' ], 10, 2 );
+			add_filter( 'wpseo_sitemap_page_for_post_type_archive', [ $this, 'xml_post_type_archive_page_id' ], 10, 2 );
 
 			add_filter( 'post_type_archive_link', [ $this, 'xml_post_type_archive_link' ], 10, 2 );
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
