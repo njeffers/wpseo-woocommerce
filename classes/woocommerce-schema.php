@@ -154,7 +154,7 @@ class WPSEO_WooCommerce_Schema {
 	private function add_sku( $product ) {
 		$sku = $product->get_sku();
 		if ( ! empty( $sku ) ) {
-			$this->data[ 'productID' ] = $sku;
+			$this->data['productID'] = $sku;
 		}
 	}
 
