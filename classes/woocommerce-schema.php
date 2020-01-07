@@ -107,6 +107,8 @@ class WPSEO_WooCommerce_Schema {
 			}
 		}
 
+		$data = $this->filter_offers( $data, $product );
+
 		// Only needed for WooCommerce versions before 3.8.1.
 		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
 			// We're going to replace the single review here with an array of reviews taken from the other filter.
@@ -126,6 +128,26 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_manufacturer( $product );
 
 		return [];
+	}
+
+	/**
+	 * Filters the offers array to enrich it.
+	 *
+	 * @param array $data Schema Product data.
+	 * @param \WC_Product $product The product.
+	 *
+	 * @return mixed
+	 */
+	private function filter_offers( $data, $product ) {
+		$home_url = trailingslashit( home_url() );
+		foreach ( $data['offers'] as $key => $val ) {
+			// Remove this value as it makes no sense.
+			unset( $data['offers'][$key]['priceValidUntil'] );
+
+			// Add an @id to the offer.
+			$data['offers'][$key]['@id'] = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+		}
+		return $data;
 	}
 
 	/**
