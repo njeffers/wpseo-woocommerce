@@ -752,7 +752,7 @@ class Yoast_WooCommerce_SEO {
 			echo '<meta property="product:availability" content="in stock" />' . "\n";
 		}
 
-		echo '<meta property="product:retailer_item_id" content="' . $product->get_sku() . '" />' . "\n";
+		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
 	}
 
 	/**
