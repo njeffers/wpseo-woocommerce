@@ -28,8 +28,5 @@
   },
   "yoast": {
     "pluginVersion": "12.4.1"
-  },
-  "dependencies": {
-    "lodash": "^4.17.10"
   }
 }
