@@ -80,7 +80,7 @@ class Schema_Test extends TestCase {
 		Functions\stubs(
 			[
 				'has_post_thumbnail' => true,
-				'home_url' => $base_url,
+				'home_url'           => $base_url,
 			]
 		);
 
@@ -126,7 +126,7 @@ class Schema_Test extends TestCase {
 					'seller' => [
 						'@id' => $canonical . '#organization',
 					],
-					'@id' => $base_url . '/#/schema/offer/1-0'
+					'@id'    => $base_url . '/#/schema/offer/1-0',
 				],
 			],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
