@@ -221,7 +221,7 @@ class WPSEO_WooCommerce_Schema {
 		 *
 		 * See https://github.com/woocommerce/woocommerce/issues/24188.
 		 */
-		if ( $this->data['image'] === false ) {
+		if ( isset( $this->data['image'] ) && $this->data['image'] === false ) {
 			unset( $this->data['image'] );
 		}
 
