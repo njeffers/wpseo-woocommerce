@@ -113,7 +113,7 @@ class WPSEO_WooCommerce_Schema {
 			$data['review'] = [];
 		}
 
-		$data = $this->filter_reviews( $data, $product);
+		$data = $this->filter_reviews( $data, $product );
 
 		// This product is the main entity of this page, so we set it as such.
 		$data['mainEntityOfPage'] = [
