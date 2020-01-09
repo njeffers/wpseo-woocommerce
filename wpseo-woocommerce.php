@@ -68,8 +68,6 @@ class Yoast_WooCommerce_SEO {
 
 	/**
 	 * Class constructor.
-	 *
-	 * @since 1.0
 	 */
 	public function __construct() {
 		global $wp_version;
@@ -88,23 +86,29 @@ class Yoast_WooCommerce_SEO {
 	 */
 	protected function check_dependencies( $wp_version ) {
 		if ( ! version_compare( $wp_version, '5.2', '>=' ) ) {
-			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_wordpress_upgrade_error' );
+			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_wordpress_upgrade_error' ] );
 
 			return false;
 		}
 
-		$wordpress_seo_version = $this->get_wordpress_seo_version();
+		// When WooCommerce is not installed.
+		if ( ! function_exists( 'WC' ) ) {
+			add_action( 'all_admin_notices', [ $this, 'woocommerce_missing_error' ] );
 
-		// When WordPress SEO is not installed.
+			return false;
+		}
+
+		// When Yoast SEO SEO is not installed.
+		$wordpress_seo_version = $this->get_wordpress_seo_version();
 		if ( ! $wordpress_seo_version ) {
-			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_missing_error' );
+			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_missing_error' ] );
 
 			return false;
 		}
 
 		// At least 12.6, in which we've implemented the new HelpScout Beacon.
 		if ( ! version_compare( $wordpress_seo_version, '12.6-RC0', '>=' ) ) {
-			add_action( 'all_admin_notices', 'yoast_wpseo_woocommerce_upgrade_error' );
+			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_upgrade_error' ] );
 
 			return false;
 		}
@@ -1195,6 +1199,65 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Throw an error if WooCommerce is not active.
+	 */
+	public function woocommerce_missing_error() {
+		echo '<div class="error"><p>';
+		printf(
+		/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce SEO */
+			esc_html__( 'Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work.', 'yoast-woo-seo' ),
+			'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=woocommerce&plugin-search-input=Search+Plugins' ) ) . '">',
+			'</a>',
+			'WooCommerce',
+			'Yoast WooCommerce SEO'
+		);
+		echo '</p></div>';
+	}
+
+	/**
+	 * Throw an error if WordPress SEO is not installed.
+	 */
+	public function yoast_wpseo_woocommerce_missing_error() {
+		echo '<div class="error"><p>';
+		printf(
+		/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce SEO */
+			esc_html__( 'Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work.', 'yoast-woo-seo' ),
+			'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=yoast+seo&plugin-search-input=Search+Plugins' ) ) . '">',
+			'</a>',
+			'Yoast SEO',
+			'Yoast WooCommerce SEO'
+		);
+		echo '</p></div>';
+	}
+
+	/**
+	 * Throw an error if WordPress is out of date.
+	 */
+	public function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
+		echo '<div class="error"><p>';
+		printf(
+		/* translators: %1$s resolves to WooCommerce SEO */
+			esc_html__( 'Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly.', 'yoast-woo-seo' ),
+			'WooCommerce SEO'
+		);
+		echo '</p></div>';
+	}
+
+	/**
+	 * Throw an error if WordPress SEO is out of date.
+	 */
+	public function yoast_wpseo_woocommerce_upgrade_error() {
+		echo '<div class="error"><p>';
+		printf(
+		/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce SEO */
+			esc_html__( 'Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work.', 'yoast-woo-seo' ),
+			'Yoast SEO',
+			'WooCommerce SEO'
+		);
+		echo '</p></div>';
+	}
+
+	/**
 	 * Localizes scripts for the wooplugin.
 	 *
 	 * @return array
@@ -1262,57 +1325,6 @@ class Yoast_WooCommerce_SEO {
 	}
 }
 
-
-/**
- * Throw an error if WordPress SEO is not installed.
- *
- * @since 1.0.1
- */
-function yoast_wpseo_woocommerce_missing_error() {
-	echo '<div class="error"><p>';
-	printf(
-		/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce SEO */
-		esc_html__( 'Please %1$sinstall &amp; activate %3$s%2$s and then enable its XML sitemap functionality to allow the %4$s module to work.', 'yoast-woo-seo' ),
-		'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=yoast+seo&plugin-search-input=Search+Plugins' ) ) . '">',
-		'</a>',
-		'Yoast SEO',
-		'WooCommerce SEO'
-	);
-	echo '</p></div>';
-}
-
-/**
- * Throw an error if WordPress is out of date.
- *
- * @since 1.0.1
- */
-function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
-	echo '<div class="error"><p>';
-	printf(
-		/* translators: %1$s resolves to WooCommerce SEO */
-		esc_html__( 'Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly.', 'yoast-woo-seo' ),
-		'WooCommerce SEO'
-	);
-	echo '</p></div>';
-}
-
-/**
- * Throw an error if WordPress SEO is out of date.
- *
- * @since 1.0.1
- */
-function yoast_wpseo_woocommerce_upgrade_error() {
-	echo '<div class="error"><p>';
-	printf(
-		/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce SEO */
-		esc_html__( 'Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work.', 'yoast-woo-seo' ),
-		'Yoast SEO',
-		'WooCommerce SEO'
-	);
-	echo '</p></div>';
-}
-
-
 /**
  * Initializes the plugin class, to make sure all the required functionality is loaded, do this after plugins_loaded.
  *
@@ -1321,13 +1333,6 @@ function yoast_wpseo_woocommerce_upgrade_error() {
  * @return void
  */
 function initialize_yoast_woocommerce_seo() {
-	/**
-	 * Don't initialize the plugin when WooCommerce is not active.
-	 */
-	if ( ! class_exists( 'WooCommerce', false ) ) {
-		return;
-	}
-
 	global $yoast_woo_seo;
 
 	load_plugin_textdomain( 'yoast-woo-seo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
