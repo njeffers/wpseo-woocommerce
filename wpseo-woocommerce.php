@@ -47,17 +47,6 @@ function initialize_yoast_woocommerce_seo() {
 	$yoast_woo_seo = new Yoast_WooCommerce_SEO();
 }
 
-/**
- * Instantiate the plugin license manager for the current plugin and activate it's license.
- *
- * @codeCoverageIgnore
- *
- * @deprecated 10.1
- */
-function yoast_woocommerce_seo_activate_license() {
-	_deprecated_function( __FUNCTION__, '10.1' );
-}
-
 if ( ! wp_installing() ) {
 	add_action( 'plugins_loaded', 'initialize_yoast_woocommerce_seo', 20 );
 }
