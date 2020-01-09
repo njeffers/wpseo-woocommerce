@@ -21,8 +21,8 @@ const defaultConfig = {
 		"yoastseo-woo-worker": path.join( __dirname, "../../", "js/src/yoastseo-woo-worker.js" ),
 	},
 	output: {
-		path: path.join( __dirname, "../../", "js" ),
-		filename: "[name]-" + pluginVersionSlug + ".min.js",
+		path: path.join( __dirname, "../../", "js/dist" ),
+		filename: "[name]-" + pluginVersionSlug + ".js",
 	},
 	externals: externals,
 	optimization: {
