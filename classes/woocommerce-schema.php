@@ -100,8 +100,6 @@ class WPSEO_WooCommerce_Schema {
 
 		$data = $this->change_seller_in_offers( $data );
 
-//		$data = $this->filter_offers( $data, $product );
-
 		// Only needed for WooCommerce versions before 3.8.1.
 		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
 			// We're going to replace the single review here with an array of reviews taken from the other filter.
@@ -339,7 +337,7 @@ class WPSEO_WooCommerce_Schema {
 		$product_name       = $product->get_name();
 
 		foreach ( $variations as $key => $variation ) {
-			$variation_name = implode( " / ", $variation['attributes'] );
+			$variation_name = implode( ' / ', $variation['attributes'] );
 
 			$data[] = [
 				'@type'              => 'Offer',
@@ -349,7 +347,7 @@ class WPSEO_WooCommerce_Schema {
 				'priceSpecification' => [
 					'price'                 => wc_format_decimal( $variation['display_price'], $decimals ),
 					'priceCurrency'         => $currency,
-					'valueAddedTaxIncluded' => $prices_include_tax ? 'true' : 'false',
+					'valueAddedTaxIncluded' => ( $prices_include_tax ) ? 'true' : 'false',
 				],
 			];
 		}
