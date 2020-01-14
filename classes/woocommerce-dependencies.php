@@ -11,8 +11,10 @@
 class Yoast_WooCommerce_Dependencies {
 	/**
 	 * Check whether we've met our dependencies. If not, hook in some errors.
+	 *
+	 * @return bool
 	 */
-	public function check( ) {
+	public function check() {
 		global $wp_version;
 
 		if ( $this->check_dependencies( $wp_version ) ) {

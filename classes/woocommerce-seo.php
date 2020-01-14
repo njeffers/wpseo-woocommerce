@@ -471,14 +471,14 @@ class Yoast_WooCommerce_SEO {
 			return;
 		}
 		?>
-        <script type="text/javascript">
+		<script type="text/javascript">
 			jQuery( document ).ready( function ( $ ) {
 				// Show WooCommerce box before WP SEO metabox.
 				if ( $( "#woocommerce-product-data" ).length > 0 && $( "#wpseo_meta" ).length > 0 ) {
 					$( "#woocommerce-product-data" ).insertBefore( $( "#wpseo_meta" ) );
 				}
 			} );
-        </script>
+		</script>
 		<?php
 	}
 

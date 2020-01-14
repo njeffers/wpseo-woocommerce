@@ -7,13 +7,14 @@ use Brain\Monkey\Functions;
 use Mockery;
 use Yoast\WP\Woocommerce\Tests\Doubles\Yoast_WooCommerce_Dependencies_Double;
 use Yoast\WP\Woocommerce\Tests\TestCase;
-use Yoast_WooCommerce_SEO;
 
 /**
  * Class WooCommerce_Schema_Test.
  */
 class Yoast_WooCommerce_Dependencies_Test extends TestCase {
 	/**
+	 * Tests check dependencies.
+	 *
 	 * @covers Yoast_WooCommerce_Dependencies::check_dependencies
 	 * @covers Yoast_WooCommerce_Dependencies::get_wordpress_seo_version
 	 * @covers Yoast_WooCommerce_Dependencies::check_woocommerce_exists
@@ -24,11 +25,11 @@ class Yoast_WooCommerce_Dependencies_Test extends TestCase {
 
 		$class = Mockery::mock( Yoast_WooCommerce_Dependencies_Double::class )->makePartial();
 
-		// Invalid WordPress version
+		// Invalid WordPress version.
 		$actual = $class->check_dependencies( '5.0' );
 		$this->assertFalse( $actual );
 
-		// Valid WordPress version
+		// Valid WordPress version.
 		$class->expects( 'check_woocommerce_exists' )->once()->andReturn( true );
 		$class->expects( 'get_wordpress_seo_version' )->once()->andReturn( $valid_yoast_seo_version );
 		$actual = $class->check_dependencies( '5.2' );
@@ -63,5 +64,4 @@ class Yoast_WooCommerce_Dependencies_Test extends TestCase {
 		$actual = $class->check_dependencies( $valid_wp_version );
 		$this->assertTrue( $actual );
 	}
-
 }

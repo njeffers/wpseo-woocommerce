@@ -50,7 +50,7 @@ function initialize_yoast_woocommerce_seo() {
 
 		// Initializes the plugin.
 		$yoast_woo_seo = new Yoast_WooCommerce_SEO();
-    }
+	}
 }
 
 if ( ! wp_installing() ) {

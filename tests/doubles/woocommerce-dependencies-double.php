@@ -9,21 +9,29 @@ use Yoast_WooCommerce_Dependencies;
  */
 class Yoast_WooCommerce_Dependencies_Double extends Yoast_WooCommerce_Dependencies {
 	/**
-	 * @inheritDoc
+	 * Checks the plugin's dependencies.
+	 *
+	 * @param string $wp_version WordPress Version.
+	 *
+	 * @return bool
 	 */
 	public function check_dependencies( $wp_version ) {
 		return parent::check_dependencies( $wp_version );
 	}
 
 	/**
-	 * @inheritDoc
+	 * Gets the WordPress SEO version.
+	 *
+	 * @return bool|string
 	 */
 	public function get_wordpress_seo_version() {
 		return parent::get_wordpress_seo_version();
 	}
 
 	/**
-	 * @inheritDoc
+	 * Check if WooCommerce is installed, active and the right version.
+	 *
+	 * @return bool
 	 */
 	public function check_woocommerce_exists() {
 		return parent::check_woocommerce_exists();
