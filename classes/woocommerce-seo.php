@@ -23,7 +23,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return string
 	 */
 	public static function get_plugin_file() {
-		return WPSEO_FOO_PLUGIN_FILE;
+		return WPSEO_WOO_PLUGIN_FILE;
 	}
 
 	/**
@@ -938,8 +938,8 @@ class Yoast_WooCommerce_SEO {
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
 		$version       = $asset_manager->flatten_version( self::VERSION );
 
-		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/dist/yoastseo-woo-plugin-' . $version . '.js', WPSEO_FOO_PLUGIN_FILE ), [], WPSEO_VERSION, true );
-		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/dist/yoastseo-woo-replacevars-' . $version . '.js', WPSEO_FOO_PLUGIN_FILE ), [], WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/dist/yoastseo-woo-plugin-' . $version . '.js', WPSEO_WOO_PLUGIN_FILE ), [], WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/dist/yoastseo-woo-replacevars-' . $version . '.js', WPSEO_WOO_PLUGIN_FILE ), [], WPSEO_VERSION, true );
 
 		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
 		wp_localize_script( 'wp-seo-woo-replacevars', 'wpseoWooReplaceVarsL10n', $this->localize_woo_replacevars_script() );

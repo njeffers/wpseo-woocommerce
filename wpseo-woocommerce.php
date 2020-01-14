@@ -31,7 +31,7 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 	require dirname( __FILE__ ) . '/vendor/autoload.php';
 }
 
-define( 'WPSEO_FOO_PLUGIN_FILE', __FILE__ );
+define( 'WPSEO_WOO_PLUGIN_FILE', __FILE__ );
 
 /**
  * Initializes the plugin class, to make sure all the required functionality is loaded, do this after plugins_loaded.
