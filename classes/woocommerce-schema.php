@@ -35,7 +35,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Should the yoast schema output be used.
 	 *
-	 * @return boolean Whether or not the Yoast SEO schema should be output.
+	 * @return bool Whether or not the Yoast SEO schema should be output.
 	 */
 	public static function should_output_yoast_schema() {
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Using WPSEO hook.
