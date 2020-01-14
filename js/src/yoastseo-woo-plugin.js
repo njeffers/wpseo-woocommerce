@@ -126,7 +126,7 @@ class YoastWooCommercePlugin {
 	}
 
 	/**
-	 * Adds the short description & images from the page gallery to the content to be analyzed by the analyzer.
+	 * Adds the short description and images from the page gallery to the content to be analyzed by the analyzer.
 	 *
 	 * @param {string} data The data string that does not have the images outer html.
 	 *
