@@ -98,12 +98,13 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		/**
 		 * Validates the option.
 		 *
+		 * @todo remove code using $short, there is no "short form" anymore.
+		 *
 		 * @param array $dirty New value for the option.
 		 * @param array $clean Clean value for the option, normally the defaults.
 		 * @param array $old   Old value of the option.
 		 *
 		 * @return  array      Validated clean value for the option to be saved to the database.
-		 * @todo remove code using $short, there is no "short form" anymore.
 		 */
 		protected function validate_option( $dirty, $clean, $old ) {
 

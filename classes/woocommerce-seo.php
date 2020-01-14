@@ -333,9 +333,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Registers the settings page in the WP SEO menu.
 	 *
-	 * @param array $submenu_pages List of current submenus.
-	 *
 	 * @since 5.6
+	 *
+	 * @param array $submenu_pages List of current submenus.
 	 *
 	 * @return array All submenu pages including our own.
 	 */
@@ -485,9 +485,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Removes the Yoast SEO columns in the edit products page.
 	 *
-	 * @param array $columns List of registered columns.
-	 *
 	 * @since 1.0
+	 *
+	 * @param array $columns List of registered columns.
 	 *
 	 * @return array Array with the filtered columns.
 	 */
@@ -528,10 +528,10 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Make sure product variations and shop coupons are not included in the XML sitemap.
 	 *
+	 * @since 1.0
+	 *
 	 * @param bool   $bool      Whether or not to include this post type in the XML sitemap.
 	 * @param string $post_type The post type of the post.
-	 *
-	 * @since 1.0
 	 *
 	 * @return bool
 	 */
@@ -546,10 +546,10 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Make sure product attribute taxonomies are not included in the XML sitemap.
 	 *
+	 * @since 1.0
+	 *
 	 * @param bool   $bool     Whether or not to include this post type in the XML sitemap.
 	 * @param string $taxonomy The taxonomy to check against.
-	 *
-	 * @since 1.0
 	 *
 	 * @return bool
 	 */
@@ -585,9 +585,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Adds the opengraph images.
 	 *
-	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image to use.
-	 *
 	 * @since 4.3
+	 *
+	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image to use.
 	 */
 	public function set_opengraph_image( WPSEO_OpenGraph_Image $opengraph_image ) {
 
@@ -723,9 +723,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Make sure the OpenGraph description is put out.
 	 *
-	 * @param string $desc The current description, will be overwritten if we're on a product page.
-	 *
 	 * @since 1.0
+	 *
+	 * @param string $desc The current description, will be overwritten if we're on a product page.
 	 *
 	 * @return string
 	 */
@@ -747,9 +747,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Return 'product' when current page is, well... a product.
 	 *
-	 * @param string $type Passed on without changing if not a product.
-	 *
 	 * @since 1.0
+	 *
+	 * @param string $type Passed on without changing if not a product.
 	 *
 	 * @return string
 	 */
@@ -805,9 +805,9 @@ class Yoast_WooCommerce_SEO {
 	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
 	 * the post attribute.
 	 *
-	 * @param WC_Product $product The product.
-	 *
 	 * @since 4.9
+	 *
+	 * @param WC_Product $product The product.
 	 *
 	 * @return string
 	 */
@@ -822,9 +822,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Checks if product class has a description method. Otherwise it returns the value of the post_content.
 	 *
-	 * @param WC_Product $product The product.
-	 *
 	 * @since 4.9
+	 *
+	 * @param WC_Product $product The product.
 	 *
 	 * @return string
 	 */
@@ -999,9 +999,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Returns the set image ids for the given product.
 	 *
-	 * @param WC_Product $product The product to get the image ids for.
-	 *
 	 * @since 4.9
+	 *
+	 * @param WC_Product $product The product to get the image ids for.
 	 *
 	 * @return array
 	 */
@@ -1017,9 +1017,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Returns the product for given product_id.
 	 *
-	 * @param integer $product_id The id to get the product for.
-	 *
 	 * @since 4.9
+	 *
+	 * @param int $product_id The id to get the product for.
 	 *
 	 * @return null|WC_Product
 	 */
