@@ -35,34 +35,6 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	}
 
 	/**
-	 * Tests the check dependencies function.
-	 *
-	 * @dataProvider check_dependencies_data
-	 *
-	 * @param bool   $expected              The expected value.
-	 * @param string $wordpress_seo_version The WordPress SEO version to check.
-	 * @param string $wordpress_version     The WordPress version to check.
-	 * @param string $message               Message given by PHPUnit after assertion.
-	 *
-	 * @covers Yoast_WooCommerce_SEO::check_dependencies
-	 */
-	public function test_check_dependencies( $expected, $wordpress_seo_version, $wordpress_version, $message ) {
-		$class_instance = $this
-			->getMockBuilder( 'Yoast_WooCommerce_SEO_Double' )
-			->disableOriginalConstructor()
-			->setMethods( [ 'get_wordpress_seo_version' ] )
-			->getMock();
-
-		$class_instance
-			->expects( $this->any() )
-			->method( 'get_wordpress_seo_version' )
-			->will( $this->returnValue( $wordpress_seo_version ) );
-
-
-		$this->assertSame( $expected, $class_instance->check_dependencies( $wordpress_version ), $message );
-	}
-
-	/**
 	 * Tests the sitemap filtering of a product that is not hidden.
 	 *
 	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product
@@ -189,26 +161,5 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'no-loc' => 'http://shop.site/product' ],
 			$instance->filter_hidden_product( [ 'no-loc' => 'http://shop.site/product' ], 'post', null )
 		);
-	}
-
-	/**
-	 * Data provider for the check dependencies test.
-	 *
-	 * [0]: Expected
-	 * [1]: WordPress SEO Version
-	 * [2]: WordPress Version
-	 * [3]: Message for PHPUnit.
-	 *
-	 * @return array
-	 */
-	public function check_dependencies_data() {
-		return [
-			[ false, '12.7', '3.0', 'WordPress is below the minimal required version.' ],
-			[ false, '12.7', '5.1', 'WordPress is below the minimal required version.' ],
-			[ false, false, '5.3', 'WordPress SEO is not installed.' ],
-			[ false, '8.1', '5.1', 'WordPress SEO is below the minimal required version.' ],
-			[ true, '12.6-RC1', '5.2', 'WordPress and WordPress SEO have the minimal required versions.' ],
-			[ true, '12.7', '5.3', 'WordPress and WordPress SEO have the minimal required versions.' ],
-		];
 	}
 }
