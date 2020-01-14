@@ -5,22 +5,24 @@ namespace Yoast\WP\Woocommerce\Tests\Classes;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 use Mockery;
-use Yoast\WP\Woocommerce\Tests\Doubles\Yoast_WooCommerce_SEO_Double;
+use Yoast\WP\Woocommerce\Tests\Doubles\Yoast_WooCommerce_Dependencies_Double;
 use Yoast\WP\Woocommerce\Tests\TestCase;
 use Yoast_WooCommerce_SEO;
 
 /**
  * Class WooCommerce_Schema_Test.
  */
-class Yoast_WooCommerce_SEO_Test extends TestCase {
+class Yoast_WooCommerce_Dependencies_Test extends TestCase {
 	/**
-	 * @covers Yoast_WooCommerce_SEO::check_dependencies
+	 * @covers Yoast_WooCommerce_Dependencies::check_dependencies
+	 * @covers Yoast_WooCommerce_Dependencies::get_wordpress_seo_version
+	 * @covers Yoast_WooCommerce_Dependencies::check_woocommerce_exists
 	 */
 	public function test_check_dependencies() {
 		$valid_wp_version        = '5.2';
 		$valid_yoast_seo_version = '12.6-RC0';
 
-		$class = Mockery::mock( Yoast_WooCommerce_SEO_Double::class )->makePartial();
+		$class = Mockery::mock( Yoast_WooCommerce_Dependencies_Double::class )->makePartial();
 
 		// Invalid WordPress version
 		$actual = $class->check_dependencies( '5.0' );

@@ -10,6 +10,9 @@ module.exports = function( grunt ) {
 	const pkg = grunt.file.readJSON( "package.json" );
 	const pluginVersion = pkg.yoast.pluginVersion;
 
+	// Used to switch between development and release builds.
+	const developmentBuild = ! [ "release", "release:js", "artifact", "deploy:trunk", "deploy:master" ].includes( process.argv[ 2 ] );
+
 	// Define project configuration
 	const project = {
 		pluginVersion: pluginVersion,
@@ -35,7 +38,7 @@ module.exports = function( grunt ) {
 			],
 			js: [
 				"js/src/**/*.js",
-				"!js/*.min.js",
+				"!js/dist/*.min.js",
 			],
 			phptests: "tests/**/*.php",
 			/**

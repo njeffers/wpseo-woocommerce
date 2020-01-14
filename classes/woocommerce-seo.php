@@ -18,98 +18,21 @@ class Yoast_WooCommerce_SEO {
 	const VERSION = '12.4.1';
 
 	/**
-	 * Instance of the WooCommerce_SEO option management class.
-	 *
-	 * @var WPSEO_Option_Woo
-	 */
-	public $option_instance;
-
-	/**
-	 * Name of the option to store plugins setting.
-	 *
-	 * @var string
-	 */
-	public $short_name;
-
-	/**
 	 * Return the plugin file.
 	 *
 	 * @return string
 	 */
 	public static function get_plugin_file() {
-		return __FILE__;
+		return WPSEO_FOO_PLUGIN_FILE;
 	}
 
 	/**
 	 * Class constructor.
+	 *
+	 * @since 1.0
 	 */
 	public function __construct() {
-		global $wp_version;
-
-		if ( $this->check_dependencies( $wp_version ) ) {
-			$this->initialize();
-		}
-	}
-
-	/**
-	 * Checks the dependencies. Sets a notice when requirements aren't met.
-	 *
-	 * @param string $wp_version The current version of WordPress.
-	 *
-	 * @return bool True whether the dependencies are okay.
-	 */
-	protected function check_dependencies( $wp_version ) {
-		if ( ! version_compare( $wp_version, '5.2', '>=' ) ) {
-			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_wordpress_upgrade_error' ] );
-
-			return false;
-		}
-
-		// When WooCommerce is not installed.
-		if ( ! $this->check_woocommerce_exists() ) {
-			add_action( 'all_admin_notices', [ $this, 'woocommerce_missing_error' ] );
-
-			return false;
-		}
-
-		// When Yoast SEO SEO is not installed.
-		$wordpress_seo_version = $this->get_wordpress_seo_version();
-		if ( ! $wordpress_seo_version ) {
-			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_missing_error' ] );
-
-			return false;
-		}
-
-		// At least 12.6, in which we've implemented the new HelpScout Beacon.
-		if ( ! version_compare( $wordpress_seo_version, '12.6-RC0', '>=' ) ) {
-			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_upgrade_error' ] );
-
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Checks whether WooCommerce is available.
-	 *
-	 * @return bool
-	 */
-	protected function check_woocommerce_exists() {
-		return function_exists( 'WC' );
-	}
-
-	/**
-	 * Returns the WordPress SEO version when set.
-	 *
-	 * @return bool|string The version whether it is set.
-	 */
-	protected function get_wordpress_seo_version() {
-		if ( ! defined( 'WPSEO_VERSION' ) ) {
-			return false;
-		}
-
-		return WPSEO_VERSION;
+		$this->initialize();
 	}
 
 	/**
@@ -161,6 +84,7 @@ class Yoast_WooCommerce_SEO {
 
 			add_filter( 'wpseo_sitemap_exclude_post_type', [ $this, 'xml_sitemap_post_types' ], 10, 2 );
 			add_filter( 'wpseo_sitemap_post_type_archive_link', [ $this, 'xml_sitemap_taxonomies' ], 10, 2 );
+			add_filter( 'wpseo_sitemap_page_for_post_type_archive', [ $this, 'xml_post_type_archive_page_id' ], 10, 2 );
 
 			add_filter( 'post_type_archive_link', [ $this, 'xml_post_type_archive_link' ], 10, 2 );
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
@@ -409,9 +333,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Registers the settings page in the WP SEO menu.
 	 *
-	 * @since 5.6
-	 *
 	 * @param array $submenu_pages List of current submenus.
+	 *
+	 * @since 5.6
 	 *
 	 * @return array All submenu pages including our own.
 	 */
@@ -461,7 +385,7 @@ class Yoast_WooCommerce_SEO {
 	public function admin_panel() {
 		Yoast_Form::get_instance()->admin_header( true, 'wpseo_woo' );
 
-		$object_taxonomies = get_object_taxonomies( 'product', 'objects' );
+		$object_taxonomies = array_filter( get_object_taxonomies( 'product', 'objects' ), 'is_taxonomy_viewable' );
 		$taxonomies        = [ '' => '-' ];
 		foreach ( $object_taxonomies as $object_taxonomy ) {
 			$taxonomies[ strtolower( $object_taxonomy->name ) ] = esc_html( $object_taxonomy->labels->name );
@@ -548,10 +472,10 @@ class Yoast_WooCommerce_SEO {
 		}
 		?>
         <script type="text/javascript">
-			jQuery( document ).ready( function( $ ) {
+			jQuery( document ).ready( function ( $ ) {
 				// Show WooCommerce box before WP SEO metabox.
-				if ( $( '#woocommerce-product-data' ).length > 0 && $( '#wpseo_meta' ).length > 0 ) {
-					$( '#woocommerce-product-data' ).insertBefore( $( '#wpseo_meta' ) );
+				if ( $( "#woocommerce-product-data" ).length > 0 && $( "#wpseo_meta" ).length > 0 ) {
+					$( "#woocommerce-product-data" ).insertBefore( $( "#wpseo_meta" ) );
 				}
 			} );
         </script>
@@ -561,9 +485,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Removes the Yoast SEO columns in the edit products page.
 	 *
-	 * @since 1.0
-	 *
 	 * @param array $columns List of registered columns.
+	 *
+	 * @since 1.0
 	 *
 	 * @return array Array with the filtered columns.
 	 */
@@ -572,7 +496,13 @@ class Yoast_WooCommerce_SEO {
 			return $columns;
 		}
 
-		$keys_to_remove = [ 'wpseo-title', 'wpseo-metadesc', 'wpseo-focuskw', 'wpseo-score', 'wpseo-score-readability' ];
+		$keys_to_remove = [
+			'wpseo-title',
+			'wpseo-metadesc',
+			'wpseo-focuskw',
+			'wpseo-score',
+			'wpseo-score-readability',
+		];
 
 		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
 			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS;
@@ -598,10 +528,10 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Make sure product variations and shop coupons are not included in the XML sitemap.
 	 *
-	 * @since 1.0
-	 *
 	 * @param bool   $bool      Whether or not to include this post type in the XML sitemap.
 	 * @param string $post_type The post type of the post.
+	 *
+	 * @since 1.0
 	 *
 	 * @return bool
 	 */
@@ -616,10 +546,10 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Make sure product attribute taxonomies are not included in the XML sitemap.
 	 *
-	 * @since 1.0
-	 *
 	 * @param bool   $bool     Whether or not to include this post type in the XML sitemap.
 	 * @param string $taxonomy The taxonomy to check against.
+	 *
+	 * @since 1.0
 	 *
 	 * @return bool
 	 */
@@ -655,9 +585,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Adds the opengraph images.
 	 *
-	 * @since 4.3
-	 *
 	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image to use.
+	 *
+	 * @since 4.3
 	 */
 	public function set_opengraph_image( WPSEO_OpenGraph_Image $opengraph_image ) {
 
@@ -687,6 +617,30 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Retrieve the primary and if that doesn't exist first term for the brand taxonomy.
+	 *
+	 * @param string      $schema_brand The taxonomy the site uses for brands.
+	 * @param \WC_Product $product      The product we're finding the brand for.
+	 *
+	 * @return bool|string The brand name or false on failure.
+	 */
+	private function get_brand_term_name( $schema_brand, $product ) {
+		$primary_term = $this->search_primary_term( [ $schema_brand ], $product );
+		if ( ! empty( $primary_term ) ) {
+			return $primary_term;
+		}
+		$terms = get_the_terms( get_the_ID(), $schema_brand );
+		if ( is_array( $terms ) && count( $terms ) > 0 ) {
+			$term_values = array_values( $terms );
+			$term        = array_shift( $term_values );
+
+			return $term->name;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Adds the other product images to the OpenGraph output.
 	 *
 	 * @since 1.0
@@ -699,11 +653,9 @@ class Yoast_WooCommerce_SEO {
 
 		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
 		if ( $schema_brand !== '' ) {
-			$terms = get_the_terms( get_the_ID(), $schema_brand );
-			if ( is_array( $terms ) && count( $terms ) > 0 ) {
-				$term_values = array_values( $terms );
-				$term        = array_shift( $term_values );
-				echo '<meta property="product:brand" content="' . esc_attr( $term->name ) . '"/>' . "\n";
+			$brand = $this->get_brand_term_name( $schema_brand, $product );
+			if ( ! empty( $brand ) ) {
+				echo '<meta property="product:brand" content="' . esc_attr( $brand ) . '"/>' . "\n";
 			}
 		}
 
@@ -712,7 +664,7 @@ class Yoast_WooCommerce_SEO {
 		 *
 		 * @deprecated 12.5.0. Use the {@see 'Yoast\WP\Woocommerce\og_price'} filter instead.
 		 *
-		 * @api bool unsigned Defaults to true.
+		 * @api        bool unsigned Defaults to true.
 		 */
 		$show_price = apply_filters_deprecated(
 			'wpseo_woocommerce_og_price',
@@ -726,17 +678,30 @@ class Yoast_WooCommerce_SEO {
 		 *
 		 * @since 12.5.0
 		 *
-		 * @api bool unsigned Defaults to true.
+		 * @api   bool unsigned Defaults to true.
 		 */
 		$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', $show_price );
 
 		if ( $show_price === true ) {
-			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '"/>' . "\n";
-			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '"/>' . "\n";
+			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '" />' . "\n";
+			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '" />' . "\n";
 		}
 
 		if ( $product->is_in_stock() ) {
-			echo '<meta property="product:availability" content="instock"/>' . "\n";
+			echo '<meta property="product:availability" content="in stock" />' . "\n";
+		}
+
+		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
+
+		/**
+		 * Filter: Yoast\WP\Woocommerce\product_condition - Allow developers to prevent or change the output of the product condition in the OpenGraph tags.
+		 *
+		 * @api string Defaults to 'new'.
+		 * @param \WC_Product $product The product we're outputting.
+		 */
+		$product_condition = apply_filters( 'Yoast\WP\Woocommerce\product_condition', 'new', $product );
+		if ( ! empty( $product_condition ) ) {
+			echo '<meta property="product:condition" content="' . esc_attr( $product_condition ) . '" />' . "\n";
 		}
 	}
 
@@ -760,9 +725,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Make sure the OpenGraph description is put out.
 	 *
-	 * @since 1.0
-	 *
 	 * @param string $desc The current description, will be overwritten if we're on a product page.
+	 *
+	 * @since 1.0
 	 *
 	 * @return string
 	 */
@@ -784,9 +749,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Return 'product' when current page is, well... a product.
 	 *
-	 * @since 1.0
-	 *
 	 * @param string $type Passed on without changing if not a product.
+	 *
+	 * @since 1.0
 	 *
 	 * @return string
 	 */
@@ -842,9 +807,9 @@ class Yoast_WooCommerce_SEO {
 	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
 	 * the post attribute.
 	 *
-	 * @since 4.9
-	 *
 	 * @param WC_Product $product The product.
+	 *
+	 * @since 4.9
 	 *
 	 * @return string
 	 */
@@ -852,15 +817,16 @@ class Yoast_WooCommerce_SEO {
 		if ( method_exists( $product, 'get_short_description' ) ) {
 			return $product->get_short_description();
 		}
+
 		return $product->post->post_excerpt;
 	}
 
 	/**
 	 * Checks if product class has a description method. Otherwise it returns the value of the post_content.
 	 *
-	 * @since 4.9
-	 *
 	 * @param WC_Product $product The product.
+	 *
+	 * @since 4.9
 	 *
 	 * @return string
 	 */
@@ -909,12 +875,29 @@ class Yoast_WooCommerce_SEO {
 		if ( function_exists( 'wc_get_page_id' ) ) {
 			$shop_page_id = wc_get_page_id( 'shop' );
 			$home_page_id = (int) get_option( 'page_on_front' );
-			if ( $home_page_id === $shop_page_id ) {
+			if ( $shop_page_id === -1 || $home_page_id === $shop_page_id ) {
 				return false;
 			}
 		}
 
 		return $link;
+	}
+
+	/**
+	 * Returns the ID of the WooCommerce shop page when product's archive is requested.
+	 *
+	 * @param int    $page_id   The page id.
+	 * @param string $post_type The post type to check against.
+	 *
+	 * @return int
+	 */
+	public function xml_post_type_archive_page_id( $page_id, $post_type ) {
+
+		if ( $post_type === 'product' && function_exists( 'wc_get_page_id' ) ) {
+			$page_id = wc_get_page_id( 'shop' );
+		}
+
+		return $page_id;
 	}
 
 	/**
@@ -955,8 +938,8 @@ class Yoast_WooCommerce_SEO {
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
 		$version       = $asset_manager->flatten_version( self::VERSION );
 
-		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), [], WPSEO_VERSION, true );
-		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), [], WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/dist/yoastseo-woo-plugin-' . $version . '.js', WPSEO_FOO_PLUGIN_FILE ), [], WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/dist/yoastseo-woo-replacevars-' . $version . '.js', WPSEO_FOO_PLUGIN_FILE ), [], WPSEO_VERSION, true );
 
 		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
 		wp_localize_script( 'wp-seo-woo-replacevars', 'wpseoWooReplaceVarsL10n', $this->localize_woo_replacevars_script() );
@@ -1018,9 +1001,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Returns the set image ids for the given product.
 	 *
-	 * @since 4.9
-	 *
 	 * @param WC_Product $product The product to get the image ids for.
+	 *
+	 * @since 4.9
 	 *
 	 * @return array
 	 */
@@ -1036,9 +1019,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Returns the product for given product_id.
 	 *
-	 * @since 4.9
-	 *
 	 * @param integer $product_id The id to get the product for.
+	 *
+	 * @since 4.9
 	 *
 	 * @return null|WC_Product
 	 */
@@ -1160,6 +1143,7 @@ class Yoast_WooCommerce_SEO {
 
 			if ( $found_primary_term ) {
 				$term = get_term_by( 'id', $found_primary_term, $taxonomy );
+
 				return $term->name;
 			}
 		}
@@ -1182,65 +1166,6 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Throw an error if WooCommerce is not active.
-	 */
-	public function woocommerce_missing_error() {
-		echo '<div class="error"><p>';
-		printf(
-		/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce SEO */
-			esc_html__( 'Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work.', 'yoast-woo-seo' ),
-			'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=woocommerce&plugin-search-input=Search+Plugins' ) ) . '">',
-			'</a>',
-			'WooCommerce',
-			'Yoast WooCommerce SEO'
-		);
-		echo '</p></div>';
-	}
-
-	/**
-	 * Throw an error if WordPress SEO is not installed.
-	 */
-	public function yoast_wpseo_woocommerce_missing_error() {
-		echo '<div class="error"><p>';
-		printf(
-		/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce SEO */
-			esc_html__( 'Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work.', 'yoast-woo-seo' ),
-			'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=yoast+seo&plugin-search-input=Search+Plugins' ) ) . '">',
-			'</a>',
-			'Yoast SEO',
-			'Yoast WooCommerce SEO'
-		);
-		echo '</p></div>';
-	}
-
-	/**
-	 * Throw an error if WordPress is out of date.
-	 */
-	public function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
-		echo '<div class="error"><p>';
-		printf(
-		/* translators: %1$s resolves to WooCommerce SEO */
-			esc_html__( 'Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly.', 'yoast-woo-seo' ),
-			'WooCommerce SEO'
-		);
-		echo '</p></div>';
-	}
-
-	/**
-	 * Throw an error if WordPress SEO is out of date.
-	 */
-	public function yoast_wpseo_woocommerce_upgrade_error() {
-		echo '<div class="error"><p>';
-		printf(
-		/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce SEO */
-			esc_html__( 'Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work.', 'yoast-woo-seo' ),
-			'Yoast SEO',
-			'WooCommerce SEO'
-		);
-		echo '</p></div>';
-	}
-
-	/**
 	 * Localizes scripts for the wooplugin.
 	 *
 	 * @return array
@@ -1250,7 +1175,7 @@ class Yoast_WooCommerce_SEO {
 		$version       = $asset_manager->flatten_version( self::VERSION );
 
 		return [
-			'script_url'     => plugins_url( 'js/yoastseo-woo-worker-' . $version . WPSEO_CSSJS_SUFFIX . '.js', self::get_plugin_file() ),
+			'script_url'     => plugins_url( 'js/dist/yoastseo-woo-worker-' . $version . '.js', self::get_plugin_file() ),
 			'woo_desc_none'  => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
 			'woo_desc_short' => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
 			'woo_desc_good'  => __( 'Your short description has a good length.', 'yoast-woo-seo' ),

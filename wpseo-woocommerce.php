@@ -31,6 +31,8 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 	require dirname( __FILE__ ) . '/vendor/autoload.php';
 }
 
+define( 'WPSEO_FOO_PLUGIN_FILE', __FILE__ );
+
 /**
  * Initializes the plugin class, to make sure all the required functionality is loaded, do this after plugins_loaded.
  *
@@ -39,12 +41,16 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
  * @return void
  */
 function initialize_yoast_woocommerce_seo() {
-	global $yoast_woo_seo;
 
 	load_plugin_textdomain( 'yoast-woo-seo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
-	// Initializes the plugin.
-	$yoast_woo_seo = new Yoast_WooCommerce_SEO();
+	$dependency_check = new Yoast_WooCommerce_Dependencies();
+	if ( $dependency_check->check() ) {
+		global $yoast_woo_seo;
+
+		// Initializes the plugin.
+		$yoast_woo_seo = new Yoast_WooCommerce_SEO();
+    }
 }
 
 if ( ! wp_installing() ) {

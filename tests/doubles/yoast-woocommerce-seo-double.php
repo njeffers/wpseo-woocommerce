@@ -2,12 +2,12 @@
 
 namespace Yoast\WP\Woocommerce\Tests\Doubles;
 
-use Yoast_WooCommerce_SEO;
+use Yoast_WooCommerce_Dependencies;
 
 /**
  * Test Helper Class.
  */
-class Yoast_WooCommerce_SEO_Double extends Yoast_WooCommerce_SEO {
+class Yoast_WooCommerce_Dependencies_Double extends Yoast_WooCommerce_Dependencies {
 	/**
 	 * @inheritDoc
 	 */

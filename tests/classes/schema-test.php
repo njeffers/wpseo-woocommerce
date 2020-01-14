@@ -52,6 +52,7 @@ class Schema_Test extends TestCase {
 	 * @covers \WPSEO_WooCommerce_Schema::add_organization_for_attribute
 	 */
 	public function test_change_product() {
+		$product_id   = 1;
 		$product_name = 'TestProduct';
 		$base_url     = 'http://local.wordpress.test';
 		$canonical    = $base_url . '/product/test/';
@@ -60,7 +61,9 @@ class Schema_Test extends TestCase {
 		$utils->expects( 'get_home_url' )->once()->with()->andReturn( $canonical );
 
 		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_id' )->twice()->with()->andReturn( 1 );
+		$product->expects( 'get_id' )->times( 4 )->with()->andReturn( $product_id );
+		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
+		$product->expects( 'get_sku' )->once()->with()->andReturn( 'sku1234' );
 
 		Mockery::getConfiguration()->setConstantsMap(
 			[
@@ -76,10 +79,14 @@ class Schema_Test extends TestCase {
 		$mock = Mockery::mock( 'alias:WPSEO_Options' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
+		$mock->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
+		$mock->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'WP' );
 
 		Functions\stubs(
 			[
 				'has_post_thumbnail' => true,
+				'home_url'           => $base_url,
+				'get_site_url'       => $base_url,
 			]
 		);
 
@@ -94,7 +101,7 @@ class Schema_Test extends TestCase {
 			'url'         => $canonical,
 			'image'       => false,
 			'description' => '',
-			'sku'         => 1234,
+			'sku'         => 'sku1234',
 			'offers'      => [
 				[
 					'@type'  => 'Offer',
@@ -107,6 +114,21 @@ class Schema_Test extends TestCase {
 					],
 				],
 			],
+			'review'      => [
+				[
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => 5,
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Joost de Valk',
+					],
+					'reviewBody'    => 'Product review',
+					'datePublished' => '2020-01-07T13:36:12+00:00',
+				],
+			],
 		];
 
 		$expected = [
@@ -116,7 +138,7 @@ class Schema_Test extends TestCase {
 			'url'              => $canonical,
 			'image'            => [ '@id' => $canonical . '#primaryimage' ],
 			'description'      => '',
-			'sku'              => 1234,
+			'sku'              => 'sku1234',
 			'offers'           => [
 				[
 					'@type'  => 'Offer',
@@ -125,6 +147,24 @@ class Schema_Test extends TestCase {
 					'seller' => [
 						'@id' => $canonical . '#organization',
 					],
+					'@id'    => $base_url . '/#/schema/offer/1-0',
+				],
+			],
+			'review'           => [
+				[
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => 5,
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Joost de Valk',
+					],
+					'reviewBody'    => 'Product review',
+					'datePublished' => '2020-01-07T13:36:12+00:00',
+					'@id'           => $base_url . '/#/schema/review/' . $product_id . '-0',
+					'name'          => $product_name,
 				],
 			],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
@@ -136,6 +176,7 @@ class Schema_Test extends TestCase {
 				'@type' => 'Organization',
 				'name'  => $product_name,
 			],
+			'productID'        => 'sku1234',
 		];
 
 		$instance->change_product( $data, $product );

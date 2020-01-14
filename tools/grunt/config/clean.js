@@ -1,5 +1,5 @@
 module.exports = {
-	jsDistFiles: [ "js/*.js", "!js/src/*.js" ],
+	jsDistFiles: [ "js/dist/*.js" ],
 	artifact: [
 		"artifact",
 	],
