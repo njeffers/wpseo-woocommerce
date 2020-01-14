@@ -329,9 +329,9 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Overrides the Woo breadcrumb functionality when the WP SEO breadcrumb functionality is enabled.
 	 *
-	 * @since 1.1.3
-	 *
 	 * @uses  woo_breadcrumbs filter
+	 *
+	 * @since 1.1.3
 	 *
 	 * @return string
 	 */
@@ -782,6 +782,17 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
+
+		/**
+		 * Filter: Yoast\WP\Woocommerce\product_condition - Allow developers to prevent or change the output of the product condition in the OpenGraph tags.
+		 *
+		 * @api string Defaults to 'new'.
+		 * @param \WC_Product $product The product we're outputting.
+		 */
+		$product_condition = apply_filters( 'Yoast\WP\Woocommerce\product_condition', 'new', $product );
+		if ( ! empty( $product_condition ) ) {
+			echo '<meta property="product:condition" content="' . esc_attr( $product_condition ) . '" />' . "\n";
+		}
 	}
 
 	/**
