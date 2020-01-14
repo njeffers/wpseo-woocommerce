@@ -321,9 +321,11 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * @param \WC_Product $product
+	 * Adds the individual product variants as variants of the offer.
 	 *
-	 * @return array $data
+	 * @param \WC_Product $product The WooCommerce product we're working with.
+	 *
+	 * @return array $data Schema Offers data.
 	 */
 	protected function add_individual_offers( $product ) {
 		$variations = $product->get_available_variations();
@@ -351,6 +353,8 @@ class WPSEO_WooCommerce_Schema {
 				],
 			];
 		}
+
+		return $data;
 	}
 
 	/**
