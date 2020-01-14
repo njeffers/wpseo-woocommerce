@@ -54,7 +54,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * Formatting of each record that is provided:
 	 * field, expected, dirty, clean, old and short-form.
 	 *
-	 * @return array
+	 * @return array[]
 	 */
 	public function validate_option_values() {
 		return [
