@@ -710,7 +710,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @since 4.3
 	 *
-	 * @return null|WC_Product
+	 * @return WC_Product|null
 	 */
 	private function get_product() {
 		if ( ! is_singular( 'product' ) || ! function_exists( 'wc_get_product' ) ) {
@@ -1021,7 +1021,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @param int $product_id The id to get the product for.
 	 *
-	 * @return null|WC_Product
+	 * @return WC_Product|null
 	 */
 	protected function get_product_for_id( $product_id ) {
 		if ( function_exists( 'wc_get_product' ) ) {
