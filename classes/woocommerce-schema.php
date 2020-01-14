@@ -98,14 +98,7 @@ class WPSEO_WooCommerce_Schema {
 	public function change_product( $data, $product ) {
 		$canonical = $this->get_canonical();
 
-		// Make seller refer to the Organization.
-		if ( ! empty( $data['offers'] ) ) {
-			foreach ( $data['offers'] as $key => $val ) {
-				$data['offers'][ $key ]['seller'] = [
-					'@id' => trailingslashit( WPSEO_Utils::get_home_url() ) . WPSEO_Schema_IDs::ORGANIZATION_HASH,
-				];
-			}
-		}
+		$data = $this->change_seller_in_offers( $data );
 
 		// Only needed for WooCommerce versions before 3.8.1.
 		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
@@ -145,6 +138,31 @@ class WPSEO_WooCommerce_Schema {
 		}
 
 		return $types;
+	}
+
+	/**
+	 * Update the seller attribute to reference the Organization, when it is set.
+	 *
+	 * @param array $data Schema Product data.
+	 *
+	 * @return array $data Schema Product data.
+	 */
+	private function change_seller_in_offers( $data ) {
+		$company_or_person = WPSEO_Options::get( 'company_or_person', false );
+		$company_name      = WPSEO_Options::get( 'company_name' );
+
+		if ( $company_or_person !== 'company' || empty( $company_name ) ) {
+			return $data;
+		}
+
+		if ( ! empty( $data['offers'] ) ) {
+			foreach ( $data['offers'] as $key => $val ) {
+				$data['offers'][ $key ]['seller'] = [
+					'@id' => trailingslashit( WPSEO_Utils::get_home_url() ) . WPSEO_Schema_IDs::ORGANIZATION_HASH,
+				];
+			}
+		}
+		return $data;
 	}
 
 	/**
