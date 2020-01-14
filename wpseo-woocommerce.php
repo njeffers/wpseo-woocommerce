@@ -174,6 +174,7 @@ class Yoast_WooCommerce_SEO {
 
 			add_filter( 'wpseo_sitemap_exclude_post_type', [ $this, 'xml_sitemap_post_types' ], 10, 2 );
 			add_filter( 'wpseo_sitemap_post_type_archive_link', [ $this, 'xml_sitemap_taxonomies' ], 10, 2 );
+			add_filter( 'wpseo_sitemap_page_for_post_type_archive', [ $this, 'xml_post_type_archive_page_id' ], 10, 2 );
 
 			add_filter( 'post_type_archive_link', [ $this, 'xml_post_type_archive_link' ], 10, 2 );
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
@@ -474,7 +475,7 @@ class Yoast_WooCommerce_SEO {
 	public function admin_panel() {
 		Yoast_Form::get_instance()->admin_header( true, 'wpseo_woo' );
 
-		$object_taxonomies = get_object_taxonomies( 'product', 'objects' );
+		$object_taxonomies = array_filter( get_object_taxonomies( 'product', 'objects' ), 'is_taxonomy_viewable' );
 		$taxonomies        = [ '' => '-' ];
 		foreach ( $object_taxonomies as $object_taxonomy ) {
 			$taxonomies[ strtolower( $object_taxonomy->name ) ] = esc_html( $object_taxonomy->labels->name );
@@ -931,6 +932,23 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Returns the ID of the WooCommerce shop page when product's archive is requested.
+	 *
+	 * @param int    $page_id   The page id.
+	 * @param string $post_type The post type to check against.
+	 *
+	 * @return int
+	 */
+	public function xml_post_type_archive_page_id( $page_id, $post_type ) {
+
+		if ( $post_type === 'product' && function_exists( 'wc_get_page_id' ) ) {
+			$page_id = wc_get_page_id( 'shop' );
+		}
+
+		return $page_id;
+	}
+
+	/**
 	 * Initializes the Yoast SEO WooCommerce HelpScout beacon.
 	 */
 	public function init_beacon() {
@@ -968,8 +986,8 @@ class Yoast_WooCommerce_SEO {
 		$asset_manager = new WPSEO_Admin_Asset_Manager();
 		$version       = $asset_manager->flatten_version( self::VERSION );
 
-		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/yoastseo-woo-plugin-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), [], WPSEO_VERSION, true );
-		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/yoastseo-woo-replacevars-' . $version . WPSEO_CSSJS_SUFFIX . '.js', __FILE__ ), [], WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo', plugins_url( 'js/dist/yoastseo-woo-plugin-' . $version . '.js', __FILE__ ), [], WPSEO_VERSION, true );
+		wp_enqueue_script( 'wp-seo-woo-replacevars', plugins_url( 'js/dist/yoastseo-woo-replacevars-' . $version . '.js', __FILE__ ), [], WPSEO_VERSION, true );
 
 		wp_localize_script( 'wp-seo-woo', 'wpseoWooL10n', $this->localize_woo_script() );
 		wp_localize_script( 'wp-seo-woo-replacevars', 'wpseoWooReplaceVarsL10n', $this->localize_woo_replacevars_script() );
@@ -1204,7 +1222,7 @@ class Yoast_WooCommerce_SEO {
 		$version       = $asset_manager->flatten_version( self::VERSION );
 
 		return [
-			'script_url'     => plugins_url( 'js/yoastseo-woo-worker-' . $version . WPSEO_CSSJS_SUFFIX . '.js', self::get_plugin_file() ),
+			'script_url'     => plugins_url( 'js/dist/yoastseo-woo-worker-' . $version . '.js', self::get_plugin_file() ),
 			'woo_desc_none'  => __( 'You should write a short description for this product.', 'yoast-woo-seo' ),
 			'woo_desc_short' => __( 'The short description for this product is too short.', 'yoast-woo-seo' ),
 			'woo_desc_good'  => __( 'Your short description has a good length.', 'yoast-woo-seo' ),

@@ -113,6 +113,8 @@ class WPSEO_WooCommerce_Schema {
 			$data['review'] = [];
 		}
 
+		$data = $this->filter_reviews( $data, $product );
+
 		// This product is the main entity of this page, so we set it as such.
 		$data['mainEntityOfPage'] = [
 			'@id' => $canonical . WPSEO_Schema_IDs::WEBPAGE_HASH,
@@ -199,7 +201,7 @@ class WPSEO_WooCommerce_Schema {
 		 *
 		 * See https://github.com/woocommerce/woocommerce/issues/24188.
 		 */
-		if ( $this->data['image'] === false ) {
+		if ( isset( $this->data['image'] ) && $this->data['image'] === false ) {
 			unset( $this->data['image'] );
 		}
 
@@ -255,5 +257,28 @@ class WPSEO_WooCommerce_Schema {
 	 */
 	protected function get_canonical() {
 		return WPSEO_Frontend::get_instance()->canonical( false );
+	}
+
+	/**
+	 * Enhances the review data output by WooCommerce.
+	 *
+	 * @param array       $data    Review Schema data.
+	 * @param \WC_Product $product The WooCommerce product we're working with.
+	 *
+	 * @return array $data Review Schema data.
+	 */
+	protected function filter_reviews( $data, $product ) {
+		if ( ! isset( $data['review'] ) || $data['review'] === [] ) {
+			return $data;
+		}
+
+		$site_url = trailingslashit( get_site_url() );
+
+		foreach ( $data['review'] as $key => $review ) {
+			$data['review'][ $key ]['@id']  = $site_url . '#/schema/review/' . $product->get_id() . '-' . $key;
+			$data['review'][ $key ]['name'] = $product->get_name();
+		}
+
+		return $data;
 	}
 }
