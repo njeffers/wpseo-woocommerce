@@ -61,7 +61,7 @@ class Schema_Test extends TestCase {
 		$utils->expects( 'get_home_url' )->once()->with()->andReturn( $canonical );
 
 		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_id' )->times( 3 )->with()->andReturn( $product_id );
+		$product->expects( 'get_id' )->times( 4 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
 		$product->expects( 'get_sku' )->once()->with()->andReturn( 'sku1234' );
 
@@ -85,6 +85,7 @@ class Schema_Test extends TestCase {
 		Functions\stubs(
 			[
 				'has_post_thumbnail' => true,
+				'home_url'           => $base_url,
 				'get_site_url'       => $base_url,
 			]
 		);
@@ -146,6 +147,7 @@ class Schema_Test extends TestCase {
 					'seller' => [
 						'@id' => $canonical . '#organization',
 					],
+					'@id'    => $base_url . '/#/schema/offer/1-0',
 				],
 			],
 			'review'           => [

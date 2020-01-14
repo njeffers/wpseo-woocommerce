@@ -107,6 +107,7 @@ class WPSEO_WooCommerce_Schema {
 		}
 
 		$data = $this->filter_reviews( $data, $product );
+		$data = $this->filter_offers( $data, $product );
 
 		// This product is the main entity of this page, so we set it as such.
 		$data['mainEntityOfPage'] = [
@@ -122,6 +123,33 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_sku( $product );
 
 		return [];
+	}
+
+	/**
+	 * Filters the offers array to enrich it.
+	 *
+	 * @param array       $data    Schema Product data.
+	 * @param \WC_Product $product The product.
+	 *
+	 * @return array $data Schema Product data.
+	 */
+	private function filter_offers( $data, $product ) {
+		$home_url = trailingslashit( home_url() );
+		foreach ( $data['offers'] as $key => $offer ) {
+			// Remove this value as it makes no sense.
+			unset( $data['offers'][ $key ]['priceValidUntil'] );
+
+			// Add an @id to the offer.
+			if ( $offer['@type'] === 'Offer' ) {
+				$data['offers'][ $key ]['@id'] = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+			}
+			if ( $offer['@type'] === 'AggregateOffer' ) {
+				$data['offers'][ $key ]['@id']    = $home_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
+				$data['offers'][ $key ]['offers'] = $this->add_individual_offers( $product );
+			}
+		}
+
+		return $data;
 	}
 
 	/**
@@ -288,6 +316,43 @@ class WPSEO_WooCommerce_Schema {
 	 */
 	protected function get_canonical() {
 		return WPSEO_Frontend::get_instance()->canonical( false );
+	}
+
+	/**
+	 * Adds the individual product variants as variants of the offer.
+	 *
+	 * @param \WC_Product $product The WooCommerce product we're working with.
+	 *
+	 * @return array $data Schema Offers data.
+	 */
+	protected function add_individual_offers( $product ) {
+		$variations = $product->get_available_variations();
+
+		$site_url           = trailingslashit( get_site_url() );
+		$currency           = get_woocommerce_currency();
+		$prices_include_tax = wc_prices_include_tax();
+		$decimals           = wc_get_price_decimals();
+		$data               = [];
+		$product_id         = $product->get_id();
+		$product_name       = $product->get_name();
+
+		foreach ( $variations as $key => $variation ) {
+			$variation_name = implode( ' / ', $variation['attributes'] );
+
+			$data[] = [
+				'@type'              => 'Offer',
+				'@id'                => $site_url . '#/schema/offer/' . $product_id . '-' . $key,
+				'name'               => $product_name . ' - ' . $variation_name,
+				'price'              => wc_format_decimal( $variation['display_price'], $decimals ),
+				'priceSpecification' => [
+					'price'                 => wc_format_decimal( $variation['display_price'], $decimals ),
+					'priceCurrency'         => $currency,
+					'valueAddedTaxIncluded' => ( $prices_include_tax ) ? 'true' : 'false',
+				],
+			];
+		}
+
+		return $data;
 	}
 
 	/**
