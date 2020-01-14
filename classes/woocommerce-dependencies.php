@@ -13,7 +13,7 @@ class Yoast_WooCommerce_Dependencies {
 	/**
 	 * Check whether we've met our dependencies. If not, hook in some errors.
 	 *
-	 * @return bool
+	 * @return bool True if the plugin can run, false if not.
 	 */
 	public function check() {
 		global $wp_version;
@@ -30,7 +30,7 @@ class Yoast_WooCommerce_Dependencies {
 	 *
 	 * @param string $wp_version The current version of WordPress.
 	 *
-	 * @return bool True whether the dependencies are okay.
+	 * @return bool True when the dependencies are okay.
 	 */
 	protected function check_dependencies( $wp_version ) {
 		if ( ! version_compare( $wp_version, '5.2', '>=' ) ) {
@@ -46,7 +46,7 @@ class Yoast_WooCommerce_Dependencies {
 			return false;
 		}
 
-		// When Yoast SEO SEO is not installed.
+		// When Yoast SEO is not installed.
 		$wordpress_seo_version = $this->get_wordpress_seo_version();
 		if ( ! $wordpress_seo_version ) {
 			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_missing_error' ] );
@@ -67,7 +67,7 @@ class Yoast_WooCommerce_Dependencies {
 	/**
 	 * Checks whether WooCommerce is available.
 	 *
-	 * @return bool
+	 * @return bool True if WooCommerce is active, false if not.
 	 */
 	protected function check_woocommerce_exists() {
 		return function_exists( 'WC' );
@@ -76,7 +76,7 @@ class Yoast_WooCommerce_Dependencies {
 	/**
 	 * Returns the WordPress SEO version when set.
 	 *
-	 * @return bool|string The version whether it is set.
+	 * @return bool|string The version when it is set.
 	 */
 	protected function get_wordpress_seo_version() {
 		if ( ! defined( 'WPSEO_VERSION' ) ) {
@@ -92,7 +92,7 @@ class Yoast_WooCommerce_Dependencies {
 	public function woocommerce_missing_error() {
 		echo '<div class="error"><p>';
 		printf(
-		/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce SEO */
+			/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to WooCommerce, %4$s resolves to Yoast WooCommerce SEO */
 			esc_html__( 'Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work.', 'yoast-woo-seo' ),
 			'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=woocommerce&plugin-search-input=Search+Plugins' ) ) . '">',
 			'</a>',
@@ -108,7 +108,7 @@ class Yoast_WooCommerce_Dependencies {
 	public function yoast_wpseo_woocommerce_missing_error() {
 		echo '<div class="error"><p>';
 		printf(
-		/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to WooCommerce SEO */
+			/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to Yoast WooCommerce SEO */
 			esc_html__( 'Please %1$sinstall &amp; activate %3$s%2$s to allow the %4$s module to work.', 'yoast-woo-seo' ),
 			'<a href="' . esc_url( admin_url( 'plugin-install.php?tab=search&type=term&s=yoast+seo&plugin-search-input=Search+Plugins' ) ) . '">',
 			'</a>',
@@ -124,9 +124,9 @@ class Yoast_WooCommerce_Dependencies {
 	public function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
 		echo '<div class="error"><p>';
 		printf(
-		/* translators: %1$s resolves to WooCommerce SEO */
+			/* translators: %1$s resolves to Yoast WooCommerce SEO */
 			esc_html__( 'Please upgrade WordPress to the latest version to allow WordPress and the %1$s module to work properly.', 'yoast-woo-seo' ),
-			'WooCommerce SEO'
+			'Yoast WooCommerce SEO'
 		);
 		echo '</p></div>';
 	}
@@ -137,10 +137,10 @@ class Yoast_WooCommerce_Dependencies {
 	public function yoast_wpseo_woocommerce_upgrade_error() {
 		echo '<div class="error"><p>';
 		printf(
-		/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce SEO */
+			/* translators: %1$s resolves to Yoast SEO, %2$s resolves to Yoast WooCommerce SEO */
 			esc_html__( 'Please upgrade the %1$s plugin to the latest version to allow the %2$s module to work.', 'yoast-woo-seo' ),
 			'Yoast SEO',
-			'WooCommerce SEO'
+			'Yoast WooCommerce SEO'
 		);
 		echo '</p></div>';
 	}
