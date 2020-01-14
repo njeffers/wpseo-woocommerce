@@ -1,4 +1,4 @@
-const _defaultsDeep = require( "lodash/defaultsDeep" );
+const _defaultsDeep = require( "lodash.defaultsdeep" );
 const path = require( "path" );
 const pkg = require( "../../package.json" );
 const UnminifiedWebpackPlugin = require( "unminified-webpack-plugin" );
@@ -21,8 +21,8 @@ const defaultConfig = {
 		"yoastseo-woo-worker": path.join( __dirname, "../../", "js/src/yoastseo-woo-worker.js" ),
 	},
 	output: {
-		path: path.join( __dirname, "../../", "js" ),
-		filename: "[name]-" + pluginVersionSlug + ".min.js",
+		path: path.join( __dirname, "../../", "js/dist" ),
+		filename: "[name]-" + pluginVersionSlug + ".js",
 	},
 	externals: externals,
 	optimization: {

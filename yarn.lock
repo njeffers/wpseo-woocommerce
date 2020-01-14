@@ -288,10 +288,10 @@
   resolved "https://registry.yarnpkg.com/@yoast/browserslist-config/-/browserslist-config-1.0.4.tgz#e6daa4b98073292dfcad1404b8644d22f21f3a53"
   integrity sha512-Z7rC9jdoMzPHiL3WZaZ2yfyYUoIcrLIAfLi+QL3CNMOIoHCEkjwA3cKxdFQqRjfWpFiGSoOgFVQsIUFEND1g9w==
 
-"@yoast/grunt-plugin-tasks@^1.6":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@yoast/grunt-plugin-tasks/-/grunt-plugin-tasks-1.6.0.tgz#ec454cfafc8a6312ccd9a9bf1ae935ef2c27079a"
-  integrity sha512-GAsQK4SxXh8uf8EanoCFonWCs2Azoj5waM46A1V+luk64LiagoliNFS/xGUgkXhG4fYG+0qmoT/qWRddZjly3Q==
+"@yoast/grunt-plugin-tasks@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@yoast/grunt-plugin-tasks/-/grunt-plugin-tasks-1.6.1.tgz#0e150e67dbb1c8fc23abe86db0fd799d1d8f440f"
+  integrity sha512-y60lbhfMghXO+HdmoJo/2uoENJMY2AMy3LUG3OOjlZoEQQxuV6Y55q6emrzzUXD7SJ6Fw8zHkxgM5swbq+JUAQ==
   dependencies:
     "@yoast/browserslist-config" "^1.0.0"
     autoprefixer "^9.7.2"
