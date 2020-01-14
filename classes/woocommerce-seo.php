@@ -840,7 +840,7 @@ class Yoast_WooCommerce_SEO {
 	 * Checks if product class has a short description method. Otherwise it returns the value of the post_excerpt from
 	 * the post attribute.
 	 *
-	 * @param WC_Product $product The product.
+	 * @param WC_Product|null $product The product.
 	 *
 	 * @return string
 	 */
