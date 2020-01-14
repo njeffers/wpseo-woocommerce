@@ -58,7 +58,7 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @param array $data Product Schema data.
 	 *
-	 * @return array $data Product Schema data.
+	 * @return array Product Schema data.
 	 */
 	public function filter_webpage( $data ) {
 		if ( is_product() ) {
@@ -76,7 +76,7 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @param array $data Review Schema data.
 	 *
-	 * @return array $data Review Schema data.
+	 * @return array Review Schema data.
 	 */
 	public function change_reviewed_entity( $data ) {
 		unset( $data['@type'] );
@@ -93,7 +93,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @param array       $data    Schema Product data.
 	 * @param \WC_Product $product Product object.
 	 *
-	 * @return array $data Schema Product data.
+	 * @return array Schema Product data.
 	 */
 	public function change_product( $data, $product ) {
 		$canonical = $this->get_canonical();
@@ -131,7 +131,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @param array       $data    Schema Product data.
 	 * @param \WC_Product $product The product.
 	 *
-	 * @return array $data Schema Product data.
+	 * @return array Schema Product data.
 	 */
 	private function filter_offers( $data, $product ) {
 		$home_url = trailingslashit( home_url() );
@@ -157,7 +157,7 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @param array $types Types of Schema Woo will render.
 	 *
-	 * @return array $types Types of Schema Woo will render.
+	 * @return array Types of Schema Woo will render.
 	 */
 	public function remove_woo_breadcrumbs( $types ) {
 		foreach ( $types as $key => $type ) {
@@ -186,7 +186,7 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @param array $data Schema Product data.
 	 *
-	 * @return array $data Schema Product data.
+	 * @return array Schema Product data.
 	 */
 	private function change_seller_in_offers( $data ) {
 		$company_or_person = WPSEO_Options::get( 'company_or_person', false );
@@ -323,7 +323,7 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @param \WC_Product $product The WooCommerce product we're working with.
 	 *
-	 * @return array $data Schema Offers data.
+	 * @return array Schema Offers data.
 	 */
 	protected function add_individual_offers( $product ) {
 		$variations = $product->get_available_variations();
@@ -361,7 +361,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @param array       $data    Review Schema data.
 	 * @param \WC_Product $product The WooCommerce product we're working with.
 	 *
-	 * @return array $data Review Schema data.
+	 * @return array Review Schema data.
 	 */
 	protected function filter_reviews( $data, $product ) {
 		if ( ! isset( $data['review'] ) || $data['review'] === [] ) {
