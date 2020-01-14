@@ -717,7 +717,7 @@ class Yoast_WooCommerce_SEO {
 			if ( is_array( $terms ) && count( $terms ) > 0 ) {
 				$term_values = array_values( $terms );
 				$term        = array_shift( $term_values );
-				echo '<meta property="product:brand" content="' . esc_attr( $term->name ) . '"/>' . "\n";
+				echo '<meta property="product:brand" content="' . esc_attr( $term->name ) . '" />' . "\n";
 			}
 		}
 
@@ -745,13 +745,15 @@ class Yoast_WooCommerce_SEO {
 		$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', $show_price );
 
 		if ( $show_price === true ) {
-			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '"/>' . "\n";
-			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '"/>' . "\n";
+			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '" />' . "\n";
+			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '" />' . "\n";
 		}
 
 		if ( $product->is_in_stock() ) {
-			echo '<meta property="product:availability" content="instock"/>' . "\n";
+			echo '<meta property="product:availability" content="in stock" />' . "\n";
 		}
+
+		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
 	}
 
 	/**
