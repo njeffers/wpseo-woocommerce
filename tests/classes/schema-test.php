@@ -52,6 +52,7 @@ class Schema_Test extends TestCase {
 	 * @covers \WPSEO_WooCommerce_Schema::add_organization_for_attribute
 	 */
 	public function test_change_product() {
+		$product_id   = 1;
 		$product_name = 'TestProduct';
 		$base_url     = 'http://local.wordpress.test';
 		$canonical    = $base_url . '/product/test/';
@@ -60,7 +61,8 @@ class Schema_Test extends TestCase {
 		$utils->expects( 'get_home_url' )->once()->with()->andReturn( $canonical );
 
 		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_id' )->twice()->with()->andReturn( 1 );
+		$product->expects( 'get_id' )->times( 3 )->with()->andReturn( $product_id );
+		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
 
 		Mockery::getConfiguration()->setConstantsMap(
 			[
@@ -80,6 +82,7 @@ class Schema_Test extends TestCase {
 		Functions\stubs(
 			[
 				'has_post_thumbnail' => true,
+				'get_site_url'       => $base_url,
 			]
 		);
 
@@ -107,6 +110,21 @@ class Schema_Test extends TestCase {
 					],
 				],
 			],
+			'review'      => [
+				[
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => 5,
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Joost de Valk',
+					],
+					'reviewBody'    => 'Product review',
+					'datePublished' => '2020-01-07T13:36:12+00:00',
+				],
+			],
 		];
 
 		$expected = [
@@ -125,6 +143,23 @@ class Schema_Test extends TestCase {
 					'seller' => [
 						'@id' => $canonical . '#organization',
 					],
+				],
+			],
+			'review'           => [
+				[
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => 5,
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Joost de Valk',
+					],
+					'reviewBody'    => 'Product review',
+					'datePublished' => '2020-01-07T13:36:12+00:00',
+					'@id'           => $base_url . '/#/schema/review/' . $product_id . '-0',
+					'name'          => $product_name,
 				],
 			],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
