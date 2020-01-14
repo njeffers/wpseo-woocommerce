@@ -8,6 +8,7 @@ use Yoast_WooCommerce_Dependencies;
  * Test Helper Class.
  */
 class Yoast_WooCommerce_Dependencies_Double extends Yoast_WooCommerce_Dependencies {
+
 	/**
 	 * Checks the plugin's dependencies.
 	 *

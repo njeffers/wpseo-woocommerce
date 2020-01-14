@@ -9,6 +9,7 @@
  * Class Yoast_WooCommerce_Dependencies
  */
 class Yoast_WooCommerce_Dependencies {
+
 	/**
 	 * Check whether we've met our dependencies. If not, hook in some errors.
 	 *
@@ -143,5 +144,4 @@ class Yoast_WooCommerce_Dependencies {
 		);
 		echo '</p></div>';
 	}
-
 }

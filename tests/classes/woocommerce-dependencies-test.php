@@ -12,6 +12,7 @@ use Yoast\WP\Woocommerce\Tests\TestCase;
  * Class WooCommerce_Schema_Test.
  */
 class Yoast_WooCommerce_Dependencies_Test extends TestCase {
+
 	/**
 	 * Tests check dependencies.
 	 *
