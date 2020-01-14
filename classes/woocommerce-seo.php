@@ -91,8 +91,8 @@ class Yoast_WooCommerce_SEO {
 
 			// Fix breadcrumbs.
 			$this->handle_breadcrumbs_replacements();
+		}
 
-		} // End if.
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 
 		// Make sure the primary category will be used in the permalink.
