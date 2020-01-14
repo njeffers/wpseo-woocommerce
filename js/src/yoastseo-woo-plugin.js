@@ -57,6 +57,13 @@ class YoastWooCommercePlugin {
 	 * @returns {void}
 	 */
 	bindEvents() {
+		if ( isTinyMCEAvailable( 'excerpt' ) ) {
+			const excerptElement = tinyMCE.get( 'excerpt' );
+			excerptElement.on( 'change', function() {
+				YoastSEO.app.analyzeTimer();
+			} );
+		}
+
 		jQuery( ".add_product_images" ).find( "a" ).on( "click", this.bindLinkEvent.bind( this ) );
 	}
 
@@ -108,25 +115,28 @@ class YoastWooCommercePlugin {
 	}
 
 	/**
-	 * Registers the addImageToContent modification.
+	 * Registers the addContent modification.
 	 *
 	 * @returns {void}
 	 */
 	registerModifications() {
-		var callback = this.addImageToContent.bind( this );
+		var callback = this.addContent.bind( this );
 
 		YoastSEO.app.registerModification( "content", callback, "YoastWooCommercePlugin", 10 );
 	}
 
 	/**
-	 * Adds the images from the page gallery to the content to be analyzed by the analyzer.
+	 * Adds the short description and images from the page gallery to the content to be analyzed by the analyzer.
 	 *
 	 * @param {string} data The data string that does not have the images outer html.
 	 *
-	 * @returns {string} The data string parameter with the images outer html.
+	 * @returns {string} The data string parameter with the short description and the images outer html.
 	 */
-	addImageToContent( data ) {
-		var images = jQuery( "#product_images_container" ).find( "img" );
+	addContent( data ) {
+		var short_desc = getExcerpt();
+		data += "\n\n" + short_desc;
+
+		var images     = jQuery( "#product_images_container" ).find( "img" );
 
 		for ( var i = 0; i < images.length; i++ ) {
 			data += images[ i ].outerHTML;
