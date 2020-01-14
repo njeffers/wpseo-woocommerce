@@ -98,14 +98,7 @@ class WPSEO_WooCommerce_Schema {
 	public function change_product( $data, $product ) {
 		$canonical = $this->get_canonical();
 
-		// Make seller refer to the Organization.
-		if ( ! empty( $data['offers'] ) ) {
-			foreach ( $data['offers'] as $key => $val ) {
-				$data['offers'][ $key ]['seller'] = [
-					'@id' => trailingslashit( WPSEO_Utils::get_home_url() ) . WPSEO_Schema_IDs::ORGANIZATION_HASH,
-				];
-			}
-		}
+		$data = $this->change_seller_in_offers( $data );
 
 		$data = $this->filter_offers( $data, $product );
 
@@ -114,6 +107,8 @@ class WPSEO_WooCommerce_Schema {
 			// We're going to replace the single review here with an array of reviews taken from the other filter.
 			$data['review'] = [];
 		}
+
+		$data = $this->filter_reviews( $data, $product );
 
 		// This product is the main entity of this page, so we set it as such.
 		$data['mainEntityOfPage'] = [
@@ -126,6 +121,7 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_image( $canonical );
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
+		$this->add_sku( $product );
 
 		return [];
 	}
@@ -165,6 +161,43 @@ class WPSEO_WooCommerce_Schema {
 		}
 
 		return $types;
+	}
+
+	/**
+	 * Add productID to our output.
+	 *
+	 * @param \WC_Product $product Product object.
+	 */
+	private function add_sku( $product ) {
+		$sku = $product->get_sku();
+		if ( ! empty( $sku ) ) {
+			$this->data['productID'] = $sku;
+		}
+	}
+
+	/**
+	 * Update the seller attribute to reference the Organization, when it is set.
+	 *
+	 * @param array $data Schema Product data.
+	 *
+	 * @return array $data Schema Product data.
+	 */
+	private function change_seller_in_offers( $data ) {
+		$company_or_person = WPSEO_Options::get( 'company_or_person', false );
+		$company_name      = WPSEO_Options::get( 'company_name' );
+
+		if ( $company_or_person !== 'company' || empty( $company_name ) ) {
+			return $data;
+		}
+
+		if ( ! empty( $data['offers'] ) ) {
+			foreach ( $data['offers'] as $key => $val ) {
+				$data['offers'][ $key ]['seller'] = [
+					'@id' => trailingslashit( WPSEO_Utils::get_home_url() ) . WPSEO_Schema_IDs::ORGANIZATION_HASH,
+				];
+			}
+		}
+		return $data;
 	}
 
 	/**
@@ -221,7 +254,7 @@ class WPSEO_WooCommerce_Schema {
 		 *
 		 * See https://github.com/woocommerce/woocommerce/issues/24188.
 		 */
-		if ( $this->data['image'] === false ) {
+		if ( isset( $this->data['image'] ) && $this->data['image'] === false ) {
 			unset( $this->data['image'] );
 		}
 
@@ -277,5 +310,28 @@ class WPSEO_WooCommerce_Schema {
 	 */
 	protected function get_canonical() {
 		return WPSEO_Frontend::get_instance()->canonical( false );
+	}
+
+	/**
+	 * Enhances the review data output by WooCommerce.
+	 *
+	 * @param array       $data    Review Schema data.
+	 * @param \WC_Product $product The WooCommerce product we're working with.
+	 *
+	 * @return array $data Review Schema data.
+	 */
+	protected function filter_reviews( $data, $product ) {
+		if ( ! isset( $data['review'] ) || $data['review'] === [] ) {
+			return $data;
+		}
+
+		$site_url = trailingslashit( get_site_url() );
+
+		foreach ( $data['review'] as $key => $review ) {
+			$data['review'][ $key ]['@id']  = $site_url . '#/schema/review/' . $product->get_id() . '-' . $key;
+			$data['review'][ $key ]['name'] = $product->get_name();
+		}
+
+		return $data;
 	}
 }

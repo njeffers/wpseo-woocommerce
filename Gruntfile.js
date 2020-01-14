@@ -35,7 +35,7 @@ module.exports = function( grunt ) {
 			],
 			js: [
 				"js/src/**/*.js",
-				"!js/*.min.js",
+				"!js/dist/*.min.js",
 			],
 			phptests: "tests/**/*.php",
 			/**
