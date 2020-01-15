@@ -44,13 +44,16 @@ class WPSEO_WooCommerce_Schema {
 
 	/**
 	 * Outputs the Woo Schema blob in the footer.
+	 *
+	 * @return bool False when there's nothing to output, true when we did output something.
 	 */
 	public function output_schema_footer() {
 		if ( empty( $this->data ) || $this->data === [] ) {
-			return;
+			return false;
 		}
 
 		WPSEO_Utils::schema_output( [ $this->data ], 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
+		return true;
 	}
 
 	/**

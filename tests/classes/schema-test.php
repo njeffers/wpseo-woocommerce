@@ -25,6 +25,93 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
+	 * Tests the class constructor.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::__construct
+	 */
+	public function test_construct() {
+		$schema = new WPSEO_WooCommerce_Schema();
+
+		$this->assertTrue( has_filter( 'woocommerce_structured_data_product', [ $schema, 'change_product' ] ) );
+		$this->assertTrue( has_filter( 'woocommerce_structured_data_type_for_page', [
+			$schema,
+			'remove_woo_breadcrumbs',
+		] ) );
+		$this->assertTrue( has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
+		$this->assertTrue( has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
+	}
+
+	/**
+	 * Test our Schema output in the footer.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::output_schema_footer
+	 */
+	public function test_output_schema_footer() {
+		$schema = new Schema_Double();
+
+		$schema->data = [];
+		$this->assertFalse( $schema->output_schema_footer() );
+
+		$data = [ 'test' ];
+
+		$utils = Mockery::mock( 'alias:WPSEO_Utils' );
+		$utils->expects( 'schema_output' )->once()->andSet( 'output', $data );
+
+		$schema->data = $data;
+		$schema->output_schema_footer();
+		$this->assertEquals( $data, $utils->output );
+	}
+
+	/**
+	 * Test our Schema output in the footer.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::filter_webpage
+	 */
+	public function test_filter_webpage() {
+		Functions\stubs(
+			[
+				'is_product' => false,
+				'is_checkout' => false,
+				'is_checkout_pay_page' => false,
+			]
+		);
+
+		$input = [
+			'@type' => 'WebPage'
+		];
+		$schema = new WPSEO_WooCommerce_Schema();
+		$this->assertEquals( $input, $schema->filter_webpage( $input ) );
+
+		Functions\stubs(
+			[
+				'is_product' => false,
+				'is_checkout' => true,
+				'is_checkout_pay_page' => false,
+			]
+		);
+
+		$expected = [
+			'@type' => 'CheckoutPage'
+		];
+		$schema = new WPSEO_WooCommerce_Schema();
+		$this->assertEquals( $expected, $schema->filter_webpage( $input ) );
+
+		Functions\stubs(
+			[
+				'is_product' => true,
+				'is_checkout' => false,
+				'is_checkout_pay_page' => false,
+			]
+		);
+
+		$expected = [
+			'@type' => 'ItemPage'
+		];
+		$schema = new WPSEO_WooCommerce_Schema();
+		$this->assertEquals( $expected, $schema->filter_webpage( $input ) );
+	}
+
+	/**
 	 * Tests that should_output_yoast_schema returns the right value.
 	 *
 	 * @covers \WPSEO_WooCommerce_Schema::should_output_yoast_schema
