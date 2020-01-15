@@ -155,11 +155,9 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 							$clean[ $key ] = WPSEO_Utils::validate_bool( $dirty[ $key ] );
 						}
 						else {
+							$clean[ $key ] = false;
 							if ( $short && isset( $old[ $key ] ) ) {
 								$clean[ $key ] = WPSEO_Utils::validate_bool( $old[ $key ] );
-							}
-							else {
-								$clean[ $key ] = false;
 							}
 						}
 						break;
