@@ -27,8 +27,8 @@ if ( ! function_exists( 'add_filter' ) ) {
 	exit();
 }
 
-if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
-	require dirname( __FILE__ ) . '/vendor/autoload.php';
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require __DIR__ . '/vendor/autoload.php';
 }
 
 define( 'WPSEO_WOO_PLUGIN_FILE', __FILE__ );
