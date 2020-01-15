@@ -717,9 +717,7 @@ class Yoast_WooCommerce_SEO {
 			return null;
 		}
 
-		$product = wc_get_product( get_queried_object_id() );
-
-		return $product;
+		return wc_get_product( get_queried_object_id() );
 	}
 
 	/**
