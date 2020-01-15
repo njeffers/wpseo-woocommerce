@@ -24,14 +24,14 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 *
 	 * @dataProvider validate_option_values
 	 *
+	 * @covers WPSEO_Option_Woo::validate_option
+	 *
 	 * @param string           $field_name The field name to validate.
 	 * @param string|bool      $expected   The expected value.
 	 * @param string|bool|null $dirty      The value for the dirty argument.
 	 * @param string|bool      $clean      The value for the clean argument.
 	 * @param string|bool|null $old        The value for the old argument.
 	 * @param string           $short      Determines whether the short form should set or not.
-	 *
-	 * @covers WPSEO_Option_Woo::validate_option
 	 */
 	public function test_validate_option( $field_name, $expected, $dirty, $clean, $old, $short = 'off' ) {
 		$option = new WPSEO_Option_Woo_Double();
@@ -54,7 +54,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * Formatting of each record that is provided:
 	 * field, expected, dirty, clean, old and short-form.
 	 *
-	 * @return array
+	 * @return array[]
 	 */
 	public function validate_option_values() {
 		return [
