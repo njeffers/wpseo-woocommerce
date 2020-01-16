@@ -25,8 +25,8 @@ class Yoast_WooCommerce_Dependencies_Double extends Yoast_WooCommerce_Dependenci
 	 *
 	 * @return bool|string
 	 */
-	public function get_wordpress_seo_version() {
-		return parent::get_wordpress_seo_version();
+	public function get_yoast_seo_version() {
+		return parent::get_yoast_seo_version();
 	}
 
 	/**

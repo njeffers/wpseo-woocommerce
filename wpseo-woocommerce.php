@@ -44,8 +44,10 @@ function initialize_yoast_woocommerce_seo() {
 
 	load_plugin_textdomain( 'yoast-woo-seo', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
+	global $wp_version;
+
 	$dependency_check = new Yoast_WooCommerce_Dependencies();
-	if ( $dependency_check->check() ) {
+	if ( $dependency_check->check_dependencies( $wp_version ) ) {
 		global $yoast_woo_seo;
 
 		// Initializes the plugin.

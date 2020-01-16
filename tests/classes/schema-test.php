@@ -25,6 +25,705 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
+	 * Tests the class constructor.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::__construct
+	 */
+	public function test_construct() {
+		$schema = new WPSEO_WooCommerce_Schema();
+
+		$this->assertTrue( has_filter( 'woocommerce_structured_data_product', [ $schema, 'change_product' ] ) );
+		$this->assertTrue( has_filter( 'woocommerce_structured_data_type_for_page', [ $schema, 'remove_woo_breadcrumbs' ] ) );
+		$this->assertTrue( has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
+		$this->assertTrue( has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
+	}
+
+	/**
+	 * Test our Schema output in the footer.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::output_schema_footer
+	 */
+	public function test_output_schema_footer() {
+		$schema = new Schema_Double();
+
+		$schema->data = [];
+		$this->assertFalse( $schema->output_schema_footer() );
+
+		$data = [ 'test' ];
+
+		$utils = Mockery::mock( 'alias:WPSEO_Utils' );
+		$utils->expects( 'schema_output' )->once()->andSet( 'output', $data );
+
+		$schema->data = $data;
+		$schema->output_schema_footer();
+		$this->assertEquals( $data, $utils->output );
+	}
+
+	/**
+	 * Test our Schema output in the footer.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::filter_webpage
+	 */
+	public function test_filter_webpage() {
+		Functions\stubs(
+			[
+				'is_product'           => false,
+				'is_checkout'          => false,
+				'is_checkout_pay_page' => false,
+			]
+		);
+
+		$input  = [
+			'@type' => 'WebPage',
+		];
+		$schema = new WPSEO_WooCommerce_Schema();
+		$this->assertEquals( $input, $schema->filter_webpage( $input ) );
+
+		Functions\stubs(
+			[
+				'is_product'           => false,
+				'is_checkout'          => true,
+				'is_checkout_pay_page' => false,
+			]
+		);
+
+		$expected = [
+			'@type' => 'CheckoutPage',
+		];
+		$schema   = new WPSEO_WooCommerce_Schema();
+		$this->assertEquals( $expected, $schema->filter_webpage( $input ) );
+
+		Functions\stubs(
+			[
+				'is_product'           => true,
+				'is_checkout'          => false,
+				'is_checkout_pay_page' => false,
+			]
+		);
+
+		$expected = [
+			'@type' => 'ItemPage',
+		];
+		$schema   = new WPSEO_WooCommerce_Schema();
+		$this->assertEquals( $expected, $schema->filter_webpage( $input ) );
+	}
+
+	/**
+	 * Change review Schema test.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::change_reviewed_entity
+	 */
+	public function test_change_reviewed_entity() {
+		$schema = new Schema_Double();
+
+		$input  = [
+			'@type'         => 'Review',
+			'itemReviewed'  => 'Product',
+			'reviewContent' => 'is a dummy review',
+		];
+		$output = $schema->change_reviewed_entity( $input );
+
+		$expected_output = [];
+		$expected_data   = [
+			'review' => [
+				[
+					'reviewContent' => 'is a dummy review',
+				],
+			],
+		];
+
+		$this->assertEquals( $expected_output, $output );
+		$this->assertEquals( $expected_data, $schema->data );
+	}
+
+	/**
+	 * Test filtering offers.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::filter_offers
+	 */
+	public function test_filter_offers() {
+		$schema = new Schema_Double();
+		$input  = [
+			'@type'       => 'Product',
+			'name'        => 'Customizable responsive toolset',
+			'url'         => 'https://example.com/product/customizable-responsive-toolset/',
+			'description' => 'Sit debitis reprehenderit non rem natus. Corporis quidem quos et sit similique. Et ad hic exercitationem repudiandae rem laborum.\n\n\n\n\n\n\n\n\nCumque iusto cum enim ut. Et ipsum tempore dolorem ullam aspernatur autem et. Aut molestiae dolor natus. Ducimus molestias perspiciatis magni in libero deleniti ut. Rerum perspiciatis autem et maiores hic ducimus.\n\n\nAut tenetur ducimus distinctio quaerat deserunt sed. Sint ullam ut deserunt deleniti velit et. Incidunt in molestiae voluptas corrupti qui facilis quia.\n\n\n\n\n\nIste asperiores voluptas expedita id cupiditate. Sed error corrupti quibusdam dolor facere enim tenetur. Asperiores error qui commodi dolorem veritatis aspernatur.',
+			'image'       => [
+				'@id' => 'https://example.com/product/customizable-responsive-toolset/#primaryimage',
+			],
+			'sku'         => '209643',
+			'offers'      => [
+
+				[
+					'@type'              => 'Offer',
+					'price'              => '49.00',
+					'priceValidUntil'    => '2021-12-31',
+					'priceSpecification' => [
+						'price'                 => '49.00',
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => 'false',
+					],
+					'priceCurrency'      => 'GBP',
+					'availability'       => 'http://schema.org/InStock',
+					'url'                => 'https://example.com/product/customizable-responsive-toolset/',
+					'seller'             => [
+						'@type' => 'Organization',
+						'name'  => 'WooCommerce',
+						'url'   => 'https://example.com',
+					],
+				],
+			],
+		];
+
+		$expected_output                     = $input;
+		$expected_output['offers'][0]['@id'] = 'http://example.com/#/schema/offer/209643-0';
+		unset( $expected_output['offers'][0]['priceValidUntil'] );
+
+		$base_url = 'http://example.com';
+		Functions\stubs(
+			[
+				'get_site_url' => $base_url,
+			]
+		);
+
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->once()->andReturn( '209643' );
+		$output = $schema->filter_offers( $input, $product );
+
+		$this->assertEquals( $expected_output, $output );
+	}
+
+	/**
+	 * Test filtering offers.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::filter_offers
+	 * @covers WPSEO_WooCommerce_Schema::add_individual_offers
+	 */
+	public function test_filter_aggregate_offers() {
+		$schema = new Schema_Double();
+		$input  = [
+			'@type'       => 'Product',
+			'name'        => 'Customizable responsive toolset',
+			'url'         => 'https://example.com/product/customizable-responsive-toolset/',
+			'description' => 'Sit debitis reprehenderit non rem natus. Corporis quidem quos et sit similique. Et ad hic exercitationem repudiandae rem laborum.\n\n\n\n\n\n\n\n\nCumque iusto cum enim ut. Et ipsum tempore dolorem ullam aspernatur autem et. Aut molestiae dolor natus. Ducimus molestias perspiciatis magni in libero deleniti ut. Rerum perspiciatis autem et maiores hic ducimus.\n\n\nAut tenetur ducimus distinctio quaerat deserunt sed. Sint ullam ut deserunt deleniti velit et. Incidunt in molestiae voluptas corrupti qui facilis quia.\n\n\n\n\n\nIste asperiores voluptas expedita id cupiditate. Sed error corrupti quibusdam dolor facere enim tenetur. Asperiores error qui commodi dolorem veritatis aspernatur.',
+			'image'       => [
+				'@id' => 'https://example.com/product/customizable-responsive-toolset/#primaryimage',
+			],
+			'sku'         => 'sku209643',
+			'offers'      => [
+				[
+					'@type'         => 'AggregateOffer',
+					'lowPrice'      => '8.00',
+					'highPrice'     => '12.00',
+					'offerCount'    => 3,
+					'priceCurrency' => 'GBP',
+					'availability'  => 'http://schema.org/InStock',
+					'url'           => 'https://example.com/product/customizable-responsive-toolset/',
+					'seller'        => [
+						'@type' => 'Organization',
+						'name'  => 'WooCommerce',
+						'url'   => 'https://example.com',
+					],
+				],
+			],
+		];
+
+		$variants        = [
+			[
+				'attributes'            => [
+					'attribute_pa_size' => 'l',
+				],
+				'availability_html'     => '',
+				'backorders_allowed'    => false,
+				'dimensions'            => [
+					'length' => '',
+					'width'  => '',
+					'height' => '',
+				],
+				'dimensions_html'       => 'N/A',
+				'display_price'         => 10,
+				'display_regular_price' => 10,
+				'image'                 => [
+					'title'                   => 'jewelry5',
+					'caption'                 => '',
+					'url'                     => 'https://example.com/wp-content/uploads/2020/01/jewelry5.jpg',
+					'alt'                     => '',
+					'src'                     => 'https://example.com/wp-content/uploads/2020/01/jewelry5-416x312.jpg',
+					'srcset'                  => 'https://example.com/wp-content/uploads/2020/01/jewelry5-416x312.jpg 416w, https://example.com/wp-content/uploads/2020/01/jewelry5-300x225.jpg 300w, https://example.com/wp-content/uploads/2020/01/jewelry5.jpg 640w',
+					'sizes'                   => '(max-width: 416px) 100vw, 416px',
+					'full_src'                => 'https://example.com/wp-content/uploads/2020/01/jewelry5.jpg',
+					'full_src_w'              => 640,
+					'full_src_h'              => 480,
+					'gallery_thumbnail_src'   => 'https://example.com/wp-content/uploads/2020/01/jewelry5-100x100.jpg',
+					'gallery_thumbnail_src_w' => 100,
+					'gallery_thumbnail_src_h' => 100,
+					'thumb_src'               => 'https://example.com/wp-content/uploads/2020/01/jewelry5-324x324.jpg',
+					'thumb_src_w'             => 324,
+					'thumb_src_h'             => 324,
+					'src_w'                   => 416,
+					'src_h'                   => 312,
+				],
+				'image_id'              => '17',
+				'is_downloadable'       => false,
+				'is_in_stock'           => true,
+				'is_purchasable'        => true,
+				'is_sold_individually'  => 'no',
+				'is_virtual'            => false,
+				'max_qty'               => '',
+				'min_qty'               => 1,
+				'price_html'            => '<span class=\'price\'><span class=\'woocommerce-Price-amount amount\'><span class=\'woocommerce-Price-currencySymbol\'>&pound;</span>10.00</span></span>',
+				'sku'                   => '209643',
+				'variation_description' => '',
+				'variation_id'          => 330,
+				'variation_is_active'   => true,
+				'variation_is_visible'  => true,
+				'weight'                => '',
+				'weight_html'           => 'N/A',
+			],
+			[
+				'attributes'            => [
+					'attribute_pa_size' => 'm',
+				],
+				'availability_html'     => '',
+				'backorders_allowed'    => false,
+				'dimensions'            => [
+					'length' => '',
+					'width'  => '',
+					'height' => '',
+				],
+				'dimensions_html'       => 'N/A',
+				'display_price'         => 8,
+				'display_regular_price' => 8,
+				'image'                 => [
+					'title'                   => 'jewelry5',
+					'caption'                 => '',
+					'url'                     => 'https://example.com/wp-content/uploads/2020/01/jewelry5.jpg',
+					'alt'                     => '',
+					'src'                     => 'https://example.com/wp-content/uploads/2020/01/jewelry5-416x312.jpg',
+					'srcset'                  => 'https://example.com/wp-content/uploads/2020/01/jewelry5-416x312.jpg 416w, https://example.com/wp-content/uploads/2020/01/jewelry5-300x225.jpg 300w, https://example.com/wp-content/uploads/2020/01/jewelry5.jpg 640w',
+					'sizes'                   => '(max-width: 416px) 100vw, 416px',
+					'full_src'                => 'https://example.com/wp-content/uploads/2020/01/jewelry5.jpg',
+					'full_src_w'              => 640,
+					'full_src_h'              => 480,
+					'gallery_thumbnail_src'   => 'https://example.com/wp-content/uploads/2020/01/jewelry5-100x100.jpg',
+					'gallery_thumbnail_src_w' => 100,
+					'gallery_thumbnail_src_h' => 100,
+					'thumb_src'               => 'https://example.com/wp-content/uploads/2020/01/jewelry5-324x324.jpg',
+					'thumb_src_w'             => 324,
+					'thumb_src_h'             => 324,
+					'src_w'                   => 416,
+					'src_h'                   => 312,
+				],
+				'image_id'              => '17',
+				'is_downloadable'       => false,
+				'is_in_stock'           => true,
+				'is_purchasable'        => true,
+				'is_sold_individually'  => 'no',
+				'is_virtual'            => false,
+				'max_qty'               => '',
+				'min_qty'               => 1,
+				'price_html'            => '<span class=\'price\'><span class=\'woocommerce-Price-amount amount\'><span class=\'woocommerce-Price-currencySymbol\'>&pound;</span>8.00</span></span>',
+				'sku'                   => '209643',
+				'variation_description' => '',
+				'variation_id'          => 331,
+				'variation_is_active'   => true,
+				'variation_is_visible'  => true,
+				'weight'                => '',
+				'weight_html'           => 'N/A',
+			],
+			[
+				'attributes'            => [
+					'attribute_pa_size' => 'xl',
+				],
+				'availability_html'     => '',
+				'backorders_allowed'    => false,
+				'dimensions'            => [
+					'length' => '',
+					'width'  => '',
+					'height' => '',
+				],
+				'dimensions_html'       => 'N/A',
+				'display_price'         => 12,
+				'display_regular_price' => 12,
+				'image'                 => [
+					'title'                   => 'jewelry5',
+					'caption'                 => '',
+					'url'                     => 'https://example.com/wp-content/uploads/2020/01/jewelry5.jpg',
+					'alt'                     => '',
+					'src'                     => 'https://example.com/wp-content/uploads/2020/01/jewelry5-416x312.jpg',
+					'srcset'                  => 'https://example.com/wp-content/uploads/2020/01/jewelry5-416x312.jpg 416w, https://example.com/wp-content/uploads/2020/01/jewelry5-300x225.jpg 300w, https://example.com/wp-content/uploads/2020/01/jewelry5.jpg 640w',
+					'sizes'                   => '(max-width: 416px) 100vw, 416px',
+					'full_src'                => 'https://example.com/wp-content/uploads/2020/01/jewelry5.jpg',
+					'full_src_w'              => 640,
+					'full_src_h'              => 480,
+					'gallery_thumbnail_src'   => 'https://example.com/wp-content/uploads/2020/01/jewelry5-100x100.jpg',
+					'gallery_thumbnail_src_w' => 100,
+					'gallery_thumbnail_src_h' => 100,
+					'thumb_src'               => 'https://example.com/wp-content/uploads/2020/01/jewelry5-324x324.jpg',
+					'thumb_src_w'             => 324,
+					'thumb_src_h'             => 324,
+					'src_w'                   => 416,
+					'src_h'                   => 312,
+				],
+				'image_id'              => '17',
+				'is_downloadable'       => false,
+				'is_in_stock'           => true,
+				'is_purchasable'        => true,
+				'is_sold_individually'  => 'no',
+				'is_virtual'            => false,
+				'max_qty'               => '',
+				'min_qty'               => 1,
+				'price_html'            => '<span class=\'price\'><span class=\'woocommerce-Price-amount amount\'><span class=\'woocommerce-Price-currencySymbol\'>&pound;</span>12.00</span></span>',
+				'sku'                   => '209643',
+				'variation_description' => '',
+				'variation_id'          => 332,
+				'variation_is_active'   => true,
+				'variation_is_visible'  => true,
+				'weight'                => '',
+				'weight_html'           => 'N/A',
+			],
+		];
+		$expected_output =
+			[
+				'@type'         => 'AggregateOffer',
+				'lowPrice'      => '8.00',
+				'highPrice'     => '12.00',
+				'offerCount'    => 3,
+				'priceCurrency' => 'GBP',
+				'availability'  => 'http://schema.org/InStock',
+				'url'           => 'https://example.com/product/customizable-responsive-toolset/',
+				'seller'        => [
+					'@type' => 'Organization',
+					'name'  => 'WooCommerce',
+					'url'   => 'https://example.com',
+				],
+				'@id'           => 'https://example.com/#/schema/aggregate-offer/209643-0',
+				'offers'        => [
+					[
+						'@type'              => 'Offer',
+						'@id'                => 'https://example.com/#/schema/offer/209643-0',
+						'name'               => 'Customizable responsive toolset - l',
+						'price'              => 10,
+						'priceSpecification' => [
+							'price'                 => '10',
+							'priceCurrency'         => 'GBP',
+							'valueAddedTaxIncluded' => 'false',
+						],
+					],
+					[
+						'@type'              => 'Offer',
+						'@id'                => 'https://example.com/#/schema/offer/209643-1',
+						'name'               => 'Customizable responsive toolset - m',
+						'price'              => 8,
+						'priceSpecification' => [
+							'price'                 => '8',
+							'priceCurrency'         => 'GBP',
+							'valueAddedTaxIncluded' => 'false',
+						],
+					],
+					[
+						'@type'              => 'Offer',
+						'@id'                => 'https://example.com/#/schema/offer/209643-2',
+						'name'               => 'Customizable responsive toolset - xl',
+						'price'              => 12,
+						'priceSpecification' => [
+							'price'                 => '12',
+							'priceCurrency'         => 'GBP',
+							'valueAddedTaxIncluded' => 'false',
+						],
+					],
+				],
+			];
+
+		$base_url = 'https://example.com';
+		Functions\stubs(
+			[
+				'get_site_url'             => $base_url,
+				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => false,
+				'wc_get_price_decimals'    => 2,
+				'wc_format_decimal'        => null,
+			]
+		);
+
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->twice()->andReturn( '209643' );
+		$product->expects( 'get_available_variations' )->once()->andReturn( $variants );
+		$product->expects( 'get_name' )->once()->andReturn( 'Customizable responsive toolset' );
+		$output = $schema->filter_offers( $input, $product );
+
+		$this->assertEquals( $expected_output, $output['offers'][0] );
+	}
+
+	/**
+	 * Test that removing Woo Breadcrumbs works.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::remove_woo_breadcrumbs
+	 */
+	public function test_remove_woo_breadcrumbs() {
+		$input    = [ 'webpage', 'breadcrumblist' ];
+		$expected = [ 'webpage' ];
+
+		$class = new WPSEO_WooCommerce_Schema();
+		$this->assertEquals( $expected, $class->remove_woo_breadcrumbs( $input ) );
+	}
+
+	/**
+	 * Test that adding the SKU as the productID works.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::add_sku
+	 */
+	public function test_add_sku() {
+		$class   = new Schema_Double();
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_sku' )->once()->andReturn( 'sku123' );
+
+		$expected = [ 'productID' => 'sku123' ];
+		$class->add_sku( $product );
+		$this->assertEquals( $expected, $class->data );
+	}
+
+	/**
+	 * Test that adding the SKU as the productID works.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::add_sku
+	 */
+	public function test_empty_sku() {
+		$class   = new Schema_Double();
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_sku' )->once()->andReturn( '' );
+
+		$expected = null;
+		$class->add_sku( $product );
+		$this->assertEquals( $expected, $class->data );
+	}
+
+	/**
+	 * Changing the seller in offers to point to our Organization ID when there's no org.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::change_seller_in_offers
+	 */
+	public function test_change_seller_in_offers_no_organization() {
+		$input = [
+			'@type'       => 'Product',
+			'@id'         => 'https://example.com/product/customizable-responsive-toolset/#product',
+			'name'        => 'Customizable responsive toolset',
+			'url'         => 'https://example.com/product/customizable-responsive-toolset/',
+			'description' => 'Sit debitis reprehenderit non rem natus. Corporis quidem quos et sit similique. Et ad hic exercitationem repudiandae rem laborum.\n\n\n\n\n\n\n\n\nCumque iusto cum enim ut. Et ipsum tempore dolorem ullam aspernatur autem et. Aut molestiae dolor natus. Ducimus molestias perspiciatis magni in libero deleniti ut. Rerum perspiciatis autem et maiores hic ducimus.\n\n\nAut tenetur ducimus distinctio quaerat deserunt sed. Sint ullam ut deserunt deleniti velit et. Incidunt in molestiae voluptas corrupti qui facilis quia.\n\n\n\n\n\nIste asperiores voluptas expedita id cupiditate. Sed error corrupti quibusdam dolor facere enim tenetur. Asperiores error qui commodi dolorem veritatis aspernatur.',
+			'image'       => [
+				'@id' => 'https://example.com/product/customizable-responsive-toolset/#primaryimage',
+			],
+			'sku'         => '209643',
+			'offers'      => [
+				[
+					'@type'         => 'AggregateOffer',
+					'lowPrice'      => '8.00',
+					'highPrice'     => '12.00',
+					'offerCount'    => 3,
+					'priceCurrency' => 'GBP',
+					'availability'  => 'http://schema.org/InStock',
+					'url'           => 'https://example.com/product/customizable-responsive-toolset/',
+					'seller'        => [
+						'@type' => 'Organization',
+						'name'  => 'WooCommerce',
+						'url'   => 'https://example.com',
+					],
+					'@id'           => 'https://example.com/#/schema/aggregate-offer/24-0',
+
+				],
+			],
+		];
+
+		$options = Mockery::mock( 'alias:WPSEO_Options' );
+		$options->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( false );
+		$options->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'Yoast BV' );
+
+		Mockery::getConfiguration()->setConstantsMap(
+			[
+				'WPSEO_Schema_IDs' => [
+					'ORGANIZATION_HASH'  => '#organization',
+					'WEBPAGE_HASH'       => '#webpage',
+					'PRIMARY_IMAGE_HASH' => '#primaryimage',
+				],
+			]
+		);
+		Mockery::mock( 'alias:WPSEO_Schema_IDs' );
+
+		$expected = $input;
+		$schema   = new Schema_Double();
+		$output   = $schema->change_seller_in_offers( $input );
+
+		$this->assertEquals( $expected, $output );
+	}
+
+	/**
+	 * Changing the seller in offers to point to our Organization ID
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::change_seller_in_offers
+	 */
+	public function test_change_seller_in_offers() {
+		$input = [
+			'@type'       => 'Product',
+			'@id'         => 'https://example.com/product/customizable-responsive-toolset/#product',
+			'name'        => 'Customizable responsive toolset',
+			'url'         => 'https://example.com/product/customizable-responsive-toolset/',
+			'description' => 'Sit debitis reprehenderit non rem natus. Corporis quidem quos et sit similique. Et ad hic exercitationem repudiandae rem laborum.\n\n\n\n\n\n\n\n\nCumque iusto cum enim ut. Et ipsum tempore dolorem ullam aspernatur autem et. Aut molestiae dolor natus. Ducimus molestias perspiciatis magni in libero deleniti ut. Rerum perspiciatis autem et maiores hic ducimus.\n\n\nAut tenetur ducimus distinctio quaerat deserunt sed. Sint ullam ut deserunt deleniti velit et. Incidunt in molestiae voluptas corrupti qui facilis quia.\n\n\n\n\n\nIste asperiores voluptas expedita id cupiditate. Sed error corrupti quibusdam dolor facere enim tenetur. Asperiores error qui commodi dolorem veritatis aspernatur.',
+			'image'       => [
+				'@id' => 'https://example.com/product/customizable-responsive-toolset/#primaryimage',
+			],
+			'sku'         => '209643',
+			'offers'      => [
+				[
+					'@type'         => 'AggregateOffer',
+					'lowPrice'      => '8.00',
+					'highPrice'     => '12.00',
+					'offerCount'    => 3,
+					'priceCurrency' => 'GBP',
+					'availability'  => 'http://schema.org/InStock',
+					'url'           => 'https://example.com/product/customizable-responsive-toolset/',
+					'seller'        => [
+						'@type' => 'Organization',
+						'name'  => 'WooCommerce',
+						'url'   => 'https://example.com',
+					],
+					'@id'           => 'https://example.com/#/schema/aggregate-offer/24-0',
+
+				],
+			],
+		];
+
+		$options = Mockery::mock( 'alias:WPSEO_Options' );
+		$options->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
+		$options->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'Yoast BV' );
+
+		$utils = Mockery::mock( 'alias:WPSEO_Utils' );
+		$utils->expects( 'get_home_url' )->andReturn( 'https://example.com' );
+
+		Mockery::getConfiguration()->setConstantsMap(
+			[
+				'WPSEO_Schema_IDs' => [
+					'ORGANIZATION_HASH'  => '#organization',
+					'WEBPAGE_HASH'       => '#webpage',
+					'PRIMARY_IMAGE_HASH' => '#primaryimage',
+				],
+			]
+		);
+		Mockery::mock( 'alias:WPSEO_Schema_IDs' );
+
+		$expected                        = $input;
+		$expected['offers'][0]['seller'] = [ '@id' => 'https://example.com/#organization' ];
+		$schema                          = new Schema_Double();
+		$output                          = $schema->change_seller_in_offers( $input );
+
+		$this->assertEquals( $expected, $output );
+	}
+
+	/**
+	 * Test if our review filtering works and leaves empty reviews unchanged.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::filter_reviews
+	 */
+	public function test_filter_reviews_empty() {
+		$input   = [
+			'review' => [],
+		];
+		$schema  = new Schema_Double();
+		$product = Mockery::mock( 'WC_Product' );
+
+		$output = $schema->filter_reviews( $input, $product );
+
+		$this->assertEquals( $input, $output );
+	}
+
+	/**
+	 * Test if our review filtering works.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::filter_reviews
+	 */
+	public function test_filter_reviews() {
+		$input = [
+			'review' => [
+				[
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => '2',
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Fleta Herman',
+					],
+					'reviewBody'    => 'Et eum odit nihil voluptas. Repudiandae expedita possimus quam quos ab dolorem rerum. Quam impedit omnis voluptatum commodi aliquid. Accusantium cumque qui sequi deleniti voluptate quia.',
+					'datePublished' => '2020-01-14T14:02:48+00:00',
+				],
+				[
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => '5',
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Prof. Alexane Luettgen',
+					],
+					'reviewBody'    => 'Omnis id tempore quae dolor in. Sunt aliquam rem animi. Repellendus porro voluptatem ut id illo veritatis ullam voluptatum.',
+					'datePublished' => '2020-01-14T14:02:47+00:00',
+				],
+			],
+		];
+
+		$base_url = 'https://example.com';
+		Functions\stubs(
+			[
+				'get_site_url' => $base_url,
+			]
+		);
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->once()->andReturn( 24 );
+		$product->expects( 'get_name' )->once()->andReturn( 'Example product' );
+
+		$schema = new Schema_Double();
+		$output = $schema->filter_reviews( $input, $product );
+
+		$expected = [
+			'review' => [
+				'0' => [
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => 2,
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Fleta Herman',
+					],
+					'reviewBody'    => 'Et eum odit nihil voluptas. Repudiandae expedita possimus quam quos ab dolorem rerum. Quam impedit omnis voluptatum commodi aliquid. Accusantium cumque qui sequi deleniti voluptate quia.',
+					'datePublished' => '2020-01-14T14:02:48+00:00',
+					'@id'           => 'https://example.com/#/schema/review/24-0',
+					'name'          => 'Example product',
+				],
+				'1' => [
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => 5,
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Prof. Alexane Luettgen',
+					],
+					'reviewBody'    => 'Omnis id tempore quae dolor in. Sunt aliquam rem animi. Repellendus porro voluptatem ut id illo veritatis ullam voluptatum.',
+					'datePublished' => '2020-01-14T14:02:47+00:00',
+					'@id'           => 'https://example.com/#/schema/review/24-1',
+					'name'          => 'Example product',
+				],
+			],
+		];
+
+		$this->assertEquals( $expected, $output );
+	}
+
+	/**
 	 * Tests that should_output_yoast_schema returns the right value.
 	 *
 	 * @covers \WPSEO_WooCommerce_Schema::should_output_yoast_schema

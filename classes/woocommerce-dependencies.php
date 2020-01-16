@@ -11,30 +11,15 @@
 class Yoast_WooCommerce_Dependencies {
 
 	/**
-	 * Check whether we've met our dependencies. If not, hook in some errors.
-	 *
-	 * @return bool True if the plugin can run, false if not.
-	 */
-	public function check() {
-		global $wp_version;
-
-		if ( $this->check_dependencies( $wp_version ) ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Checks the dependencies. Sets a notice when requirements aren't met.
 	 *
 	 * @param string $wp_version The current version of WordPress.
 	 *
 	 * @return bool True when the dependencies are okay.
 	 */
-	protected function check_dependencies( $wp_version ) {
+	public function check_dependencies( $wp_version ) {
 		if ( ! version_compare( $wp_version, '5.2', '>=' ) ) {
-			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_wordpress_upgrade_error' ] );
+			add_action( 'all_admin_notices', [ $this, 'wordpress_upgrade_error' ] );
 
 			return false;
 		}
@@ -47,16 +32,16 @@ class Yoast_WooCommerce_Dependencies {
 		}
 
 		// When Yoast SEO is not installed.
-		$wordpress_seo_version = $this->get_wordpress_seo_version();
+		$wordpress_seo_version = $this->get_yoast_seo_version();
 		if ( ! $wordpress_seo_version ) {
-			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_missing_error' ] );
+			add_action( 'all_admin_notices', [ $this, 'yoast_seo_missing_error' ] );
 
 			return false;
 		}
 
 		// At least 12.6, in which we've implemented the new HelpScout Beacon.
 		if ( ! version_compare( $wordpress_seo_version, '12.6-RC0', '>=' ) ) {
-			add_action( 'all_admin_notices', [ $this, 'yoast_wpseo_woocommerce_upgrade_error' ] );
+			add_action( 'all_admin_notices', [ $this, 'yoast_seo_upgrade_error' ] );
 
 			return false;
 		}
@@ -70,7 +55,7 @@ class Yoast_WooCommerce_Dependencies {
 	 * @return bool True if WooCommerce is active, false if not.
 	 */
 	protected function check_woocommerce_exists() {
-		return function_exists( 'WC' );
+		return class_exists( 'woocommerce' );
 	}
 
 	/**
@@ -78,7 +63,7 @@ class Yoast_WooCommerce_Dependencies {
 	 *
 	 * @return bool|string The version when it is set.
 	 */
-	protected function get_wordpress_seo_version() {
+	protected function get_yoast_seo_version() {
 		if ( ! defined( 'WPSEO_VERSION' ) ) {
 			return false;
 		}
@@ -105,7 +90,7 @@ class Yoast_WooCommerce_Dependencies {
 	/**
 	 * Throw an error if WordPress SEO is not installed.
 	 */
-	public function yoast_wpseo_woocommerce_missing_error() {
+	public function yoast_seo_missing_error() {
 		echo '<div class="error"><p>';
 		printf(
 			/* translators: %1$s resolves to the plugin search for Yoast SEO, %2$s resolves to the closing tag, %3$s resolves to Yoast SEO, %4$s resolves to Yoast WooCommerce SEO */
@@ -121,7 +106,7 @@ class Yoast_WooCommerce_Dependencies {
 	/**
 	 * Throw an error if WordPress is out of date.
 	 */
-	public function yoast_wpseo_woocommerce_wordpress_upgrade_error() {
+	public function wordpress_upgrade_error() {
 		echo '<div class="error"><p>';
 		printf(
 			/* translators: %1$s resolves to Yoast WooCommerce SEO */
@@ -134,7 +119,7 @@ class Yoast_WooCommerce_Dependencies {
 	/**
 	 * Throw an error if WordPress SEO is out of date.
 	 */
-	public function yoast_wpseo_woocommerce_upgrade_error() {
+	public function yoast_seo_upgrade_error() {
 		echo '<div class="error"><p>';
 		printf(
 			/* translators: %1$s resolves to Yoast SEO, %2$s resolves to Yoast WooCommerce SEO */
