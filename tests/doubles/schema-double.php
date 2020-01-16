@@ -43,4 +43,48 @@ class Schema_Double extends WPSEO_WooCommerce_Schema {
 	public function get_canonical() {
 		return parent::get_canonical();
 	}
+
+	/**
+	 * Filters the offers array to enrich it.
+	 *
+	 * @param array       $data    Schema Product data.
+	 * @param \WC_Product $product The product.
+	 *
+	 * @return array Schema Product data.
+	 */
+	public function filter_offers( $data, $product ) {
+		return parent::filter_offers( $data, $product );
+	}
+
+	/**
+	 * Add productID to our output.
+	 *
+	 * @param \WC_Product $product Product object.
+	 */
+	public function add_sku( $product ) {
+		return parent::add_sku( $product );
+	}
+
+	/**
+	 * Update the seller attribute to reference the Organization, when it is set.
+	 *
+	 * @param array $data Schema Product data.
+	 *
+	 * @return array Schema Product data.
+	 */
+	public function change_seller_in_offers( $data ) {
+		return parent::change_seller_in_offers( $data );
+	}
+
+	/**
+	 * Enhances the review data output by WooCommerce.
+	 *
+	 * @param array       $data    Review Schema data.
+	 * @param \WC_Product $product The WooCommerce product we're working with.
+	 *
+	 * @return array Review Schema data.
+	 */
+	public function filter_reviews( $data, $product ) {
+		return parent::filter_reviews( $data, $product );
+	}
 }

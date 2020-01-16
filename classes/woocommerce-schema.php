@@ -136,8 +136,8 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @return array Schema Product data.
 	 */
-	private function filter_offers( $data, $product ) {
-		$home_url = trailingslashit( home_url() );
+	protected function filter_offers( $data, $product ) {
+		$home_url = trailingslashit( get_site_url() );
 		foreach ( $data['offers'] as $key => $offer ) {
 			// Remove this value as it makes no sense.
 			unset( $data['offers'][ $key ]['priceValidUntil'] );
@@ -177,7 +177,7 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @param \WC_Product $product Product object.
 	 */
-	private function add_sku( $product ) {
+	protected function add_sku( $product ) {
 		$sku = $product->get_sku();
 		if ( ! empty( $sku ) ) {
 			$this->data['productID'] = $sku;
@@ -191,7 +191,7 @@ class WPSEO_WooCommerce_Schema {
 	 *
 	 * @return array Schema Product data.
 	 */
-	private function change_seller_in_offers( $data ) {
+	protected function change_seller_in_offers( $data ) {
 		$company_or_person = WPSEO_Options::get( 'company_or_person', false );
 		$company_name      = WPSEO_Options::get( 'company_name' );
 
@@ -278,7 +278,8 @@ class WPSEO_WooCommerce_Schema {
 		// Fallback to WooCommerce placeholder image.
 		if ( function_exists( 'wc_placeholder_img_src' ) ) {
 			$image_schema        = new WPSEO_Schema_Image( $canonical . '#woocommerceimageplaceholder' );
-			$this->data['image'] = $image_schema->generate_from_url( wc_placeholder_img_src() );
+			$placeholder_img_src = wc_placeholder_img_src();
+			$this->data['image'] = $image_schema->generate_from_url( $placeholder_img_src );
 		}
 	}
 
@@ -373,9 +374,12 @@ class WPSEO_WooCommerce_Schema {
 
 		$site_url = trailingslashit( get_site_url() );
 
+		$product_id   = $product->get_id();
+		$product_name = $product->get_name();
+
 		foreach ( $data['review'] as $key => $review ) {
-			$data['review'][ $key ]['@id']  = $site_url . '#/schema/review/' . $product->get_id() . '-' . $key;
-			$data['review'][ $key ]['name'] = $product->get_name();
+			$data['review'][ $key ]['@id']  = $site_url . '#/schema/review/' . $product_id . '-' . $key;
+			$data['review'][ $key ]['name'] = $product_name;
 		}
 
 		return $data;

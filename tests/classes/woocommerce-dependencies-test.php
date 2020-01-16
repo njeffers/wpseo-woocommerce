@@ -3,6 +3,7 @@
 namespace Yoast\WP\Woocommerce\Tests\Classes;
 
 use Mockery;
+use Brain\Monkey\Functions;
 use Yoast\WP\Woocommerce\Tests\Doubles\Yoast_WooCommerce_Dependencies_Double;
 use Yoast\WP\Woocommerce\Tests\TestCase;
 
