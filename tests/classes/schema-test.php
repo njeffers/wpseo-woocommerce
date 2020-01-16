@@ -625,7 +625,7 @@ class Schema_Test extends TestCase {
 	 */
 	public function test_filter_reviews_empty() {
 		$input   = [
-			"review" => [],
+			'review' => [],
 		];
 		$schema  = new Schema_Double();
 		$product = Mockery::mock( 'WC_Product' );
