@@ -13,24 +13,6 @@ use Yoast\WP\Woocommerce\Tests\TestCase;
 class Yoast_WooCommerce_Dependencies_Test extends TestCase {
 
 	/**
-	 * Test our main check functionality.
-	 *
-	 * @covers Yoast_WooCommerce_Dependencies::check
-	 */
-	public function test_check() {
-		$class = Mockery::mock( Yoast_WooCommerce_Dependencies_Double::class )->makePartial();
-
-		global $wp_version;
-		$wp_version = '5.1';
-
-		$this->assertFalse( $class->check() );
-
-		// Still false, will only return true when Yoast SEO and WooCommerce are also active. That's tested below.
-		$wp_version = '5.2';
-		$this->assertFalse( $class->check() );
-	}
-
-	/**
 	 * Tests check dependencies.
 	 *
 	 * @covers Yoast_WooCommerce_Dependencies::check_dependencies

@@ -11,28 +11,13 @@
 class Yoast_WooCommerce_Dependencies {
 
 	/**
-	 * Check whether we've met our dependencies. If not, hook in some errors.
-	 *
-	 * @return bool True if the plugin can run, false if not.
-	 */
-	public function check() {
-		global $wp_version;
-
-		if ( $this->check_dependencies( $wp_version ) ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Checks the dependencies. Sets a notice when requirements aren't met.
 	 *
 	 * @param string $wp_version The current version of WordPress.
 	 *
 	 * @return bool True when the dependencies are okay.
 	 */
-	protected function check_dependencies( $wp_version ) {
+	public function check_dependencies( $wp_version ) {
 		if ( ! version_compare( $wp_version, '5.2', '>=' ) ) {
 			add_action( 'all_admin_notices', [ $this, 'wordpress_upgrade_error' ] );
 
