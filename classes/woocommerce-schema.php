@@ -187,73 +187,22 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Add a global identifier to our output if we have one.
-	 *
-	 * @param \WC_Product $product Product object.
-	 */
-	protected function add_global_identifier( $product ) {
-		$global_identifier = $this->get_global_identifier( $product );
-		if ( $global_identifier !== false ) {
-			switch ( $global_identifier['type'] ) {
-				case 'gtin8':
-				case 'gtin12':
-				case 'gtin13':
-				case 'gtin14':
-					$this->add_gtin( $global_identifier );
-					break;
-				case 'mpn':
-				case 'isbn':
-					$this->add_mpn_isbn( $global_identifier );
-					break;
-			}
-		}
-	}
-
-	/**
 	 * Retrieve the global identifier type and value if we have one.
 	 *
 	 * @param \WC_Product $product Product object.
 	 *
-	 * @return array|bool An array of `type` and `value` on success, false on failure.
+	 * @return bool True on success, false on failure.
 	 */
-	protected function get_global_identifier( $product ) {
-		$product_id              = $product->get_id();
-		$global_identifier_value = get_post_meta( $product_id, 'wpseo_global_identifier_value', true );
-		if ( ! empty( $global_identifier_value ) ) {
-			$global_identifier_type = get_post_meta( $product_id, 'wpseo_global_identifier_type', true );
-
-			return [
-				'type'  => $global_identifier_type,
-				'value' => $global_identifier_value,
-			];
+	protected function add_global_identifier( $product ) {
+		$product_id               = $product->get_id();
+		$global_identifier_values = get_post_meta( $product_id, 'wpseo_global_identifier_values', true );
+		if ( ! is_array( $global_identifier_values ) || $global_identifier_values === [] ) {
+			return false;
 		}
-
-		return false;
-	}
-
-	/**
-	 * Add the GTIN number to our Schema.
-	 *
-	 * @param array $global_identifier An array of the global identifier data.
-	 *
-	 * @return void
-	 */
-	protected function add_gtin( $global_identifier ) {
-		$this->data['gtin']                       = $global_identifier['value'];
-		$this->data['identifier']                 = $global_identifier['value'];
-		$this->data[ $global_identifier['type'] ] = $global_identifier['value'];
-	}
-
-	/**
-	 * Add the MPN or ISBN number to our Schema.
-	 *
-	 * @param array $global_identifier An array of the global identifier data.
-	 *
-	 * @return void
-	 */
-	protected function add_mpn_isbn( $global_identifier ) {
-		$this->data['identifier']                 = $global_identifier['value'];
-		$this->data[ $global_identifier['type'] ] = $global_identifier['value'];
+		foreach( $global_identifier_values as $type => $value ) {
+			$this->data[ $type ] = $value;
+		}
+		return true;
 	}
 
 	/**

@@ -642,8 +642,6 @@ class Schema_Test extends TestCase {
 	 * Test adding the global identifier
 	 *
 	 * @covers WPSEO_WooCommerce_Schema::add_global_identifier
-	 * @covers WPSEO_WooCommerce_Schema::get_global_identifier
-	 * @covers WPSEO_WooCommerce_Schema::add_gtin
 	 */
 	public function test_add_global_identifier_false() {
 		$product = Mockery::mock( 'WC_Product' );
@@ -651,85 +649,31 @@ class Schema_Test extends TestCase {
 
 		Functions\stubs(
 			[
-				'get_post_meta' => false
+				'get_post_meta' => false,
 			]
 		);
 
 		$schema = new Schema_Double();
 
-		$this->assertFalse( $schema->get_global_identifier( $product ) );
+		$this->assertFalse( $schema->add_global_identifier( $product ) );
 	}
 
 	/**
 	 * Test adding the global identifier
 	 *
 	 * @covers WPSEO_WooCommerce_Schema::add_global_identifier
-	 * @covers WPSEO_WooCommerce_Schema::get_global_identifier
-	 * @covers WPSEO_WooCommerce_Schema::add_gtin
 	 */
 	public function test_add_global_identifier_gtin() {
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->once()->andReturn( 123 );
 
 		$data = [
-			'gtin8'      => '123',
-			'gtin'       => '123',
-			'identifier' => '123',
+			'gtin8' => '123',
 		];
 
 		Functions\stubs(
 			[
-				'get_post_meta' => static function ( $post_id, $key, $single ) {
-					switch ( $key ) {
-						case 'wpseo_global_identifier_type':
-							return 'gtin8';
-							break;
-						case 'wpseo_global_identifier_value':
-							return '123';
-							break;
-						default:
-							break;
-					}
-				},
-			]
-		);
-
-		$schema = new Schema_Double();
-		$schema->add_global_identifier( $product );
-
-		$this->assertEquals( $data, $schema->data );
-	}
-
-	/**
-	 * Test adding the global identifier
-	 *
-	 * @covers WPSEO_WooCommerce_Schema::add_global_identifier
-	 * @covers WPSEO_WooCommerce_Schema::get_global_identifier
-	 * @covers WPSEO_WooCommerce_Schema::add_mpn_isbn
-	 */
-	public function test_add_global_identifier_isbn() {
-		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_id' )->once()->andReturn( 123456 );
-
-		$data = [
-			'isbn'      => '123456',
-			'identifier' => '123456',
-		];
-
-		Functions\stubs(
-			[
-				'get_post_meta' => static function ( $post_id, $key, $single ) {
-					switch ( $key ) {
-						case 'wpseo_global_identifier_type':
-							return 'isbn';
-							break;
-						case 'wpseo_global_identifier_value':
-							return '123456';
-							break;
-						default:
-							break;
-					}
-				},
+				'get_post_meta' => $data,
 			]
 		);
 

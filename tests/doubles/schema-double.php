@@ -92,9 +92,11 @@ class Schema_Double extends WPSEO_WooCommerce_Schema {
 	 * Add a global identifier to our output if we have one.
 	 *
 	 * @param \WC_Product $product Product object.
+	 *
+	 * @return bool
 	 */
 	public function add_global_identifier( $product ) {
-		parent::add_global_identifier( $product );
+		return parent::add_global_identifier( $product );
 	}
 
 	/**

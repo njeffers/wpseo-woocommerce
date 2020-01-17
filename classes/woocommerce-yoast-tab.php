@@ -15,7 +15,14 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 *
 	 * @var array
 	 */
-	protected $global_identifier_types = [ 'isbn', 'gtin8', 'gtin12', 'gtin13', 'gtin14', 'mpn' ];
+	protected $global_identifier_types = [
+		'gtin8'  => 'GTIN8',
+		'gtin12' => 'GTIN12 / UPC',
+		'gtin13' => 'GTIN13 / EAN',
+		'gtin14' => 'GTIN14 / ITF-14',
+		'isbn'   => 'ISBN',
+		'mpn'    => 'MPN',
+	];
 
 	/**
 	 * WPSEO_WooCommerce_Yoast_Tab constructor.
@@ -34,12 +41,11 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 * @return array
 	 */
 	public function yoast_seo_tab( $tabs ) {
-		echo '<script>console.log(\'tab loading\');</script>';
-		$tabs['yoast_tab'] = array(
+		$tabs['yoast_tab'] = [
 			'label'  => 'Yoast SEO',
 			'class'  => 'yoast-seo',
 			'target' => 'yoast_seo',
-		);
+		];
 
 		return $tabs;
 	}
@@ -50,9 +56,8 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 * @return void
 	 */
 	public function add_yoast_seo_fields() {
-		$global_identifier_types = $this->global_identifier_types;
-		$global_identifier_type  = get_post_meta( get_the_ID(), 'wpseo_global_identifier_type', true );
-		$global_identifier_value = get_post_meta( get_the_ID(), 'wpseo_global_identifier_value', true );
+		$global_identifier_types  = $this->global_identifier_types;
+		$global_identifier_values = get_post_meta( get_the_ID(), 'wpseo_global_identifier_values', true );
 		require plugin_dir_path( WPSEO_WOO_PLUGIN_FILE ) . 'views/tab.php';
 	}
 
@@ -67,40 +72,37 @@ class WPSEO_WooCommerce_Yoast_Tab {
 		if ( wp_is_post_revision( $post_id ) ) {
 			return;
 		}
-		foreach ( [ 'global_identifier_type', 'global_identifier_value' ] as $key ) {
+		$values = [];
+		foreach ( $this->global_identifier_types as $key => $label ) {
 			$value = $_POST['yoast_seo'][ $key ];
-			if ( $this->validate_data( $key, $value ) ) {
-				update_post_meta( $post_id, 'wpseo_' . $key, $value );
+			if ( ! array_key_exists( $key, $this->global_identifier_types ) ) {
+				continue;
 			}
+			if ( $this->validate_data( $value ) ) {
+				$values[ $key ] = $value;
+			}
+		}
+
+		if ( $values !== [] ) {
+			update_post_meta( $post_id, 'wpseo_global_identifier_values', $values );
 		}
 	}
 
 	/**
 	 * Make sure the data is safe to save.
 	 *
-	 * @param string $key   The key we're testing.
 	 * @param string $value The value we're testing.
 	 *
-	 * @return bool True when safe, false when it's not.
+	 * @return bool True when safe and not empty, false when it's not.
 	 */
-	protected function validate_data( $key, $value ) {
-		switch ( $key ) {
-			case 'global_identifier_type':
-				if ( in_array( $value, $this->global_identifier_types ) ) {
-					return true;
-				}
-
-				return false;
-				break;
-			case 'global_identifier_value':
-				if ( wp_strip_all_tags( $value ) === $value ) {
-					return true;
-				}
-
-				return false;
-			default:
-				return false;
-				break;
+	protected function validate_data( $value ) {
+		if ( empty( $value ) ) {
+			return false;
 		}
+		if ( wp_strip_all_tags( $value ) !== $value ) {
+			return false;
+		}
+
+		return true;
 	}
 }
