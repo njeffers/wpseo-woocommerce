@@ -61,7 +61,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'esc_html_e'      => null,
 				'wp_nonce_field'  => function( $action, $name ) {
 					return '<input type="hidden" id="" name="' . $name . '" value="' . $action . '" />';
-				}
+				},
 			]
 		);
 

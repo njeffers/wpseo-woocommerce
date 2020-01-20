@@ -117,6 +117,8 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	protected function save_post_data() {
 		$values = [];
 		foreach ( $this->global_identifier_types as $key => $label ) {
+			// Ignoring nonce verification as we do that elsewhere, sanitization as we do that below.
+			// @ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$value = isset( $_POST['yoast_seo'][ $key ] ) ? wp_unslash( $_POST['yoast_seo'][ $key ] ) : '';
 			if ( $this->validate_data( $value ) ) {
 				$values[ $key ] = $value;
@@ -137,9 +139,9 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 */
 	protected function input_field_for_identifier( $type, $label, $value ) {
 		echo '<p class="form-field">';
-		echo '<label for="yoast_identfiier_', $type, '>', esc_html( $label ), ':</label>';
+		echo '<label for="yoast_identfier_', esc_attr( $type ), '>', esc_html( $label ), ':</label>';
 		echo '<span class="wrap">';
-		echo '<input type="text" id="yoast_identfiier_', $type, ' name="yoast_seo[', esc_attr( $type ), ']" value="', esc_attr( $value ), '"/>';
+		echo '<input type="text" id="yoast_identfier_', esc_attr( $type ), ' name="yoast_seo[', esc_attr( $type ), ']" value="', esc_attr( $value ), '"/>';
 		echo '</span>';
 		echo '</p>';
 	}

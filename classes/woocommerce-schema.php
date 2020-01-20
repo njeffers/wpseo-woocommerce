@@ -199,7 +199,7 @@ class WPSEO_WooCommerce_Schema {
 		if ( ! is_array( $global_identifier_values ) || $global_identifier_values === [] ) {
 			return false;
 		}
-		foreach( $global_identifier_values as $type => $value ) {
+		foreach ( $global_identifier_values as $type => $value ) {
 			$this->data[ $type ] = $value;
 		}
 		return true;

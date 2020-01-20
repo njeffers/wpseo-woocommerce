@@ -33,10 +33,12 @@ class Schema_Test extends TestCase {
 		$schema = new WPSEO_WooCommerce_Schema();
 
 		$this->assertTrue( has_filter( 'woocommerce_structured_data_product', [ $schema, 'change_product' ] ) );
-		$this->assertTrue( has_filter( 'woocommerce_structured_data_type_for_page', [
-			$schema,
-			'remove_woo_breadcrumbs',
-		] ) );
+		$this->assertTrue(
+			has_filter( 'woocommerce_structured_data_type_for_page', [
+				$schema,
+				'remove_woo_breadcrumbs',
+			]
+		) );
 		$this->assertTrue( has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
 		$this->assertTrue( has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
 	}
