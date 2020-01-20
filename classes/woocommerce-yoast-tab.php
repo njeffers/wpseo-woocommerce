@@ -139,9 +139,9 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 */
 	protected function input_field_for_identifier( $type, $label, $value ) {
 		echo '<p class="form-field">';
-		echo '<label for="yoast_identfier_', esc_attr( $type ), '>', esc_html( $label ), ':</label>';
+		echo '<label for="yoast_identfier_', esc_attr( $type ), '">', esc_html( $label ), ':</label>';
 		echo '<span class="wrap">';
-		echo '<input type="text" id="yoast_identfier_', esc_attr( $type ), ' name="yoast_seo[', esc_attr( $type ), ']" value="', esc_attr( $value ), '"/>';
+		echo '<input class="input-text" type="text" id="yoast_identfier_', esc_attr( $type ), ' name="yoast_seo[', esc_attr( $type ), ']" value="', esc_attr( $value ), '"/>';
 		echo '</span>';
 		echo '</p>';
 	}
