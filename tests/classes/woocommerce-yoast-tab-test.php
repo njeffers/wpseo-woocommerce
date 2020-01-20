@@ -5,8 +5,7 @@ namespace Yoast\WP\Woocommerce\Tests\Classes;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 use Mockery;
-use Yoast\WP\Woocommerce\Tests\Doubles\Schema_Double;
-use Yoast\WP\Woocommerce\Tests\Doubles\WPSEO_WooCommerce_Yoast_Tab_Double;
+use Yoast\WP\Woocommerce\Tests\Doubles\Yoast_Tab_Double;
 use Yoast\WP\Woocommerce\Tests\TestCase;
 
 /**
@@ -87,7 +86,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 			]
 		);
 
-		$instance = new WPSEO_WooCommerce_Yoast_Tab_Double();
+		$instance = new Yoast_Tab_Double();
 		$this->assertTrue( $instance->validate_data( '12345' ) );
 		$this->assertFalse( $instance->validate_data( '12345<script>' ) );
 		$this->assertFalse( $instance->validate_data( '' ) );
