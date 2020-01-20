@@ -739,11 +739,15 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Adds the opengraph images.
 	 *
-	 * @param \Yoast\WP\Free\Values\Open_Graph\Images $opengraph_image The OpenGraph image to use.
+	 * @param mixed $opengraph_image The OpenGraph image to use.
 	 *
 	 * @since 4.3
 	 */
-	public function set_opengraph_image( \Yoast\WP\Free\Values\Open_Graph\Images $opengraph_image ) {
+	public function set_opengraph_image( $opengraph_image ) {
+
+		if ( ! is_object( $opengraph_image ) || ! method_exists( $opengraph_image, 'add_image' ) ) {
+			return;
+		}
 
 		if ( ! function_exists( 'is_product_category' ) || is_product_category() ) {
 			global $wp_query;
