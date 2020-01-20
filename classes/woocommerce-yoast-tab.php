@@ -113,9 +113,6 @@ class WPSEO_WooCommerce_Yoast_Tab {
 		$values = [];
 		foreach ( $this->global_identifier_types as $key => $label ) {
 			$value = $_POST['yoast_seo'][ $key ];
-			if ( ! array_key_exists( $key, $this->global_identifier_types ) ) {
-				continue;
-			}
 			if ( $this->validate_data( $value ) ) {
 				$values[ $key ] = $value;
 			}
