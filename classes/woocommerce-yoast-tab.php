@@ -74,21 +74,23 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 *
 	 * @param int $post_id The post ID.
 	 *
-	 * @return void
+	 * @return boolean Whether or not we saved data.
 	 */
 	public function save_data( $post_id ) {
 		if ( wp_is_post_revision( $post_id ) ) {
-			return;
+			return false;
 		}
 
 		if ( ! wp_verify_nonce( '_wpnonce_yoast_seo_woo', 'yoast_woo_seo_identifiers' ) ) {
-			return;
+			return false;
 		}
 		$values = $this->save_post_data();
 
 		if ( $values !== [] ) {
-			update_post_meta( $post_id, 'wpseo_global_identifier_values', $values );
+			return update_post_meta( $post_id, 'wpseo_global_identifier_values', $values );
 		}
+
+		return false;
 	}
 
 	/**
@@ -139,7 +141,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 */
 	protected function input_field_for_identifier( $type, $label, $value ) {
 		echo '<p class="form-field">';
-		echo '<label for="yoast_identfier_', esc_attr( $type ), '">', esc_html( $label ), ':</label>';
+		echo '<label for="yoast_identifier_', esc_attr( $type ), '">', esc_html( $label ), ':</label>';
 		echo '<span class="wrap">';
 		echo '<input class="input-text" type="text" id="yoast_identfier_', esc_attr( $type ), ' name="yoast_seo[', esc_attr( $type ), ']" value="', esc_attr( $value ), '"/>';
 		echo '</span>';
