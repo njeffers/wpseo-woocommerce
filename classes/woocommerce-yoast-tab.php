@@ -118,7 +118,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 		$values = [];
 		foreach ( $this->global_identifier_types as $key => $label ) {
 			// Ignoring nonce verification as we do that elsewhere, sanitization as we do that below.
-			// @ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$value = isset( $_POST['yoast_seo'][ $key ] ) ? wp_unslash( $_POST['yoast_seo'][ $key ] ) : '';
 			if ( $this->validate_data( $value ) ) {
 				$values[ $key ] = $value;
