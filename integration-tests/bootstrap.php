@@ -13,17 +13,17 @@ if ( function_exists( 'xdebug_disable' ) ) {
 echo 'Welcome to the WordPress SEO WooCommerce test suite' . PHP_EOL;
 echo 'Version: 1.0' . PHP_EOL . PHP_EOL;
 
-if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
+if ( getenv( 'WP_DEVELOP_DIR' ) !== false ) {
 	define( 'WP_DEVELOP_DIR', getenv( 'WP_DEVELOP_DIR' ) );
 }
 
-if ( false !== getenv( 'WP_PLUGIN_DIR' ) ) {
+if ( getenv( 'WP_PLUGIN_DIR' ) !== false ) {
 	define( 'WP_PLUGIN_DIR', getenv( 'WP_PLUGIN_DIR' ) );
 }
 
-$GLOBALS['wp_tests_options'] = array(
-	'active_plugins' => array( 'wpseo-woocommerce/wpseo-woocommerce.php', 'wordpress-seo/wp-seo.php' ),
-);
+$GLOBALS['wp_tests_options'] = [
+	'active_plugins' => [ 'wpseo-woocommerce/wpseo-woocommerce.php', 'wordpress-seo/wp-seo.php' ],
+];
 
 if ( defined( 'WP_DEVELOP_DIR' ) ) {
 	if ( file_exists( WP_DEVELOP_DIR . 'tests/phpunit/includes/bootstrap.php' ) ) {
@@ -42,7 +42,7 @@ else {
 	exit( 1 );
 }
 
-if ( file_exists( dirname( dirname( __FILE__ ) ) . '/vendor/autoload.php' ) === false ) {
+if ( file_exists( dirname( __DIR__ ) . '/vendor/autoload.php' ) === false ) {
 	echo PHP_EOL, 'ERROR: Run `composer install` to generate the autoload files before running the unit tests.', PHP_EOL;
 	exit( 1 );
 }
@@ -53,4 +53,4 @@ if ( ! defined( 'WP_PLUGIN_DIR' ) || file_exists( WP_PLUGIN_DIR . '/wpseo-woocom
 }
 
 // Include unit test base class.
-require_once dirname( __FILE__ ) . '/framework/woocommerce-unittestcase.php';
+require_once __DIR__ . '/framework/woocommerce-unittestcase.php';

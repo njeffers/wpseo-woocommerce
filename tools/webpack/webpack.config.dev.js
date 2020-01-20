@@ -4,6 +4,9 @@ const webpack = require( "webpack" );
 
 const devConfig = {
 	devtool: "eval",
+	optimization: {
+		minimize: false,
+	},
 	plugins: [
 		new webpack.DefinePlugin( {
 			"process.env": {
