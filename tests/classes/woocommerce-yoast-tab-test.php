@@ -93,6 +93,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 
 	/**
 	 * Test whether we don't save any data when there is no valid nonce.
+	 *
 	 * @covers WPSEO_WooCommerce_Yoast_Tab::save_data
 	 */
 	public function test_save_data_wrong_nonce() {
