@@ -57,7 +57,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'get_post_meta'   => 'gtin8',
 				'plugin_dir_path' => './',
 				'_e'              => null,
-				'esc_attr'      => null,
+				'esc_attr'        => null,
 				'esc_html_e'      => null,
 			]
 		);
@@ -81,6 +81,8 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 		Functions\stubs(
 			[
 				'wp_strip_all_tags' => function( $value ) {
+					// Ignoring WPCS's warning about using `wp_strip_all_tags` because we're *doing that*.
+					// @phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
 					return strip_tags( $value );
 				},
 			]

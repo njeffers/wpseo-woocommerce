@@ -60,6 +60,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 
 		echo '<div id="yoast_seo" class="panel woocommerce_options_panel">';
 		echo '<div class="options_group">';
+		wp_nonce_field( 'yoast_woo_seo_identifiers', '_wpnonce_yoast_seo_woo' );
 		foreach ( $this->global_identifier_types as $type => $label ) {
 			$value = isset( $global_identifier_values[ $type ] ) ? $global_identifier_values[ $type ] : '';
 			$this->input_field_for_identifier( $type, $label, $value );
@@ -77,6 +78,10 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 */
 	public function save_data( $post_id ) {
 		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( '_wpnonce_yoast_seo_woo', 'yoast_woo_seo_identifiers' ) ) {
 			return;
 		}
 		$values = $this->save_post_data();
@@ -112,7 +117,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	protected function save_post_data() {
 		$values = [];
 		foreach ( $this->global_identifier_types as $key => $label ) {
-			$value = $_POST['yoast_seo'][ $key ];
+			$value = isset( $_POST['yoast_seo'][ $key ] ) ? wp_unslash( $_POST['yoast_seo'][ $key ] ) : '';
 			if ( $this->validate_data( $value ) ) {
 				$values[ $key ] = $value;
 			}
