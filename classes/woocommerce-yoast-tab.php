@@ -56,9 +56,16 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 * @return void
 	 */
 	public function add_yoast_seo_fields() {
-		$global_identifier_types  = $this->global_identifier_types;
 		$global_identifier_values = get_post_meta( get_the_ID(), 'wpseo_global_identifier_values', true );
-		require plugin_dir_path( WPSEO_WOO_PLUGIN_FILE ) . 'views/tab.php';
+
+		echo '<div id="yoast_seo" class="panel woocommerce_options_panel">';
+		echo '<div class="options_group">';
+		foreach ( $this->global_identifier_types as $type => $label ) {
+			$value = isset( $global_identifier_values[ $type ] ) ? $global_identifier_values[ $type ] : '';
+			$this->input_field_for_identifier( $type, $label, $value );
+		}
+		echo '</div>';
+		echo '</div>';
 	}
 
 	/**
@@ -72,16 +79,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 		if ( wp_is_post_revision( $post_id ) ) {
 			return;
 		}
-		$values = [];
-		foreach ( $this->global_identifier_types as $key => $label ) {
-			$value = $_POST['yoast_seo'][ $key ];
-			if ( ! array_key_exists( $key, $this->global_identifier_types ) ) {
-				continue;
-			}
-			if ( $this->validate_data( $value ) ) {
-				$values[ $key ] = $value;
-			}
-		}
+		$values = $this->save_post_data();
 
 		if ( $values !== [] ) {
 			update_post_meta( $post_id, 'wpseo_global_identifier_values', $values );
@@ -104,5 +102,43 @@ class WPSEO_WooCommerce_Yoast_Tab {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Grab the values from the $_POST data and validate them.
+	 *
+	 * @return array Valid save data.
+	 */
+	protected function save_post_data() {
+		$values = [];
+		foreach ( $this->global_identifier_types as $key => $label ) {
+			$value = $_POST['yoast_seo'][ $key ];
+			if ( ! array_key_exists( $key, $this->global_identifier_types ) ) {
+				continue;
+			}
+			if ( $this->validate_data( $value ) ) {
+				$values[ $key ] = $value;
+			}
+		}
+
+		return $values;
+	}
+
+	/**
+	 * Displays an input field for an identifier.
+	 *
+	 * @param string $type  Type of identifier, used for input name.
+	 * @param string $label Label for the identifier input.
+	 * @param string $value Current value of the identifier.
+	 *
+	 * @return void
+	 */
+	protected function input_field_for_identifier( $type, $label, $value ) {
+		echo '<p class="form-field">';
+		echo '<label for="yoast_identfiier_', $type, '>', esc_html( $label ), ':</label>';
+		echo '<span class="wrap">';
+		echo '<input type="text" id="yoast_identfiier_', $type, ' name="yoast_seo[', esc_attr( $type ), ']" value="', esc_attr( $value ), '"/>';
+		echo '</span>';
+		echo '</p>';
 	}
 }
