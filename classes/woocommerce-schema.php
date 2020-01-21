@@ -53,6 +53,7 @@ class WPSEO_WooCommerce_Schema {
 		}
 
 		WPSEO_Utils::schema_output( [ $this->data ], 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
+
 		return true;
 	}
 
@@ -124,6 +125,7 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
 		$this->add_sku( $product );
+		$this->add_global_identifier( $product );
 
 		return [];
 	}
@@ -185,6 +187,27 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
+	 * Retrieve the global identifier type and value if we have one.
+	 *
+	 * @param \WC_Product $product Product object.
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function add_global_identifier( $product ) {
+		$product_id               = $product->get_id();
+		$global_identifier_values = get_post_meta( $product_id, 'wpseo_global_identifier_values', true );
+
+		if ( ! is_array( $global_identifier_values ) || $global_identifier_values === [] ) {
+			return false;
+		}
+
+		foreach ( $global_identifier_values as $type => $value ) {
+			$this->data[ $type ] = $value;
+		}
+		return true;
+	}
+
+	/**
 	 * Update the seller attribute to reference the Organization, when it is set.
 	 *
 	 * @param array $data Schema Product data.
@@ -206,6 +229,7 @@ class WPSEO_WooCommerce_Schema {
 				];
 			}
 		}
+
 		return $data;
 	}
 
