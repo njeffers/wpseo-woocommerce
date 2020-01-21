@@ -63,6 +63,8 @@ class Yoast_WooCommerce_SEO {
 
 			// Move Woo box above SEO box.
 			add_action( 'admin_footer', [ $this, 'footer_js' ] );
+
+			new WPSEO_WooCommerce_Yoast_Tab();
 		}
 		else {
 			// Initialize schema.
