@@ -33,6 +33,7 @@ Changelog
 ### 12.5: February 4th, 2020
 Enhancements:
 
+* Adds a Yoast SEO section to the WooCommerce product data metabox that allows entering a GTIN / ISBN / MPN number.
 * Analyzes the content of the short description as part of the page content.
 * Throws a warning when WooCommerce is not active.
 * Adjusts the wording for when Yoast SEO is not active.
@@ -41,6 +42,12 @@ Enhancements:
     * Adds a `name` attribute to every individual review.
     * Adds an `@id` attribute to every offer.
     * Adds a `productID` attribute to the `Product` output.
+    * Adds a `gtin8` attribute to the `Product` output.
+    * Adds a `gtin12` attribute to the `Product` output.
+    * Adds a `gtin13` attribute to the `Product` output.
+    * Adds a `gtin14` attribute to the `Product` output.
+    * Adds a `mpn` attribute to the `Product` output.
+    * Adds a `isbn` attribute to the `Product` output.
     * Removes the `priceValidUntil` attribute, as it's not sensible.
 * OpenGraph:    
     * Adds a `product:condition` meta tag to the OpenGraph output. It defaults to `new` but can be filtered using the new `Yoast\WP\Woocommerce\product_condition` filter.
