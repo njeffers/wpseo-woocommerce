@@ -30,12 +30,24 @@ class Schema_Test extends TestCase {
 	 * @covers WPSEO_WooCommerce_Schema::__construct
 	 */
 	public function test_construct() {
-		$schema = new WPSEO_WooCommerce_Schema();
+		$schema = new WPSEO_WooCommerce_Schema( '3.9' );
 
 		$this->assertTrue( has_filter( 'woocommerce_structured_data_product', [ $schema, 'change_product' ] ) );
 		$this->assertTrue( has_filter( 'woocommerce_structured_data_type_for_page', [ $schema, 'remove_woo_breadcrumbs' ] ) );
 		$this->assertTrue( has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
 		$this->assertTrue( has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
+
+		$this->assertFalse( has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
+	}
+
+	/**
+	 * Tests the class constructor.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::__construct
+	 */
+	public function test_construct_old_wc() {
+		$schema = new WPSEO_WooCommerce_Schema( '3.8' );
+		$this->assertTrue( has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
 	}
 
 	/**

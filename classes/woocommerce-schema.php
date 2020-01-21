@@ -18,16 +18,27 @@ class WPSEO_WooCommerce_Schema {
 	protected $data;
 
 	/**
-	 * WPSEO_WooCommerce_Schema constructor.
+	 * WooCommerce version number.
+	 *
+	 * @var string
 	 */
-	public function __construct() {
+	protected $wc_version;
+
+	/**
+	 * WPSEO_WooCommerce_Schema constructor.
+	 *
+	 * @param string $wc_version The WooCommerce version.
+	 */
+	public function __construct( $wc_version = WC_VERSION ) {
+		$this->wc_version = $wc_version;
+
 		add_filter( 'woocommerce_structured_data_product', [ $this, 'change_product' ], 10, 2 );
 		add_filter( 'woocommerce_structured_data_type_for_page', [ $this, 'remove_woo_breadcrumbs' ] );
 		add_filter( 'wpseo_schema_webpage', [ $this, 'filter_webpage' ] );
 		add_action( 'wp_footer', [ $this, 'output_schema_footer' ] );
 
 		// Only needed for WooCommerce versions before 3.8.1.
-		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
+		if ( version_compare( $this->wc_version, '3.8.1' ) < 0 ) {
 			add_filter( 'woocommerce_structured_data_review', [ $this, 'change_reviewed_entity' ] );
 		}
 	}
@@ -103,13 +114,6 @@ class WPSEO_WooCommerce_Schema {
 		$canonical = $this->get_canonical();
 
 		$data = $this->change_seller_in_offers( $data );
-
-		// Only needed for WooCommerce versions before 3.8.1.
-		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
-			// We're going to replace the single review here with an array of reviews taken from the other filter.
-			$data['review'] = [];
-		}
-
 		$data = $this->filter_reviews( $data, $product );
 		$data = $this->filter_offers( $data, $product );
 
