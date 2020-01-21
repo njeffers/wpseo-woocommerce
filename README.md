@@ -36,28 +36,29 @@ Enhancements:
 * Analyzes the content of the short description as part of the page content.
 * Throws a warning when WooCommerce is not active.
 * Adjusts the wording for when Yoast SEO is not active.
-* Schema: adds `@id` attribute to every individual review.
-* Schema: adds `name` attribute to every individual review.
-* Schema: adds an `@id` attribute to every offer.
-* Schema: removes the `priceValidUntil` attribute, as it's not sensible.
-* Schema: adds `productID` to the `Product` output.
+* Schema: 
+    * Adds an `@id` attribute to every individual review.
+    * Adds a `name` attribute to every individual review.
+    * Adds an `@id` attribute to every offer.
+    * Adds a `productID` attribute to the `Product` output.
+    * Removes the `priceValidUntil` attribute, as it's not sensible.
+* OpenGraph:    
+    * Adds a `product:condition` meta tag to the OpenGraph output. It defaults to `new` but can be filtered using the new `Yoast\WP\Woocommerce\product_condition` filter.
+    * Adds a `product:retailer_item_id` meta tag to the OpenGraph output for Facebook Catalog usage.
 * Don't try to use the WooCommerce shop page in the sitemap when it is not set in WooCommerce.
-* Adds `product:condition` meta tag to the OpenGraph output. It defaults to `new` but can be filtered using the new `Yoast\WP\Woocommerce\product_condition` filter.
-* Adds `product:retailer_item_id` meta tag to the plugins OpenGraph output for Facebook Catalog usage.
-
 
 Bugfixes:
 
-* Fixes a bug where the `product:brand` meta tag is not always the selected primary term.
-* Fixes a bug where the `product:availability` meta tag was set to `instock` instead of the correct `in stock`.
+* Fixes a bug where the `product:brand` meta tag would not always be the selected primary term.
+* Fixes a bug where the `product:availability` meta tag would be set to `instock` instead of the correct `in stock`.
 * Fixes a bug where a PHP notice would be thrown on products with variations where a variation lacked an image.
-* Fixes a bug where Organization would be used in the schema output, while no organization is set.
-* Fixes a bug where non-public taxonomies can chosen as manufacturer and brand.
+* Fixes a bug where Organization would be used in the schema output, while no organization was set.
+* Fixes a bug where non-public taxonomies could be chosen as manufacturer and brand.
 * Fixes a bug where the shop page would be shown in the XML sitemap when it was set to `noindex`. Props [stodorovic](https://github.com/stodorovic).
 
 Other:
 
-* The `wpseo_woocommerce_og_price` filter hook has been deprecated in favour of the `Yoast\WP\Woocommerce\og_price` hook.
+* Deprecates the `wpseo_woocommerce_og_price` filter hook in favor of the `Yoast\WP\Woocommerce\og_price` hook.
 
 ### 12.4.1: December 17th, 2019
 Bugfixes:
