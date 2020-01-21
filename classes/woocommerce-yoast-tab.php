@@ -82,7 +82,8 @@ class WPSEO_WooCommerce_Yoast_Tab {
 			return false;
 		}
 
-		if ( ! wp_verify_nonce( '_wpnonce_yoast_seo_woo', 'yoast_woo_seo_identifiers' ) ) {
+		$nonce = filter_input( INPUT_POST, '_wpnonce_yoast_seo_woo' );
+		if ( ! wp_verify_nonce( $nonce, 'yoast_woo_seo_identifiers' ) ) {
 			return false;
 		}
 
