@@ -18,11 +18,6 @@ class WPSEO_WooCommerce_Utils {
 	 * @return string The term's name (if found). Otherwise an empty string.
 	 */
 	public static function search_primary_term( array $brand_taxonomies, $product ) {
-		// First find the primary term.
-		if ( ! class_exists( 'WPSEO_Primary_Term' ) ) {
-			return '';
-		}
-
 		foreach ( $brand_taxonomies as $taxonomy ) {
 			$primary_term       = new WPSEO_Primary_Term( $taxonomy, $product->get_id() );
 			$found_primary_term = $primary_term->get_primary_term();

@@ -141,6 +141,7 @@ class OpenGraph_Test extends TestCase {
 	 */
 	public function test_brand() {
 		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$product->expects( 'get_id' )->once();
 
 		$options = Mockery::mock( 'alias:WPSEO_Options' )->makePartial();
 		$options->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'brand' );
@@ -153,8 +154,15 @@ class OpenGraph_Test extends TestCase {
 				'wp_strip_all_tags'     => null,
 				'strip_shortcodes'      => null,
 				'get_the_terms'         => [ 'Apple' => (object) [ 'name' => 'Apple' ] ],
+				'get_term_by' => function( $thing, $term, $taxonomy ) {
+					return (object) [ 'name' => 'Apple' ];
+				},
 			]
 		);
+
+		$primary_term_mock = Mockery::mock( 'overload:WPSEO_Primary_Term' );
+		$primary_term_mock->expects( '__construct' )->once()->with( 'brand', null )->andReturnSelf();
+		$primary_term_mock->expects( 'get_primary_term' )->once()->with()->andReturn( 12345 );
 
 		$og = new OpenGraph_Double();
 		ob_start();
@@ -236,11 +244,17 @@ class OpenGraph_Test extends TestCase {
 
 		$taxonomy = 'brand';
 
-		$primary_term = Mockery::mock( 'WPSEO_Primary_Term' )->makePartial();
-		$primary_term->expects( '__construct' )->once()->with( [ $taxonomy, $product->get_id() ] )->andReturn( '12345' );
-		$primary_term->expects( 'get_primary_term' )->once()->andReturn( '12345' );
-//		$woo_seo = Mockery::mock( 'alias:WPSEO_WooCommerce_Utils' )->makePartial();
-//		$woo_seo->expects( 'search_primary_term' )->once()->with( ['brand'], $product )->andReturn( 'Apple' );
+		Functions\stubs(
+			[
+				'get_term_by' => function( $thing, $term, $taxonomy ) {
+					return (object) [ 'name' => 'Apple' ];
+				},
+			]
+		);
+
+		$primary_term_mock = Mockery::mock( 'overload:WPSEO_Primary_Term' );
+		$primary_term_mock->expects( '__construct' )->once()->with( $taxonomy, 123 )->andReturnSelf();
+		$primary_term_mock->expects( 'get_primary_term' )->once()->with()->andReturn( 12345 );
 
 		$og = new OpenGraph_Double();
 		$this->assertEquals( 'Apple', $og->get_brand_term_name( 'brand', $product ) );
