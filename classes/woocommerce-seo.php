@@ -560,10 +560,6 @@ class Yoast_WooCommerce_SEO {
 			return true;
 		}
 
-		if ( substr( $taxonomy, 0, 3 ) === 'pa_' ) {
-			return true;
-		}
-
 		return $bool;
 	}
 
