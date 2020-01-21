@@ -681,6 +681,35 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
+	 * Test adding an ISBN number.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::add_global_identifier
+	 */
+	public function test_add_global_identifier_isbn() {
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->once()->andReturn( 123 );
+
+		$data = [
+			'isbn' => '978-3-16-148410-0',
+		];
+
+		Functions\stubs(
+			[
+				'get_post_meta' => $data,
+			]
+		);
+
+		$schema = new Schema_Double();
+		$schema->add_global_identifier( $product );
+
+		$expected = [
+			'@type' => [ 'Book', 'Product' ],
+			'isbn'  => '978-3-16-148410-0',
+		];
+		$this->assertEquals( $expected, $schema->data );
+	}
+
+	/**
 	 * Test if our review filtering works.
 	 *
 	 * @covers WPSEO_WooCommerce_Schema::filter_reviews
