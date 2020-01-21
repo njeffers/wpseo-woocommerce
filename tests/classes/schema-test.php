@@ -636,6 +636,51 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
+	 * Test adding the global identifier
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::add_global_identifier
+	 */
+	public function test_add_global_identifier_false() {
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->once()->andReturn( 123 );
+
+		Functions\stubs(
+			[
+				'get_post_meta' => false,
+			]
+		);
+
+		$schema = new Schema_Double();
+
+		$this->assertFalse( $schema->add_global_identifier( $product ) );
+	}
+
+	/**
+	 * Test adding the global identifier
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::add_global_identifier
+	 */
+	public function test_add_global_identifier_gtin() {
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->once()->andReturn( 123 );
+
+		$data = [
+			'gtin8' => '123',
+		];
+
+		Functions\stubs(
+			[
+				'get_post_meta' => $data,
+			]
+		);
+
+		$schema = new Schema_Double();
+		$schema->add_global_identifier( $product );
+
+		$this->assertEquals( $data, $schema->data );
+	}
+
+	/**
 	 * Test if our review filtering works.
 	 *
 	 * @covers WPSEO_WooCommerce_Schema::filter_reviews
@@ -760,7 +805,7 @@ class Schema_Test extends TestCase {
 		$utils->expects( 'get_home_url' )->once()->with()->andReturn( $canonical );
 
 		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_id' )->times( 4 )->with()->andReturn( $product_id );
+		$product->expects( 'get_id' )->times( 5 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
 		$product->expects( 'get_sku' )->once()->with()->andReturn( 'sku1234' );
 
@@ -786,6 +831,7 @@ class Schema_Test extends TestCase {
 				'has_post_thumbnail' => true,
 				'home_url'           => $base_url,
 				'get_site_url'       => $base_url,
+				'get_post_meta'      => false,
 			]
 		);
 
