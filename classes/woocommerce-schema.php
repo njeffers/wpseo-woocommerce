@@ -200,9 +200,11 @@ class WPSEO_WooCommerce_Schema {
 	protected function add_global_identifier( $product ) {
 		$product_id               = $product->get_id();
 		$global_identifier_values = get_post_meta( $product_id, 'wpseo_global_identifier_values', true );
+
 		if ( ! is_array( $global_identifier_values ) || $global_identifier_values === [] ) {
 			return false;
 		}
+
 		foreach ( $global_identifier_values as $type => $value ) {
 			$this->data[ $type ] = $value;
 		}
