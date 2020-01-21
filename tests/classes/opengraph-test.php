@@ -129,7 +129,7 @@ class OpenGraph_Test extends TestCase {
 		$og->price( $product );
 
 		$expected = '<meta property="product:price:amount" content="54" />' . "\n"
-		            . '<meta property="product:price:currency" content="USD" />' . "\n";
+					. '<meta property="product:price:currency" content="USD" />' . "\n";
 		$this->assertEquals( $expected, ob_get_clean() );
 	}
 
@@ -154,7 +154,7 @@ class OpenGraph_Test extends TestCase {
 				'wp_strip_all_tags'     => null,
 				'strip_shortcodes'      => null,
 				'get_the_terms'         => [ 'Apple' => (object) [ 'name' => 'Apple' ] ],
-				'get_term_by' => function( $thing, $term, $taxonomy ) {
+				'get_term_by'           => function( $thing, $term, $taxonomy ) {
 					return (object) [ 'name' => 'Apple' ];
 				},
 			]

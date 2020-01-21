@@ -9,6 +9,7 @@
  * Class WPSEO_WooCommerce_Utils
  */
 class WPSEO_WooCommerce_Utils {
+
 	/**
 	 * Searches for the primary terms for given taxonomies and returns the first found primary term.
 	 *
