@@ -38,7 +38,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 *
 	 * @param array $tabs The current product data tabs.
 	 *
-	 * @return array
+	 * @return array An array with product tabs with the Yoast SEO tab added.
 	 */
 	public function yoast_seo_tab( $tabs ) {
 		$tabs['yoast_tab'] = [
@@ -61,6 +61,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 		echo '<div id="yoast_seo" class="panel woocommerce_options_panel">';
 		echo '<div class="options_group">';
 		wp_nonce_field( 'yoast_woo_seo_identifiers', '_wpnonce_yoast_seo_woo' );
+
 		foreach ( $this->global_identifier_types as $type => $label ) {
 			$value = isset( $global_identifier_values[ $type ] ) ? $global_identifier_values[ $type ] : '';
 			$this->input_field_for_identifier( $type, $label, $value );
@@ -84,6 +85,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 		if ( ! wp_verify_nonce( '_wpnonce_yoast_seo_woo', 'yoast_woo_seo_identifiers' ) ) {
 			return false;
 		}
+
 		$values = $this->save_post_data();
 
 		if ( $values !== [] ) {
@@ -104,6 +106,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 		if ( empty( $value ) ) {
 			return false;
 		}
+
 		if ( wp_strip_all_tags( $value ) !== $value ) {
 			return false;
 		}
