@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3.2
-Stable tag: 12.5-RC1
+Stable tag: 12.5-RC2
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -47,7 +47,7 @@ Enhancements:
     * Adds a `gtin13` attribute to the `Product` output.
     * Adds a `gtin14` attribute to the `Product` output.
     * Adds a `mpn` attribute to the `Product` output.
-    * Adds a `isbn` attribute to the `Product` output.
+    * Adds a `isbn` attribute to the `Product` output. If a isbn number is set, it double types the schema output to `[ Product, Book ]`. By double typing it, the Product can have the attributes of both schema.org/Book and schema.org/Product, and thus it can have an isbn attribute and a price etc.
     * Removes the `priceValidUntil` attribute, as it's not sensible.
 * OpenGraph:    
     * Adds a `product:condition` meta tag to the OpenGraph output. It defaults to `new` but can be filtered using the new `Yoast\WP\Woocommerce\product_condition` filter.
