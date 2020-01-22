@@ -398,6 +398,15 @@ class Yoast_WooCommerce_SEO {
 		Yoast_Form::get_instance()->select( 'woo_schema_manufacturer', esc_html__( 'Manufacturer', 'yoast-woo-seo' ), $taxonomies );
 		Yoast_Form::get_instance()->select( 'woo_schema_brand', esc_html__( 'Brand', 'yoast-woo-seo' ), $taxonomies );
 
+		Yoast_Form::get_instance()->checkbox(
+			'woo_schema_og_prices_with_tax',
+			sprintf(
+			/* translators: %1$s resolves to WooCommerce */
+				esc_html__( 'Prices in OpenGraph and Schema include tax', 'yoast-woo-seo' ),
+				'WooCommerce'
+			)
+		);
+
 		if ( WPSEO_Options::get( 'breadcrumbs-enable' ) === true ) {
 			echo '<h2>' . esc_html__( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
 			echo '<p>';

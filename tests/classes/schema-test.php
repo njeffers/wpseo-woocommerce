@@ -181,7 +181,7 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => '49.00',
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => 'false',
+						'valueAddedTaxIncluded' => false,
 					],
 					'priceCurrency'      => 'GBP',
 					'availability'       => 'http://schema.org/InStock',
@@ -202,12 +202,24 @@ class Schema_Test extends TestCase {
 		$base_url = 'http://example.com';
 		Functions\stubs(
 			[
-				'get_site_url' => $base_url,
+				'get_site_url'             => $base_url,
+				'wc_get_price_decimals'    => 2,
+				'wc_tax_enabled'           => false,
+				'wc_format_decimal'        => function ( $number ) {
+					return number_format( $number, 2 );
+				},
+				'get_woocommerce_currency' => 'GBP',
 			]
 		);
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->once()->andReturn( '209643' );
+		$product->expects( 'get_price' )->once()->andReturn( 49 );
+		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
+
+		$options = Mockery::mock( 'alias:WPSEO_Options' );
+		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( false );
+
 		$output = $schema->filter_offers( $input, $product );
 
 		$this->assertEquals( $expected_output, $output );
@@ -427,7 +439,7 @@ class Schema_Test extends TestCase {
 						'priceSpecification' => [
 							'price'                 => '10',
 							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => 'false',
+							'valueAddedTaxIncluded' => false,
 						],
 					],
 					[
@@ -438,7 +450,7 @@ class Schema_Test extends TestCase {
 						'priceSpecification' => [
 							'price'                 => '8',
 							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => 'false',
+							'valueAddedTaxIncluded' => false,
 						],
 					],
 					[
@@ -449,7 +461,7 @@ class Schema_Test extends TestCase {
 						'priceSpecification' => [
 							'price'                 => '12',
 							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => 'false',
+							'valueAddedTaxIncluded' => false,
 						],
 					],
 				],
@@ -463,6 +475,7 @@ class Schema_Test extends TestCase {
 				'wc_prices_include_tax'    => false,
 				'wc_get_price_decimals'    => 2,
 				'wc_format_decimal'        => null,
+				'wc_tax_enabled'           => false,
 			]
 		);
 
@@ -828,6 +841,8 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_id' )->times( 5 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
 		$product->expects( 'get_sku' )->once()->with()->andReturn( 'sku1234' );
+		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
+		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
 
 		Mockery::getConfiguration()->setConstantsMap(
 			[
@@ -845,14 +860,21 @@ class Schema_Test extends TestCase {
 		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
 		$mock->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'WP' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( false );
 
 		Functions\stubs(
 			[
-				'has_post_thumbnail'     => true,
-				'home_url'               => $base_url,
-				'get_site_url'           => $base_url,
-				'get_post_meta'          => false,
-				'wc_placeholder_img_src' => $base_url . '/example_image.jpg',
+				'has_post_thumbnail'       => true,
+				'home_url'                 => $base_url,
+				'get_site_url'             => $base_url,
+				'get_post_meta'            => false,
+				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
+				'wc_get_price_decimals'    => 2,
+				'wc_tax_enabled'           => false,
+				'wc_format_decimal'        => function ( $number ) {
+					return number_format( $number, 2 );
+				},
+				'get_woocommerce_currency' => 'GBP',
 			]
 		);
 
@@ -916,13 +938,18 @@ class Schema_Test extends TestCase {
 			'sku'              => 'sku1234',
 			'offers'           => [
 				[
-					'@type'  => 'Offer',
-					'price'  => '1.00',
-					'url'    => $canonical,
-					'seller' => [
+					'@type'              => 'Offer',
+					'price'              => '1.00',
+					'priceSpecification' => [
+						'price'                 => '1.00',
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
+					],
+					'url'                => $canonical,
+					'seller'             => [
 						'@id' => $canonical . '#organization',
 					],
-					'@id'    => $base_url . '/#/schema/offer/1-0',
+					'@id'                => $base_url . '/#/schema/offer/1-0',
 				],
 			],
 			'review'           => [
@@ -981,6 +1008,8 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_id' )->times( 5 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
 		$product->expects( 'get_sku' )->once()->with()->andReturn( 'sku1234' );
+		$product->expects( 'get_price' )->once()->andReturn( 1 );
+		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
 
 		Mockery::getConfiguration()->setConstantsMap(
 			[
@@ -998,14 +1027,21 @@ class Schema_Test extends TestCase {
 		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
 		$mock->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'WP' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( false );
 
 		Functions\stubs(
 			[
-				'has_post_thumbnail'     => false,
-				'home_url'               => $base_url,
-				'get_site_url'           => $base_url,
-				'get_post_meta'          => false,
-				'wc_placeholder_img_src' => $base_url . '/example_image.jpg',
+				'has_post_thumbnail'       => false,
+				'home_url'                 => $base_url,
+				'get_site_url'             => $base_url,
+				'get_post_meta'            => false,
+				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
+				'wc_get_price_decimals'    => 2,
+				'wc_tax_enabled'           => false,
+				'wc_format_decimal'        => function ( $number ) {
+					return number_format( $number, 2 );
+				},
+				'get_woocommerce_currency' => 'GBP',
 			]
 		);
 
@@ -1077,13 +1113,18 @@ class Schema_Test extends TestCase {
 			'sku'              => 'sku1234',
 			'offers'           => [
 				[
-					'@type'  => 'Offer',
-					'price'  => '1.00',
-					'url'    => $canonical,
-					'seller' => [
+					'@type'              => 'Offer',
+					'price'              => '1.00',
+					'url'                => $canonical,
+					'seller'             => [
 						'@id' => $canonical . '#organization',
 					],
-					'@id'    => $base_url . '/#/schema/offer/1-0',
+					'@id'                => $base_url . '/#/schema/offer/1-0',
+					'priceSpecification' => [
+						'price'                 => '1.00',
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
+					],
 				],
 			],
 			'review'           => [

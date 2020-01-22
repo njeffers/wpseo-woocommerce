@@ -59,11 +59,12 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			'woo_dbversion'           => 0, // Leave default as 0 to ensure activation/upgrade works.
 
 			// Form fields.
-			'woo_schema_brand'        => '',
-			'woo_schema_manufacturer' => '',
-			'woo_breadcrumbs'         => true,
-			'woo_hide_columns'        => true,
-			'woo_metabox_top'         => true,
+			'woo_schema_brand'              => '',
+			'woo_schema_manufacturer'       => '',
+			'woo_breadcrumbs'               => true,
+			'woo_hide_columns'              => true,
+			'woo_metabox_top'               => true,
+			'woo_schema_og_prices_with_tax' => false,
 		];
 
 		/**
@@ -152,6 +153,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 					case 'woo_breadcrumbs':
 					case 'woo_hide_columns':
 					case 'woo_metabox_top':
+					case 'woo_schema_og_prices_with_tax':
 						if ( isset( $dirty[ $key ] ) ) {
 							$clean[ $key ] = WPSEO_Utils::validate_bool( $dirty[ $key ] );
 						}

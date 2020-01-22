@@ -32,4 +32,23 @@ class WPSEO_WooCommerce_Utils {
 
 		return '';
 	}
+
+	/**
+	 * Get the product display price, using the correct decimals, and tax setting.
+	 *
+	 * @param WC_Product $product The product we're retrieving the price for.
+	 *
+	 * @return string Price ready for display.
+	 */
+	public static function get_product_display_price( WC_Product $product ) {
+		$decimals      = wc_get_price_decimals();
+		$display_price = $product->get_price();
+		$quantity      = $product->get_min_purchase_quantity();
+
+		if ( wc_tax_enabled() && ! wc_prices_include_tax() && WPSEO_Options::get( 'woo_schema_og_prices_with_tax' ) ) {
+			$display_price = wc_get_price_including_tax( $product, [ 'qty' => $quantity, 'price' => $display_price ] );
+		}
+
+		return wc_format_decimal( $display_price, $decimals );
+	}
 }

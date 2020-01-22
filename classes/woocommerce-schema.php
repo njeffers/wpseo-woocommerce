@@ -150,7 +150,12 @@ class WPSEO_WooCommerce_Schema {
 
 			// Add an @id to the offer.
 			if ( $offer['@type'] === 'Offer' ) {
-				$data['offers'][ $key ]['@id'] = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+				$price                                                                 = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
+				$data['offers'][ $key ]['@id']                                         = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+				$data['offers'][ $key ]['price']                                       = $price;
+				$data['offers'][ $key ]['priceSpecification']['price']                 = $price;
+				$data['offers'][ $key ]['priceSpecification']['priceCurrency']         = get_woocommerce_currency();
+				$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_Options::get( 'woo_schema_og_prices_with_tax' );
 			}
 			if ( $offer['@type'] === 'AggregateOffer' ) {
 				$data['offers'][ $key ]['@id']    = $home_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
@@ -208,6 +213,7 @@ class WPSEO_WooCommerce_Schema {
 		foreach ( $global_identifier_values as $type => $value ) {
 			$this->data[ $type ] = $value;
 		}
+
 		return true;
 	}
 
@@ -379,7 +385,7 @@ class WPSEO_WooCommerce_Schema {
 				'priceSpecification' => [
 					'price'                 => wc_format_decimal( $variation['display_price'], $decimals ),
 					'priceCurrency'         => $currency,
-					'valueAddedTaxIncluded' => ( $prices_include_tax ) ? 'true' : 'false',
+					'valueAddedTaxIncluded' => $prices_include_tax,
 				],
 			];
 		}

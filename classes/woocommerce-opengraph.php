@@ -17,8 +17,15 @@ class WPSEO_WooCommerce_OpenGraph {
 		add_filter( 'language_attributes', [ $this, 'product_namespace' ], 11 );
 		add_filter( 'wpseo_opengraph_type', [ $this, 'return_type_product' ] );
 		add_filter( 'wpseo_opengraph_desc', [ $this, 'product_taxonomy_desc_enhancement' ] );
+
 		add_action( 'wpseo_opengraph', [ $this, 'product_enhancement' ], 50 );
 		add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
+
+		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'brand' ], 10 );
+		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'price' ], 20 );
+		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'in_stock' ], 30 );
+		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'retailer_item_id' ], 40 );
+		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'product_condition' ], 50 );
 	}
 
 	/**
@@ -64,53 +71,56 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Adds the other product images to the OpenGraph output.
 	 *
-	 * @since 1.0
+	 * @return bool False if we didn't output, true if we did.
 	 */
 	public function product_enhancement() {
 		$product = wc_get_product( get_queried_object_id() );
 		if ( ! is_object( $product ) ) {
-			return;
+			return false;
 		}
 
-		$this->brand( $product );
-		$this->price( $product );
-		$this->in_stock( $product );
-		$this->retailer_item_id( $product );
-		$this->product_condition( $product );
+		/**
+		 * Action: Yoast\WP\Woocommerce\OpenGraph - Allow developers to add to our OpenGraph tags.
+		 *
+		 * @since 12.6.0
+		 *
+		 * @api   WC_Product $product The WooCommerce product we're outputting for.
+		 */
+		do_action( 'Yoast\WP\Woocommerce\OpenGraph', $product );
+		return true;
 	}
 
 	/**
-	 * Adds the opengraph images.
-	 *
-	 * @since 4.3
+	 * Adds the OpenGraph images.
 	 *
 	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image to use.
+	 *
+	 * @return bool True when images are added, false when they're not.
 	 */
 	public function set_opengraph_image( WPSEO_OpenGraph_Image $opengraph_image ) {
 
-		if ( ! function_exists( 'is_product_category' ) || is_product_category() ) {
-			global $wp_query;
-			$cat          = $wp_query->get_queried_object();
-			$thumbnail_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
-			$img_url      = wp_get_attachment_url( $thumbnail_id );
-			if ( $img_url ) {
-				$opengraph_image->add_image( $img_url );
+		if ( is_product_category() ) {
+			$thumbnail_id = get_term_meta( get_queried_object_id(), 'thumbnail_id', true );
+			if ( $thumbnail_id ) {
+				$opengraph_image->add_image_by_id( $thumbnail_id );
 			}
+			return true;
 		}
 
 		$product = wc_get_product( get_queried_object_id() );
 		if ( ! is_object( $product ) ) {
-			return;
+			return false;
 		}
 
 		$img_ids = $product->get_gallery_image_ids();
 
 		if ( is_array( $img_ids ) && $img_ids !== [] ) {
 			foreach ( $img_ids as $img_id ) {
-				$img_url = wp_get_attachment_url( $img_id );
-				$opengraph_image->add_image( $img_url );
+				$opengraph_image->add_image_by_id( $img_id );
 			}
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -159,7 +169,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
-	protected function brand( WC_Product $product ) {
+	public function brand( WC_Product $product ) {
 		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
 		if ( $schema_brand !== '' ) {
 			$brand = $this->get_brand_term_name( $schema_brand, $product );
@@ -174,7 +184,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
-	protected function price( WC_Product $product ) {
+	public function price( WC_Product $product ) {
 		/**
 		 * Filter: wpseo_woocommerce_og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
 		 *
@@ -199,7 +209,7 @@ class WPSEO_WooCommerce_OpenGraph {
 		$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', $show_price );
 
 		if ( $show_price === true ) {
-			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '" />' . "\n";
+			echo '<meta property="product:price:amount" content="' . esc_attr( WPSEO_WooCommerce_Utils::get_product_display_price( $product ) ) . '" />' . "\n";
 			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '" />' . "\n";
 		}
 	}
@@ -209,7 +219,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
-	protected function product_condition( WC_Product $product ) {
+	public function product_condition( WC_Product $product ) {
 		/**
 		 * Filter: Yoast\WP\Woocommerce\product_condition - Allow developers to prevent or change the output of the product condition in the OpenGraph tags.
 		 *
@@ -228,7 +238,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
-	protected function retailer_item_id( WC_Product $product ) {
+	public function retailer_item_id( WC_Product $product ) {
 		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
 	}
 
@@ -237,7 +247,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
-	protected function in_stock( WC_Product $product ) {
+	public function in_stock( WC_Product $product ) {
 		if ( $product->is_in_stock() ) {
 			echo '<meta property="product:availability" content="in stock" />' . "\n";
 		}
