@@ -129,14 +129,19 @@ class OpenGraph_Test extends TestCase {
 				'wc_get_price_decimals'      => 2,
 				'wc_tax_enabled'             => true,
 				'wc_prices_include_tax'      => false,
-				'wc_get_price_including_tax' => function( $product, $args ) {
+				'wc_get_price_including_tax' => function ( $product, $args ) {
 					return ( $args['price'] * 1.1 );
 				},
-				'wc_format_decimal'          => function( $number ) {
+				'wc_format_decimal'          => function ( $number ) {
 					return number_format( $number, 2 );
 				},
 			]
 		);
+
+		Monkey\Functions\expect( 'get_option' )
+			->once()
+			->with( 'woocommerce_tax_display_shop' )
+			->andReturn( 'incl' );
 
 		$options = Mockery::mock( 'alias:WPSEO_Options' );
 		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( true );
@@ -151,7 +156,7 @@ class OpenGraph_Test extends TestCase {
 		$og->price( $product );
 
 		$expected = '<meta property="product:price:amount" content="' . number_format( ( $base_price * $tax_rate ), 2 ) . '" />' . "\n"
-					. '<meta property="product:price:currency" content="USD" />' . "\n";
+		            . '<meta property="product:price:currency" content="USD" />' . "\n";
 		$this->assertEquals( $expected, ob_get_clean() );
 	}
 

@@ -71,6 +71,11 @@ class Utils_Test extends TestCase {
 		$options = Mockery::mock( 'alias:WPSEO_Options' )->makePartial();
 		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( true );
 
+		Monkey\Functions\expect( 'get_option' )
+			->once()
+			->with( 'woocommerce_tax_display_shop' )
+			->andReturn( 'incl' );
+
 		Functions\stubs(
 			[
 				'wc_get_price_decimals'      => 2,

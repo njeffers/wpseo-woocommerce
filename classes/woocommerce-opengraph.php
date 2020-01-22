@@ -51,7 +51,6 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @return string
 	 */
 	public function product_taxonomy_desc_enhancement( $desc ) {
-
 		if ( is_product_taxonomy() ) {
 			$term_desc = term_description();
 

@@ -398,7 +398,7 @@ class Yoast_WooCommerce_SEO {
 		Yoast_Form::get_instance()->select( 'woo_schema_manufacturer', esc_html__( 'Manufacturer', 'yoast-woo-seo' ), $taxonomies );
 		Yoast_Form::get_instance()->select( 'woo_schema_brand', esc_html__( 'Brand', 'yoast-woo-seo' ), $taxonomies );
 
-		if ( wc_tax_enabled() ) {
+		if ( wc_tax_enabled() && get_option( 'woocommerce_tax_display_shop' ) === 'incl' ) {
 			Yoast_Form::get_instance()->checkbox(
 				'woo_schema_og_prices_with_tax',
 				sprintf(
