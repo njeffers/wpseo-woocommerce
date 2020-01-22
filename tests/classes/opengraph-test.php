@@ -28,11 +28,11 @@ class OpenGraph_Test extends TestCase {
 		$this->assertTrue( has_action( 'wpseo_opengraph', [ $og, 'product_enhancement' ] ) );
 		$this->assertTrue( has_action( 'wpseo_add_opengraph_additional_images', [ $og, 'set_opengraph_image' ] ) );
 
-		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'brand' ] ) );
-		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'price' ] ) );
-		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'in_stock' ] ) );
-		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'retailer_item_id' ] ) );
-		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'product_condition' ] ) );
+		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'brand' ] ) );
+		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'price' ] ) );
+		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'in_stock' ] ) );
+		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'retailer_item_id' ] ) );
+		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'product_condition' ] ) );
 	}
 
 	/**
@@ -257,6 +257,7 @@ class OpenGraph_Test extends TestCase {
 	 * Test setting the OpenGraph image.
 	 *
 	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image
+	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image_product_category
 	 */
 	public function test_set_opengraph_image_product_category() {
 		$og_image = Mockery::mock( 'alias:WPSEO_OpenGraph_Image' );
@@ -278,6 +279,28 @@ class OpenGraph_Test extends TestCase {
 	 * Test setting the OpenGraph image.
 	 *
 	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image
+	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image_product_category
+	 */
+	public function test_set_opengraph_image_product_category_no_image() {
+		$og_image = Mockery::mock( 'alias:WPSEO_OpenGraph_Image' );
+
+		Functions\stubs(
+			[
+				'is_product_category'   => true,
+				'get_term_meta'         => false,
+				'get_queried_object_id' => 12,
+			]
+		);
+
+		$og = new WPSEO_WooCommerce_OpenGraph();
+		$this->assertFalse( $og->set_opengraph_image( $og_image ) );
+	}
+
+	/**
+	 * Test setting the OpenGraph image.
+	 *
+	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image
+	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image_product
 	 */
 	public function test_set_opengraph_image_product() {
 		$og_image = Mockery::mock( 'alias:WPSEO_OpenGraph_Image' );
@@ -296,6 +319,30 @@ class OpenGraph_Test extends TestCase {
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		$this->assertTrue( $og->set_opengraph_image( $og_image ) );
+	}
+
+	/**
+	 * Test setting the OpenGraph image.
+	 *
+	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image
+	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image_product
+	 */
+	public function test_set_opengraph_image_product_no_image() {
+		$og_image = Mockery::mock( 'alias:WPSEO_OpenGraph_Image' );
+
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_gallery_image_ids' )->once()->andReturn( [] );
+
+		Functions\stubs(
+			[
+				'is_product_category'   => false,
+				'wc_get_product'        => $product,
+				'get_queried_object_id' => 12,
+			]
+		);
+
+		$og = new WPSEO_WooCommerce_OpenGraph();
+		$this->assertFalse( $og->set_opengraph_image( $og_image ) );
 	}
 
 	/**

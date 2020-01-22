@@ -21,17 +21,15 @@ class WPSEO_WooCommerce_OpenGraph {
 		add_action( 'wpseo_opengraph', [ $this, 'product_enhancement' ], 50 );
 		add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
 
-		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'brand' ], 10 );
-		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'price' ], 20 );
-		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'in_stock' ], 30 );
-		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'retailer_item_id' ], 40 );
-		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'product_condition' ], 50 );
+		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'brand' ], 10 );
+		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'price' ], 20 );
+		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'in_stock' ], 30 );
+		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'retailer_item_id' ], 40 );
+		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'product_condition' ], 50 );
 	}
 
 	/**
 	 * Return 'product' when current page is, well... a product.
-	 *
-	 * @since 1.0
 	 *
 	 * @param string $type Passed on without changing if not a product.
 	 *
@@ -47,8 +45,6 @@ class WPSEO_WooCommerce_OpenGraph {
 
 	/**
 	 * Make sure the OpenGraph description is put out.
-	 *
-	 * @since 1.0
 	 *
 	 * @param string $desc The current description, will be overwritten if we're on a product page.
 	 *
@@ -80,13 +76,14 @@ class WPSEO_WooCommerce_OpenGraph {
 		}
 
 		/**
-		 * Action: \tYoast\WP\Woocommerce\Opengraph - Allow developers to add to our OpenGraph tags.
+		 * Action: 'Yoast\WP\Woocommerce\opengraph' - Allow developers to add to our OpenGraph tags.
 		 *
 		 * @since 12.6.0
 		 *
 		 * @api   WC_Product $product The WooCommerce product we're outputting for.
 		 */
-		do_action( '\tYoast\WP\Woocommerce\Opengraph', $product );
+		do_action( 'Yoast\WP\Woocommerce\opengraph', $product );
+
 		return true;
 	}
 
@@ -100,11 +97,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	public function set_opengraph_image( WPSEO_OpenGraph_Image $opengraph_image ) {
 
 		if ( is_product_category() ) {
-			$thumbnail_id = get_term_meta( get_queried_object_id(), 'thumbnail_id', true );
-			if ( $thumbnail_id ) {
-				$opengraph_image->add_image_by_id( $thumbnail_id );
-			}
-			return true;
+			return $this->set_opengraph_image_product_category( $opengraph_image );
 		}
 
 		$product = wc_get_product( get_queried_object_id() );
@@ -112,15 +105,7 @@ class WPSEO_WooCommerce_OpenGraph {
 			return false;
 		}
 
-		$img_ids = $product->get_gallery_image_ids();
-
-		if ( is_array( $img_ids ) && $img_ids !== [] ) {
-			foreach ( $img_ids as $img_id ) {
-				$opengraph_image->add_image_by_id( $img_id );
-			}
-			return true;
-		}
-		return false;
+		return $this->set_opengraph_image_product( $opengraph_image, $product );
 	}
 
 	/**
@@ -251,5 +236,45 @@ class WPSEO_WooCommerce_OpenGraph {
 		if ( $product->is_in_stock() ) {
 			echo '<meta property="product:availability" content="in stock" />' . "\n";
 		}
+	}
+
+	/**
+	 * Set the OpenGraph image for a product category based on the category thumbnail.
+	 *
+	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image class.
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function set_opengraph_image_product_category( WPSEO_OpenGraph_Image $opengraph_image ) {
+		$thumbnail_id = get_term_meta( get_queried_object_id(), 'thumbnail_id', true );
+		if ( $thumbnail_id ) {
+			$opengraph_image->add_image_by_id( $thumbnail_id );
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Set the OpenGraph images for a product based on its gallery image IDs.
+	 *
+	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image class.
+	 * @param WC_Product            $product         The WooCommerce product.
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	protected function set_opengraph_image_product( WPSEO_OpenGraph_Image $opengraph_image, WC_Product $product ) {
+		$img_ids = $product->get_gallery_image_ids();
+
+		if ( is_array( $img_ids ) && $img_ids !== [] ) {
+			foreach ( $img_ids as $img_id ) {
+				$opengraph_image->add_image_by_id( $img_id );
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 }
