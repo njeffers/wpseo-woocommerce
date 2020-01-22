@@ -155,8 +155,7 @@ class OpenGraph_Test extends TestCase {
 		ob_start();
 		$og->price( $product );
 
-		$expected = '<meta property="product:price:amount" content="' . number_format( ( $base_price * $tax_rate ), 2 ) . '" />' . "\n"
-		            . '<meta property="product:price:currency" content="USD" />' . "\n";
+		$expected = '<meta property="product:price:amount" content="' . number_format( ( $base_price * $tax_rate ), 2 ) . '" />' . "\n" . '<meta property="product:price:currency" content="USD" />' . "\n";
 		$this->assertEquals( $expected, ob_get_clean() );
 	}
 

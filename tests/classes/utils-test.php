@@ -94,6 +94,11 @@ class Utils_Test extends TestCase {
 		$this->assertEquals( ( $price * $tax_rate ), WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
 	}
 
+	/**
+	 * Test the different cases for prices with or without tax.
+	 *
+	 * @covers WPSEO_WooCommerce_Utils::prices_with_tax
+	 */
 	public function test_prices_with_tax() {
 		Functions\stubs(
 			[
