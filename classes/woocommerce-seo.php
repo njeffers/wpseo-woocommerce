@@ -618,14 +618,38 @@ class Yoast_WooCommerce_SEO {
 		$long_description  = $this->get_product_description( $product );
 
 		if ( $short_description !== '' ) {
-			return $short_description;
+			return $this->clean_description( $short_description );
 		}
 
 		if ( $long_description !== '' ) {
-			return wp_html_excerpt( $long_description, 156 );
+			return wp_html_excerpt( $this->clean_description( $long_description ), 156 );
 		}
 
 		return '';
+	}
+
+	/**
+	 * Make a string clear for display in meta data.
+	 *
+	 * @param string $string The input string.
+	 *
+	 * @return string The clean string.
+	 */
+	protected function clean_description( $string ) {
+		// Strip tags.
+		$string = wp_strip_all_tags( $string );
+
+		// Replace non breaking space entities with spaces.
+		$string = str_replace( '&nbsp;', ' ', $string );
+
+		// Replace non breaking uni-code spaces with spaces. Don't ask.
+		$string = str_replace( chr( 194 ) . chr( 160 ), ' ', $string );
+
+		// Replace all double or more spaces with one space and trim our string.
+		$string = preg_replace( '/\s+/', ' ', $string );
+		$string = trim( $string );
+
+		return $string;
 	}
 
 	/**
