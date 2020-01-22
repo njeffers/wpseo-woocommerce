@@ -46,7 +46,13 @@ class WPSEO_WooCommerce_Utils {
 		$quantity      = $product->get_min_purchase_quantity();
 
 		if ( wc_tax_enabled() && ! wc_prices_include_tax() && WPSEO_Options::get( 'woo_schema_og_prices_with_tax' ) ) {
-			$display_price = wc_get_price_including_tax( $product, [ 'qty' => $quantity, 'price' => $display_price ] );
+			$display_price = wc_get_price_including_tax(
+				$product,
+				[
+					'qty'   => $quantity,
+					'price' => $display_price,
+				]
+			);
 		}
 
 		return wc_format_decimal( $display_price, $decimals );

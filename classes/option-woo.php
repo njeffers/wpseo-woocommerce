@@ -56,7 +56,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		 */
 		protected $defaults = [
 			// Non-form fields, set via validation routine.
-			'woo_dbversion'           => 0, // Leave default as 0 to ensure activation/upgrade works.
+			'woo_dbversion'                 => 0, // Leave default as 0 to ensure activation/upgrade works.
 
 			// Form fields.
 			'woo_schema_brand'              => '',

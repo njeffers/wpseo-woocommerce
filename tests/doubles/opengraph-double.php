@@ -9,6 +9,7 @@ use WPSEO_WooCommerce_OpenGraph;
  * Test Helper Class.
  */
 class OpenGraph_Double extends WPSEO_WooCommerce_OpenGraph {
+
 	/**
 	 * Retrieve the primary and if that doesn't exist first term for the brand taxonomy.
 	 *

@@ -80,11 +80,11 @@ class Utils_Test extends TestCase {
 					return number_format( $number, $decimals );
 				},
 				'wc_get_price_including_tax' => function ( $product, $args ) {
-					return $args['price'] * 1.1;
+					return ( $args['price'] * 1.1 );
 				},
 			]
 		);
 
-		$this->assertEquals( $price * $tax_rate, WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
+		$this->assertEquals( ( $price * $tax_rate ), WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
 	}
 }

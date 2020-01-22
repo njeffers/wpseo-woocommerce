@@ -21,11 +21,11 @@ class WPSEO_WooCommerce_OpenGraph {
 		add_action( 'wpseo_opengraph', [ $this, 'product_enhancement' ], 50 );
 		add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
 
-		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'brand' ], 10 );
-		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'price' ], 20 );
-		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'in_stock' ], 30 );
-		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'retailer_item_id' ], 40 );
-		add_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $this, 'product_condition' ], 50 );
+		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'brand' ], 10 );
+		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'price' ], 20 );
+		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'in_stock' ], 30 );
+		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'retailer_item_id' ], 40 );
+		add_action( '\tYoast\WP\Woocommerce\Opengraph', [ $this, 'product_condition' ], 50 );
 	}
 
 	/**
@@ -80,13 +80,13 @@ class WPSEO_WooCommerce_OpenGraph {
 		}
 
 		/**
-		 * Action: Yoast\WP\Woocommerce\OpenGraph - Allow developers to add to our OpenGraph tags.
+		 * Action: \tYoast\WP\Woocommerce\Opengraph - Allow developers to add to our OpenGraph tags.
 		 *
 		 * @since 12.6.0
 		 *
 		 * @api   WC_Product $product The WooCommerce product we're outputting for.
 		 */
-		do_action( 'Yoast\WP\Woocommerce\OpenGraph', $product );
+		do_action( '\tYoast\WP\Woocommerce\Opengraph', $product );
 		return true;
 	}
 

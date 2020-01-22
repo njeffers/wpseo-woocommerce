@@ -28,11 +28,11 @@ class OpenGraph_Test extends TestCase {
 		$this->assertTrue( has_action( 'wpseo_opengraph', [ $og, 'product_enhancement' ] ) );
 		$this->assertTrue( has_action( 'wpseo_add_opengraph_additional_images', [ $og, 'set_opengraph_image' ] ) );
 
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $og, 'brand' ] ) );
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $og, 'price' ] ) );
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $og, 'in_stock' ] ) );
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $og, 'retailer_item_id' ] ) );
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\OpenGraph', [ $og, 'product_condition' ] ) );
+		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'brand' ] ) );
+		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'price' ] ) );
+		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'in_stock' ] ) );
+		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'retailer_item_id' ] ) );
+		$this->assertTrue( has_action( '\tYoast\WP\Woocommerce\Opengraph', [ $og, 'product_condition' ] ) );
 	}
 
 	/**
@@ -122,19 +122,19 @@ class OpenGraph_Test extends TestCase {
 
 		Functions\stubs(
 			[
-				'apply_filters_deprecated' => true,
-				'apply_filters'            => true,
-				'esc_attr'                 => null,
-				'get_woocommerce_currency' => 'USD',
-				'wc_get_price_decimals'    => 2,
-				'wc_tax_enabled'           => true,
-				'wc_prices_include_tax'    => false,
+				'apply_filters_deprecated'   => true,
+				'apply_filters'              => true,
+				'esc_attr'                   => null,
+				'get_woocommerce_currency'   => 'USD',
+				'wc_get_price_decimals'      => 2,
+				'wc_tax_enabled'             => true,
+				'wc_prices_include_tax'      => false,
 				'wc_get_price_including_tax' => function( $product, $args ) {
-					return $args['price'] * 1.1;
+					return ( $args['price'] * 1.1 );
 				},
-				'wc_format_decimal' => function( $number ) {
+				'wc_format_decimal'          => function( $number ) {
 					return number_format( $number, 2 );
-				}
+				},
 			]
 		);
 
@@ -150,8 +150,8 @@ class OpenGraph_Test extends TestCase {
 		ob_start();
 		$og->price( $product );
 
-		$expected = '<meta property="product:price:amount" content="' . number_format( $base_price * $tax_rate, 2 ) . '" />' . "\n"
-		            . '<meta property="product:price:currency" content="USD" />' . "\n";
+		$expected = '<meta property="product:price:amount" content="' . number_format( ( $base_price * $tax_rate ), 2 ) . '" />' . "\n"
+					. '<meta property="product:price:currency" content="USD" />' . "\n";
 		$this->assertEquals( $expected, ob_get_clean() );
 	}
 
