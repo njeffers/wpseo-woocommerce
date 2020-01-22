@@ -45,7 +45,7 @@ class WPSEO_WooCommerce_Utils {
 		$display_price = $product->get_price();
 		$quantity      = $product->get_min_purchase_quantity();
 
-		if ( wc_tax_enabled() && ! wc_prices_include_tax() &&  get_option( 'woocommerce_tax_display_shop' ) === 'incl' && WPSEO_Options::get( 'woo_schema_og_prices_with_tax' ) ) {
+		if ( self::prices_with_tax() ) {
 			$display_price = wc_get_price_including_tax(
 				$product,
 				[
@@ -56,5 +56,19 @@ class WPSEO_WooCommerce_Utils {
 		}
 
 		return wc_format_decimal( $display_price, $decimals );
+	}
+
+	/**
+	 * Determines if prices should be returned with or without tax included.
+	 *
+	 * @return bool True if prices should be displayed with tax added, false if not.
+	 */
+	public static function prices_with_tax() {
+		return (
+			wc_tax_enabled() &&
+			! wc_prices_include_tax() &&
+			get_option( 'woocommerce_tax_display_shop' ) === 'incl' &&
+			WPSEO_Options::get( 'woo_schema_og_prices_with_tax' )
+		);
 	}
 }

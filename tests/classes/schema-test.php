@@ -217,9 +217,6 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_price' )->once()->andReturn( 49 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
 
-		$options = Mockery::mock( 'alias:WPSEO_Options' );
-		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( false );
-
 		$output = $schema->filter_offers( $input, $product );
 
 		$this->assertEquals( $expected_output, $output );
@@ -860,7 +857,6 @@ class Schema_Test extends TestCase {
 		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
 		$mock->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'WP' );
-		$mock->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( false );
 
 		Functions\stubs(
 			[
@@ -1027,7 +1023,6 @@ class Schema_Test extends TestCase {
 		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
 		$mock->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'WP' );
-		$mock->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( false );
 
 		Functions\stubs(
 			[

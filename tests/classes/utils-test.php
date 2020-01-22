@@ -59,6 +59,7 @@ class Utils_Test extends TestCase {
 	 * Test getting the product display price
 	 *
 	 * @covers WPSEO_WooCommerce_Utils::get_product_display_price
+	 * @covers WPSEO_WooCommerce_Utils::prices_with_tax
 	 */
 	public function test_get_product_display_price() {
 		$price    = 10;
@@ -91,5 +92,40 @@ class Utils_Test extends TestCase {
 		);
 
 		$this->assertEquals( ( $price * $tax_rate ), WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
+	}
+
+	public function test_prices_with_tax() {
+		Functions\stubs(
+			[
+				'wc_tax_enabled' => false,
+			]
+		);
+		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_with_tax() );
+
+		Functions\stubs(
+			[
+				'wc_tax_enabled'        => true,
+				'wc_prices_include_tax' => false,
+			]
+		);
+		Monkey\Functions\expect( 'get_option' )
+			->once()
+			->with( 'woocommerce_tax_display_shop' )
+			->andReturn( 'excl' );
+
+		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_with_tax() );
+
+		Monkey\Functions\expect( 'get_option' )
+			->twice()
+			->with( 'woocommerce_tax_display_shop' )
+			->andReturn( 'incl' );
+
+		$options = Mockery::mock( 'alias:WPSEO_Options' )->makePartial();
+		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( false );
+
+		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_with_tax() );
+
+		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( true );
+		$this->assertTrue( WPSEO_WooCommerce_Utils::prices_with_tax() );
 	}
 }
