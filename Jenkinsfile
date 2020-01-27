@@ -1,18 +1,8 @@
 def runTests( phpVersion ) {
     docker.image( "wordpressdevelop/php:${phpVersion}-fpm" ).inside {
         stage( "${phpVersion} Tests" ){
-            sh 'docker-php-ext-enable xdebug'
-	        sh 'rm -f /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini'
-            sh "vendor/bin/phpunit -c phpunit.xml.dist --log-junit build/logs/junit-${phpVersion}.xml --coverage-html build/coverage-${phpVersion} --coverage-clover build/logs/clover-${phpVersion}.xml"
+            sh "vendor/bin/phpunit -c phpunit.xml.dist --log-junit build/logs/junit-${phpVersion}.xml"
             junit "build/logs/junit-${phpVersion}.xml"
-            step ([
-                $class: 'CloverPublisher',
-                cloverReportDir: "build/coverage-${phpVersion}",
-                cloverReportFileName: "../logs/clover-${phpVersion}.xml",
-                healthyTarget: [ methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80 ],
-                unhealthyTarget: [ methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50 ],
-                failingTarget: [ methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0 ]
-            ] )
         }
     }
 }
@@ -57,11 +47,26 @@ node( 'docker-agent' ) {
                 )
             }
         },
+        php73: {
+            // Run tests with code coverage
+            docker.image( "wordpressdevelop/php:7.3-fpm" ).inside {
+                stage( "7.3 Tests" ){
+                    sh 'docker-php-ext-enable xdebug'
+                    sh "vendor/bin/phpunit -c phpunit.xml.dist --log-junit build/logs/junit-7.3.xml --coverage-html build/coverage --coverage-clover build/logs/clover.xml"
+                    junit "build/logs/junit-7.3.xml"
+                    step ([
+                        $class: 'CloverPublisher',
+                        cloverReportDir: "build/coverage",
+                        cloverReportFileName: "../logs/clover.xml",
+                        healthyTarget: [ methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80 ],
+                        unhealthyTarget: [ methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50 ],
+                        failingTarget: [ methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0 ]
+                    ] )
+                }
+            }
+        },
         php74: {
             runTests( '7.4' );
-        },
-        php73: {
-            runTests( '7.3' );
         },
         php56: {
             runTests( '5.6' );
