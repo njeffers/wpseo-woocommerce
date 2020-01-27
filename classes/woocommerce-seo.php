@@ -15,7 +15,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var string
 	 */
-	const VERSION = '12.4.1';
+	const VERSION = WPSEO_WOO_VERSION;
 
 	/**
 	 * Return the plugin file.
