@@ -1,8 +1,11 @@
 def runTests( phpVersion ) {
     docker.image( "wordpressdevelop/php:${phpVersion}-fpm" ).inside {
         stage( "${phpVersion} Tests" ){
-            sh "vendor/bin/phpunit -c phpunit.xml.dist --log-junit build/logs/junit-${phpVersion}.xml"
-            junit "build/logs/junit-${phpVersion}.xml"
+            try {
+                sh "vendor/bin/phpunit -c phpunit.xml.dist --log-junit build/logs/junit-${phpVersion}.xml"
+            } finally {
+                junit "build/logs/junit-${phpVersion}.xml"
+            }
         }
     }
 }
@@ -27,16 +30,22 @@ node( 'docker-agent' ) {
                     },
                     phpcs: {
                         stage( 'Codestyle' ) {
-                            sh 'vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml'
-                            def checkstyle = scanForIssues tool: checkStyle(pattern: 'build/logs/checkstyle.xml')
-                            publishIssues issues: [checkstyle]
+                            try {
+                                sh 'vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml'
+                            } finally {
+                                def checkstyle = scanForIssues tool: checkStyle(pattern: 'build/logs/checkstyle.xml')
+                                publishIssues issues: [checkstyle]
+                            }
                         }
                     },
                     phpmd: {
                         stage( 'Mess detection' ) {
-                            sh 'vendor/bin/phpmd . xml cleancode,codesize,design,naming,unusedcode --reportfile build/logs/pmd.xml --exclude vendor/,build/'
-                            def pmd = scanForIssues tool: pmdParser(pattern: 'build/logs/pmd.xml')
-                            publishIssues issues: [pmd]
+                            try {
+                                sh 'vendor/bin/phpmd . xml cleancode,codesize,design,naming,unusedcode --reportfile build/logs/pmd.xml --exclude vendor/,build/ --ignore-violations-on-exit'
+                            } finally {
+                                def pmd = scanForIssues tool: pmdParser(pattern: 'build/logs/pmd.xml')
+                                publishIssues issues: [pmd]
+                            }
                         }
                     },
                     securitycheck: {
@@ -52,16 +61,19 @@ node( 'docker-agent' ) {
             docker.image( "wordpressdevelop/php:7.3-fpm" ).inside {
                 stage( "7.3 Tests" ){
                     sh 'docker-php-ext-enable xdebug'
-                    sh "vendor/bin/phpunit -c phpunit.xml.dist --log-junit build/logs/junit-7.3.xml --coverage-html build/coverage --coverage-clover build/logs/clover.xml"
-                    junit "build/logs/junit-7.3.xml"
-                    step ([
-                        $class: 'CloverPublisher',
-                        cloverReportDir: "build/coverage",
-                        cloverReportFileName: "../logs/clover.xml",
-                        healthyTarget: [ methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80 ],
-                        unhealthyTarget: [ methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50 ],
-                        failingTarget: [ methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0 ]
-                    ] )
+                    try {
+                        sh "vendor/bin/phpunit -c phpunit.xml.dist --log-junit build/logs/junit-7.3.xml --coverage-html build/coverage --coverage-clover build/logs/clover.xml"
+                    } finally {
+                        junit "build/logs/junit-7.3.xml"
+                        step ([
+                            $class: 'CloverPublisher',
+                            cloverReportDir: "build/coverage",
+                            cloverReportFileName: "../logs/clover.xml",
+                            healthyTarget: [ methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80 ],
+                            unhealthyTarget: [ methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50 ],
+                            failingTarget: [ methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0 ]
+                        ] )
+                    }
                 }
             }
         },
