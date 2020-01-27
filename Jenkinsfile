@@ -23,6 +23,7 @@ node( 'docker-agent' ) {
     docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside {
         stage( 'Install' ) {
             sh 'composer install --no-interaction'
+            sh 'mkdir -p build/logs'
         }
     }
     parallel(
@@ -31,7 +32,7 @@ node( 'docker-agent' ) {
                 parallel(
                     phplint: {
                         stage( 'Linting' ) {
-                            sh 'find -L . -path ./vendor -prune -o -path ./node_modules -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l'
+                            sh 'find -L . -path ./vendor -prune -o -path ./node_modules -prune -o -name "*.php" -print0 | xargs -0 -n 1 -P 4 php -l'
                         }
                     },
                     phpcs: {
