@@ -1,6 +1,8 @@
 def runTests( phpVersion ) {
     docker.image( "wordpressdevelop/php:${phpVersion}-fpm" ).inside {
         stage( "${phpVersion} Tests" ){
+            sh 'docker-php-ext-enable xdebug'
+	        sh 'm -f /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini'
             sh "vendor/bin/phpunit -c phpunit.xml.dist --log-junit build/logs/junit-${phpVersion}.xml --coverage-html build/coverage-${phpVersion} --coverage-clover build/logs/clover-${phpVersion}.xml"
             junit "build/logs/junit-${phpVersion}.xml"
             step ([
@@ -25,7 +27,7 @@ node( 'docker-agent' ) {
     }
     parallel(
         other: {
-            docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside {
+            docker.image( 'wordpressdevelop/php:7.3-fpm' ).inside {
                 parallel(
                     phplint: {
                         stage( 'Linting' ) {
