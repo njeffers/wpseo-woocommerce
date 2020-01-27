@@ -27,14 +27,14 @@ node( 'docker-agent' ) {
                     },
                     phpcs: {
                         stage( 'Codestyle' ) {
-                            sh 'vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml || exit 0'
+                            sh 'vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml'
                             def checkstyle = scanForIssues tool: checkStyle(pattern: 'build/logs/checkstyle.xml')
                             publishIssues issues: [checkstyle]
                         }
                     },
                     phpmd: {
                         stage( 'Mess detection' ) {
-                            sh 'vendor/bin/phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ --exclude build/ || exit 0'
+                            sh 'vendor/bin/phpmd . xml cleancode,codesize,design,naming,unusedcode --reportfile build/logs/pmd.xml --exclude vendor/,build/'
                             def pmd = scanForIssues tool: pmdParser(pattern: 'build/logs/pmd.xml')
                             publishIssues issues: [pmd]
                         }
