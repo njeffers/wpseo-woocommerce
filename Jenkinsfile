@@ -48,6 +48,16 @@ node( 'docker-agent' ) {
                             }
                         }
                     },
+                    copypaste: {
+                        stage('Copy paste detection') {
+                            try {
+                                sh 'vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor --exclude build .'
+                            } finally {
+                                def cpd = scanForIssues tool: cpd(pattern: 'build/logs/pmd-cpd.xml')
+                                publishIssues issues: [cpd]
+                            }
+                        }
+                    },
                     securitycheck: {
                         stage( 'Security check' ) {
                             sh 'vendor/bin/security-checker security:check composer.lock'
