@@ -51,7 +51,7 @@ node( 'docker-agent' ) {
                     copypaste: {
                         stage('Copy paste detection') {
                             try {
-                                sh 'vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor --exclude build .'
+                                sh 'vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor --exclude build . || exit 0'
                             } finally {
                                 def cpd = scanForIssues tool: cpd(pattern: 'build/logs/pmd-cpd.xml')
                                 publishIssues issues: [cpd]
