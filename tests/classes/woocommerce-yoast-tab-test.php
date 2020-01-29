@@ -118,13 +118,19 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 			[
 				'wp_is_post_revision' => false,
 				'wp_verify_nonce'     => true,
+				'update_post_meta'    => true,
+				'wp_strip_all_tags'   => function ( $value ) {
+					// Ignoring WPCS's warning about using `wp_strip_all_tags` because we're *doing that*.
+					// @phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
+					return strip_tags( $value );
+				},
 			]
 		);
 
 		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
 
 		// No $_POST data, so nothing to save.
-		$this->assertFalse( $instance->save_data( 123 ) );
+		$this->assertTrue( $instance->save_data( 123 ) );
 	}
 
 	/**
@@ -177,7 +183,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 		$instance = new Yoast_Tab_Double();
 		$this->assertTrue( $instance->validate_data( '12345' ) );
 		$this->assertFalse( $instance->validate_data( '12345<script>' ) );
-		$this->assertFalse( $instance->validate_data( '' ) );
+		$this->assertTrue( $instance->validate_data( '' ) );
 	}
 
 	/**

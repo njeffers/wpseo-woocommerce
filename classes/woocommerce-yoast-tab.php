@@ -104,10 +104,6 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 * @return bool True when safe and not empty, false when it's not.
 	 */
 	protected function validate_data( $value ) {
-		if ( empty( $value ) ) {
-			return false;
-		}
-
 		if ( wp_strip_all_tags( $value ) !== $value ) {
 			return false;
 		}

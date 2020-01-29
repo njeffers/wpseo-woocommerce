@@ -499,36 +499,6 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
-	 * Test that adding the SKU as the productID works.
-	 *
-	 * @covers WPSEO_WooCommerce_Schema::add_sku
-	 */
-	public function test_add_sku() {
-		$class   = new Schema_Double();
-		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_sku' )->once()->andReturn( 'sku123' );
-
-		$expected = [ 'productID' => 'sku123' ];
-		$class->add_sku( $product );
-		$this->assertEquals( $expected, $class->data );
-	}
-
-	/**
-	 * Test that adding the SKU as the productID works.
-	 *
-	 * @covers WPSEO_WooCommerce_Schema::add_sku
-	 */
-	public function test_empty_sku() {
-		$class   = new Schema_Double();
-		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_sku' )->once()->andReturn( '' );
-
-		$expected = null;
-		$class->add_sku( $product );
-		$this->assertEquals( $expected, $class->data );
-	}
-
-	/**
 	 * Changing the seller in offers to point to our Organization ID when there's no org.
 	 *
 	 * @covers WPSEO_WooCommerce_Schema::change_seller_in_offers
@@ -866,7 +836,6 @@ class Schema_Test extends TestCase {
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->times( 5 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
-		$product->expects( 'get_sku' )->once()->with()->andReturn( 'sku1234' );
 		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
 
@@ -1003,7 +972,6 @@ class Schema_Test extends TestCase {
 				'@type' => 'Organization',
 				'name'  => $product_name,
 			],
-			'productID'        => 'sku1234',
 		];
 
 		$instance->change_product( $data, $product );
@@ -1032,7 +1000,6 @@ class Schema_Test extends TestCase {
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->times( 5 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
-		$product->expects( 'get_sku' )->once()->with()->andReturn( 'sku1234' );
 		$product->expects( 'get_price' )->once()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
 
@@ -1177,7 +1144,6 @@ class Schema_Test extends TestCase {
 				'@type' => 'Organization',
 				'name'  => $product_name,
 			],
-			'productID'        => 'sku1234',
 		];
 
 		$instance->change_product( $data, $product );
