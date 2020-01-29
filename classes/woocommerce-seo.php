@@ -693,7 +693,10 @@ class Yoast_WooCommerce_SEO {
 			echo '<meta property="product:availability" content="in stock" />' . "\n";
 		}
 
-		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
+		$sku = $product->get_sku();
+		if ( ! empty( $sku ) ) {
+			echo '<meta property="product:retailer_item_id" content="' . esc_attr( $sku ) . '" />' . "\n";
+		}
 
 		/**
 		 * Filter: Yoast\WP\Woocommerce\product_condition - Allow developers to prevent or change the output of the product condition in the OpenGraph tags.
