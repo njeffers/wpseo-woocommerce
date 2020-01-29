@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3.2
-Stable tag: 12.5-RC3
+Stable tag: 12.5-RC4
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -62,6 +62,7 @@ Bugfixes:
 * Fixes a bug where Organization would be used in the schema output, while no organization was set.
 * Fixes a bug where non-public taxonomies could be chosen as manufacturer and brand.
 * Fixes a bug where the shop page would be shown in the XML sitemap when it was set to `noindex`. Props [stodorovic](https://github.com/stodorovic).
+* Fixes a bug where an empty `product:retailer_item_id` was output when there was no SKU.
 
 Other:
 
