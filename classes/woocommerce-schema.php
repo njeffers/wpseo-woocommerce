@@ -203,7 +203,7 @@ class WPSEO_WooCommerce_Schema {
 
 		foreach ( $global_identifier_values as $type => $value ) {
 			$this->data[ $type ] = $value;
-			if ( $type === 'isbn' ) {
+			if ( $type === 'isbn' && ! empty( $value ) ) {
 				$this->data['@type'] = [ 'Book', 'Product' ];
 			}
 		}
