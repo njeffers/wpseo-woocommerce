@@ -92,7 +92,7 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
 
 			// Fix breadcrumbs.
-			$this->handle_breadcrumbs_replacements();
+			add_action( 'send_headers', [ $this, 'handle_breadcrumbs_replacements' ] );
 		}
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
@@ -248,7 +248,11 @@ class Yoast_WooCommerce_SEO {
 	 * @return string
 	 */
 	public function override_woo_breadcrumbs() {
-		return yoast_breadcrumb( '<div class="breadcrumb breadcrumbs woo-breadcrumbs"><div class="breadcrumb-trail">', '</div></div>', false );
+		$breadcrumb = yoast_breadcrumb( '<div class="breadcrumb breadcrumbs woo-breadcrumbs"><div class="breadcrumb-trail">', '</div></div>', false );
+		if ( current_action() === 'storefront_before_content' ) {
+			$breadcrumb = '<div class="storefront-breadcrumb"><div class="col-full">' . $breadcrumb . '</div></div>';
+		}
+		return $breadcrumb;
 	}
 
 	/**
@@ -1191,9 +1195,14 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return void
 	 */
-	protected function handle_breadcrumbs_replacements() {
+	public function handle_breadcrumbs_replacements() {
 		if ( WPSEO_Options::get( 'woo_breadcrumbs' ) !== true || WPSEO_Options::get( 'breadcrumbs-enable' ) !== true ) {
 			return;
+		}
+
+		if ( has_action( 'storefront_before_content', 'woocommerce_breadcrumb' ) ) {
+			remove_action( 'storefront_before_content', 'woocommerce_breadcrumb' );
+			add_action( 'storefront_before_content', [ $this, 'show_yoast_breadcrumbs' ] );
 		}
 
 		// Replaces the WooCommerce breadcrumbs.
