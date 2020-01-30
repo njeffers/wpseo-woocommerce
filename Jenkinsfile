@@ -11,12 +11,12 @@ def runTests( phpVersion ) {
 }
 
 node( 'docker-agent' ) {
-        cache(maxCacheSize: 500, caches: [
-            [$class: 'ArbitraryFileCache', excludes: '', includes: '**/*', path: './vendor']
-        ]) {
+        // cache(maxCacheSize: 500, caches: [
+        //     [$class: 'ArbitraryFileCache', excludes: '', includes: '**/*', path: './vendor']
+        // ]) {
         checkout scm
         def workspace = pwd()
-        docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside {
+        docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside('-v ./vendor:./vendor') {
             stage( 'Install' ) {
                 sh 'composer install --no-interaction'
                 sh 'mkdir -p build/logs'
@@ -97,5 +97,5 @@ node( 'docker-agent' ) {
                 runTests( '5.6' );
             }
         )
-    }
+    // }
 }
