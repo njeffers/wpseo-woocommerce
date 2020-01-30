@@ -98,5 +98,5 @@ node( 'docker-agent' ) {
                 runTests( '5.6' );
             }
         )
-    // }
+    }
 }
