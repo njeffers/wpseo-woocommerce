@@ -16,7 +16,7 @@ node( 'docker-agent' ) {
     docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside {
         stage( 'Install' ) {
             cache( maxCacheSize: 250, caches: [
-                [$class: 'ArbitraryFileCache', excludes: '', includes: '**/*', path: './vendor']
+                [ $class: 'ArbitraryFileCache', excludes: '', includes: '**/*', path: './vendor' ]
             ] ) {
                 sh 'composer install --no-interaction'
             }
