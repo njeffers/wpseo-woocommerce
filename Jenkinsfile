@@ -15,8 +15,12 @@ node( 'docker-agent' ) {
     def workspace = pwd()
     docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside {
         stage( 'Install' ) {
-            sh 'composer install --no-interaction'
-            sh 'mkdir -p build/logs'
+            cache(maxCacheSize: 500, caches: [
+                [$class: 'ArbitraryFileCache', excludes: '', includes: '**/*', path: './vendor']
+            ]) {
+                sh 'composer install --no-interaction'
+                sh 'mkdir -p build/logs'
+            }
         }
     }
     parallel(
