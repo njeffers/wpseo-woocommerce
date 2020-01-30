@@ -16,7 +16,7 @@ node( 'docker-agent' ) {
         // ]) {
         checkout scm
         def workspace = pwd()
-        docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside('-v ./vendor:./vendor') {
+        docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside('-v $PWD/vendor:/home/jenkins/agent/workspace/vendor') {
             stage( 'Install' ) {
                 sh 'composer install --no-interaction'
                 sh 'mkdir -p build/logs'
