@@ -47,12 +47,12 @@ function initialize_yoast_woocommerce_seo() {
 
 	global $wp_version;
 
-	$dependency_check = new Yoast_WooCommerce_Dependencies();
+	$dependency_check = new Yoast\WP\Woocommerce\Classes\Dependencies();
 	if ( $dependency_check->check_dependencies( $wp_version ) ) {
 		global $yoast_woo_seo;
 
 		// Initializes the plugin.
-		$yoast_woo_seo = new Yoast_WooCommerce_SEO();
+		$yoast_woo_seo = new Yoast\WP\Woocommerce\Classes\Main();
 	}
 }
 
