@@ -98,6 +98,6 @@ node( 'docker-agent' ) {
         try {
             def tag = sh( script: 'git describe --exact-match --tags HEAD', returnStdout: true ).trim()
             build( [ job: 'artifact', parameters: [ commit: env.GIT_COMMIT, version: tag ] ] )
-        } catch() {}
+        } finally {}
     }
 }
