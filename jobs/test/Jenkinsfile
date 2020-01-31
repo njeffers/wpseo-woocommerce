@@ -94,10 +94,8 @@ node( 'docker-agent' ) {
         }
     )
     stage( 'Post build actions' ) {
-        try {
-            sh 'git fetch --tags'
-            def tag = sh( script: "git describe --exact-match --tags ${scmVars.GIT_COMMIT}", returnStdout: true ).trim()
-            build( [ job: 'artifact', parameters: [ commit: scmVars.GIT_COMMIT, version: tag ] ] )
-        } catch( Exception e ) {}
+        sh 'git fetch --tags'
+        def tag = sh( script: "git describe --exact-match --tags ${scmVars.GIT_COMMIT}", returnStdout: true ).trim()
+        build job: 'wpseo-woocommerce/artifact', parameters: [ [ $class: 'StringParameterValue', name: 'commit', value: scmVars.GIT_COMMIT ], [ $class: 'StringParameterValue', name: 'version', value: tag ] ]
     }
 }
