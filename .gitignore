@@ -2,7 +2,7 @@ node_modules/*
 /vendor/
 .idea
 artifact.zip
-artifact/
+./artifact/
 .phpcs.xml
 phpcs.xml
 phpunit.xml

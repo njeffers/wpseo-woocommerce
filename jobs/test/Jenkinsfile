@@ -94,4 +94,10 @@ node( 'docker-agent' ) {
             runTests( '5.6' );
         }
     )
+    stage( 'Post build actions' ) {
+        try {
+            def tag = sh( script: 'git describe --exact-match --tags HEAD', returnStdout: true ).trim()
+            build( [ job: 'artifact', parameters: [ commit: env.GIT_COMMIT, version: tag ] ] )
+        }
+    }
 }
