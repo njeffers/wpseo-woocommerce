@@ -11,7 +11,7 @@ def runTests( phpVersion ) {
 }
 
 node( 'docker-agent' ) {
-    def scmVars checkout scm
+    def scmVars = checkout scm
     docker.image( 'yoastseo/docker-php-composer-node:latest' ).inside {
         stage( 'Install' ) {
             sh 'composer install --no-interaction'
