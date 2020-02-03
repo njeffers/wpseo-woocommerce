@@ -15,7 +15,7 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @var string
 	 */
-	const VERSION = '12.4.1';
+	const VERSION = WPSEO_WOO_VERSION;
 
 	/**
 	 * Return the plugin file.
@@ -63,24 +63,18 @@ class Yoast_WooCommerce_SEO {
 
 			// Move Woo box above SEO box.
 			add_action( 'admin_footer', [ $this, 'footer_js' ] );
+
+			new WPSEO_WooCommerce_Yoast_Tab();
 		}
 		else {
-			// Initialize schema.
+			// Initialize schema & OpenGraph.
+			add_action( 'init', [ $this, 'initialize_opengraph' ] );
 			add_action( 'init', [ $this, 'initialize_schema' ] );
 
 			// Add metadescription filter.
 			add_filter( 'wpseo_metadesc', [ $this, 'metadesc' ] );
 
-			// OpenGraph.
-			add_filter( 'language_attributes', [ $this, 'og_product_namespace' ], 11 );
-			add_filter( 'wpseo_opengraph_type', [ $this, 'return_type_product' ] );
-			add_filter( 'wpseo_opengraph_desc', [ $this, 'og_desc_enhancement' ] );
-			add_action( 'wpseo_opengraph', [ $this, 'og_enhancement' ], 50 );
 			add_action( 'wpseo_register_extra_replacements', [ $this, 'register_replacements' ] );
-
-			if ( class_exists( 'WPSEO_OpenGraph_Image' ) ) {
-				add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
-			}
 
 			add_filter( 'wpseo_sitemap_exclude_post_type', [ $this, 'xml_sitemap_post_types' ], 10, 2 );
 			add_filter( 'wpseo_sitemap_post_type_archive_link', [ $this, 'xml_sitemap_taxonomies' ], 10, 2 );
@@ -90,7 +84,7 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
 
 			// Fix breadcrumbs.
-			$this->handle_breadcrumbs_replacements();
+			add_action( 'send_headers', [ $this, 'handle_breadcrumbs_replacements' ] );
 		}
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
@@ -112,8 +106,15 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function initialize_schema() {
 		if ( WPSEO_WooCommerce_Schema::should_output_yoast_schema() ) {
-			new WPSEO_WooCommerce_Schema();
+			new WPSEO_WooCommerce_Schema( WC_VERSION );
 		}
+	}
+
+	/**
+	 * Initializes the schema functionality.
+	 */
+	public function initialize_opengraph() {
+		new WPSEO_WooCommerce_OpenGraph();
 	}
 
 	/**
@@ -246,7 +247,11 @@ class Yoast_WooCommerce_SEO {
 	 * @return string
 	 */
 	public function override_woo_breadcrumbs() {
-		return yoast_breadcrumb( '<div class="breadcrumb breadcrumbs woo-breadcrumbs"><div class="breadcrumb-trail">', '</div></div>', false );
+		$breadcrumb = yoast_breadcrumb( '<div class="breadcrumb breadcrumbs woo-breadcrumbs"><div class="breadcrumb-trail">', '</div></div>', false );
+		if ( current_action() === 'storefront_before_content' ) {
+			$breadcrumb = '<div class="storefront-breadcrumb"><div class="col-full">' . $breadcrumb . '</div></div>';
+		}
+		return $breadcrumb;
 	}
 
 	/**
@@ -396,6 +401,17 @@ class Yoast_WooCommerce_SEO {
 
 		Yoast_Form::get_instance()->select( 'woo_schema_manufacturer', esc_html__( 'Manufacturer', 'yoast-woo-seo' ), $taxonomies );
 		Yoast_Form::get_instance()->select( 'woo_schema_brand', esc_html__( 'Brand', 'yoast-woo-seo' ), $taxonomies );
+
+		if ( wc_tax_enabled() && get_option( 'woocommerce_tax_display_shop' ) === 'incl' ) {
+			Yoast_Form::get_instance()->checkbox(
+				'woo_schema_og_prices_with_tax',
+				sprintf(
+				/* translators: %1$s resolves to WooCommerce */
+					esc_html__( 'Prices in OpenGraph and Schema include tax', 'yoast-woo-seo' ),
+					'WooCommerce'
+				)
+			);
+		}
 
 		if ( WPSEO_Options::get( 'breadcrumbs-enable' ) === true ) {
 			echo '<h2>' . esc_html__( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
@@ -558,151 +574,7 @@ class Yoast_WooCommerce_SEO {
 			return true;
 		}
 
-		if ( substr( $taxonomy, 0, 3 ) === 'pa_' ) {
-			return true;
-		}
-
 		return $bool;
-	}
-
-	/**
-	 * Filter for the namespace, adding the OpenGraph namespace.
-	 *
-	 * @link https://developers.facebook.com/docs/reference/opengraph/object-type/product/
-	 *
-	 * @param string $input The input namespace string.
-	 *
-	 * @return string
-	 */
-	public function og_product_namespace( $input ) {
-		if ( is_singular( 'product' ) ) {
-			$input = preg_replace( '/prefix="([^"]+)"/', 'prefix="$1 product: http://ogp.me/ns/product#"', $input );
-		}
-
-		return $input;
-	}
-
-	/**
-	 * Adds the opengraph images.
-	 *
-	 * @since 4.3
-	 *
-	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image to use.
-	 */
-	public function set_opengraph_image( WPSEO_OpenGraph_Image $opengraph_image ) {
-
-		if ( ! function_exists( 'is_product_category' ) || is_product_category() ) {
-			global $wp_query;
-			$cat          = $wp_query->get_queried_object();
-			$thumbnail_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
-			$img_url      = wp_get_attachment_url( $thumbnail_id );
-			if ( $img_url ) {
-				$opengraph_image->add_image( $img_url );
-			}
-		}
-
-		$product = $this->get_product();
-		if ( ! is_object( $product ) ) {
-			return;
-		}
-
-		$img_ids = $this->get_image_ids( $product );
-
-		if ( is_array( $img_ids ) && $img_ids !== [] ) {
-			foreach ( $img_ids as $img_id ) {
-				$img_url = wp_get_attachment_url( $img_id );
-				$opengraph_image->add_image( $img_url );
-			}
-		}
-	}
-
-	/**
-	 * Retrieve the primary and if that doesn't exist first term for the brand taxonomy.
-	 *
-	 * @param string      $schema_brand The taxonomy the site uses for brands.
-	 * @param \WC_Product $product      The product we're finding the brand for.
-	 *
-	 * @return bool|string The brand name or false on failure.
-	 */
-	private function get_brand_term_name( $schema_brand, $product ) {
-		$primary_term = $this->search_primary_term( [ $schema_brand ], $product );
-		if ( ! empty( $primary_term ) ) {
-			return $primary_term;
-		}
-		$terms = get_the_terms( get_the_ID(), $schema_brand );
-		if ( is_array( $terms ) && count( $terms ) > 0 ) {
-			$term_values = array_values( $terms );
-			$term        = array_shift( $term_values );
-
-			return $term->name;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Adds the other product images to the OpenGraph output.
-	 *
-	 * @since 1.0
-	 */
-	public function og_enhancement() {
-		$product = $this->get_product();
-		if ( ! is_object( $product ) ) {
-			return;
-		}
-
-		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
-		if ( $schema_brand !== '' ) {
-			$brand = $this->get_brand_term_name( $schema_brand, $product );
-			if ( ! empty( $brand ) ) {
-				echo '<meta property="product:brand" content="' . esc_attr( $brand ) . '"/>' . "\n";
-			}
-		}
-
-		/**
-		 * Filter: wpseo_woocommerce_og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
-		 *
-		 * @deprecated 12.5.0. Use the {@see 'Yoast\WP\Woocommerce\og_price'} filter instead.
-		 *
-		 * @api        bool unsigned Defaults to true.
-		 */
-		$show_price = apply_filters_deprecated(
-			'wpseo_woocommerce_og_price',
-			[ true ],
-			'Yoast WooCommerce 12.5.0',
-			'Yoast\WP\Woocommerce\og_price'
-		);
-
-		/**
-		 * Filter: Yoast\WP\Woocommerce\og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
-		 *
-		 * @since 12.5.0
-		 *
-		 * @api   bool unsigned Defaults to true.
-		 */
-		$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', $show_price );
-
-		if ( $show_price === true ) {
-			echo '<meta property="product:price:amount" content="' . esc_attr( $product->get_price() ) . '" />' . "\n";
-			echo '<meta property="product:price:currency" content="' . esc_attr( get_woocommerce_currency() ) . '" />' . "\n";
-		}
-
-		if ( $product->is_in_stock() ) {
-			echo '<meta property="product:availability" content="in stock" />' . "\n";
-		}
-
-		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
-
-		/**
-		 * Filter: Yoast\WP\Woocommerce\product_condition - Allow developers to prevent or change the output of the product condition in the OpenGraph tags.
-		 *
-		 * @api string Defaults to 'new'.
-		 * @param \WC_Product $product The product we're outputting.
-		 */
-		$product_condition = apply_filters( 'Yoast\WP\Woocommerce\product_condition', 'new', $product );
-		if ( ! empty( $product_condition ) ) {
-			echo '<meta property="product:condition" content="' . esc_attr( $product_condition ) . '" />' . "\n";
-		}
 	}
 
 	/**
@@ -718,47 +590,6 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return wc_get_product( get_queried_object_id() );
-	}
-
-	/**
-	 * Make sure the OpenGraph description is put out.
-	 *
-	 * @since 1.0
-	 *
-	 * @param string $desc The current description, will be overwritten if we're on a product page.
-	 *
-	 * @return string
-	 */
-	public function og_desc_enhancement( $desc ) {
-
-		if ( is_product_taxonomy() ) {
-
-			$term_desc = term_description();
-
-			if ( ! empty( $term_desc ) ) {
-				$desc = wp_strip_all_tags( $term_desc, true );
-				$desc = strip_shortcodes( $desc );
-			}
-		}
-
-		return $desc;
-	}
-
-	/**
-	 * Return 'product' when current page is, well... a product.
-	 *
-	 * @since 1.0
-	 *
-	 * @param string $type Passed on without changing if not a product.
-	 *
-	 * @return string
-	 */
-	public function return_type_product( $type ) {
-		if ( is_singular( 'product' ) ) {
-			return 'product';
-		}
-
-		return $type;
 	}
 
 	/**
@@ -791,14 +622,38 @@ class Yoast_WooCommerce_SEO {
 		$long_description  = $this->get_product_description( $product );
 
 		if ( $short_description !== '' ) {
-			return $short_description;
+			return $this->clean_description( $short_description );
 		}
 
 		if ( $long_description !== '' ) {
-			return wp_html_excerpt( $long_description, 156 );
+			return wp_html_excerpt( $this->clean_description( $long_description ), 156 );
 		}
 
 		return '';
+	}
+
+	/**
+	 * Make a string clear for display in meta data.
+	 *
+	 * @param string $string The input string.
+	 *
+	 * @return string The clean string.
+	 */
+	protected function clean_description( $string ) {
+		// Strip tags.
+		$string = wp_strip_all_tags( $string );
+
+		// Replace non breaking space entities with spaces.
+		$string = str_replace( '&nbsp;', ' ', $string );
+
+		// Replace non breaking uni-code spaces with spaces. Don't ask.
+		$string = str_replace( chr( 194 ) . chr( 160 ), ' ', $string );
+
+		// Replace all double or more spaces with one space and trim our string.
+		$string = preg_replace( '/\s+/', ' ', $string );
+		$string = trim( $string );
+
+		return $string;
 	}
 
 	/**
@@ -997,24 +852,6 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Returns the set image ids for the given product.
-	 *
-	 * @since 4.9
-	 *
-	 * @param WC_Product $product The product to get the image ids for.
-	 *
-	 * @return array
-	 */
-	protected function get_image_ids( $product ) {
-		if ( method_exists( $product, 'get_gallery_image_ids' ) ) {
-			return $product->get_gallery_image_ids();
-		}
-
-		// Backwards compatibility.
-		return $product->get_gallery_attachment_ids();
-	}
-
-	/**
 	 * Returns the product for given product_id.
 	 *
 	 * @since 4.9
@@ -1106,7 +943,7 @@ class Yoast_WooCommerce_SEO {
 
 		$brand_taxonomies = array_filter( $brand_taxonomies, 'taxonomy_exists' );
 
-		$primary_term = $this->search_primary_term( $brand_taxonomies, $product );
+		$primary_term = WPSEO_WooCommerce_Utils::search_primary_term( $brand_taxonomies, $product );
 		if ( $primary_term !== '' ) {
 			return $primary_term;
 		}
@@ -1115,34 +952,6 @@ class Yoast_WooCommerce_SEO {
 			$terms = get_the_terms( $product->get_id(), $taxonomy );
 			if ( is_array( $terms ) ) {
 				return $terms[0]->name;
-			}
-		}
-
-		return '';
-	}
-
-	/**
-	 * Searches for the primary terms for given taxonomies and returns the first found primary term.
-	 *
-	 * @param array      $brand_taxonomies The taxonomies to find the primary term for.
-	 * @param WC_Product $product          The WooCommerce Product.
-	 *
-	 * @return string The term's name (if found). Otherwise an empty string.
-	 */
-	protected function search_primary_term( array $brand_taxonomies, $product ) {
-		// First find the primary term.
-		if ( ! class_exists( 'WPSEO_Primary_Term' ) ) {
-			return '';
-		}
-
-		foreach ( $brand_taxonomies as $taxonomy ) {
-			$primary_term       = new WPSEO_Primary_Term( $taxonomy, $product->get_id() );
-			$found_primary_term = $primary_term->get_primary_term();
-
-			if ( $found_primary_term ) {
-				$term = get_term_by( 'id', $found_primary_term, $taxonomy );
-
-				return $term->name;
 			}
 		}
 
@@ -1186,9 +995,14 @@ class Yoast_WooCommerce_SEO {
 	 *
 	 * @return void
 	 */
-	protected function handle_breadcrumbs_replacements() {
+	public function handle_breadcrumbs_replacements() {
 		if ( WPSEO_Options::get( 'woo_breadcrumbs' ) !== true || WPSEO_Options::get( 'breadcrumbs-enable' ) !== true ) {
 			return;
+		}
+
+		if ( has_action( 'storefront_before_content', 'woocommerce_breadcrumb' ) ) {
+			remove_action( 'storefront_before_content', 'woocommerce_breadcrumb' );
+			add_action( 'storefront_before_content', [ $this, 'show_yoast_breadcrumbs' ] );
 		}
 
 		// Replaces the WooCommerce breadcrumbs.

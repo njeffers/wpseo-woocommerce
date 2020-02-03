@@ -57,15 +57,6 @@ class Schema_Double extends WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Add productID to our output.
-	 *
-	 * @param \WC_Product $product Product object.
-	 */
-	public function add_sku( $product ) {
-		return parent::add_sku( $product );
-	}
-
-	/**
 	 * Update the seller attribute to reference the Organization, when it is set.
 	 *
 	 * @param array $data Schema Product data.
@@ -86,5 +77,49 @@ class Schema_Double extends WPSEO_WooCommerce_Schema {
 	 */
 	public function filter_reviews( $data, $product ) {
 		return parent::filter_reviews( $data, $product );
+	}
+
+	/**
+	 * Add a global identifier to our output if we have one.
+	 *
+	 * @param \WC_Product $product Product object.
+	 *
+	 * @return bool
+	 */
+	public function add_global_identifier( $product ) {
+		return parent::add_global_identifier( $product );
+	}
+
+	/**
+	 * Retrieve the global identifier type and value if we have one.
+	 *
+	 * @param \WC_Product $product Product object.
+	 *
+	 * @return array|bool An array of `type` and `value` on success, false on failure.
+	 */
+	public function get_global_identifier( $product ) {
+		return parent::get_global_identifier( $product );
+	}
+
+	/**
+	 * Add the GTIN number to our Schema.
+	 *
+	 * @param array $global_identifier An array of the global identifier data.
+	 *
+	 * @return void
+	 */
+	public function add_gtin( $global_identifier ) {
+		parent::add_gtin( $global_identifier );
+	}
+
+	/**
+	 * Add the MPN or ISBN number to our Schema.
+	 *
+	 * @param array $global_identifier An array of the global identifier data.
+	 *
+	 * @return void
+	 */
+	public function add_mpn_isbn( $global_identifier ) {
+		parent::add_mpn_isbn( $global_identifier );
 	}
 }

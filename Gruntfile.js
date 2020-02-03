@@ -18,6 +18,7 @@ module.exports = function( grunt ) {
 		pluginVersion: pluginVersion,
 		pluginSlug: "wpseo-woocommerce",
 		pluginMainFile: "wpseo-woocommerce.php",
+		pluginVersionConstant: "WPSEO_WOO_VERSION",
 		paths: {
 			/**
 			 * Gets the config path.

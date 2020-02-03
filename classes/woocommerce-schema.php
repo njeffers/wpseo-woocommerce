@@ -18,16 +18,27 @@ class WPSEO_WooCommerce_Schema {
 	protected $data;
 
 	/**
-	 * WPSEO_WooCommerce_Schema constructor.
+	 * WooCommerce version number.
+	 *
+	 * @var string
 	 */
-	public function __construct() {
+	protected $wc_version;
+
+	/**
+	 * WPSEO_WooCommerce_Schema constructor.
+	 *
+	 * @param string $wc_version The WooCommerce version.
+	 */
+	public function __construct( $wc_version = WC_VERSION ) {
+		$this->wc_version = $wc_version;
+
 		add_filter( 'woocommerce_structured_data_product', [ $this, 'change_product' ], 10, 2 );
 		add_filter( 'woocommerce_structured_data_type_for_page', [ $this, 'remove_woo_breadcrumbs' ] );
 		add_filter( 'wpseo_schema_webpage', [ $this, 'filter_webpage' ] );
 		add_action( 'wp_footer', [ $this, 'output_schema_footer' ] );
 
 		// Only needed for WooCommerce versions before 3.8.1.
-		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
+		if ( version_compare( $this->wc_version, '3.8.1' ) < 0 ) {
 			add_filter( 'woocommerce_structured_data_review', [ $this, 'change_reviewed_entity' ] );
 		}
 	}
@@ -53,6 +64,7 @@ class WPSEO_WooCommerce_Schema {
 		}
 
 		WPSEO_Utils::schema_output( [ $this->data ], 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
+
 		return true;
 	}
 
@@ -102,13 +114,6 @@ class WPSEO_WooCommerce_Schema {
 		$canonical = $this->get_canonical();
 
 		$data = $this->change_seller_in_offers( $data );
-
-		// Only needed for WooCommerce versions before 3.8.1.
-		if ( version_compare( WC_VERSION, '3.8.1' ) < 0 ) {
-			// We're going to replace the single review here with an array of reviews taken from the other filter.
-			$data['review'] = [];
-		}
-
 		$data = $this->filter_reviews( $data, $product );
 		$data = $this->filter_offers( $data, $product );
 
@@ -123,7 +128,7 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_image( $canonical );
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
-		$this->add_sku( $product );
+		$this->add_global_identifier( $product );
 
 		return [];
 	}
@@ -144,7 +149,12 @@ class WPSEO_WooCommerce_Schema {
 
 			// Add an @id to the offer.
 			if ( $offer['@type'] === 'Offer' ) {
-				$data['offers'][ $key ]['@id'] = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+				$price                           = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
+				$data['offers'][ $key ]['@id']   = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+				$data['offers'][ $key ]['price'] = $price;
+				$data['offers'][ $key ]['priceSpecification']['price']                 = $price;
+				$data['offers'][ $key ]['priceSpecification']['priceCurrency']         = get_woocommerce_currency();
+				$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_with_tax();
 			}
 			if ( $offer['@type'] === 'AggregateOffer' ) {
 				$data['offers'][ $key ]['@id']    = $home_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
@@ -173,15 +183,28 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Add productID to our output.
+	 * Retrieve the global identifier type and value if we have one.
 	 *
 	 * @param \WC_Product $product Product object.
+	 *
+	 * @return bool True on success, false on failure.
 	 */
-	protected function add_sku( $product ) {
-		$sku = $product->get_sku();
-		if ( ! empty( $sku ) ) {
-			$this->data['productID'] = $sku;
+	protected function add_global_identifier( $product ) {
+		$product_id               = $product->get_id();
+		$global_identifier_values = get_post_meta( $product_id, 'wpseo_global_identifier_values', true );
+
+		if ( ! is_array( $global_identifier_values ) || $global_identifier_values === [] ) {
+			return false;
 		}
+
+		foreach ( $global_identifier_values as $type => $value ) {
+			$this->data[ $type ] = $value;
+			if ( $type === 'isbn' && ! empty( $value ) ) {
+				$this->data['@type'] = [ 'Book', 'Product' ];
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -206,6 +229,7 @@ class WPSEO_WooCommerce_Schema {
 				];
 			}
 		}
+
 		return $data;
 	}
 
@@ -334,7 +358,7 @@ class WPSEO_WooCommerce_Schema {
 
 		$site_url           = trailingslashit( get_site_url() );
 		$currency           = get_woocommerce_currency();
-		$prices_include_tax = wc_prices_include_tax();
+		$prices_include_tax = WPSEO_WooCommerce_Utils::prices_with_tax();
 		$decimals           = wc_get_price_decimals();
 		$data               = [];
 		$product_id         = $product->get_id();
@@ -351,7 +375,7 @@ class WPSEO_WooCommerce_Schema {
 				'priceSpecification' => [
 					'price'                 => wc_format_decimal( $variation['display_price'], $decimals ),
 					'priceCurrency'         => $currency,
-					'valueAddedTaxIncluded' => ( $prices_include_tax ) ? 'true' : 'false',
+					'valueAddedTaxIncluded' => $prices_include_tax,
 				],
 			];
 		}

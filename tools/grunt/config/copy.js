@@ -9,7 +9,9 @@ module.exports = {
 					"classes/**",
 					"vendor/**",
 					"!vendor/bin",
-					"js/*.min.js",
+					"js/*.js",
+					"js/dist/*.js",
+					"!js/dist/*.nomin.js",
 					"languages/**",
 					// Files to copy
 					"*.php",
