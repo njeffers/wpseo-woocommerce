@@ -128,7 +128,6 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_image( $canonical );
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
-		$this->add_sku( $product );
 		$this->add_global_identifier( $product );
 
 		return [];
@@ -184,18 +183,6 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Add productID to our output.
-	 *
-	 * @param \WC_Product $product Product object.
-	 */
-	protected function add_sku( $product ) {
-		$sku = $product->get_sku();
-		if ( ! empty( $sku ) ) {
-			$this->data['productID'] = $sku;
-		}
-	}
-
-	/**
 	 * Retrieve the global identifier type and value if we have one.
 	 *
 	 * @param \WC_Product $product Product object.
@@ -212,7 +199,7 @@ class WPSEO_WooCommerce_Schema {
 
 		foreach ( $global_identifier_values as $type => $value ) {
 			$this->data[ $type ] = $value;
-			if ( $type === 'isbn' ) {
+			if ( $type === 'isbn' && ! empty( $value ) ) {
 				$this->data['@type'] = [ 'Book', 'Product' ];
 			}
 		}

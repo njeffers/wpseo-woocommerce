@@ -57,15 +57,6 @@ class Schema_Double extends WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Add productID to our output.
-	 *
-	 * @param \WC_Product $product Product object.
-	 */
-	public function add_sku( $product ) {
-		return parent::add_sku( $product );
-	}
-
-	/**
 	 * Update the seller attribute to reference the Organization, when it is set.
 	 *
 	 * @param array $data Schema Product data.
