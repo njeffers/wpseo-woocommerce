@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3.2
-Stable tag: 12.5
+Stable tag: 12.5.1
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -29,6 +29,10 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+
+### 12.5.1: February 5th, 2020
+Bugfixes:
+* Fixes a bug where not all product attributes were available in the Brands and Manufacturer dropdowns.
 
 ### 12.5: February 4th, 2020
 Enhancements:

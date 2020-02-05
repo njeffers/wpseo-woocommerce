@@ -27,6 +27,6 @@
     "webpack-cli": "^3.1.0"
   },
   "yoast": {
-    "pluginVersion": "12.5"
+    "pluginVersion": "12.5.1"
   }
 }
