@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3.2
-Stable tag: 12.5.1
+Stable tag: 12.6
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -29,6 +29,16 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+
+### 12.6: February 18th, 2020
+Bugfixes:
+
+* Fixes a bug where the short description for the meta description and Twitter and Facebook description could still contain HTML tags and redundant spaces.
+* Fixes a bug where product attributes that have archives were not added to the Yoast SEO XML sitemap.
+
+Enhancements:
+
+* Adds an option to display the price in Schema and OpenGraph _with_ tax included.
 
 ### 12.5.1: February 5th, 2020
 Bugfixes:
