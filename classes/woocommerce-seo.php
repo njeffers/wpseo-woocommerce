@@ -391,6 +391,7 @@ class Yoast_WooCommerce_SEO {
 	public function admin_panel() {
 		Yoast_Form::get_instance()->admin_header( true, 'wpseo_woo' );
 
+		// Do not make the mistake of thinking this should only be public taxonomies, see https://github.com/Yoast/bugreports/issues/872.
 		$object_taxonomies = get_object_taxonomies( 'product', 'objects' );
 		$taxonomies        = [ '' => '-' ];
 		foreach ( $object_taxonomies as $object_taxonomy ) {
