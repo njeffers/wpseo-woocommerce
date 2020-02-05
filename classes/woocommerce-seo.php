@@ -391,7 +391,7 @@ class Yoast_WooCommerce_SEO {
 	public function admin_panel() {
 		Yoast_Form::get_instance()->admin_header( true, 'wpseo_woo' );
 
-		$object_taxonomies = array_filter( get_object_taxonomies( 'product', 'objects' ), 'is_taxonomy_viewable' );
+		$object_taxonomies = get_object_taxonomies( 'product', 'objects' );
 		$taxonomies        = [ '' => '-' ];
 		foreach ( $object_taxonomies as $object_taxonomy ) {
 			$taxonomies[ strtolower( $object_taxonomy->name ) ] = esc_html( $object_taxonomy->labels->name );
