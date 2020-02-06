@@ -433,7 +433,7 @@ class Schema_Test extends TestCase {
 					'name'               => 'Customizable responsive toolset - l',
 					'price'              => 10,
 					'priceSpecification' => [
-						'price'                 => '10',
+						'price'                 => 10,
 						'priceCurrency'         => 'GBP',
 						'valueAddedTaxIncluded' => false,
 					],
@@ -444,7 +444,7 @@ class Schema_Test extends TestCase {
 					'name'               => 'Customizable responsive toolset - m',
 					'price'              => 8,
 					'priceSpecification' => [
-						'price'                 => '8',
+						'price'                 => 8,
 						'priceCurrency'         => 'GBP',
 						'valueAddedTaxIncluded' => false,
 					],
@@ -455,7 +455,7 @@ class Schema_Test extends TestCase {
 					'name'               => 'Customizable responsive toolset - xl',
 					'price'              => 12,
 					'priceSpecification' => [
-						'price'                 => '12',
+						'price'                 => 12,
 						'priceCurrency'         => 'GBP',
 						'valueAddedTaxIncluded' => false,
 					],
@@ -702,8 +702,8 @@ class Schema_Test extends TestCase {
 		$schema->add_global_identifier( $product );
 
 		$expected = [
-			'@type' => [ 'Book', 'Product' ],
 			'isbn'  => '978-3-16-148410-0',
+			'@type' => [ 'Book', 'Product' ],
 		];
 		$this->assertSame( $expected, $schema->data );
 	}
@@ -764,7 +764,7 @@ class Schema_Test extends TestCase {
 					'@type'         => 'Review',
 					'reviewRating'  => [
 						'@type'       => 'Rating',
-						'ratingValue' => 2,
+						'ratingValue' => '2',
 					],
 					'author'        => [
 						'@type' => 'Person',
@@ -779,7 +779,7 @@ class Schema_Test extends TestCase {
 					'@type'         => 'Review',
 					'reviewRating'  => [
 						'@type'       => 'Rating',
-						'ratingValue' => 5,
+						'ratingValue' => '5',
 					],
 					'author'        => [
 						'@type' => 'Person',
@@ -926,23 +926,22 @@ class Schema_Test extends TestCase {
 			'@id'              => $canonical . '#product',
 			'name'             => $product_name,
 			'url'              => $canonical,
-			'image'            => [ '@id' => $canonical . '#primaryimage' ],
 			'description'      => '',
 			'sku'              => 'sku1234',
 			'offers'           => [
 				[
 					'@type'              => 'Offer',
 					'price'              => '1.00',
-					'priceSpecification' => [
-						'price'                 => '1.00',
-						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
-					],
 					'url'                => $canonical,
 					'seller'             => [
 						'@id' => $canonical . '#organization',
 					],
 					'@id'                => $base_url . '/#/schema/offer/1-0',
+					'priceSpecification' => [
+						'price'                 => '1.00',
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
+					],
 				],
 			],
 			'review'           => [
@@ -963,6 +962,7 @@ class Schema_Test extends TestCase {
 				],
 			],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
+			'image'            => [ '@id' => $canonical . '#primaryimage' ],
 			'brand'            => [
 				'@type' => 'Organization',
 				'name'  => $product_name,
@@ -1092,13 +1092,6 @@ class Schema_Test extends TestCase {
 			'@id'              => $canonical . '#product',
 			'name'             => $product_name,
 			'url'              => $canonical,
-			'image'            => [
-				'@id'    => $canonical . '#woocommerceimageplaceholder',
-				'@type'  => 'ImageObject',
-				'url'    => $base_url . '/example_image.jpg',
-				'width'  => 50,
-				'height' => 50,
-			],
 			'description'      => '',
 			'sku'              => 'sku1234',
 			'offers'           => [
@@ -1135,6 +1128,13 @@ class Schema_Test extends TestCase {
 				],
 			],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
+			'image'            => [
+				'@type'  => 'ImageObject',
+				'@id'    => $canonical . '#woocommerceimageplaceholder',
+				'url'    => $base_url . '/example_image.jpg',
+				'width'  => 50,
+				'height' => 50,
+			],
 			'brand'            => [
 				'@type' => 'Organization',
 				'name'  => $product_name,

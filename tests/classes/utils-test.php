@@ -91,7 +91,9 @@ class Utils_Test extends TestCase {
 			]
 		);
 
-		$this->assertSame( ( $price * $tax_rate ), WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
+		$expected = \number_format( ( $price * $tax_rate ), 2 );
+
+		$this->assertSame( $expected, WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
 	}
 
 	/**
