@@ -2,11 +2,10 @@
 
 namespace Yoast\WP\Woocommerce\Tests\Classes;
 
-use Brain\Monkey;
 use Brain\Monkey\Functions;
-use Mockery;
 use Yoast\WP\Woocommerce\Tests\Doubles\Yoast_Tab_Double;
 use Yoast\WP\Woocommerce\Tests\TestCase;
+use WPSEO_WooCommerce_Yoast_Tab;
 
 /**
  * Class WooCommerce_Schema_Test.
@@ -19,7 +18,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 	 * @covers WPSEO_WooCommerce_Yoast_Tab::__construct
 	 */
 	public function test_construct() {
-		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
+		$instance = new WPSEO_WooCommerce_Yoast_Tab();
 		$this->assertTrue( \has_filter( 'woocommerce_product_data_tabs', [ $instance, 'yoast_seo_tab' ] ) );
 		$this->assertTrue( \has_action( 'woocommerce_product_data_panels', [ $instance, 'add_yoast_seo_fields' ] ) );
 		$this->assertTrue( \has_action( 'save_post', [ $instance, 'save_data' ] ) );
@@ -31,7 +30,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 	 * @covers WPSEO_WooCommerce_Yoast_Tab::yoast_seo_tab
 	 */
 	public function test_yoast_seo_tab() {
-		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
+		$instance = new WPSEO_WooCommerce_Yoast_Tab();
 		$expected = [
 			'yoast_tab' => [
 				'label'  => 'Yoast SEO',
@@ -65,7 +64,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 			]
 		);
 
-		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
+		$instance = new WPSEO_WooCommerce_Yoast_Tab();
 		$instance->add_yoast_seo_fields();
 
 		$output = \ob_get_contents();
@@ -87,7 +86,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 			]
 		);
 
-		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
+		$instance = new WPSEO_WooCommerce_Yoast_Tab();
 		$this->assertFalse( $instance->save_data( 123 ) );
 	}
 
@@ -104,7 +103,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 			]
 		);
 
-		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
+		$instance = new WPSEO_WooCommerce_Yoast_Tab();
 		$this->assertFalse( $instance->save_data( 123 ) );
 	}
 
@@ -127,7 +126,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 			]
 		);
 
-		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
+		$instance = new WPSEO_WooCommerce_Yoast_Tab();
 
 		// No $_POST data, so nothing to save.
 		$this->assertTrue( $instance->save_data( 123 ) );
@@ -154,7 +153,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 			]
 		);
 
-		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
+		$instance = new WPSEO_WooCommerce_Yoast_Tab();
 
 		$_POST = [
 			'yoast_seo' => [
