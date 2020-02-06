@@ -13,7 +13,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	/**
 	 * The array of allowed identifier types.
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	protected $global_identifier_types = [
 		'gtin8'  => 'GTIN8',
@@ -75,7 +75,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 *
 	 * @param int $post_id The post ID.
 	 *
-	 * @return boolean Whether or not we saved data.
+	 * @return bool Whether or not we saved data.
 	 */
 	public function save_data( $post_id ) {
 		if ( wp_is_post_revision( $post_id ) ) {
