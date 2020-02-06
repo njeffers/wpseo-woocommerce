@@ -38,7 +38,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'target' => 'yoast_seo',
 			],
 		];
-		$this->assertEquals( $expected, $instance->yoast_seo_tab( [] ) );
+		$this->assertSame( $expected, $instance->yoast_seo_tab( [] ) );
 	}
 
 	/**

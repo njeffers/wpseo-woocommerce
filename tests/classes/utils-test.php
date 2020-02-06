@@ -34,7 +34,7 @@ class Utils_Test extends TestCase {
 			]
 		);
 
-		$this->assertEquals( 'Apple', WPSEO_WooCommerce_Utils::search_primary_term( [ 'brand' ], $product ) );
+		$this->assertSame( 'Apple', WPSEO_WooCommerce_Utils::search_primary_term( [ 'brand' ], $product ) );
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Utils_Test extends TestCase {
 		$primary_term_mock->expects( '__construct' )->once()->with( 'brand', $product_id )->andReturnSelf();
 		$primary_term_mock->expects( 'get_primary_term' )->once()->with()->andReturn( false );
 
-		$this->assertEquals( '', WPSEO_WooCommerce_Utils::search_primary_term( [ 'brand' ], $product ) );
+		$this->assertSame( '', WPSEO_WooCommerce_Utils::search_primary_term( [ 'brand' ], $product ) );
 	}
 
 	/**
@@ -91,7 +91,9 @@ class Utils_Test extends TestCase {
 			]
 		);
 
-		$this->assertEquals( ( $price * $tax_rate ), WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
+		$expected = \number_format( ( $price * $tax_rate ), 2 );
+
+		$this->assertSame( $expected, WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
 	}
 
 	/**
