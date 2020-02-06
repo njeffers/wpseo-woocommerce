@@ -76,7 +76,7 @@ class Schema_Test extends TestCase {
 
 		$schema->data = $data;
 		$schema->output_schema_footer();
-		$this->assertEquals( $data, $utils->output );
+		$this->assertSame( $data, $utils->output );
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Schema_Test extends TestCase {
 			'@type' => 'WebPage',
 		];
 		$schema = new WPSEO_WooCommerce_Schema();
-		$this->assertEquals( $input, $schema->filter_webpage( $input ) );
+		$this->assertSame( $input, $schema->filter_webpage( $input ) );
 
 		Functions\stubs(
 			[
@@ -111,7 +111,7 @@ class Schema_Test extends TestCase {
 			'@type' => 'CheckoutPage',
 		];
 		$schema   = new WPSEO_WooCommerce_Schema();
-		$this->assertEquals( $expected, $schema->filter_webpage( $input ) );
+		$this->assertSame( $expected, $schema->filter_webpage( $input ) );
 
 		Functions\stubs(
 			[
@@ -125,7 +125,7 @@ class Schema_Test extends TestCase {
 			'@type' => 'ItemPage',
 		];
 		$schema   = new WPSEO_WooCommerce_Schema();
-		$this->assertEquals( $expected, $schema->filter_webpage( $input ) );
+		$this->assertSame( $expected, $schema->filter_webpage( $input ) );
 	}
 
 	/**
@@ -152,8 +152,8 @@ class Schema_Test extends TestCase {
 			],
 		];
 
-		$this->assertEquals( $expected_output, $output );
-		$this->assertEquals( $expected_data, $schema->data );
+		$this->assertSame( $expected_output, $output );
+		$this->assertSame( $expected_data, $schema->data );
 	}
 
 	/**
@@ -219,7 +219,7 @@ class Schema_Test extends TestCase {
 
 		$output = $schema->filter_offers( $input, $product );
 
-		$this->assertEquals( $expected_output, $output );
+		$this->assertSame( $expected_output, $output );
 	}
 
 	/**
@@ -481,7 +481,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_name' )->once()->andReturn( 'Customizable responsive toolset' );
 		$output = $schema->filter_offers( $input, $product );
 
-		$this->assertEquals( $expected_output, $output['offers'][0] );
+		$this->assertSame( $expected_output, $output['offers'][0] );
 	}
 
 	/**
@@ -494,7 +494,7 @@ class Schema_Test extends TestCase {
 		$expected = [ 'webpage' ];
 
 		$class = new WPSEO_WooCommerce_Schema();
-		$this->assertEquals( $expected, $class->remove_woo_breadcrumbs( $input ) );
+		$this->assertSame( $expected, $class->remove_woo_breadcrumbs( $input ) );
 	}
 
 	/**
@@ -552,7 +552,7 @@ class Schema_Test extends TestCase {
 		$schema   = new Schema_Double();
 		$output   = $schema->change_seller_in_offers( $input );
 
-		$this->assertEquals( $expected, $output );
+		$this->assertSame( $expected, $output );
 	}
 
 	/**
@@ -614,7 +614,7 @@ class Schema_Test extends TestCase {
 		$schema                          = new Schema_Double();
 		$output                          = $schema->change_seller_in_offers( $input );
 
-		$this->assertEquals( $expected, $output );
+		$this->assertSame( $expected, $output );
 	}
 
 	/**
@@ -631,7 +631,7 @@ class Schema_Test extends TestCase {
 
 		$output = $schema->filter_reviews( $input, $product );
 
-		$this->assertEquals( $input, $output );
+		$this->assertSame( $input, $output );
 	}
 
 	/**
@@ -676,7 +676,7 @@ class Schema_Test extends TestCase {
 		$schema = new Schema_Double();
 		$schema->add_global_identifier( $product );
 
-		$this->assertEquals( $data, $schema->data );
+		$this->assertSame( $data, $schema->data );
 	}
 
 	/**
@@ -705,7 +705,7 @@ class Schema_Test extends TestCase {
 			'@type' => [ 'Book', 'Product' ],
 			'isbn'  => '978-3-16-148410-0',
 		];
-		$this->assertEquals( $expected, $schema->data );
+		$this->assertSame( $expected, $schema->data );
 	}
 
 	/**
@@ -793,7 +793,7 @@ class Schema_Test extends TestCase {
 			],
 		];
 
-		$this->assertEquals( $expected, $output );
+		$this->assertSame( $expected, $output );
 	}
 
 	/**
@@ -974,7 +974,7 @@ class Schema_Test extends TestCase {
 		];
 
 		$instance->change_product( $data, $product );
-		$this->assertEquals( $expected, $instance->data );
+		$this->assertSame( $expected, $instance->data );
 	}
 
 	/**
@@ -1146,7 +1146,7 @@ class Schema_Test extends TestCase {
 		];
 
 		$instance->change_product( $data, $product );
-		$this->assertEquals( $expected, $instance->data );
+		$this->assertSame( $expected, $instance->data );
 	}
 
 	/**
