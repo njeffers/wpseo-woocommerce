@@ -2,9 +2,7 @@
 
 namespace Yoast\WP\Woocommerce\Tests\Classes;
 
-use Brain\Monkey;
 use Brain\Monkey\Functions;
-use Mockery;
 use Yoast\WP\Woocommerce\Tests\Doubles\Yoast_Tab_Double;
 use Yoast\WP\Woocommerce\Tests\TestCase;
 
