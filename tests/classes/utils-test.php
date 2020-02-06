@@ -83,7 +83,7 @@ class Utils_Test extends TestCase {
 				'wc_tax_enabled'             => true,
 				'wc_prices_include_tax'      => false,
 				'wc_format_decimal'          => function ( $number, $decimals ) {
-					return number_format( $number, $decimals );
+					return \number_format( $number, $decimals );
 				},
 				'wc_get_price_including_tax' => function ( $product, $args ) {
 					return ( $args['price'] * 1.1 );
