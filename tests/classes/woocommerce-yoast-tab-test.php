@@ -20,9 +20,9 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 	 */
 	public function test_construct() {
 		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
-		$this->assertTrue( has_filter( 'woocommerce_product_data_tabs', [ $instance, 'yoast_seo_tab' ] ) );
-		$this->assertTrue( has_action( 'woocommerce_product_data_panels', [ $instance, 'add_yoast_seo_fields' ] ) );
-		$this->assertTrue( has_action( 'save_post', [ $instance, 'save_data' ] ) );
+		$this->assertTrue( \has_filter( 'woocommerce_product_data_tabs', [ $instance, 'yoast_seo_tab' ] ) );
+		$this->assertTrue( \has_action( 'woocommerce_product_data_panels', [ $instance, 'add_yoast_seo_fields' ] ) );
+		$this->assertTrue( \has_action( 'save_post', [ $instance, 'save_data' ] ) );
 	}
 
 	/**
@@ -48,9 +48,9 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 	 * @covers WPSEO_WooCommerce_Yoast_Tab::add_yoast_seo_fields
 	 */
 	public function test_add_yoast_seo_fields() {
-		ob_start();
+		\ob_start();
 
-		define( 'WPSEO_WOO_PLUGIN_FILE', './wpseo-woocommerce.php' );
+		\define( 'WPSEO_WOO_PLUGIN_FILE', './wpseo-woocommerce.php' );
 		Functions\stubs(
 			[
 				'get_the_ID'      => 123,
@@ -68,8 +68,8 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 		$instance = new \WPSEO_WooCommerce_Yoast_Tab();
 		$instance->add_yoast_seo_fields();
 
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = \ob_get_contents();
+		\ob_end_clean();
 
 		$this->assertContains( 'yoast_seo[gtin8]', $output );
 		$this->assertContains( '<div id="yoast_seo" class="panel woocommerce_options_panel">', $output );
@@ -122,7 +122,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'wp_strip_all_tags'   => function ( $value ) {
 					// Ignoring WPCS's warning about using `wp_strip_all_tags` because we're *doing that*.
 					// @phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
-					return strip_tags( $value );
+					return \strip_tags( $value );
 				},
 			]
 		);
@@ -149,7 +149,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'wp_strip_all_tags'   => function ( $value ) {
 					// Ignoring WPCS's warning about using `wp_strip_all_tags` because we're *doing that*.
 					// @phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
-					return strip_tags( $value );
+					return \strip_tags( $value );
 				},
 			]
 		);
@@ -175,7 +175,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'wp_strip_all_tags' => function ( $value ) {
 					// Ignoring WPCS's warning about using `wp_strip_all_tags` because we're *doing that*.
 					// @phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
-					return strip_tags( $value );
+					return \strip_tags( $value );
 				},
 			]
 		);
@@ -199,11 +199,11 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 			]
 		);
 
-		ob_start();
+		\ob_start();
 		$instance = new Yoast_Tab_Double();
 		$instance->input_field_for_identifier( 'gtin8', 'GTIN 8', '12345678' );
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = \ob_get_contents();
+		\ob_end_clean();
 
 		$this->assertContains( 'gtin8', $output );
 		$this->assertContains( 'GTIN 8', $output );

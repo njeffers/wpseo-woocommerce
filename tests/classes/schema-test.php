@@ -32,9 +32,9 @@ class Schema_Test extends TestCase {
 	public function test_construct() {
 		$schema = new WPSEO_WooCommerce_Schema( '3.9' );
 
-		$this->assertTrue( has_filter( 'woocommerce_structured_data_product', [ $schema, 'change_product' ] ) );
+		$this->assertTrue( \has_filter( 'woocommerce_structured_data_product', [ $schema, 'change_product' ] ) );
 		$this->assertTrue(
-			has_filter(
+			\has_filter(
 				'woocommerce_structured_data_type_for_page',
 				[
 					$schema,
@@ -42,10 +42,10 @@ class Schema_Test extends TestCase {
 				]
 			)
 		);
-		$this->assertTrue( has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
-		$this->assertTrue( has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
+		$this->assertTrue( \has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
+		$this->assertTrue( \has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
 
-		$this->assertFalse( has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
+		$this->assertFalse( \has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Schema_Test extends TestCase {
 	 */
 	public function test_construct_old_wc() {
 		$schema = new WPSEO_WooCommerce_Schema( '3.8' );
-		$this->assertTrue( has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
+		$this->assertTrue( \has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
 	}
 
 	/**
@@ -206,7 +206,7 @@ class Schema_Test extends TestCase {
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
 				'wc_format_decimal'        => function ( $number ) {
-					return number_format( $number, 2 );
+					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
 			]
@@ -865,7 +865,7 @@ class Schema_Test extends TestCase {
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
 				'wc_format_decimal'        => function ( $number ) {
-					return number_format( $number, 2 );
+					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
 			]
@@ -1029,7 +1029,7 @@ class Schema_Test extends TestCase {
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
 				'wc_format_decimal'        => function ( $number ) {
-					return number_format( $number, 2 );
+					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
 			]
