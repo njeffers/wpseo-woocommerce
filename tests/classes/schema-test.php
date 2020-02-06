@@ -205,7 +205,7 @@ class Schema_Test extends TestCase {
 				'get_site_url'             => $base_url,
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
-				'wc_format_decimal'        => function ( $number ) {
+				'wc_format_decimal'        => static function ( $number ) {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
@@ -864,7 +864,7 @@ class Schema_Test extends TestCase {
 				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
-				'wc_format_decimal'        => function ( $number ) {
+				'wc_format_decimal'        => static function ( $number ) {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
@@ -1028,7 +1028,7 @@ class Schema_Test extends TestCase {
 				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
-				'wc_format_decimal'        => function ( $number ) {
+				'wc_format_decimal'        => static function ( $number ) {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
