@@ -41,7 +41,7 @@ function getTextEditorContent( elementID ) {
  *
  * @returns {boolean} Whether TinyMCE is available.
  */
-function isTinyMCEAvailable( editorID ) {
+export function isTinyMCEAvailable( editorID ) {
 	if ( ! isTinyMCELoaded() ) {
 		return false;
 	}
