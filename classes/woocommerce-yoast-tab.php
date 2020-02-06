@@ -60,6 +60,8 @@ class WPSEO_WooCommerce_Yoast_Tab {
 
 		echo '<div id="yoast_seo" class="panel woocommerce_options_panel">';
 		echo '<div class="options_group">';
+		echo '<h2>' . __( 'Product identifiers', 'yoast-woo-seo' ) . '</h2>';
+		echo '<p>' . __( 'If you have any of these unique identifiers for your products, please add them here. Yoast SEO will use them in your Schema and OpenGraph output.', 'yoast-woo-seo' ) . '</p>';
 		wp_nonce_field( 'yoast_woo_seo_identifiers', '_wpnonce_yoast_seo_woo' );
 
 		foreach ( $this->global_identifier_types as $type => $label ) {
