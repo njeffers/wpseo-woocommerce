@@ -58,7 +58,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'_e'              => null,
 				'esc_attr'        => null,
 				'esc_html_e'      => null,
-				'wp_nonce_field'  => function ( $action, $name ) {
+				'wp_nonce_field'  => static function ( $action, $name ) {
 					return '<input type="hidden" id="" name="' . $name . '" value="' . $action . '" />';
 				},
 			]
@@ -118,7 +118,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'wp_is_post_revision' => false,
 				'wp_verify_nonce'     => true,
 				'update_post_meta'    => true,
-				'wp_strip_all_tags'   => function ( $value ) {
+				'wp_strip_all_tags'   => static function ( $value ) {
 					// Ignoring WPCS's warning about using `wp_strip_all_tags` because we're *doing that*.
 					// @phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
 					return \strip_tags( $value );
@@ -145,7 +145,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 				'wp_verify_nonce'     => true,
 				'update_post_meta'    => true,
 				'wp_unslash'          => null,
-				'wp_strip_all_tags'   => function ( $value ) {
+				'wp_strip_all_tags'   => static function ( $value ) {
 					// Ignoring WPCS's warning about using `wp_strip_all_tags` because we're *doing that*.
 					// @phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
 					return \strip_tags( $value );
@@ -171,7 +171,7 @@ class WooCommerce_Yoast_Tab_Test extends TestCase {
 	public function test_validate_data() {
 		Functions\stubs(
 			[
-				'wp_strip_all_tags' => function ( $value ) {
+				'wp_strip_all_tags' => static function ( $value ) {
 					// Ignoring WPCS's warning about using `wp_strip_all_tags` because we're *doing that*.
 					// @phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
 					return \strip_tags( $value );
