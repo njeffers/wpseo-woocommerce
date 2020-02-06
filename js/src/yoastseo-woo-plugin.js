@@ -1,6 +1,6 @@
 /* global YoastSEO, wpseoWooL10n */
 
-import { getExcerpt, addExcerptEventHandlers } from "./yoastseo-woo-handle-excerpt-editors";
+import { getExcerpt, addExcerptEventHandlers, isTinyMCEAvailable } from "./yoastseo-woo-handle-excerpt-editors";
 
 const PLUGIN_NAME = "YoastWooCommerce";
 
