@@ -412,57 +412,56 @@ class Schema_Test extends TestCase {
 				'weight_html'           => 'N/A',
 			],
 		];
-		$expected_output =
-			[
-				'@type'         => 'AggregateOffer',
-				'lowPrice'      => '8.00',
-				'highPrice'     => '12.00',
-				'offerCount'    => 3,
-				'priceCurrency' => 'GBP',
-				'availability'  => 'http://schema.org/InStock',
-				'url'           => 'https://example.com/product/customizable-responsive-toolset/',
-				'seller'        => [
-					'@type' => 'Organization',
-					'name'  => 'WooCommerce',
-					'url'   => 'https://example.com',
-				],
-				'@id'           => 'https://example.com/#/schema/aggregate-offer/209643-0',
-				'offers'        => [
-					[
-						'@type'              => 'Offer',
-						'@id'                => 'https://example.com/#/schema/offer/209643-0',
-						'name'               => 'Customizable responsive toolset - l',
-						'price'              => 10,
-						'priceSpecification' => [
-							'price'                 => '10',
-							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
-						],
-					],
-					[
-						'@type'              => 'Offer',
-						'@id'                => 'https://example.com/#/schema/offer/209643-1',
-						'name'               => 'Customizable responsive toolset - m',
-						'price'              => 8,
-						'priceSpecification' => [
-							'price'                 => '8',
-							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
-						],
-					],
-					[
-						'@type'              => 'Offer',
-						'@id'                => 'https://example.com/#/schema/offer/209643-2',
-						'name'               => 'Customizable responsive toolset - xl',
-						'price'              => 12,
-						'priceSpecification' => [
-							'price'                 => '12',
-							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
-						],
+		$expected_output = [
+			'@type'         => 'AggregateOffer',
+			'lowPrice'      => '8.00',
+			'highPrice'     => '12.00',
+			'offerCount'    => 3,
+			'priceCurrency' => 'GBP',
+			'availability'  => 'http://schema.org/InStock',
+			'url'           => 'https://example.com/product/customizable-responsive-toolset/',
+			'seller'        => [
+				'@type' => 'Organization',
+				'name'  => 'WooCommerce',
+				'url'   => 'https://example.com',
+			],
+			'@id'           => 'https://example.com/#/schema/aggregate-offer/209643-0',
+			'offers'        => [
+				[
+					'@type'              => 'Offer',
+					'@id'                => 'https://example.com/#/schema/offer/209643-0',
+					'name'               => 'Customizable responsive toolset - l',
+					'price'              => 10,
+					'priceSpecification' => [
+						'price'                 => '10',
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
 					],
 				],
-			];
+				[
+					'@type'              => 'Offer',
+					'@id'                => 'https://example.com/#/schema/offer/209643-1',
+					'name'               => 'Customizable responsive toolset - m',
+					'price'              => 8,
+					'priceSpecification' => [
+						'price'                 => '8',
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
+					],
+				],
+				[
+					'@type'              => 'Offer',
+					'@id'                => 'https://example.com/#/schema/offer/209643-2',
+					'name'               => 'Customizable responsive toolset - xl',
+					'price'              => 12,
+					'priceSpecification' => [
+						'price'                 => '12',
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
+					],
+				],
+			],
+		];
 
 		$base_url = 'https://example.com';
 		Functions\stubs(
