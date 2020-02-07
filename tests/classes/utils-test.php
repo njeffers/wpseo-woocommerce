@@ -34,7 +34,7 @@ class Utils_Test extends TestCase {
 			]
 		);
 
-		$this->assertEquals( 'Apple', WPSEO_WooCommerce_Utils::search_primary_term( [ 'brand' ], $product ) );
+		$this->assertSame( 'Apple', WPSEO_WooCommerce_Utils::search_primary_term( [ 'brand' ], $product ) );
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Utils_Test extends TestCase {
 		$primary_term_mock->expects( '__construct' )->once()->with( 'brand', $product_id )->andReturnSelf();
 		$primary_term_mock->expects( 'get_primary_term' )->once()->with()->andReturn( false );
 
-		$this->assertEquals( '', WPSEO_WooCommerce_Utils::search_primary_term( [ 'brand' ], $product ) );
+		$this->assertSame( '', WPSEO_WooCommerce_Utils::search_primary_term( [ 'brand' ], $product ) );
 	}
 
 	/**
@@ -82,16 +82,18 @@ class Utils_Test extends TestCase {
 				'wc_get_price_decimals'      => 2,
 				'wc_tax_enabled'             => true,
 				'wc_prices_include_tax'      => false,
-				'wc_format_decimal'          => function ( $number, $decimals ) {
-					return number_format( $number, $decimals );
+				'wc_format_decimal'          => static function ( $number, $decimals ) {
+					return \number_format( $number, $decimals );
 				},
-				'wc_get_price_including_tax' => function ( $product, $args ) {
+				'wc_get_price_including_tax' => static function ( $product, $args ) {
 					return ( $args['price'] * 1.1 );
 				},
 			]
 		);
 
-		$this->assertEquals( ( $price * $tax_rate ), WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
+		$expected = \number_format( ( $price * $tax_rate ), 2 );
+
+		$this->assertSame( $expected, WPSEO_WooCommerce_Utils::get_product_display_price( $product ) );
 	}
 
 	/**
