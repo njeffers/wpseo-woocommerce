@@ -37,8 +37,17 @@ class Permalink_Watcher_Test extends TestCase {
 	 */
 	public function test_filter_product_from_post_types() {
 		$this->assertEquals(
-			[ 'post' => 'post', 'page' => 'page' ],
-			$this->instance->filter_product_from_post_types( [ 'post' => 'post', 'page' => 'page', 'product' => 'product' ] )
+			[
+				'post' => 'post',
+				'page' => 'page',
+			],
+			$this->instance->filter_product_from_post_types(
+				[
+					'post'    => 'post',
+					'page'    => 'page',
+					'product' => 'product',
+				]
+			)
 		);
 	}
 
@@ -53,8 +62,12 @@ class Permalink_Watcher_Test extends TestCase {
 			->once()
 			->with( 'post', 'product' );
 
-		$old = [ 'product_base' => 'bar' ];
-		$new = [ 'product_base' => 'foo' ];
+		$old = [
+			'product_base' => 'bar',
+		];
+		$new = [
+			'product_base' => 'foo',
+		];
 
 		$this->instance->reset_woocommerce_permalinks( $old, $new );
 	}
@@ -75,8 +88,12 @@ class Permalink_Watcher_Test extends TestCase {
 			->once()
 			->andReturn( [ 'my_attribute' ] );
 
-		$old = [ 'attribute_base' => 'bar' ];
-		$new = [ 'attribute_base' => 'foo' ];
+		$old = [
+			'attribute_base' => 'bar',
+		];
+		$new = [
+			'attribute_base' => 'foo',
+		];
 
 		$this->instance->reset_woocommerce_permalinks( $old, $new );
 	}
@@ -97,8 +114,16 @@ class Permalink_Watcher_Test extends TestCase {
 			->once()
 			->with( 'term', 'product_tag' );
 
-		$old = [ 'category_base' => 'bar', 'tag_base' => 'bar', 'no_base' => 'bar' ];
-		$new = [ 'category_base' => 'foo', 'tag_base' => 'foo', 'no_base' => 'foo'  ];
+		$old = [
+			'category_base' => 'bar',
+			'tag_base'      => 'bar',
+			'no_base'       => 'bar',
+		];
+		$new = [
+			'category_base' => 'foo',
+			'tag_base'      => 'foo',
+			'no_base'       => 'foo',
+		];
 
 		$this->instance->reset_woocommerce_permalinks( $old, $new );
 	}

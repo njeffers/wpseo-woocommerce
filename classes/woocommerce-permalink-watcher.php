@@ -105,7 +105,7 @@ class WPSEO_Woocommerce_Permalink_Watcher {
 			],
 			[
 				'object_type'     => $type,
-				'object_sub_type' => $subtype
+				'object_sub_type' => $subtype,
 			]
 		);
 	}
