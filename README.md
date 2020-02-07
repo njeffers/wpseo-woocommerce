@@ -39,6 +39,7 @@ Bugfixes:
 
 Enhancements:
 
+* Adds explanatory copy above the input fields for GTIN, ISBN etc.
 * Adds an option to display the price in Schema and OpenGraph _with_ tax included.
 
 ### 12.5.1: February 5th, 2020
