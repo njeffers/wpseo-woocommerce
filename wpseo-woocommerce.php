@@ -175,6 +175,9 @@ class Yoast_WooCommerce_SEO {
 			if ( $this->options['metabox_woo_top'] === true ) {
 				add_action( 'admin_footer', array( $this, 'footer_js' ) );
 			}
+
+			$permalink_watcher = new WPSEO_Woocommerce_Permalink_Watcher();
+			$permalink_watcher->register_hooks();
 		}
 		else {
 			$wpseo_options = WPSEO_Options::get_all();
