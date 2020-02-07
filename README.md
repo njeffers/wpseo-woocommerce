@@ -35,7 +35,6 @@ Bugfixes:
 
 * Fixes a bug where the internal linking and additional keyphrase functionality are missing from the product edit page.
 * Fixes a bug where the short description for the meta description and Twitter and Facebook description could still contain HTML tags and redundant spaces.
-* Fixes a bug where product attributes that have archives were not added to the Yoast SEO XML sitemap.
 
 Enhancements:
 
