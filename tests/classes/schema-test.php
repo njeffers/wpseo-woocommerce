@@ -32,9 +32,9 @@ class Schema_Test extends TestCase {
 	public function test_construct() {
 		$schema = new WPSEO_WooCommerce_Schema( '3.9' );
 
-		$this->assertTrue( has_filter( 'woocommerce_structured_data_product', [ $schema, 'change_product' ] ) );
+		$this->assertTrue( \has_filter( 'woocommerce_structured_data_product', [ $schema, 'change_product' ] ) );
 		$this->assertTrue(
-			has_filter(
+			\has_filter(
 				'woocommerce_structured_data_type_for_page',
 				[
 					$schema,
@@ -42,10 +42,10 @@ class Schema_Test extends TestCase {
 				]
 			)
 		);
-		$this->assertTrue( has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
-		$this->assertTrue( has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
+		$this->assertTrue( \has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
+		$this->assertTrue( \has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
 
-		$this->assertFalse( has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
+		$this->assertFalse( \has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Schema_Test extends TestCase {
 	 */
 	public function test_construct_old_wc() {
 		$schema = new WPSEO_WooCommerce_Schema( '3.8' );
-		$this->assertTrue( has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
+		$this->assertTrue( \has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Schema_Test extends TestCase {
 
 		$schema->data = $data;
 		$schema->output_schema_footer();
-		$this->assertEquals( $data, $utils->output );
+		$this->assertSame( $data, $utils->output );
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Schema_Test extends TestCase {
 			'@type' => 'WebPage',
 		];
 		$schema = new WPSEO_WooCommerce_Schema();
-		$this->assertEquals( $input, $schema->filter_webpage( $input ) );
+		$this->assertSame( $input, $schema->filter_webpage( $input ) );
 
 		Functions\stubs(
 			[
@@ -111,7 +111,7 @@ class Schema_Test extends TestCase {
 			'@type' => 'CheckoutPage',
 		];
 		$schema   = new WPSEO_WooCommerce_Schema();
-		$this->assertEquals( $expected, $schema->filter_webpage( $input ) );
+		$this->assertSame( $expected, $schema->filter_webpage( $input ) );
 
 		Functions\stubs(
 			[
@@ -125,7 +125,7 @@ class Schema_Test extends TestCase {
 			'@type' => 'ItemPage',
 		];
 		$schema   = new WPSEO_WooCommerce_Schema();
-		$this->assertEquals( $expected, $schema->filter_webpage( $input ) );
+		$this->assertSame( $expected, $schema->filter_webpage( $input ) );
 	}
 
 	/**
@@ -152,8 +152,8 @@ class Schema_Test extends TestCase {
 			],
 		];
 
-		$this->assertEquals( $expected_output, $output );
-		$this->assertEquals( $expected_data, $schema->data );
+		$this->assertSame( $expected_output, $output );
+		$this->assertSame( $expected_data, $schema->data );
 	}
 
 	/**
@@ -205,8 +205,8 @@ class Schema_Test extends TestCase {
 				'get_site_url'             => $base_url,
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
-				'wc_format_decimal'        => function ( $number ) {
-					return number_format( $number, 2 );
+				'wc_format_decimal'        => static function ( $number ) {
+					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
 			]
@@ -219,7 +219,7 @@ class Schema_Test extends TestCase {
 
 		$output = $schema->filter_offers( $input, $product );
 
-		$this->assertEquals( $expected_output, $output );
+		$this->assertSame( $expected_output, $output );
 	}
 
 	/**
@@ -412,57 +412,56 @@ class Schema_Test extends TestCase {
 				'weight_html'           => 'N/A',
 			],
 		];
-		$expected_output =
-			[
-				'@type'         => 'AggregateOffer',
-				'lowPrice'      => '8.00',
-				'highPrice'     => '12.00',
-				'offerCount'    => 3,
-				'priceCurrency' => 'GBP',
-				'availability'  => 'http://schema.org/InStock',
-				'url'           => 'https://example.com/product/customizable-responsive-toolset/',
-				'seller'        => [
-					'@type' => 'Organization',
-					'name'  => 'WooCommerce',
-					'url'   => 'https://example.com',
-				],
-				'@id'           => 'https://example.com/#/schema/aggregate-offer/209643-0',
-				'offers'        => [
-					[
-						'@type'              => 'Offer',
-						'@id'                => 'https://example.com/#/schema/offer/209643-0',
-						'name'               => 'Customizable responsive toolset - l',
-						'price'              => 10,
-						'priceSpecification' => [
-							'price'                 => '10',
-							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
-						],
-					],
-					[
-						'@type'              => 'Offer',
-						'@id'                => 'https://example.com/#/schema/offer/209643-1',
-						'name'               => 'Customizable responsive toolset - m',
-						'price'              => 8,
-						'priceSpecification' => [
-							'price'                 => '8',
-							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
-						],
-					],
-					[
-						'@type'              => 'Offer',
-						'@id'                => 'https://example.com/#/schema/offer/209643-2',
-						'name'               => 'Customizable responsive toolset - xl',
-						'price'              => 12,
-						'priceSpecification' => [
-							'price'                 => '12',
-							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
-						],
+		$expected_output = [
+			'@type'         => 'AggregateOffer',
+			'lowPrice'      => '8.00',
+			'highPrice'     => '12.00',
+			'offerCount'    => 3,
+			'priceCurrency' => 'GBP',
+			'availability'  => 'http://schema.org/InStock',
+			'url'           => 'https://example.com/product/customizable-responsive-toolset/',
+			'seller'        => [
+				'@type' => 'Organization',
+				'name'  => 'WooCommerce',
+				'url'   => 'https://example.com',
+			],
+			'@id'           => 'https://example.com/#/schema/aggregate-offer/209643-0',
+			'offers'        => [
+				[
+					'@type'              => 'Offer',
+					'@id'                => 'https://example.com/#/schema/offer/209643-0',
+					'name'               => 'Customizable responsive toolset - l',
+					'price'              => 10,
+					'priceSpecification' => [
+						'price'                 => 10,
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
 					],
 				],
-			];
+				[
+					'@type'              => 'Offer',
+					'@id'                => 'https://example.com/#/schema/offer/209643-1',
+					'name'               => 'Customizable responsive toolset - m',
+					'price'              => 8,
+					'priceSpecification' => [
+						'price'                 => 8,
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
+					],
+				],
+				[
+					'@type'              => 'Offer',
+					'@id'                => 'https://example.com/#/schema/offer/209643-2',
+					'name'               => 'Customizable responsive toolset - xl',
+					'price'              => 12,
+					'priceSpecification' => [
+						'price'                 => 12,
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
+					],
+				],
+			],
+		];
 
 		$base_url = 'https://example.com';
 		Functions\stubs(
@@ -482,7 +481,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_name' )->once()->andReturn( 'Customizable responsive toolset' );
 		$output = $schema->filter_offers( $input, $product );
 
-		$this->assertEquals( $expected_output, $output['offers'][0] );
+		$this->assertSame( $expected_output, $output['offers'][0] );
 	}
 
 	/**
@@ -495,7 +494,7 @@ class Schema_Test extends TestCase {
 		$expected = [ 'webpage' ];
 
 		$class = new WPSEO_WooCommerce_Schema();
-		$this->assertEquals( $expected, $class->remove_woo_breadcrumbs( $input ) );
+		$this->assertSame( $expected, $class->remove_woo_breadcrumbs( $input ) );
 	}
 
 	/**
@@ -553,7 +552,7 @@ class Schema_Test extends TestCase {
 		$schema   = new Schema_Double();
 		$output   = $schema->change_seller_in_offers( $input );
 
-		$this->assertEquals( $expected, $output );
+		$this->assertSame( $expected, $output );
 	}
 
 	/**
@@ -615,7 +614,7 @@ class Schema_Test extends TestCase {
 		$schema                          = new Schema_Double();
 		$output                          = $schema->change_seller_in_offers( $input );
 
-		$this->assertEquals( $expected, $output );
+		$this->assertSame( $expected, $output );
 	}
 
 	/**
@@ -632,7 +631,7 @@ class Schema_Test extends TestCase {
 
 		$output = $schema->filter_reviews( $input, $product );
 
-		$this->assertEquals( $input, $output );
+		$this->assertSame( $input, $output );
 	}
 
 	/**
@@ -677,7 +676,7 @@ class Schema_Test extends TestCase {
 		$schema = new Schema_Double();
 		$schema->add_global_identifier( $product );
 
-		$this->assertEquals( $data, $schema->data );
+		$this->assertSame( $data, $schema->data );
 	}
 
 	/**
@@ -703,10 +702,10 @@ class Schema_Test extends TestCase {
 		$schema->add_global_identifier( $product );
 
 		$expected = [
-			'@type' => [ 'Book', 'Product' ],
 			'isbn'  => '978-3-16-148410-0',
+			'@type' => [ 'Book', 'Product' ],
 		];
-		$this->assertEquals( $expected, $schema->data );
+		$this->assertSame( $expected, $schema->data );
 	}
 
 	/**
@@ -765,7 +764,7 @@ class Schema_Test extends TestCase {
 					'@type'         => 'Review',
 					'reviewRating'  => [
 						'@type'       => 'Rating',
-						'ratingValue' => 2,
+						'ratingValue' => '2',
 					],
 					'author'        => [
 						'@type' => 'Person',
@@ -780,7 +779,7 @@ class Schema_Test extends TestCase {
 					'@type'         => 'Review',
 					'reviewRating'  => [
 						'@type'       => 'Rating',
-						'ratingValue' => 5,
+						'ratingValue' => '5',
 					],
 					'author'        => [
 						'@type' => 'Person',
@@ -794,7 +793,7 @@ class Schema_Test extends TestCase {
 			],
 		];
 
-		$this->assertEquals( $expected, $output );
+		$this->assertSame( $expected, $output );
 	}
 
 	/**
@@ -865,8 +864,8 @@ class Schema_Test extends TestCase {
 				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
-				'wc_format_decimal'        => function ( $number ) {
-					return number_format( $number, 2 );
+				'wc_format_decimal'        => static function ( $number ) {
+					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
 			]
@@ -927,23 +926,22 @@ class Schema_Test extends TestCase {
 			'@id'              => $canonical . '#product',
 			'name'             => $product_name,
 			'url'              => $canonical,
-			'image'            => [ '@id' => $canonical . '#primaryimage' ],
 			'description'      => '',
 			'sku'              => 'sku1234',
 			'offers'           => [
 				[
 					'@type'              => 'Offer',
 					'price'              => '1.00',
-					'priceSpecification' => [
-						'price'                 => '1.00',
-						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
-					],
 					'url'                => $canonical,
 					'seller'             => [
 						'@id' => $canonical . '#organization',
 					],
 					'@id'                => $base_url . '/#/schema/offer/1-0',
+					'priceSpecification' => [
+						'price'                 => '1.00',
+						'priceCurrency'         => 'GBP',
+						'valueAddedTaxIncluded' => false,
+					],
 				],
 			],
 			'review'           => [
@@ -964,6 +962,7 @@ class Schema_Test extends TestCase {
 				],
 			],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
+			'image'            => [ '@id' => $canonical . '#primaryimage' ],
 			'brand'            => [
 				'@type' => 'Organization',
 				'name'  => $product_name,
@@ -975,7 +974,7 @@ class Schema_Test extends TestCase {
 		];
 
 		$instance->change_product( $data, $product );
-		$this->assertEquals( $expected, $instance->data );
+		$this->assertSame( $expected, $instance->data );
 	}
 
 	/**
@@ -1029,8 +1028,8 @@ class Schema_Test extends TestCase {
 				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
-				'wc_format_decimal'        => function ( $number ) {
-					return number_format( $number, 2 );
+				'wc_format_decimal'        => static function ( $number ) {
+					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
 			]
@@ -1093,13 +1092,6 @@ class Schema_Test extends TestCase {
 			'@id'              => $canonical . '#product',
 			'name'             => $product_name,
 			'url'              => $canonical,
-			'image'            => [
-				'@id'    => $canonical . '#woocommerceimageplaceholder',
-				'@type'  => 'ImageObject',
-				'url'    => $base_url . '/example_image.jpg',
-				'width'  => 50,
-				'height' => 50,
-			],
 			'description'      => '',
 			'sku'              => 'sku1234',
 			'offers'           => [
@@ -1136,6 +1128,13 @@ class Schema_Test extends TestCase {
 				],
 			],
 			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
+			'image'            => [
+				'@type'  => 'ImageObject',
+				'@id'    => $canonical . '#woocommerceimageplaceholder',
+				'url'    => $base_url . '/example_image.jpg',
+				'width'  => 50,
+				'height' => 50,
+			],
 			'brand'            => [
 				'@type' => 'Organization',
 				'name'  => $product_name,
@@ -1147,7 +1146,7 @@ class Schema_Test extends TestCase {
 		];
 
 		$instance->change_product( $data, $product );
-		$this->assertEquals( $expected, $instance->data );
+		$this->assertSame( $expected, $instance->data );
 	}
 
 	/**
