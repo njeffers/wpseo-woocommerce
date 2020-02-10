@@ -22,17 +22,17 @@ class OpenGraph_Test extends TestCase {
 	public function test_construct() {
 		$og = new WPSEO_WooCommerce_OpenGraph();
 
-		$this->assertTrue( has_filter( 'language_attributes', [ $og, 'product_namespace' ] ) );
-		$this->assertTrue( has_filter( 'wpseo_opengraph_type', [ $og, 'return_type_product' ] ) );
-		$this->assertTrue( has_filter( 'wpseo_opengraph_desc', [ $og, 'product_taxonomy_desc_enhancement' ] ) );
-		$this->assertTrue( has_action( 'wpseo_opengraph', [ $og, 'product_enhancement' ] ) );
-		$this->assertTrue( has_action( 'wpseo_add_opengraph_additional_images', [ $og, 'set_opengraph_image' ] ) );
+		$this->assertTrue( \has_filter( 'language_attributes', [ $og, 'product_namespace' ] ) );
+		$this->assertTrue( \has_filter( 'wpseo_opengraph_type', [ $og, 'return_type_product' ] ) );
+		$this->assertTrue( \has_filter( 'wpseo_opengraph_desc', [ $og, 'product_taxonomy_desc_enhancement' ] ) );
+		$this->assertTrue( \has_action( 'wpseo_opengraph', [ $og, 'product_enhancement' ] ) );
+		$this->assertTrue( \has_action( 'wpseo_add_opengraph_additional_images', [ $og, 'set_opengraph_image' ] ) );
 
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'brand' ] ) );
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'price' ] ) );
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'in_stock' ] ) );
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'retailer_item_id' ] ) );
-		$this->assertTrue( has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'product_condition' ] ) );
+		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'brand' ] ) );
+		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'price' ] ) );
+		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'in_stock' ] ) );
+		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'retailer_item_id' ] ) );
+		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'product_condition' ] ) );
 	}
 
 	/**
@@ -48,14 +48,14 @@ class OpenGraph_Test extends TestCase {
 		);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertEquals( 'product', $og->return_type_product( 'article' ) );
+		$this->assertSame( 'product', $og->return_type_product( 'article' ) );
 
 		Functions\stubs(
 			[
 				'is_singular' => false,
 			]
 		);
-		$this->assertEquals( 'article', $og->return_type_product( 'article' ) );
+		$this->assertSame( 'article', $og->return_type_product( 'article' ) );
 	}
 
 	/**
@@ -71,7 +71,7 @@ class OpenGraph_Test extends TestCase {
 		);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertEquals( 'example description', $og->product_taxonomy_desc_enhancement( 'example description' ) );
+		$this->assertSame( 'example description', $og->product_taxonomy_desc_enhancement( 'example description' ) );
 
 		$expected = 'This is our expected description';
 
@@ -83,7 +83,7 @@ class OpenGraph_Test extends TestCase {
 				'strip_shortcodes'    => null,
 			]
 		);
-		$this->assertEquals( $expected, $og->product_taxonomy_desc_enhancement( 'example description' ) );
+		$this->assertSame( $expected, $og->product_taxonomy_desc_enhancement( 'example description' ) );
 	}
 
 	/**
@@ -101,14 +101,14 @@ class OpenGraph_Test extends TestCase {
 		);
 
 		$input = 'prefix="fn: https://yoast.com/bla"';
-		$this->assertEquals( $input, $og->product_namespace( $input ) );
+		$this->assertSame( $input, $og->product_namespace( $input ) );
 
 		Functions\stubs(
 			[
 				'is_singular' => true,
 			]
 		);
-		$this->assertEquals( 'prefix="fn: https://yoast.com/bla product: http://ogp.me/ns/product#"', $og->product_namespace( $input ) );
+		$this->assertSame( 'prefix="fn: https://yoast.com/bla product: http://ogp.me/ns/product#"', $og->product_namespace( $input ) );
 	}
 
 	/**
@@ -129,11 +129,11 @@ class OpenGraph_Test extends TestCase {
 				'wc_get_price_decimals'      => 2,
 				'wc_tax_enabled'             => true,
 				'wc_prices_include_tax'      => false,
-				'wc_get_price_including_tax' => function ( $product, $args ) {
+				'wc_get_price_including_tax' => static function ( $product, $args ) {
 					return ( $args['price'] * 1.1 );
 				},
-				'wc_format_decimal'          => function ( $number ) {
-					return number_format( $number, 2 );
+				'wc_format_decimal'          => static function ( $number ) {
+					return \number_format( $number, 2 );
 				},
 			]
 		);
@@ -152,11 +152,11 @@ class OpenGraph_Test extends TestCase {
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
 
-		ob_start();
+		\ob_start();
 		$og->price( $product );
 
-		$expected = '<meta property="product:price:amount" content="' . number_format( ( $base_price * $tax_rate ), 2 ) . '" />' . "\n" . '<meta property="product:price:currency" content="USD" />' . "\n";
-		$this->assertEquals( $expected, ob_get_clean() );
+		$expected = '<meta property="product:price:amount" content="' . \number_format( ( $base_price * $tax_rate ), 2 ) . '" />' . "\n" . '<meta property="product:price:currency" content="USD" />' . "\n";
+		$this->assertSame( $expected, \ob_get_clean() );
 	}
 
 	/**
@@ -180,7 +180,7 @@ class OpenGraph_Test extends TestCase {
 				'wp_strip_all_tags'     => null,
 				'strip_shortcodes'      => null,
 				'get_the_terms'         => [ 'Apple' => (object) [ 'name' => 'Apple' ] ],
-				'get_term_by'           => function ( $thing, $term, $taxonomy ) {
+				'get_term_by'           => static function ( $thing, $term, $taxonomy ) {
 					return (object) [ 'name' => 'Apple' ];
 				},
 			]
@@ -191,10 +191,10 @@ class OpenGraph_Test extends TestCase {
 		$primary_term_mock->expects( 'get_primary_term' )->once()->with()->andReturn( 12345 );
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
-		ob_start();
+		\ob_start();
 		$og->brand( $product );
 
-		$this->assertEquals( '<meta property="product:brand" content="Apple"/>' . "\n", ob_get_clean() );
+		$this->assertSame( '<meta property="product:brand" content="Apple"/>' . "\n", \ob_get_clean() );
 	}
 
 	/**
@@ -213,10 +213,10 @@ class OpenGraph_Test extends TestCase {
 		);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
-		ob_start();
+		\ob_start();
 		$og->product_condition( $product );
 
-		$this->assertEquals( '<meta property="product:condition" content="used" />' . "\n", ob_get_clean() );
+		$this->assertSame( '<meta property="product:condition" content="used" />' . "\n", \ob_get_clean() );
 	}
 
 	/**
@@ -235,10 +235,10 @@ class OpenGraph_Test extends TestCase {
 		);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
-		ob_start();
+		\ob_start();
 		$og->retailer_item_id( $product );
 
-		$this->assertEquals( '<meta property="product:retailer_item_id" content="sku123" />' . "\n", ob_get_clean() );
+		$this->assertSame( '<meta property="product:retailer_item_id" content="sku123" />' . "\n", \ob_get_clean() );
 	}
 
 	/**
@@ -251,10 +251,10 @@ class OpenGraph_Test extends TestCase {
 		$product->expects( 'is_in_stock' )->andReturn( true );
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
-		ob_start();
+		\ob_start();
 		$og->in_stock( $product );
 
-		$this->assertEquals( '<meta property="product:availability" content="in stock" />' . "\n", ob_get_clean() );
+		$this->assertSame( '<meta property="product:availability" content="in stock" />' . "\n", \ob_get_clean() );
 	}
 
 	/**
@@ -417,7 +417,7 @@ class OpenGraph_Test extends TestCase {
 		$primary_term_mock->expects( 'get_primary_term' )->once()->with()->andReturn( '' );
 
 		$og = new OpenGraph_Double();
-		$this->assertEquals( 'Apple', $og->get_brand_term_name( 'brand', $product ) );
+		$this->assertSame( 'Apple', $og->get_brand_term_name( 'brand', $product ) );
 	}
 
 	/**

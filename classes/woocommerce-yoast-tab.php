@@ -13,7 +13,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	/**
 	 * The array of allowed identifier types.
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	protected $global_identifier_types = [
 		'gtin8'  => 'GTIN8',
@@ -60,6 +60,13 @@ class WPSEO_WooCommerce_Yoast_Tab {
 
 		echo '<div id="yoast_seo" class="panel woocommerce_options_panel">';
 		echo '<div class="options_group">';
+		echo '<h2>' . esc_html__( 'Product identifiers', 'yoast-woo-seo' ) . '</h2>';
+		echo '<p>' . sprintf(
+			/* translators: %1$s resolves to Yoast SEO */
+			esc_html__( 'If you have any of these unique identifiers for your products, please add them here. %1$s will use them in your Schema and OpenGraph output.', 'yoast-woo-seo' ),
+			'Yoast SEO'
+		) . '</p>';
+
 		wp_nonce_field( 'yoast_woo_seo_identifiers', '_wpnonce_yoast_seo_woo' );
 
 		foreach ( $this->global_identifier_types as $type => $label ) {
@@ -75,7 +82,7 @@ class WPSEO_WooCommerce_Yoast_Tab {
 	 *
 	 * @param int $post_id The post ID.
 	 *
-	 * @return boolean Whether or not we saved data.
+	 * @return bool Whether or not we saved data.
 	 */
 	public function save_data( $post_id ) {
 		if ( wp_is_post_revision( $post_id ) ) {

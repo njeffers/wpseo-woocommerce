@@ -2,8 +2,6 @@
 
 namespace Yoast\WP\Woocommerce\Tests\Doubles;
 
-use WC_Product;
-use WPSEO_OpenGraph_Image;
 use WPSEO_WooCommerce_OpenGraph;
 
 /**

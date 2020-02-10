@@ -91,7 +91,7 @@ class Yoast_WooCommerce_Dependencies_Test extends TestCase {
 		$this->assertFalse( $class->get_yoast_seo_version() );
 
 		$wpseo_version = '14.0';
-		define( 'WPSEO_VERSION', $wpseo_version );
+		\define( 'WPSEO_VERSION', $wpseo_version );
 
 		$this->assertEquals( $wpseo_version, $class->get_yoast_seo_version() );
 	}
@@ -147,7 +147,7 @@ class Yoast_WooCommerce_Dependencies_Test extends TestCase {
 	 * @param string $expected Expected output.
 	 */
 	private function error_message_test( $function, $expected ) {
-		ob_start();
+		\ob_start();
 		$class = Mockery::mock( Yoast_WooCommerce_Dependencies_Double::class )->makePartial();
 
 		Functions\stubs(
@@ -157,8 +157,8 @@ class Yoast_WooCommerce_Dependencies_Test extends TestCase {
 			]
 		);
 		$class->$function();
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = \ob_get_contents();
+		\ob_end_clean();
 
 		$this->assertEquals( $expected, $output, $function );
 	}
