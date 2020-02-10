@@ -65,6 +65,9 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'admin_footer', [ $this, 'footer_js' ] );
 
 			new WPSEO_WooCommerce_Yoast_Tab();
+
+			$permalink_watcher = new WPSEO_Woocommerce_Permalink_Watcher();
+			$permalink_watcher->register_hooks();
 		}
 		else {
 			// Initialize schema & OpenGraph.
