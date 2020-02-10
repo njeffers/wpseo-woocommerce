@@ -157,7 +157,7 @@ class Yoast_WooCommerce_SEO {
 		add_filter( 'wpseo_enable_tracking', '__return_true' );
 
 		// Check if the options need updating.
-		if ( $this->option_instance->db_version > $this->options['dbversion'] ) {
+		if ( $this->option_instance->db_version > $this->options['woo_dbversion'] ) {
 			$this->upgrade();
 		}
 
@@ -204,7 +204,7 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_sitemap_urlimages', [ $this, 'add_product_images_to_xml_sitemap' ], 10, 2 );
 
 			// Fix breadcrumbs.
-			if ( $this->options['breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
+			if ( $this->options['woo_breadcrumbs'] === true && $wpseo_options['breadcrumbs-enable'] === true ) {
 				$this->handle_breadcrumbs_replacements();
 			}
 		} // End if.
@@ -563,7 +563,7 @@ class Yoast_WooCommerce_SEO {
 			);
 			echo "</p>\n";
 			$this->checkbox(
-				'breadcrumbs',
+				'woo_breadcrumbs',
 				sprintf(
 					/* translators: %1$s resolves to WooCommerce */
 					__( 'Replace %1$s Breadcrumbs', 'yoast-woo-seo' ),
