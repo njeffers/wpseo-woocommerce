@@ -157,7 +157,7 @@ class Yoast_WooCommerce_SEO {
 		add_filter( 'wpseo_enable_tracking', '__return_true' );
 
 		// Check if the options need updating.
-		if ( $this->option_instance->db_version > $this->options['dbversion'] ) {
+		if ( $this->option_instance->db_version > $this->options['woo_dbversion'] ) {
 			$this->upgrade();
 		}
 
