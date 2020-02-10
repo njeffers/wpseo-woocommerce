@@ -57,17 +57,12 @@ class WPSEO_Woocommerce_Permalink_Watcher {
 			}
 		}
 
-		$base_to_term_map = [
-			'category_base' => 'product_cat',
-			'tag_base'      => 'product_tag',
-		];
+		if ( array_key_exists( 'category_base', $changed_options ) ) {
+			$this->reset_permalink_indexables( 'term', 'product_cat' );
+		}
 
-		foreach ( array_keys( $changed_options ) as $changed_term ) {
-			if ( ! isset( $base_to_term_map[ $changed_term ] ) ) {
-				continue;
-			}
-
-			$this->reset_permalink_indexables( 'term', $base_to_term_map[ $changed_term ] );
+		if ( array_key_exists( 'tag_base', $changed_options ) ) {
+			$this->reset_permalink_indexables( 'term', 'product_tag' );
 		}
 	}
 
