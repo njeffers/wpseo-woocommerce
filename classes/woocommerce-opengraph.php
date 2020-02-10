@@ -89,11 +89,15 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Adds the OpenGraph images.
 	 *
-	 * @param WPSEO_OpenGraph_Image $opengraph_image The OpenGraph image to use.
+	 * @param mixed $opengraph_image The OpenGraph image to use.
 	 *
 	 * @return bool True when images are added, false when they're not.
 	 */
-	public function set_opengraph_image( WPSEO_OpenGraph_Image $opengraph_image ) {
+	public function set_opengraph_image( $opengraph_image ) {
+
+		if ( ! is_object( $opengraph_image ) || ! method_exists( $opengraph_image, 'add_image' ) ) {
+			return false;
+		}
 
 		if ( is_product_category() ) {
 			return $this->set_opengraph_image_product_category( $opengraph_image );
