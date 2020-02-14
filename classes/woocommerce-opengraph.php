@@ -5,8 +5,6 @@
  * @package WPSEO/WooCommerce
  */
 
-use Yoast\WP\SEO\Values\Open_Graph\Images;
-
 /**
  * Class WPSEO_WooCommerce_OpenGraph
  */
@@ -259,12 +257,12 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Set the OpenGraph images for a product based on its gallery image IDs.
 	 *
-	 * @param Images     $opengraph_image The OpenGraph image class.
+	 * @param mixed     $opengraph_image The OpenGraph image class.
 	 * @param WC_Product $product         The WooCommerce product.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
-	protected function set_opengraph_image_product( Images $opengraph_image, WC_Product $product ) {
+	protected function set_opengraph_image_product( $opengraph_image, WC_Product $product ) {
 		$img_ids = $product->get_gallery_image_ids();
 
 		if ( is_array( $img_ids ) && $img_ids !== [] ) {
