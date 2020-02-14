@@ -343,7 +343,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @return string The canonical URL.
 	 */
 	protected function get_canonical() {
-		return YoastSEO()->current_page()->get_canonical();
+		return YoastSEO()->current_page->get_canonical();
 	}
 
 	/**
