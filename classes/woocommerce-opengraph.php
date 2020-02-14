@@ -257,7 +257,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Set the OpenGraph images for a product based on its gallery image IDs.
 	 *
-	 * @param mixed     $opengraph_image The OpenGraph image class.
+	 * @param mixed      $opengraph_image The OpenGraph image class.
 	 * @param WC_Product $product         The WooCommerce product.
 	 *
 	 * @return bool True on success, false on failure.
