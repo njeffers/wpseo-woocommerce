@@ -144,8 +144,14 @@ class WPSEO_WooCommerce_Schema {
 	protected function filter_offers( $data, $product ) {
 		$home_url = trailingslashit( get_site_url() );
 		foreach ( $data['offers'] as $key => $offer ) {
-			// Remove this value as it makes no sense.
-			unset( $data['offers'][ $key ]['priceValidUntil'] );
+			/*
+			 * WooCommerce assumes all prices will be valid until the end of next year,
+			 * unless on sale and there is an end date. We keep the `priceValidUntil`
+			 * property only for products with a sale price and a sale end date.
+			 */
+			if ( ! $product->is_on_sale() || ! $product->get_date_on_sale_to() ) {
+				unset( $data['offers'][ $key ]['priceValidUntil'] );
+			}
 
 			// Add an @id to the offer.
 			if ( $offer['@type'] === 'Offer' ) {
