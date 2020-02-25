@@ -66,6 +66,20 @@ class WPSEO_WooCommerce_Utils {
 	public static function prices_with_tax() {
 		return (
 			wc_tax_enabled() &&
+			! wc_prices_include_tax() &&
+			get_option( 'woocommerce_tax_display_shop' ) === 'incl' &&
+			WPSEO_Options::get( 'woo_schema_og_prices_with_tax' )
+		);
+	}
+
+	/**
+	 * Determines if prices have tax included or not.
+	 *
+	 * @return bool True if prices have tax included, false if not.
+	 */
+	public static function prices_have_tax_included() {
+		return (
+			wc_tax_enabled() &&
 			wc_prices_include_tax() &&
 			get_option( 'woocommerce_tax_display_shop' ) === 'incl' &&
 			WPSEO_Options::get( 'woo_schema_og_prices_with_tax' )

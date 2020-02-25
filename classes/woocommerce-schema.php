@@ -358,7 +358,7 @@ class WPSEO_WooCommerce_Schema {
 
 		$site_url           = trailingslashit( get_site_url() );
 		$currency           = get_woocommerce_currency();
-		$prices_include_tax = WPSEO_WooCommerce_Utils::prices_with_tax();
+		$prices_include_tax = WPSEO_WooCommerce_Utils::prices_have_tax_included();
 		$decimals           = wc_get_price_decimals();
 		$data               = [];
 		$product_id         = $product->get_id();
