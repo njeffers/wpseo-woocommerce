@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3.2
-Stable tag: 12.6
+Stable tag: 12.6.1-RC1
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -29,6 +29,11 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+
+### 12.6.1: February 26th, 2020
+Bugfixes:
+
+* Fixes a bug where the `valueAddedTaxIncluded` property of the Product schema was set to `false` when the 'Yes, I will enter prices inclusive of tax' option was selected in WooCommerce.
 
 ### 12.6: February 18th, 2020
 Bugfixes:

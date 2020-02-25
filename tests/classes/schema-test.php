@@ -209,6 +209,7 @@ class Schema_Test extends TestCase {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => false,
 			]
 		);
 
@@ -868,6 +869,7 @@ class Schema_Test extends TestCase {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => false,
 			]
 		);
 
@@ -1032,6 +1034,7 @@ class Schema_Test extends TestCase {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => false,
 			]
 		);
 
