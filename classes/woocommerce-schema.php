@@ -154,7 +154,7 @@ class WPSEO_WooCommerce_Schema {
 				$data['offers'][ $key ]['price'] = $price;
 				$data['offers'][ $key ]['priceSpecification']['price']                 = $price;
 				$data['offers'][ $key ]['priceSpecification']['priceCurrency']         = get_woocommerce_currency();
-				$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_with_tax();
+				$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_have_tax_included();
 			}
 			if ( $offer['@type'] === 'AggregateOffer' ) {
 				$data['offers'][ $key ]['@id']    = $home_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
@@ -358,7 +358,7 @@ class WPSEO_WooCommerce_Schema {
 
 		$site_url           = trailingslashit( get_site_url() );
 		$currency           = get_woocommerce_currency();
-		$prices_include_tax = WPSEO_WooCommerce_Utils::prices_with_tax();
+		$prices_include_tax = WPSEO_WooCommerce_Utils::prices_have_tax_included();
 		$decimals           = wc_get_price_decimals();
 		$data               = [];
 		$product_id         = $product->get_id();
