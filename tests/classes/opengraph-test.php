@@ -143,9 +143,6 @@ class OpenGraph_Test extends TestCase {
 			->with( 'woocommerce_tax_display_shop' )
 			->andReturn( 'incl' );
 
-		$options = Mockery::mock( 'alias:WPSEO_Options' );
-		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( true );
-
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_price' )->once()->andReturn( $base_price );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );

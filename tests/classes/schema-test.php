@@ -181,7 +181,6 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => '49.00',
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
 					],
 					'priceCurrency'      => 'GBP',
 					'availability'       => 'http://schema.org/InStock',
@@ -437,7 +436,6 @@ class Schema_Test extends TestCase {
 						'priceSpecification' => [
 							'price'                 => '10',
 							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
 						],
 					],
 					[
@@ -448,7 +446,6 @@ class Schema_Test extends TestCase {
 						'priceSpecification' => [
 							'price'                 => '8',
 							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
 						],
 					],
 					[
@@ -459,7 +456,6 @@ class Schema_Test extends TestCase {
 						'priceSpecification' => [
 							'price'                 => '12',
 							'priceCurrency'         => 'GBP',
-							'valueAddedTaxIncluded' => false,
 						],
 					],
 				],
@@ -939,7 +935,6 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => '1.00',
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
 					],
 					'url'                => $canonical,
 					'seller'             => [
@@ -1117,7 +1112,6 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => '1.00',
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
 					],
 				],
 			],

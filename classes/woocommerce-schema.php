@@ -152,9 +152,16 @@ class WPSEO_WooCommerce_Schema {
 				$price                           = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
 				$data['offers'][ $key ]['@id']   = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
 				$data['offers'][ $key ]['price'] = $price;
-				$data['offers'][ $key ]['priceSpecification']['price']                 = $price;
-				$data['offers'][ $key ]['priceSpecification']['priceCurrency']         = get_woocommerce_currency();
-				$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_have_tax_included();
+				$data['offers'][ $key ]['priceSpecification']['price']         = $price;
+				$data['offers'][ $key ]['priceSpecification']['priceCurrency'] = get_woocommerce_currency();
+				if ( wc_tax_enabled() ) {
+					// Only show this property if tax calculation has been enabled in WooCommerce.
+					$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_have_tax_included();
+				}
+				else {
+					// Remove `valueAddedTaxIncluded` property from Schema output by WooCommerce.
+					unset( $data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] );
+				}
 			}
 			if ( $offer['@type'] === 'AggregateOffer' ) {
 				$data['offers'][ $key ]['@id']    = $home_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
@@ -367,7 +374,7 @@ class WPSEO_WooCommerce_Schema {
 		foreach ( $variations as $key => $variation ) {
 			$variation_name = implode( ' / ', $variation['attributes'] );
 
-			$data[] = [
+			$offer = [
 				'@type'              => 'Offer',
 				'@id'                => $site_url . '#/schema/offer/' . $product_id . '-' . $key,
 				'name'               => $product_name . ' - ' . $variation_name,
@@ -375,9 +382,15 @@ class WPSEO_WooCommerce_Schema {
 				'priceSpecification' => [
 					'price'                 => wc_format_decimal( $variation['display_price'], $decimals ),
 					'priceCurrency'         => $currency,
-					'valueAddedTaxIncluded' => $prices_include_tax,
 				],
 			];
+
+			if ( wc_tax_enabled() ) {
+				// Only add this property if tax calculation has been enabled in WooCommerce.
+				$offer['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_have_tax_included();
+			}
+
+			$data[] = $offer;
 		}
 
 		return $data;
