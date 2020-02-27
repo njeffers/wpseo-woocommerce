@@ -46,7 +46,9 @@ class WPSEO_WooCommerce_Utils {
 		$quantity      = $product->get_min_purchase_quantity();
 
 		if ( wc_tax_enabled() ) {
+			// Taxes should be calculated.
 			if ( self::prices_should_include_tax() ) {
+				// Prices are stored **without** tax, add tax.
 				$display_price = wc_get_price_including_tax(
 					$product,
 					[
@@ -55,6 +57,7 @@ class WPSEO_WooCommerce_Utils {
 					]
 				);
 			} else if ( self::prices_should_exclude_tax() ) {
+				// Prices are stored **with** tax, subtract tax.
 				$display_price = wc_get_price_excluding_tax(
 					$product,
 					[
