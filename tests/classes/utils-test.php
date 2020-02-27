@@ -96,7 +96,7 @@ class Utils_Test extends TestCase {
 	 *
 	 * @covers WPSEO_WooCommerce_Utils::prices_should_include_tax
 	 */
-	public function test_prices_with_tax() {
+	public function test_prices_should_include_tax() {
 		// Prices do not include tax, tax should be shown in shop => tax should be added.
 		Functions\stubs(
 			[
@@ -125,7 +125,7 @@ class Utils_Test extends TestCase {
 	 *
 	 * @covers WPSEO_WooCommerce_Utils::prices_should_exclude_tax
 	 */
-	public function test_prices_without_tax() {
+	public function test_prices_should_exclude_tax() {
 		// Prices include tax, tax should not be shown in shop => tax should be subtracted.
 		Functions\stubs(
 			[
