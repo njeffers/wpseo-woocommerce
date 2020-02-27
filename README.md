@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.3.2
-Stable tag: 12.6.1-RC1
+Stable tag: 12.6.1-RC2
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -30,10 +30,15 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 
-### 12.6.1: February 26th, 2020
+### 12.6.1: February 27th, 2020
 Bugfixes:
 
-* Fixes a bug where the `valueAddedTaxIncluded` property of the Product schema was set to `false` when the 'Yes, I will enter prices inclusive of tax' option was selected in WooCommerce.
+* Fixes a bug where the product price and tax inclusion were not accurately reflected in the Schema and Open Graph metatags.
+
+Enhancements:
+
+* Removes the `valueAddedTaxIncluded` Schema property when tax rate calculations are disabled in WooCommerce.
+* Removes the 'Prices in Open Graph and Schema include tax' setting in the plugin. Whether tax is included in Open Graph and Schema now solely relies on your product page settings in WooCommerce.
 
 ### 12.6: February 18th, 2020
 Bugfixes:
