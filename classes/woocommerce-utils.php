@@ -56,7 +56,8 @@ class WPSEO_WooCommerce_Utils {
 						'price' => $display_price,
 					]
 				);
-			} else if ( self::prices_should_exclude_tax() ) {
+			}
+			elseif ( self::prices_should_exclude_tax() ) {
 				// Prices are stored **with** tax, subtract tax.
 				$display_price = wc_get_price_excluding_tax(
 					$product,
