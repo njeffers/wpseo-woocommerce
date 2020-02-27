@@ -158,6 +158,10 @@ class WPSEO_WooCommerce_Schema {
 					// Only show this property if tax calculation has been enabled in WooCommerce.
 					$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_have_tax_included();
 				}
+				else {
+					// Remove `valueAddedTaxIncluded` property from Schema output by WooCommerce.
+					unset( $data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] );
+				}
 			}
 			if ( $offer['@type'] === 'AggregateOffer' ) {
 				$data['offers'][ $key ]['@id']    = $home_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
