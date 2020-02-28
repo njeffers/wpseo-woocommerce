@@ -819,6 +819,48 @@ class Yoast_WooCommerce_SEO {
 			'basic',
 			'The product\'s brand.'
 		);
+
+		wpseo_register_var_replacement(
+			'wc_gtin8',
+			[ $this, 'get_product_var_gtin8' ],
+			'basic',
+			'The product\'s GTIN8 identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_gtin12',
+			[ $this, 'get_product_var_gtin12' ],
+			'basic',
+			'The product\'s GTIN12 \/ UPC identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_gtin13',
+			[ $this, 'get_product_var_gtin13' ],
+			'basic',
+			'The product\'s GTIN13 \/ EAN identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_gtin14',
+			[ $this, 'get_product_var_gtin14' ],
+			'basic',
+			'The product\'s GTIN14 \/ ITF-14 identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_isbn',
+			[ $this, 'get_product_var_isbn' ],
+			'basic',
+			'The product\'s ISBN identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_mpn',
+			[ $this, 'get_product_var_mpn' ],
+			'basic',
+			'The product\'s MPN identifier.'
+		);
 	}
 
 	/**
@@ -946,6 +988,93 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Retrieves the product global identifiers.
+	 *
+	 * @return array The product global identifiers.
+	 */
+	public function get_product_global_identifiers() {
+		$product = $this->get_product();
+		if ( ! is_object( $product ) ) {
+			return [];
+		}
+
+		$product_id               = $product->get_id();
+		$global_identifier_values = get_post_meta( $product_id, 'wpseo_global_identifier_values', true );
+
+		if ( ! is_array( $global_identifier_values ) ) {
+			return [];
+		}
+
+		return $global_identifier_values;
+	}
+
+	/**
+	 * Retrieves the product GTIN8 identifier.
+	 *
+	 * @return string The product GTIN8 identifier.
+	 */
+	public function get_product_var_gtin8() {
+		$global_identifier_values = $this->get_product_global_identifiers();
+
+		return isset( $global_identifier_values['gtin8'] ) ? $global_identifier_values['gtin8'] : '';
+	}
+
+	/**
+	 * Retrieves the product GTIN12 / UPC identifier.
+	 *
+	 * @return string The product GTIN12 / UPC identifier.
+	 */
+	public function get_product_var_gtin12() {
+		$global_identifier_values = $this->get_product_global_identifiers();
+
+		return isset( $global_identifier_values['gtin12'] ) ? $global_identifier_values['gtin12'] : '';
+	}
+
+	/**
+	 * Retrieves the product GTIN13 / EAN identifier.
+	 *
+	 * @return string The product GTIN13 / EAN identifier.
+	 */
+	public function get_product_var_gtin13() {
+		$global_identifier_values = $this->get_product_global_identifiers();
+
+		return isset( $global_identifier_values['gtin13'] ) ? $global_identifier_values['gtin13'] : '';
+	}
+
+	/**
+	 * Retrieves the product GTIN14 / ITF-14 identifier.
+	 *
+	 * @return string The product GTIN14 / ITF-14 identifier.
+	 */
+	public function get_product_var_gtin14() {
+		$global_identifier_values = $this->get_product_global_identifiers();
+
+		return isset( $global_identifier_values['gtin14'] ) ? $global_identifier_values['gtin14'] : '';
+	}
+
+	/**
+	 * Retrieves the product ISBN identifier.
+	 *
+	 * @return string The product ISBN identifier.
+	 */
+	public function get_product_var_isbn() {
+		$global_identifier_values = $this->get_product_global_identifiers();
+
+		return isset( $global_identifier_values['isbn'] ) ? $global_identifier_values['isbn'] : '';
+	}
+
+	/**
+	 * Retrieves the product MPN identifier.
+	 *
+	 * @return string The product MPN identifier.
+	 */
+	public function get_product_var_mpn() {
+		$global_identifier_values = $this->get_product_global_identifiers();
+
+		return isset( $global_identifier_values['mpn'] ) ? $global_identifier_values['mpn'] : '';
 	}
 
 	/**
