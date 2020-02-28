@@ -146,11 +146,6 @@ class WPSEO_WooCommerce_Schema {
 		$data['offers'] = $this->filter_sales( $data['offers'], $product );
 
 		foreach ( $data['offers'] as $key => $offer ) {
-			/*
-			 * WooCommerce assumes all prices will be valid until the end of next year,
-			 * unless on sale and there is an end date. We keep the `priceValidUntil`
-			 * property only for products with a sale price and a sale end date.
-			 */
 
 			// Add an @id to the offer.
 			if ( $offer['@type'] === 'Offer' ) {
@@ -187,6 +182,12 @@ class WPSEO_WooCommerce_Schema {
 	 */
 	protected function filter_sales( $offers, $product ) {
 		foreach ( $offers as $key => $offer ) {
+			/*
+			 * WooCommerce assumes all prices will be valid until the end of next year,
+			 * unless on sale and there is an end date. We keep the `priceValidUntil`
+			 * property only for products with a sale price and a sale end date.
+			 */
+
 			if ( ! $product->is_on_sale() || ! $product->get_date_on_sale_to() ) {
 				unset( $offers[ $key ]['priceValidUntil'] );
 			}
