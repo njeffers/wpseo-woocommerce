@@ -142,10 +142,10 @@ class WPSEO_WooCommerce_Schema {
 	 * @return array Schema Product data.
 	 */
 	protected function filter_offers( $data, $product ) {
-		$home_url           = trailingslashit( get_site_url() );
-		$sale_filtered_data = $this->filter_sales( $data, $product );
+		$home_url       = trailingslashit( get_site_url() );
+		$data['offers'] = $this->filter_sales( $data['offers'], $product );
 
-		foreach ( $sale_filtered_data['offers'] as $key => $offer ) {
+		foreach ( $data['offers'] as $key => $offer ) {
 			/*
 			 * WooCommerce assumes all prices will be valid until the end of next year,
 			 * unless on sale and there is an end date. We keep the `priceValidUntil`
@@ -154,37 +154,37 @@ class WPSEO_WooCommerce_Schema {
 
 			// Add an @id to the offer.
 			if ( $offer['@type'] === 'Offer' ) {
-				$price                                       = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
-				$sale_filtered_data['offers'][ $key ]['@id'] = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
-				$sale_filtered_data['offers'][ $key ]['price']                                       = $price;
-				$sale_filtered_data['offers'][ $key ]['priceSpecification']['price']                 = $price;
-				$sale_filtered_data['offers'][ $key ]['priceSpecification']['priceCurrency']         = get_woocommerce_currency();
-				$sale_filtered_data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_with_tax();
+				$price                           = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
+				$data['offers'][ $key ]['@id']   = $home_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+				$data['offers'][ $key ]['price'] = $price;
+				$data['offers'][ $key ]['priceSpecification']['price']                 = $price;
+				$data['offers'][ $key ]['priceSpecification']['priceCurrency']         = get_woocommerce_currency();
+				$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_with_tax();
 			}
 			if ( $offer['@type'] === 'AggregateOffer' ) {
-				$sale_filtered_data['offers'][ $key ]['@id']    = $home_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
-				$sale_filtered_data['offers'][ $key ]['offers'] = $this->add_individual_offers( $product );
+				$data['offers'][ $key ]['@id']    = $home_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
+				$data['offers'][ $key ]['offers'] = $this->add_individual_offers( $product );
 			}
 		}
 
-		return $sale_filtered_data;
+		return $data;
 	}
 
 	/**
 	 * Filters the offers array on sales, possibly unset them.
-
-	 * @param array      $data    Schema Product data.
+	 *
+	 * @param array      $offers Schema Offer data.
 	 * @param WC_Product $product The product.
 	 *
-	 * @return array      $data    Schema Product data.
+	 * @return array $offers    Schema Offer data.
 	 */
-	protected function filter_sales( $data, $product ) {
-		foreach ( $data['offers'] as $key => $offer ) {
+	protected function filter_sales( $offers, $product ) {
+		foreach ( $offers as $key => $offer ) {
 			if ( ! $product->is_on_sale() || ! $product->get_date_on_sale_to() ) {
-				unset( $data['offers'][ $key ]['priceValidUntil'] );
+				unset( $offers[ $key ]['priceValidUntil'] );
 			}
 		}
-		return $data;
+		return $offers;
 	}
 
 	/**
