@@ -179,7 +179,6 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => '49.00',
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
 					],
 					'priceCurrency'      => 'GBP',
 					'availability'       => 'http://schema.org/InStock',
@@ -206,6 +205,7 @@ class Schema_Test extends TestCase {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => false,
 			]
 		);
 
@@ -433,7 +433,7 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => 10,
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
+
 					],
 				],
 				[
@@ -444,7 +444,7 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => 8,
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
+
 					],
 				],
 				[
@@ -455,7 +455,7 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => 12,
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
+
 					],
 				],
 			],
@@ -869,6 +869,7 @@ class Schema_Test extends TestCase {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => false,
 			]
 		);
 
@@ -933,16 +934,15 @@ class Schema_Test extends TestCase {
 				[
 					'@type'              => 'Offer',
 					'price'              => '1.00',
+					'priceSpecification' => [
+						'price'                 => '1.00',
+						'priceCurrency'         => 'GBP',
+					],
 					'url'                => $canonical,
 					'seller'             => [
 						'@id' => $canonical . '#organization',
 					],
 					'@id'                => $base_url . '/#/schema/offer/1-0',
-					'priceSpecification' => [
-						'price'                 => '1.00',
-						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
-					],
 				],
 			],
 			'review'           => [
@@ -1034,6 +1034,7 @@ class Schema_Test extends TestCase {
 					return \number_format( $number, 2 );
 				},
 				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => false,
 			]
 		);
 
@@ -1108,7 +1109,6 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => '1.00',
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
 					],
 				],
 			],
