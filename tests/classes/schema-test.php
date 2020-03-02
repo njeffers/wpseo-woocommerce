@@ -933,15 +933,15 @@ class Schema_Test extends TestCase {
 				[
 					'@type'              => 'Offer',
 					'price'              => '1.00',
-					'priceSpecification' => [
-						'price'                 => '1.00',
-						'priceCurrency'         => 'GBP',
-					],
 					'url'                => $canonical,
 					'seller'             => [
 						'@id' => $canonical . '#organization',
 					],
 					'@id'                => $base_url . '/#/schema/offer/1-0',
+					'priceSpecification' => [
+						'price'         => '1.00',
+						'priceCurrency' => 'GBP',
+					],
 				],
 			],
 			'review'           => [
