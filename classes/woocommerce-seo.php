@@ -18,6 +18,13 @@ class Yoast_WooCommerce_SEO {
 	const VERSION = WPSEO_WOO_VERSION;
 
 	/**
+	 * The product global identifiers.
+	 *
+	 * @var array
+	 */
+	private $global_identifiers = [];
+
+	/**
 	 * Return the plugin file.
 	 *
 	 * @return string
@@ -75,6 +82,7 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_metadesc', [ $this, 'metadesc' ] );
 
 			add_action( 'wpseo_register_extra_replacements', [ $this, 'register_replacements' ] );
+			add_action( 'wp', [ $this, 'get_product_global_identifiers' ] );
 
 			add_filter( 'wpseo_sitemap_exclude_post_type', [ $this, 'xml_sitemap_post_types' ], 10, 2 );
 			add_filter( 'wpseo_sitemap_post_type_archive_link', [ $this, 'xml_sitemap_taxonomies' ], 10, 2 );
@@ -993,22 +1001,22 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Retrieves the product global identifiers.
 	 *
-	 * @return array The product global identifiers.
+	 * @return void
 	 */
 	public function get_product_global_identifiers() {
 		$product = $this->get_product();
 		if ( ! is_object( $product ) ) {
-			return [];
+			return;
 		}
 
 		$product_id               = $product->get_id();
 		$global_identifier_values = get_post_meta( $product_id, 'wpseo_global_identifier_values', true );
 
 		if ( ! is_array( $global_identifier_values ) ) {
-			return [];
+			return;
 		}
 
-		return $global_identifier_values;
+		$this->global_identifiers = $global_identifier_values;
 	}
 
 	/**
@@ -1017,9 +1025,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return string The product GTIN8 identifier.
 	 */
 	public function get_product_var_gtin8() {
-		$global_identifier_values = $this->get_product_global_identifiers();
-
-		return isset( $global_identifier_values['gtin8'] ) ? $global_identifier_values['gtin8'] : '';
+		return isset( $this->global_identifiers['gtin8'] ) ? $this->global_identifiers['gtin8'] : '';
 	}
 
 	/**
@@ -1028,9 +1034,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return string The product GTIN12 / UPC identifier.
 	 */
 	public function get_product_var_gtin12() {
-		$global_identifier_values = $this->get_product_global_identifiers();
-
-		return isset( $global_identifier_values['gtin12'] ) ? $global_identifier_values['gtin12'] : '';
+		return isset( $this->global_identifiers['gtin12'] ) ? $this->global_identifiers['gtin12'] : '';
 	}
 
 	/**
@@ -1039,9 +1043,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return string The product GTIN13 / EAN identifier.
 	 */
 	public function get_product_var_gtin13() {
-		$global_identifier_values = $this->get_product_global_identifiers();
-
-		return isset( $global_identifier_values['gtin13'] ) ? $global_identifier_values['gtin13'] : '';
+		return isset( $this->global_identifiers['gtin13'] ) ? $this->global_identifiers['gtin13'] : '';
 	}
 
 	/**
@@ -1050,9 +1052,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return string The product GTIN14 / ITF-14 identifier.
 	 */
 	public function get_product_var_gtin14() {
-		$global_identifier_values = $this->get_product_global_identifiers();
-
-		return isset( $global_identifier_values['gtin14'] ) ? $global_identifier_values['gtin14'] : '';
+		return isset( $this->global_identifiers['gtin14'] ) ? $this->global_identifiers['gtin14'] : '';
 	}
 
 	/**
@@ -1061,9 +1061,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return string The product ISBN identifier.
 	 */
 	public function get_product_var_isbn() {
-		$global_identifier_values = $this->get_product_global_identifiers();
-
-		return isset( $global_identifier_values['isbn'] ) ? $global_identifier_values['isbn'] : '';
+		return isset( $this->global_identifiers['isbn'] ) ? $this->global_identifiers['isbn'] : '';
 	}
 
 	/**
@@ -1072,9 +1070,7 @@ class Yoast_WooCommerce_SEO {
 	 * @return string The product MPN identifier.
 	 */
 	public function get_product_var_mpn() {
-		$global_identifier_values = $this->get_product_global_identifiers();
-
-		return isset( $global_identifier_values['mpn'] ) ? $global_identifier_values['mpn'] : '';
+		return isset( $this->global_identifiers['mpn'] ) ? $this->global_identifiers['mpn'] : '';
 	}
 
 	/**
