@@ -23,6 +23,7 @@ class WPSEO_WooCommerce_OpenGraph {
 
 		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'brand' ], 10 );
 		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'price' ], 20 );
+		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'pinterest_product_availability' ], 25 );
 		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'in_stock' ], 30 );
 		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'retailer_item_id' ], 40 );
 		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'product_condition' ], 50 );
@@ -235,6 +236,25 @@ class WPSEO_WooCommerce_OpenGraph {
 		if ( $product->is_in_stock() ) {
 			echo '<meta property="product:availability" content="in stock" />' . "\n";
 		}
+	}
+
+	/**
+	 * Add our product stock availability for Pinterest Rich Pins.
+	 *
+	 * @param WC_Product $product The WooCommerce product object.
+	 */
+	public function pinterest_product_availability( WC_Product $product ) {
+		if ( $product->is_on_backorder() ) {
+			echo '<meta property="og:availability" content="backorder" />' . "\n";
+			return;
+		}
+
+		if ( $product->is_in_stock() ) {
+			echo '<meta property="og:availability" content="instock" />' . "\n";
+			return;
+		}
+
+		echo '<meta property="og:availability" content="out of stock" />' . "\n";
 	}
 
 	/**

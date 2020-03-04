@@ -255,6 +255,56 @@ class OpenGraph_Test extends TestCase {
 	}
 
 	/**
+	 * Test the OpenGraph product availability for Pinterest Rich Pins with product in stock.
+	 *
+	 * @covers WPSEO_WooCommerce_OpenGraph::pinterest_product_availability
+	 */
+	public function test_pinterest_product_availability_in_stock() {
+		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$product->expects( 'is_on_backorder' )->andReturn( false );
+		$product->expects( 'is_in_stock' )->andReturn( true );
+
+		$og = new WPSEO_WooCommerce_OpenGraph();
+		\ob_start();
+		$og->pinterest_product_availability( $product );
+
+		$this->assertSame( '<meta property="og:availability" content="instock" />' . "\n", \ob_get_clean() );
+	}
+
+	/**
+	 * Test the OpenGraph product availability for Pinterest Rich Pins with product in backorder.
+	 *
+	 * @covers WPSEO_WooCommerce_OpenGraph::pinterest_product_availability
+	 */
+	public function test_pinterest_product_availability_on_backorder() {
+		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$product->expects( 'is_on_backorder' )->andReturn( true );
+
+		$og = new WPSEO_WooCommerce_OpenGraph();
+		\ob_start();
+		$og->pinterest_product_availability( $product );
+
+		$this->assertSame( '<meta property="og:availability" content="backorder" />' . "\n", \ob_get_clean() );
+	}
+
+	/**
+	 * Test the OpenGraph product availability for Pinterest Rich Pins with product out of stock.
+	 *
+	 * @covers WPSEO_WooCommerce_OpenGraph::pinterest_product_availability
+	 */
+	public function test_pinterest_product_availability_out_of_stock() {
+		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$product->expects( 'is_on_backorder' )->andReturn( false );
+		$product->expects( 'is_in_stock' )->andReturn( false );
+
+		$og = new WPSEO_WooCommerce_OpenGraph();
+		\ob_start();
+		$og->pinterest_product_availability( $product );
+
+		$this->assertSame( '<meta property="og:availability" content="out of stock" />' . "\n", \ob_get_clean() );
+	}
+
+	/**
 	 * Test setting the OpenGraph image.
 	 *
 	 * @covers WPSEO_WooCommerce_OpenGraph::set_opengraph_image
