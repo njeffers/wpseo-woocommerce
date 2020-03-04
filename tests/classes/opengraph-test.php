@@ -30,7 +30,8 @@ class OpenGraph_Test extends TestCase {
 
 		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'brand' ] ) );
 		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'price' ] ) );
-		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'in_stock' ] ) );
+		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'product_availability' ] ) );
+		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'pinterest_product_availability' ] ) );
 		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'retailer_item_id' ] ) );
 		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'product_condition' ] ) );
 	}
@@ -239,19 +240,53 @@ class OpenGraph_Test extends TestCase {
 	}
 
 	/**
-	 * Test the OpenGraph in stock enhancement.
+	 * Test the OpenGraph product availability with product in stock.
 	 *
-	 * @covers WPSEO_WooCommerce_OpenGraph::in_stock
+	 * @covers WPSEO_WooCommerce_OpenGraph::product_availability
 	 */
-	public function test_in_stock() {
+	public function test_product_availability_in_stock() {
 		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$product->expects( 'is_on_backorder' )->andReturn( false );
 		$product->expects( 'is_in_stock' )->andReturn( true );
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
-		$og->in_stock( $product );
+		$og->product_availability( $product );
 
 		$this->assertSame( '<meta property="product:availability" content="in stock" />' . "\n", \ob_get_clean() );
+	}
+
+	/**
+	 * Test the OpenGraph product availability with product in backorder.
+	 *
+	 * @covers WPSEO_WooCommerce_OpenGraph::product_availability
+	 */
+	public function test_product_availability_on_backorder() {
+		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$product->expects( 'is_on_backorder' )->andReturn( true );
+
+		$og = new WPSEO_WooCommerce_OpenGraph();
+		\ob_start();
+		$og->product_availability( $product );
+
+		$this->assertSame( '<meta property="product:availability" content="pending" />' . "\n", \ob_get_clean() );
+	}
+
+	/**
+	 * Test the OpenGraph product availability with product out of stock.
+	 *
+	 * @covers WPSEO_WooCommerce_OpenGraph::product_availability
+	 */
+	public function test_product_availability_out_of_stock() {
+		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$product->expects( 'is_on_backorder' )->andReturn( false );
+		$product->expects( 'is_in_stock' )->andReturn( false );
+
+		$og = new WPSEO_WooCommerce_OpenGraph();
+		\ob_start();
+		$og->product_availability( $product );
+
+		$this->assertSame( '<meta property="product:availability" content="out of stock" />' . "\n", \ob_get_clean() );
 	}
 
 	/**
