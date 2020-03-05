@@ -128,6 +128,7 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_image( $canonical );
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
+		$this->add_color( $product );
 		$this->add_global_identifier( $product );
 
 		return [];
@@ -311,6 +312,30 @@ class WPSEO_WooCommerce_Schema {
 			$image_schema        = new WPSEO_Schema_Image( $canonical . '#woocommerceimageplaceholder' );
 			$placeholder_img_src = wc_placeholder_img_src();
 			$this->data['image'] = $image_schema->generate_from_url( $placeholder_img_src );
+		}
+	}
+
+	/**
+	 * Adds the product color property to the Schema output.
+	 *
+	 * @param \WC_Product $product The product object.
+	 *
+	 * @return void
+	 */
+	private function add_color( $product ) {
+		$schema_color = WPSEO_Options::get( 'woo_schema_color' );
+
+		if ( ! empty( $schema_color ) ) {
+			$terms = get_the_terms( $product->get_id(), $schema_color );
+
+			if ( is_array( $terms ) ) {
+				$colors = [];
+				foreach ( $terms as $term ) {
+					$colors[] = strtolower( $term->name );
+				}
+
+				$this->data['color'] = $colors;
+			}
 		}
 	}
 

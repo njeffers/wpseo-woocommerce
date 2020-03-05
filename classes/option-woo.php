@@ -61,6 +61,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 			// Form fields.
 			'woo_schema_brand'              => '',
 			'woo_schema_manufacturer'       => '',
+			'woo_schema_color'              => '',
 			'woo_breadcrumbs'               => true,
 			'woo_hide_columns'              => true,
 			'woo_metabox_top'               => true,
@@ -122,6 +123,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 
 					case 'woo_schema_brand':
 					case 'woo_schema_manufacturer':
+					case 'woo_schema_color':
 						if ( isset( $dirty[ $key ] ) ) {
 							if ( in_array( $dirty[ $key ], $valid_taxonomies, true ) ) {
 								$clean[ $key ] = $dirty[ $key ];

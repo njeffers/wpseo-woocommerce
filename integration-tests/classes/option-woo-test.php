@@ -67,6 +67,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
 			[ 'woo_schema_brand', 'yoast', 'yoast', 'yoast', null ],
 			[ 'woo_schema_manufacturer', 'yoast', 'yoast', 'yoast', null ],
+			[ 'woo_schema_color', 'yoast', 'yoast', 'yoast', null ],
 			[ 'woo_breadcrumbs', true, true, true, '' ],
 			[ 'woo_hide_columns', true, true, true, '' ],
 			[ 'woo_metabox_top', true, true, true, '' ],
@@ -74,6 +75,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			// Validation where the dirty value is not in the validate data types.
 			[ 'woo_schema_brand', 'bar', 'bar', 'yoast', null ],
 			[ 'woo_schema_manufacturer', 'bar', 'bar', 'yoast', null ],
+			[ 'woo_schema_color', 'bar', 'bar', 'yoast', null ],
 			[ 'woo_breadcrumbs', false, null, true, '' ],
 			[ 'woo_hide_columns', false, null, true, '' ],
 			[ 'woo_metabox_top', false, null, true, '' ],
@@ -81,14 +83,17 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			// Validation where the old value is in the validate data types with short form enabled.
 			[ 'woo_schema_brand', 'yoast', null, 'yoast', 'yoast,', 'on' ],
 			[ 'woo_schema_manufacturer', 'yoast', null, 'yoast', 'yoast', 'on' ],
+			[ 'woo_schema_color', 'yoast', null, 'yoast', 'yoast', 'on' ],
 
 			// Validation where the old value isn't in the validate data types with short form enabled.
 			[ 'woo_schema_brand', 'bar', null, 'yoast', 'bar', 'on' ],
 			[ 'woo_schema_manufacturer', 'bar', null, 'yoast', 'bar', 'on' ],
+			[ 'woo_schema_color', 'bar', null, 'yoast', 'bar', 'on' ],
 
 			// Validation where the old value isn't in the validate data types with short form not enabled.
 			[ 'woo_schema_brand', 'yoast', null, 'yoast', 'bar', 'off' ],
 			[ 'woo_schema_manufacturer', 'yoast', null, 'yoast', 'bar', 'off' ],
+			[ 'woo_schema_color', 'yoast', null, 'yoast', 'bar', 'off' ],
 
 			// Validation where the boolean old value is set with short form enabled.
 			[ 'woo_breadcrumbs', true, null, true, true, 'on' ],
