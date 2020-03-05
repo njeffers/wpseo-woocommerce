@@ -207,7 +207,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		$replacevars['product']                = [ 'sitename', 'title', 'sep', 'primary_category' ];
-		$replacevars['product_cat']            = [ 'sitename', 'term_title', 'sep' ];
+		$replacevars['product_cat']            = [ 'sitename', 'term_title', 'sep', 'term_hierarchy' ];
 		$replacevars['product_tag']            = [ 'sitename', 'term_title', 'sep' ];
 		$replacevars['product_shipping_class'] = [ 'sitename', 'term_title', 'sep', 'page' ];
 		$replacevars['product_brand']          = [ 'sitename', 'term_title', 'sep' ];
