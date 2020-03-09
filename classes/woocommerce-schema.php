@@ -62,8 +62,10 @@ class WPSEO_WooCommerce_Schema {
 		if ( empty( $this->data ) || $this->data === [] ) {
 			return false;
 		}
+		
+		$wpseo_wc_schema_footer = apply_filters( 'wpseo_woocommerce_schema_footer', [ $this->data ] );
 
-		WPSEO_Utils::schema_output( [ $this->data ], 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
+		WPSEO_Utils::schema_output( $wpseo_wc_schema_footer, 'yoast-schema-graph yoast-schema-graph--woo yoast-schema-graph--footer' );
 
 		return true;
 	}
