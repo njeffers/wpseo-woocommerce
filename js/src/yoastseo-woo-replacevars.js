@@ -14,14 +14,14 @@ var modifiableFields = [
 ];
 
 /**
- * Calculates the price based on the set price and sale price.
+ * Gets the localized product active price.
  *
- * @returns {string} The calculated price.
+ * @returns {string} The localized active price.
  */
 function getPrice() {
-	var price = parseFloat( jQuery( "#_regular_price" ).val() );
+	var activePrice = parseFloat( jQuery( "#_sale_price" ).val() ) || parseFloat( jQuery( "#_regular_price" ).val() );
 
-	return price.toLocaleString(
+	return activePrice.toLocaleString(
 		wpseoWooReplaceVarsL10n.locale,
 		{
 			style: "currency",
@@ -133,7 +133,9 @@ var YoastReplaceVarPlugin = function() {
  * @returns {void}
  */
 YoastReplaceVarPlugin.prototype.registerEvents = function() {
-	jQuery( document ).on( "input", "#_regular_price, #_sku", this.declareReloaded.bind( this ) );
+	jQuery( document ).on( "input", "#_regular_price, #_sale_price, #_sku", this.declareReloaded.bind( this ) );
+	// When WooCommerce empties the sale price field with `val( '' )`, for example when higher than the regular price.
+	jQuery( document ).on( "change", "#_sale_price", this.declareReloaded.bind( this ) );
 
 	var brandElements = [ "#taxonomy-product_brand", "#pwb-branddiv" ];
 
