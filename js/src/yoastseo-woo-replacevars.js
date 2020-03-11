@@ -21,6 +21,10 @@ var modifiableFields = [
 function getPrice() {
 	var activePrice = parseFloat( jQuery( "#_sale_price" ).val() ) || parseFloat( jQuery( "#_regular_price" ).val() );
 
+	if ( isNaN( activePrice ) ) {
+		return "";
+	}
+
 	return activePrice.toLocaleString(
 		wpseoWooReplaceVarsL10n.locale,
 		{
