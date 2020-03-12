@@ -821,7 +821,7 @@ class Schema_Test extends TestCase {
 	 * @covers \WPSEO_WooCommerce_Schema::add_image
 	 * @covers \WPSEO_WooCommerce_Schema::add_brand
 	 * @covers \WPSEO_WooCommerce_Schema::add_manufacturer
-	 * @covers \WPSEO_WooCommerce_Schema::add_colors
+	 * @covers \WPSEO_WooCommerce_Schema::add_color
 	 * @covers \WPSEO_WooCommerce_Schema::add_organization_for_attribute
 	 */
 	public function test_change_product() {
@@ -988,7 +988,7 @@ class Schema_Test extends TestCase {
 	 * @covers \WPSEO_WooCommerce_Schema::add_image
 	 * @covers \WPSEO_WooCommerce_Schema::add_brand
 	 * @covers \WPSEO_WooCommerce_Schema::add_manufacturer
-	 * @covers \WPSEO_WooCommerce_Schema::add_colors
+	 * @covers \WPSEO_WooCommerce_Schema::add_color
 	 * @covers \WPSEO_WooCommerce_Schema::add_organization_for_attribute
 	 */
 	public function test_change_product_no_thumb() {
@@ -1163,7 +1163,7 @@ class Schema_Test extends TestCase {
 	 * @covers \WPSEO_WooCommerce_Schema::add_image
 	 * @covers \WPSEO_WooCommerce_Schema::add_brand
 	 * @covers \WPSEO_WooCommerce_Schema::add_manufacturer
-	 * @covers \WPSEO_WooCommerce_Schema::add_colors
+	 * @covers \WPSEO_WooCommerce_Schema::add_color
 	 * @covers \WPSEO_WooCommerce_Schema::add_organization_for_attribute
 	 */
 	public function test_change_product_with_color() {
@@ -1290,7 +1290,6 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => '1.00',
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
 					],
 				],
 			],
