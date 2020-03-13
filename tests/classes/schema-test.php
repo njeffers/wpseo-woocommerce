@@ -1182,6 +1182,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
 		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
+		$product->expects( 'is_on_sale' )->once()->andReturn( false );
 
 		Mockery::getConfiguration()->setConstantsMap(
 			[
