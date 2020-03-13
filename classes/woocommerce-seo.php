@@ -929,10 +929,13 @@ class Yoast_WooCommerce_SEO {
 		if (
 			method_exists( $product, 'get_price' )
 			&& method_exists( $product, 'is_type' )
-			&& $product->get_price() !== ''
 		) {
 			if ( $product->is_type( 'variable' ) ) {
 				return $this->get_variable_product_price( $product );
+			}
+
+			if ( $product->is_type( 'grouped' ) ) {
+				return $this->get_grouped_product_price( $product );
 			}
 
 			return wp_strip_all_tags( wc_price( $product->get_price() ), true );
@@ -949,7 +952,11 @@ class Yoast_WooCommerce_SEO {
 	 * @return string The variable product price.
 	 */
 	public function get_variable_product_price( $product ) {
-		if ( method_exists( $product, 'get_variation_price' ) ) {
+		if (
+			method_exists( $product, 'get_variation_price' )
+			&& method_exists( $product, 'wc_price' )
+			&& method_exists( $product, 'wc_format_price_range' )
+		) {
 			$lowest  = $product->get_variation_price( 'min', false );
 			$highest = $product->get_variation_price( 'max', false );
 
@@ -958,6 +965,24 @@ class Yoast_WooCommerce_SEO {
 			}
 
 			return wp_strip_all_tags( wc_format_price_range( $lowest, $highest ), true );
+		}
+
+		return '';
+	}
+
+	/**
+	 * Retrieves a grouped product price.
+	 *
+	 * @param WC_Product $product The product.
+	 *
+	 * @return string The grouped product price.
+	 */
+	public function get_grouped_product_price( $product ) {
+		if ( method_exists( $product, 'get_price_html' ) && method_exists( $product, 'get_price_suffix' ) ) {
+			$price_html   = $product->get_price_html();
+			$price_suffix = $product->get_price_suffix();
+
+			return wp_strip_all_tags( rtrim( $price_html, $price_suffix ), true );
 		}
 
 		return '';
