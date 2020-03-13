@@ -269,7 +269,7 @@ class OpenGraph_Test extends TestCase {
 		\ob_start();
 		$og->product_availability( $product );
 
-		$this->assertSame( '<meta property="product:availability" content="pending" />' . "\n", \ob_get_clean() );
+		$this->assertSame( '<meta property="product:availability" content="available for order" />' . "\n", \ob_get_clean() );
 	}
 
 	/**

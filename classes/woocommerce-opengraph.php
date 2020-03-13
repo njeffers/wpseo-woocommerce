@@ -234,7 +234,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 */
 	public function product_availability( WC_Product $product ) {
 		if ( $product->is_on_backorder() ) {
-			echo '<meta property="product:availability" content="pending" />' . "\n";
+			echo '<meta property="product:availability" content="available for order" />' . "\n";
 			return;
 		}
 
