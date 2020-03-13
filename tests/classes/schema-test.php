@@ -173,11 +173,9 @@ class Schema_Test extends TestCase {
 			],
 			'sku'         => '209643',
 			'offers'      => [
-
 				[
 					'@type'              => 'Offer',
 					'price'              => '49.00',
-					'priceValidUntil'    => '2021-12-31',
 					'priceSpecification' => [
 						'price'                 => '49.00',
 						'priceCurrency'         => 'GBP',
@@ -196,7 +194,6 @@ class Schema_Test extends TestCase {
 
 		$expected_output                     = $input;
 		$expected_output['offers'][0]['@id'] = 'http://example.com/#/schema/offer/209643-0';
-		unset( $expected_output['offers'][0]['priceValidUntil'] );
 
 		$base_url = 'http://example.com';
 		Functions\stubs(
@@ -216,6 +213,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_id' )->once()->andReturn( '209643' );
 		$product->expects( 'get_price' )->once()->andReturn( 49 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
+		$product->expects( 'is_on_sale' )->once()->andReturn( false );
 
 		$output = $schema->filter_offers( $input, $product );
 
@@ -479,6 +477,8 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_id' )->twice()->andReturn( '209643' );
 		$product->expects( 'get_available_variations' )->once()->andReturn( $variants );
 		$product->expects( 'get_name' )->once()->andReturn( 'Customizable responsive toolset' );
+		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+
 		$output = $schema->filter_offers( $input, $product );
 
 		$this->assertSame( $expected_output, $output['offers'][0] );
@@ -821,6 +821,7 @@ class Schema_Test extends TestCase {
 	 * @covers \WPSEO_WooCommerce_Schema::add_image
 	 * @covers \WPSEO_WooCommerce_Schema::add_brand
 	 * @covers \WPSEO_WooCommerce_Schema::add_manufacturer
+	 * @covers \WPSEO_WooCommerce_Schema::add_color
 	 * @covers \WPSEO_WooCommerce_Schema::add_organization_for_attribute
 	 */
 	public function test_change_product() {
@@ -833,10 +834,11 @@ class Schema_Test extends TestCase {
 		$utils->expects( 'get_home_url' )->once()->with()->andReturn( $canonical );
 
 		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_id' )->times( 5 )->with()->andReturn( $product_id );
+		$product->expects( 'get_id' )->times( 6 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
 		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
+		$product->expects( 'is_on_sale' )->once()->andReturn( false );
 
 		Mockery::getConfiguration()->setConstantsMap(
 			[
@@ -852,6 +854,7 @@ class Schema_Test extends TestCase {
 		$mock = Mockery::mock( 'alias:WPSEO_Options' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_color' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
 		$mock->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'WP' );
 
@@ -861,6 +864,7 @@ class Schema_Test extends TestCase {
 				'home_url'                 => $base_url,
 				'get_site_url'             => $base_url,
 				'get_post_meta'            => false,
+				'get_the_terms'            => false,
 				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
@@ -974,7 +978,7 @@ class Schema_Test extends TestCase {
 		];
 
 		$instance->change_product( $data, $product );
-		$this->assertSame( $expected, $instance->data );
+		$this->assertEquals( $expected, $instance->data );
 	}
 
 	/**
@@ -985,6 +989,7 @@ class Schema_Test extends TestCase {
 	 * @covers \WPSEO_WooCommerce_Schema::add_image
 	 * @covers \WPSEO_WooCommerce_Schema::add_brand
 	 * @covers \WPSEO_WooCommerce_Schema::add_manufacturer
+	 * @covers \WPSEO_WooCommerce_Schema::add_color
 	 * @covers \WPSEO_WooCommerce_Schema::add_organization_for_attribute
 	 */
 	public function test_change_product_no_thumb() {
@@ -997,10 +1002,11 @@ class Schema_Test extends TestCase {
 		$utils->expects( 'get_home_url' )->once()->with()->andReturn( $canonical );
 
 		$product = Mockery::mock( 'WC_Product' );
-		$product->expects( 'get_id' )->times( 5 )->with()->andReturn( $product_id );
+		$product->expects( 'get_id' )->times( 6 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
 		$product->expects( 'get_price' )->once()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
+		$product->expects( 'is_on_sale' )->once()->andReturn( false );
 
 		Mockery::getConfiguration()->setConstantsMap(
 			[
@@ -1016,6 +1022,7 @@ class Schema_Test extends TestCase {
 		$mock = Mockery::mock( 'alias:WPSEO_Options' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_color' )->andReturn( 'product_cat' );
 		$mock->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
 		$mock->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'WP' );
 
@@ -1025,6 +1032,7 @@ class Schema_Test extends TestCase {
 				'home_url'                 => $base_url,
 				'get_site_url'             => $base_url,
 				'get_post_meta'            => false,
+				'get_the_terms'            => false,
 				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
@@ -1150,6 +1158,183 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
+	 * Tests that the schema data after change product is as expected.
+	 *
+	 * @covers \WPSEO_WooCommerce_Schema::change_product
+	 * @covers \WPSEO_WooCommerce_Schema::get_canonical
+	 * @covers \WPSEO_WooCommerce_Schema::add_image
+	 * @covers \WPSEO_WooCommerce_Schema::add_brand
+	 * @covers \WPSEO_WooCommerce_Schema::add_manufacturer
+	 * @covers \WPSEO_WooCommerce_Schema::add_color
+	 * @covers \WPSEO_WooCommerce_Schema::add_organization_for_attribute
+	 */
+	public function test_change_product_with_color() {
+		$product_id   = 1;
+		$product_name = 'TestProduct';
+		$base_url     = 'http://local.wordpress.test';
+		$canonical    = $base_url . '/product/test/';
+
+		$utils = Mockery::mock( 'alias:WPSEO_Utils' );
+		$utils->expects( 'get_home_url' )->once()->with()->andReturn( $canonical );
+
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->times( 6 )->with()->andReturn( $product_id );
+		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
+		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
+		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
+
+		Mockery::getConfiguration()->setConstantsMap(
+			[
+				'WPSEO_Schema_IDs' => [
+					'ORGANIZATION_HASH'  => '#organization',
+					'WEBPAGE_HASH'       => '#webpage',
+					'PRIMARY_IMAGE_HASH' => '#primaryimage',
+				],
+			]
+		);
+		Mockery::mock( 'alias:WPSEO_Schema_IDs' );
+
+		$mock = Mockery::mock( 'alias:WPSEO_Options' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'product_cat' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_manufacturer' )->andReturn( 'product_cat' );
+		$mock->expects( 'get' )->once()->with( 'woo_schema_color' )->andReturn( 'product_cat' );
+		$mock->expects( 'get' )->once()->with( 'company_or_person', false )->andReturn( 'company' );
+		$mock->expects( 'get' )->once()->with( 'company_name' )->andReturn( 'WP' );
+
+		Functions\stubs(
+			[
+				'has_post_thumbnail'       => true,
+				'home_url'                 => $base_url,
+				'get_site_url'             => $base_url,
+				'get_post_meta'            => false,
+				'get_the_terms'            => [
+					(object) [ 'name' => 'green' ],
+					(object) [ 'name' => 'white' ],
+					(object) [ 'name' => 'red' ],
+					(object) [ 'name' => 'UPPERCASECOLOR' ],
+				],
+				'wc_placeholder_img_src'   => $base_url . '/example_image.jpg',
+				'wc_get_price_decimals'    => 2,
+				'wc_tax_enabled'           => false,
+				'wc_format_decimal'        => static function ( $number ) {
+					return \number_format( $number, 2 );
+				},
+				'get_woocommerce_currency' => 'GBP',
+			]
+		);
+
+		$instance = Mockery::mock( Schema_Double::class )->makePartial();
+		$instance->expects( 'get_canonical' )->once()->with()->andReturn( $canonical );
+		$instance->expects( 'get_primary_term_or_first_term' )->twice()->with( 'product_cat', 1 )->andReturn( (object) [ 'name' => $product_name ] );
+
+		$image_data   = [
+			'url'    => $base_url . '/example_image.jpg',
+			'width'  => 50,
+			'height' => 50,
+		];
+		$schema_image = Mockery::mock( 'overload:WPSEO_Schema_Image' );
+		$schema_image->expects( '__construct' )->once()->with( $canonical . '#woocommerceimageplaceholder' )->andReturnSelf();
+		$schema_image->expects( 'generate_from_url' )->once()->with( $base_url . '/example_image.jpg' )->andReturn( $image_data );
+
+		$data = [
+			'@type'       => 'Product',
+			'@id'         => $canonical . '#product',
+			'name'        => $product_name,
+			'url'         => $canonical,
+			'image'       => false,
+			'description' => '',
+			'sku'         => 'sku1234',
+			'offers'      => [
+				[
+					'@type'  => 'Offer',
+					'price'  => '1.00',
+					'url'    => $canonical,
+					'seller' => [
+						'@type' => 'Organization',
+						'name'  => 'WP',
+						'url'   => $base_url,
+					],
+				],
+			],
+			'review'      => [
+				[
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => 5,
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Joost de Valk',
+					],
+					'reviewBody'    => 'Product review',
+					'datePublished' => '2020-01-07T13:36:12+00:00',
+				],
+			],
+		];
+
+		$expected = [
+			'@type'            => 'Product',
+			'@id'              => $canonical . '#product',
+			'name'             => $product_name,
+			'url'              => $canonical,
+			'description'      => '',
+			'sku'              => 'sku1234',
+			'offers'           => [
+				[
+					'@type'              => 'Offer',
+					'price'              => '1.00',
+					'url'                => $canonical,
+					'seller'             => [
+						'@id' => $canonical . '#organization',
+					],
+					'@id'                => $base_url . '/#/schema/offer/1-0',
+					'priceSpecification' => [
+						'price'                 => '1.00',
+						'priceCurrency'         => 'GBP',
+					],
+				],
+			],
+			'review'           => [
+				[
+					'@type'         => 'Review',
+					'reviewRating'  => [
+						'@type'       => 'Rating',
+						'ratingValue' => 5,
+					],
+					'author'        => [
+						'@type' => 'Person',
+						'name'  => 'Joost de Valk',
+					],
+					'reviewBody'    => 'Product review',
+					'datePublished' => '2020-01-07T13:36:12+00:00',
+					'@id'           => $base_url . '/#/schema/review/' . $product_id . '-0',
+					'name'          => $product_name,
+				],
+			],
+			'mainEntityOfPage' => [ '@id' => $canonical . '#webpage' ],
+			'image'            => [ '@id' => $canonical . '#primaryimage' ],
+			'brand'            => [
+				'@type' => 'Organization',
+				'name'  => $product_name,
+			],
+			'manufacturer'     => [
+				'@type' => 'Organization',
+				'name'  => $product_name,
+			],
+			'color'            => [
+				'green',
+				'white',
+				'red',
+				'uppercasecolor',
+			],
+		];
+
+		$instance->change_product( $data, $product );
+		$this->assertSame( $expected, $instance->data );
+	}
+
+	/**
 	 * Tests that get_primary_term_or_first_term returns the primary term.
 	 *
 	 * @covers \WPSEO_WooCommerce_Schema::get_primary_term_or_first_term
@@ -1223,5 +1408,70 @@ class Schema_Test extends TestCase {
 		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
 
 		$this->assertNull( $actual );
+	}
+
+	/**
+	 * Tests filtering offers with a product on sale and sale price dates should output a `priceValidUntil` property.
+	 *
+	 * @covers WPSEO_WooCommerce_Schema::filter_offers
+	 */
+	public function test_filter_offers_with_product_on_sale_should_output_price_valid_until() {
+		$schema = new Schema_Double();
+		$input  = [
+			'@type'       => 'Product',
+			'name'        => 'Customizable responsive toolset',
+			'url'         => 'https://example.com/product/customizable-responsive-toolset/',
+			'description' => 'Sit debitis reprehenderit non rem natus. Corporis quidem quos et sit similique. Et ad hic exercitationem repudiandae rem laborum.\n\n\n\n\n\n\n\n\nCumque iusto cum enim ut. Et ipsum tempore dolorem ullam aspernatur autem et. Aut molestiae dolor natus. Ducimus molestias perspiciatis magni in libero deleniti ut. Rerum perspiciatis autem et maiores hic ducimus.\n\n\nAut tenetur ducimus distinctio quaerat deserunt sed. Sint ullam ut deserunt deleniti velit et. Incidunt in molestiae voluptas corrupti qui facilis quia.\n\n\n\n\n\nIste asperiores voluptas expedita id cupiditate. Sed error corrupti quibusdam dolor facere enim tenetur. Asperiores error qui commodi dolorem veritatis aspernatur.',
+			'image'       => [
+				'@id' => 'https://example.com/product/customizable-responsive-toolset/#primaryimage',
+			],
+			'sku'         => '209643',
+			'offers'      => [
+				[
+					'@type'              => 'Offer',
+					'price'              => '49.00',
+					'priceValidUntil'    => '2020-03-24',
+					'priceSpecification' => [
+						'price'                 => '49.00',
+						'priceCurrency'         => 'GBP',
+					],
+					'priceCurrency'      => 'GBP',
+					'availability'       => 'http://schema.org/InStock',
+					'url'                => 'https://example.com/product/customizable-responsive-toolset/',
+					'seller'             => [
+						'@type' => 'Organization',
+						'name'  => 'WooCommerce',
+						'url'   => 'https://example.com',
+					],
+				],
+			],
+		];
+
+		$expected_output                     = $input;
+		$expected_output['offers'][0]['@id'] = 'http://example.com/#/schema/offer/209643-0';
+
+		$base_url = 'http://example.com';
+		Functions\stubs(
+			[
+				'get_site_url'             => $base_url,
+				'wc_get_price_decimals'    => 2,
+				'wc_tax_enabled'           => false,
+				'wc_format_decimal'        => static function ( $number ) {
+					return \number_format( $number, 2 );
+				},
+				'get_woocommerce_currency' => 'GBP',
+			]
+		);
+
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->once()->andReturn( '209643' );
+		$product->expects( 'get_price' )->once()->andReturn( 49 );
+		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
+		$product->expects( 'is_on_sale' )->once()->andReturn( true );
+		$product->expects( 'get_date_on_sale_to' )->once()->andReturn( 'not-a-null-value' );
+
+		$output = $schema->filter_offers( $input, $product );
+
+		$this->assertSame( $expected_output, $output );
 	}
 }

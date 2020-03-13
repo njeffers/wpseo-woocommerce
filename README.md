@@ -1,8 +1,8 @@
 WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
-Tested up to: 5.3.2
-Stable tag: 12.6.1
+Tested up to: 5.4
+Stable tag: 12.6.2
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -29,6 +29,11 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+
+### 12.6.2: March 11th, 2020
+Other:
+
+* We've tested with WooCommerce 4.0. Everything works as expected!
 
 ### 12.6.1: February 27th, 2020
 Bugfixes:

@@ -164,6 +164,12 @@ YoastReplaceVarPlugin.prototype.registerReplacements = function() {
 	this.addReplacement( new ReplaceVar( "%%wc_sku%%",       "wc_sku" ) );
 	this.addReplacement( new ReplaceVar( "%%wc_shortdesc%%", "wc_shortdesc" ) );
 	this.addReplacement( new ReplaceVar( "%%wc_brand%%",     "wc_brand" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_gtin8%%",     "wc_gtin8" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_gtin12%%",    "wc_gtin12" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_gtin13%%",    "wc_gtin13" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_gtin14%%",    "wc_gtin14" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_isbn%%",      "wc_isbn" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_mpn%%",       "wc_mpn" ) );
 };
 
 /**
@@ -194,6 +200,12 @@ YoastReplaceVarPlugin.prototype.replaceVariables = function( data ) {
 		data = data.replace( /%%wc_sku%%/g, jQuery( "#_sku" ).val() );
 		data = data.replace( /%%wc_shortdesc%%/g, getShortDescription() );
 		data = data.replace( /%%wc_brand%%/g, getBrand() );
+		data = data.replace( /%%wc_gtin8%%/g, jQuery( "#yoast_identfier_gtin8" ).val() );
+		data = data.replace( /%%wc_gtin12%%/g, jQuery( "#yoast_identfier_gtin12" ).val() );
+		data = data.replace( /%%wc_gtin13%%/g, jQuery( "#yoast_identfier_gtin13" ).val() );
+		data = data.replace( /%%wc_gtin14%%/g, jQuery( "#yoast_identfier_gtin14" ).val() );
+		data = data.replace( /%%wc_isbn%%/g, jQuery( "#yoast_identfier_isbn" ).val() );
+		data = data.replace( /%%wc_mpn%%/g, jQuery( "#yoast_identfier_mpn" ).val() );
 
 		data = this.replacePlaceholders( data );
 	}

@@ -105,8 +105,8 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Filter Schema Product data to work.
 	 *
-	 * @param array       $data    Schema Product data.
-	 * @param \WC_Product $product Product object.
+	 * @param array      $data    Schema Product data.
+	 * @param WC_Product $product Product object.
 	 *
 	 * @return array Schema Product data.
 	 */
@@ -128,6 +128,7 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_image( $canonical );
 		$this->add_brand( $product );
 		$this->add_manufacturer( $product );
+		$this->add_color( $product );
 		$this->add_global_identifier( $product );
 
 		return [];
@@ -136,16 +137,16 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Filters the offers array to enrich it.
 	 *
-	 * @param array       $data    Schema Product data.
-	 * @param \WC_Product $product The product.
+	 * @param array      $data    Schema Product data.
+	 * @param WC_Product $product The product.
 	 *
 	 * @return array Schema Product data.
 	 */
 	protected function filter_offers( $data, $product ) {
-		$home_url = trailingslashit( get_site_url() );
+		$home_url       = trailingslashit( get_site_url() );
+		$data['offers'] = $this->filter_sales( $data['offers'], $product );
+
 		foreach ( $data['offers'] as $key => $offer ) {
-			// Remove this value as it makes no sense.
-			unset( $data['offers'][ $key ]['priceValidUntil'] );
 
 			// Add an @id to the offer.
 			if ( $offer['@type'] === 'Offer' ) {
@@ -173,6 +174,29 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
+	 * Filters the offers array on sales, possibly unset them.
+	 *
+	 * @param array      $offers Schema Offer data.
+	 * @param WC_Product $product The product.
+	 *
+	 * @return array $offers    Schema Offer data.
+	 */
+	protected function filter_sales( $offers, $product ) {
+		foreach ( $offers as $key => $offer ) {
+			/*
+			 * WooCommerce assumes all prices will be valid until the end of next year,
+			 * unless on sale and there is an end date. We keep the `priceValidUntil`
+			 * property only for products with a sale price and a sale end date.
+			 */
+
+			if ( ! $product->is_on_sale() || ! $product->get_date_on_sale_to() ) {
+				unset( $offers[ $key ]['priceValidUntil'] );
+			}
+		}
+		return $offers;
+	}
+
+	/**
 	 * Removes the Woo Breadcrumbs from their Schema output.
 	 *
 	 * @param array $types Types of Schema Woo will render.
@@ -192,7 +216,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Retrieve the global identifier type and value if we have one.
 	 *
-	 * @param \WC_Product $product Product object.
+	 * @param WC_Product $product Product object.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
@@ -243,7 +267,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Add brand to our output.
 	 *
-	 * @param \WC_Product $product Product object.
+	 * @param WC_Product $product Product object.
 	 */
 	private function add_brand( $product ) {
 		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
@@ -255,7 +279,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Add manufacturer to our output.
 	 *
-	 * @param \WC_Product $product Product object.
+	 * @param WC_Product $product Product object.
 	 */
 	private function add_manufacturer( $product ) {
 		$schema_manufacturer = WPSEO_Options::get( 'woo_schema_manufacturer' );
@@ -267,9 +291,9 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Adds an attribute to our Product data array with the value from a taxonomy, as an Organization,
 	 *
-	 * @param string      $attribute The attribute we're adding to Product.
-	 * @param \WC_Product $product   The WooCommerce product we're working with.
-	 * @param string      $taxonomy  The taxonomy to get the attribute's value from.
+	 * @param string     $attribute The attribute we're adding to Product.
+	 * @param WC_Product $product   The WooCommerce product we're working with.
+	 * @param string     $taxonomy  The taxonomy to get the attribute's value from.
 	 */
 	private function add_organization_for_attribute( $attribute, $product, $taxonomy ) {
 		$term = $this->get_primary_term_or_first_term( $taxonomy, $product->get_id() );
@@ -315,6 +339,30 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
+	 * Adds the product color property to the Schema output.
+	 *
+	 * @param \WC_Product $product The product object.
+	 *
+	 * @return void
+	 */
+	private function add_color( $product ) {
+		$schema_color = WPSEO_Options::get( 'woo_schema_color' );
+
+		if ( ! empty( $schema_color ) ) {
+			$terms = get_the_terms( $product->get_id(), $schema_color );
+
+			if ( is_array( $terms ) ) {
+				$colors = [];
+				foreach ( $terms as $term ) {
+					$colors[] = strtolower( $term->name );
+				}
+
+				$this->data['color'] = $colors;
+			}
+		}
+	}
+
+	/**
 	 * Tries to get the primary term, then the first term, null if none found.
 	 *
 	 * @param string $taxonomy_name Taxonomy name for the term.
@@ -356,7 +404,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Adds the individual product variants as variants of the offer.
 	 *
-	 * @param \WC_Product $product The WooCommerce product we're working with.
+	 * @param WC_Product $product The WooCommerce product we're working with.
 	 *
 	 * @return array Schema Offers data.
 	 */
@@ -399,8 +447,8 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Enhances the review data output by WooCommerce.
 	 *
-	 * @param array       $data    Review Schema data.
-	 * @param \WC_Product $product The WooCommerce product we're working with.
+	 * @param array      $data    Review Schema data.
+	 * @param WC_Product $product The WooCommerce product we're working with.
 	 *
 	 * @return array Review Schema data.
 	 */
