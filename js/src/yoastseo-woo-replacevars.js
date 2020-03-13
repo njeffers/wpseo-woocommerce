@@ -19,19 +19,13 @@ var modifiableFields = [
  * @returns {string} The localized active price.
  */
 function getPrice() {
-	var activePrice = parseFloat( jQuery( "#_sale_price" ).val() ) || parseFloat( jQuery( "#_regular_price" ).val() );
+	var activePrice = wpseoWooReplaceVarsL10n.price;
 
-	if ( isNaN( activePrice ) ) {
+	if ( ! activePrice ) {
 		return "";
 	}
 
-	return activePrice.toLocaleString(
-		wpseoWooReplaceVarsL10n.locale,
-		{
-			style: "currency",
-			currency: wpseoWooReplaceVarsL10n.currency,
-		}
-	);
+	return activePrice;
 }
 
 /**

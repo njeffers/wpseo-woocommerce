@@ -584,7 +584,15 @@ class Yoast_WooCommerce_SEO {
 	 * @return WC_Product|null
 	 */
 	private function get_product() {
-		if ( ! is_singular( 'product' ) || ! function_exists( 'wc_get_product' ) ) {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return null;
+		}
+
+		if ( is_admin() ) {
+			return wc_get_product( get_the_ID() );
+		}
+
+		if ( ! is_singular( 'product' ) ) {
 			return null;
 		}
 
@@ -931,7 +939,14 @@ class Yoast_WooCommerce_SEO {
 				return $this->get_product_price_from_price_html( $product );
 			}
 
-			return wp_strip_all_tags( wc_price( $product->get_price() ), true );
+			$price = $product->get_price();
+
+			// For empty prices we want to output an empty string, as wc_price() converts them to `currencySymbol + 0.00`.
+			if ( $price === '' ) {
+				return '';
+			}
+
+			return wp_strip_all_tags( wc_price( $price ), true );
 		}
 
 		return '';
@@ -1107,6 +1122,7 @@ class Yoast_WooCommerce_SEO {
 			'currencySymbol' => get_woocommerce_currency_symbol(),
 			'decimals'       => wc_get_price_decimals(),
 			'locale'         => str_replace( '_', '-', get_locale() ),
+			'price'          => $this->get_product_var_price(),
 		];
 	}
 
