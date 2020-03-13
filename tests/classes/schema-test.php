@@ -1290,7 +1290,6 @@ class Schema_Test extends TestCase {
 					'priceSpecification' => [
 						'price'                 => '1.00',
 						'priceCurrency'         => 'GBP',
-						'valueAddedTaxIncluded' => false,
 					],
 				],
 			],

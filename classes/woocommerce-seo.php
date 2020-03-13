@@ -926,16 +926,9 @@ class Yoast_WooCommerce_SEO {
 			return '';
 		}
 
-		if (
-			method_exists( $product, 'get_price' )
-			&& method_exists( $product, 'is_type' )
-		) {
-			if ( $product->is_type( 'variable' ) ) {
-				return $this->get_variable_product_price( $product );
-			}
-
-			if ( $product->is_type( 'grouped' ) ) {
-				return $this->get_grouped_product_price( $product );
+		if ( method_exists( $product, 'is_type' ) && method_exists( $product, 'get_price' ) ) {
+			if ( $product->is_type( 'variable' ) || $product->is_type( 'grouped' ) ) {
+				return $this->get_product_price_from_price_html( $product );
 			}
 
 			return wp_strip_all_tags( wc_price( $product->get_price() ), true );
@@ -945,39 +938,13 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Retrieves a variable product price.
+	 * Retrieves the price for a variable or grouped product.
 	 *
 	 * @param WC_Product $product The product.
 	 *
-	 * @return string The variable product price.
+	 * @return string The price of a variable or grouped product.
 	 */
-	public function get_variable_product_price( $product ) {
-		if (
-			method_exists( $product, 'get_variation_price' )
-			&& method_exists( $product, 'wc_price' )
-			&& method_exists( $product, 'wc_format_price_range' )
-		) {
-			$lowest  = $product->get_variation_price( 'min', false );
-			$highest = $product->get_variation_price( 'max', false );
-
-			if ( $lowest === $highest ) {
-				return wp_strip_all_tags( wc_price( $lowest ), true );
-			}
-
-			return wp_strip_all_tags( wc_format_price_range( $lowest, $highest ), true );
-		}
-
-		return '';
-	}
-
-	/**
-	 * Retrieves a grouped product price.
-	 *
-	 * @param WC_Product $product The product.
-	 *
-	 * @return string The grouped product price.
-	 */
-	public function get_grouped_product_price( $product ) {
+	public function get_product_price_from_price_html( $product ) {
 		if ( method_exists( $product, 'get_price_html' ) && method_exists( $product, 'get_price_suffix' ) ) {
 			$price_html   = $product->get_price_html();
 			$price_suffix = $product->get_price_suffix();
