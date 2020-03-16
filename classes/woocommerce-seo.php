@@ -946,6 +946,11 @@ class Yoast_WooCommerce_SEO {
 				return '';
 			}
 
+			// WooCommerce converts negative prices to 0.
+			if ( $price < 0 ) {
+				$price = 0;
+			}
+
 			return wp_strip_all_tags( wc_price( $price ), true );
 		}
 
