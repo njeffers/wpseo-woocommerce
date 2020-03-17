@@ -939,7 +939,7 @@ class Yoast_WooCommerce_SEO {
 				return $this->get_product_price_from_price_html( $product );
 			}
 
-			$price = $product->get_price();
+			$price = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
 
 			// For empty prices we want to output an empty string, as wc_price() converts them to `currencySymbol + 0.00`.
 			if ( $price === '' ) {
@@ -947,7 +947,7 @@ class Yoast_WooCommerce_SEO {
 			}
 
 			// WooCommerce converts negative prices to 0 so we do the same here.
-			if ( $price < 0 ) {
+			if ( intval( $price ) < 0 ) {
 				$price = 0;
 			}
 
@@ -969,7 +969,7 @@ class Yoast_WooCommerce_SEO {
 			$price_html   = $product->get_price_html();
 			$price_suffix = $product->get_price_suffix();
 
-			return wp_strip_all_tags( rtrim( $price_html, $price_suffix ), true );
+			return wp_strip_all_tags( str_replace( $price_suffix, '', $price_html ), true );
 		}
 
 		return '';
