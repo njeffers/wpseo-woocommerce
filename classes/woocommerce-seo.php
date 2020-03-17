@@ -946,7 +946,7 @@ class Yoast_WooCommerce_SEO {
 				return '';
 			}
 
-			// WooCommerce converts negative prices to 0.
+			// WooCommerce converts negative prices to 0 so we do the same here.
 			if ( $price < 0 ) {
 				$price = 0;
 			}
