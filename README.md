@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.4
-Stable tag: 12.6.2
+Stable tag: 12.7-RC1
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -29,6 +29,17 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+
+### 12.7: March 31st, 2020
+Bugfixes:
+
+* Fixes a bug where the `priceValidUntil` schema property wasn't output for products on sale with an explicitly set sale end date.
+
+Enhancements:
+
+* Improves the Open Graph product availability for better compatibility with Facebook and Pinterest.
+* Adds the product identifiers (GTIN, ISBN etc.) to the SEO title and Meta description replacement variables.
+* Adds a `color` attribute to the `Product` Schema output.
 
 ### 12.6.2: March 11th, 2020
 Other:
