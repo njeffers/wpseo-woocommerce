@@ -584,7 +584,15 @@ class Yoast_WooCommerce_SEO {
 	 * @return WC_Product|null
 	 */
 	private function get_product() {
-		if ( ! is_singular( 'product' ) || ! function_exists( 'wc_get_product' ) ) {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return null;
+		}
+
+		if ( is_admin() ) {
+			return wc_get_product( get_the_ID() );
+		}
+
+		if ( ! is_singular( 'product' ) ) {
 			return null;
 		}
 
@@ -922,12 +930,43 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function get_product_var_price() {
 		$product = $this->get_product();
-		if ( ! is_object( $product ) ) {
-			return '';
+
+		if ( is_object( $product ) && method_exists( $product, 'is_type' ) && method_exists( $product, 'get_price' ) ) {
+			if ( $product->is_type( 'variable' ) || $product->is_type( 'grouped' ) ) {
+				return $this->get_product_price_from_price_html( $product );
+			}
+
+			$price = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
+
+			// For empty prices we want to output an empty string, as wc_price() converts them to `currencySymbol + 0.00`.
+			if ( $price === '' ) {
+				return '';
+			}
+
+			// WooCommerce converts negative prices to 0 so we do the same here.
+			if ( intval( $price ) < 0 ) {
+				$price = 0;
+			}
+
+			return wp_strip_all_tags( wc_price( $price ), true );
 		}
 
-		if ( method_exists( $product, 'get_price' ) ) {
-			return wp_strip_all_tags( wc_price( $product->get_price() ), true );
+		return '';
+	}
+
+	/**
+	 * Retrieves the price for a variable or grouped product.
+	 *
+	 * @param WC_Product $product The product.
+	 *
+	 * @return string The price of a variable or grouped product.
+	 */
+	public function get_product_price_from_price_html( $product ) {
+		if ( method_exists( $product, 'get_price_html' ) && method_exists( $product, 'get_price_suffix' ) ) {
+			$price_html   = $product->get_price_html();
+			$price_suffix = $product->get_price_suffix();
+
+			return wp_strip_all_tags( str_replace( $price_suffix, '', $price_html ), true );
 		}
 
 		return '';
@@ -1085,6 +1124,7 @@ class Yoast_WooCommerce_SEO {
 			'currencySymbol' => get_woocommerce_currency_symbol(),
 			'decimals'       => wc_get_price_decimals(),
 			'locale'         => str_replace( '_', '-', get_locale() ),
+			'price'          => $this->get_product_var_price(),
 		];
 	}
 
