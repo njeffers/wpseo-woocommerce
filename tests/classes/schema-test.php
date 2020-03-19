@@ -177,8 +177,8 @@ class Schema_Test extends TestCase {
 					'@type'              => 'Offer',
 					'price'              => '49.00',
 					'priceSpecification' => [
-						'price'                 => '49.00',
-						'priceCurrency'         => 'GBP',
+						'price'         => '49.00',
+						'priceCurrency' => 'GBP',
 					],
 					'priceCurrency'      => 'GBP',
 					'availability'       => 'http://schema.org/InStock',
@@ -431,9 +431,8 @@ class Schema_Test extends TestCase {
 					'name'               => 'Customizable responsive toolset - l',
 					'price'              => 10,
 					'priceSpecification' => [
-						'price'                 => 10,
-						'priceCurrency'         => 'GBP',
-
+						'price'         => 10,
+						'priceCurrency' => 'GBP',
 					],
 				],
 				[
@@ -442,9 +441,8 @@ class Schema_Test extends TestCase {
 					'name'               => 'Customizable responsive toolset - m',
 					'price'              => 8,
 					'priceSpecification' => [
-						'price'                 => 8,
-						'priceCurrency'         => 'GBP',
-
+						'price'         => 8,
+						'priceCurrency' => 'GBP',
 					],
 				],
 				[
@@ -453,9 +451,8 @@ class Schema_Test extends TestCase {
 					'name'               => 'Customizable responsive toolset - xl',
 					'price'              => 12,
 					'priceSpecification' => [
-						'price'                 => 12,
-						'priceCurrency'         => 'GBP',
-
+						'price'         => 12,
+						'priceCurrency' => 'GBP',
 					],
 				],
 			],
@@ -528,7 +525,6 @@ class Schema_Test extends TestCase {
 						'url'   => 'https://example.com',
 					],
 					'@id'           => 'https://example.com/#/schema/aggregate-offer/24-0',
-
 				],
 			],
 		];
@@ -586,7 +582,6 @@ class Schema_Test extends TestCase {
 						'url'   => 'https://example.com',
 					],
 					'@id'           => 'https://example.com/#/schema/aggregate-offer/24-0',
-
 				],
 			],
 		];
@@ -1113,8 +1108,8 @@ class Schema_Test extends TestCase {
 					],
 					'@id'                => $base_url . '/#/schema/offer/1-0',
 					'priceSpecification' => [
-						'price'                 => '1.00',
-						'priceCurrency'         => 'GBP',
+						'price'         => '1.00',
+						'priceCurrency' => 'GBP',
 					],
 				],
 			],
