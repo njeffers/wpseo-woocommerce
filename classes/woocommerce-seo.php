@@ -930,11 +930,8 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function get_product_var_price() {
 		$product = $this->get_product();
-		if ( ! is_object( $product ) ) {
-			return '';
-		}
 
-		if ( method_exists( $product, 'is_type' ) && method_exists( $product, 'get_price' ) ) {
+		if ( is_object( $product ) && method_exists( $product, 'is_type' ) && method_exists( $product, 'get_price' ) ) {
 			if ( $product->is_type( 'variable' ) || $product->is_type( 'grouped' ) ) {
 				return $this->get_product_price_from_price_html( $product );
 			}
