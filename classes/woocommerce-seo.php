@@ -327,7 +327,7 @@ class Yoast_WooCommerce_SEO {
 			$attachments = array_filter( explode( ',', $product_image_gallery ) );
 
 			foreach ( $attachments as $attachment_id ) {
-				$image_src = wp_get_attachment_image_src( $attachment_id );
+				$image_src = wp_get_attachment_image_src( $attachment_id, 'full' );
 				$image     = [
 					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Using WPSEO hook.
 					'src'   => apply_filters( 'wpseo_xml_sitemap_img_src', $image_src[0], $post_id ),
