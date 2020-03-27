@@ -33,6 +33,7 @@ Changelog
 ### 12.7: March 31st, 2020
 Bugfixes:
 
+* Fixes a bug where PHP notices and a PHP warning were thrown for `Product` schema without a price.
 * Fixes a bug where the `priceValidUntil` schema property wasn't output for products on sale with an explicitly set sale end date.
 
 Enhancements:
