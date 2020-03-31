@@ -18,6 +18,13 @@ class Yoast_WooCommerce_SEO {
 	const VERSION = WPSEO_WOO_VERSION;
 
 	/**
+	 * The product global identifiers.
+	 *
+	 * @var array
+	 */
+	private $global_identifiers = [];
+
+	/**
 	 * Return the plugin file.
 	 *
 	 * @return string
@@ -78,6 +85,7 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_metadesc', [ $this, 'metadesc' ] );
 
 			add_action( 'wpseo_register_extra_replacements', [ $this, 'register_replacements' ] );
+			add_action( 'wp', [ $this, 'get_product_global_identifiers' ] );
 
 			add_filter( 'wpseo_sitemap_exclude_post_type', [ $this, 'xml_sitemap_post_types' ], 10, 2 );
 			add_filter( 'wpseo_sitemap_post_type_archive_link', [ $this, 'xml_sitemap_taxonomies' ], 10, 2 );
@@ -210,7 +218,7 @@ class Yoast_WooCommerce_SEO {
 		}
 
 		$replacevars['product']                = [ 'sitename', 'title', 'sep', 'primary_category' ];
-		$replacevars['product_cat']            = [ 'sitename', 'term_title', 'sep' ];
+		$replacevars['product_cat']            = [ 'sitename', 'term_title', 'sep', 'term_hierarchy' ];
 		$replacevars['product_tag']            = [ 'sitename', 'term_title', 'sep' ];
 		$replacevars['product_shipping_class'] = [ 'sitename', 'term_title', 'sep', 'page' ];
 		$replacevars['product_brand']          = [ 'sitename', 'term_title', 'sep' ];
@@ -322,7 +330,7 @@ class Yoast_WooCommerce_SEO {
 			$attachments = array_filter( explode( ',', $product_image_gallery ) );
 
 			foreach ( $attachments as $attachment_id ) {
-				$image_src = wp_get_attachment_image_src( $attachment_id );
+				$image_src = wp_get_attachment_image_src( $attachment_id, 'full' );
 				$image     = [
 					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Using WPSEO hook.
 					'src'   => apply_filters( 'wpseo_xml_sitemap_img_src', $image_src[0], $post_id ),
@@ -405,17 +413,7 @@ class Yoast_WooCommerce_SEO {
 
 		Yoast_Form::get_instance()->select( 'woo_schema_manufacturer', esc_html__( 'Manufacturer', 'yoast-woo-seo' ), $taxonomies );
 		Yoast_Form::get_instance()->select( 'woo_schema_brand', esc_html__( 'Brand', 'yoast-woo-seo' ), $taxonomies );
-
-		if ( wc_tax_enabled() && get_option( 'woocommerce_tax_display_shop' ) === 'incl' ) {
-			Yoast_Form::get_instance()->checkbox(
-				'woo_schema_og_prices_with_tax',
-				sprintf(
-				/* translators: %1$s resolves to WooCommerce */
-					esc_html__( 'Prices in OpenGraph and Schema include tax', 'yoast-woo-seo' ),
-					'WooCommerce'
-				)
-			);
-		}
+		Yoast_Form::get_instance()->select( 'woo_schema_color', esc_html__( 'Color', 'yoast-woo-seo' ), $taxonomies );
 
 		if ( WPSEO_Options::get( 'breadcrumbs-enable' ) === true ) {
 			echo '<h2>' . esc_html__( 'Breadcrumbs', 'yoast-woo-seo' ) . '</h2>';
@@ -589,7 +587,15 @@ class Yoast_WooCommerce_SEO {
 	 * @return WC_Product|null
 	 */
 	private function get_product() {
-		if ( ! is_singular( 'product' ) || ! function_exists( 'wc_get_product' ) ) {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return null;
+		}
+
+		if ( is_admin() ) {
+			return wc_get_product( get_the_ID() );
+		}
+
+		if ( ! is_singular( 'product' ) ) {
 			return null;
 		}
 
@@ -833,6 +839,48 @@ class Yoast_WooCommerce_SEO {
 			'basic',
 			'The product\'s brand.'
 		);
+
+		wpseo_register_var_replacement(
+			'wc_gtin8',
+			[ $this, 'get_product_var_gtin8' ],
+			'basic',
+			'The product\'s GTIN8 identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_gtin12',
+			[ $this, 'get_product_var_gtin12' ],
+			'basic',
+			'The product\'s GTIN12 \/ UPC identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_gtin13',
+			[ $this, 'get_product_var_gtin13' ],
+			'basic',
+			'The product\'s GTIN13 \/ EAN identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_gtin14',
+			[ $this, 'get_product_var_gtin14' ],
+			'basic',
+			'The product\'s GTIN14 \/ ITF-14 identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_isbn',
+			[ $this, 'get_product_var_isbn' ],
+			'basic',
+			'The product\'s ISBN identifier.'
+		);
+
+		wpseo_register_var_replacement(
+			'wc_mpn',
+			[ $this, 'get_product_var_mpn' ],
+			'basic',
+			'The product\'s MPN identifier.'
+		);
 	}
 
 	/**
@@ -885,12 +933,43 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function get_product_var_price() {
 		$product = $this->get_product();
-		if ( ! is_object( $product ) ) {
-			return '';
+
+		if ( is_object( $product ) && method_exists( $product, 'is_type' ) && method_exists( $product, 'get_price' ) ) {
+			if ( $product->is_type( 'variable' ) || $product->is_type( 'grouped' ) ) {
+				return $this->get_product_price_from_price_html( $product );
+			}
+
+			$price = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
+
+			// For empty prices we want to output an empty string, as wc_price() converts them to `currencySymbol + 0.00`.
+			if ( $price === '' ) {
+				return '';
+			}
+
+			// WooCommerce converts negative prices to 0 so we do the same here.
+			if ( intval( $price ) < 0 ) {
+				$price = 0;
+			}
+
+			return wp_strip_all_tags( wc_price( $price ), true );
 		}
 
-		if ( method_exists( $product, 'get_price' ) ) {
-			return wp_strip_all_tags( wc_price( $product->get_price() ), true );
+		return '';
+	}
+
+	/**
+	 * Retrieves the price for a variable or grouped product.
+	 *
+	 * @param WC_Product $product The product.
+	 *
+	 * @return string The price of a variable or grouped product.
+	 */
+	public function get_product_price_from_price_html( $product ) {
+		if ( method_exists( $product, 'get_price_html' ) && method_exists( $product, 'get_price_suffix' ) ) {
+			$price_html   = $product->get_price_html();
+			$price_suffix = $product->get_price_suffix();
+
+			return wp_strip_all_tags( str_replace( $price_suffix, '', $price_html ), true );
 		}
 
 		return '';
@@ -963,6 +1042,81 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
+	 * Retrieves the product global identifiers.
+	 *
+	 * @return void
+	 */
+	public function get_product_global_identifiers() {
+		$product = $this->get_product();
+		if ( ! is_object( $product ) ) {
+			return;
+		}
+
+		$product_id               = $product->get_id();
+		$global_identifier_values = get_post_meta( $product_id, 'wpseo_global_identifier_values', true );
+
+		if ( ! is_array( $global_identifier_values ) ) {
+			return;
+		}
+
+		$this->global_identifiers = $global_identifier_values;
+	}
+
+	/**
+	 * Retrieves the product GTIN8 identifier.
+	 *
+	 * @return string The product GTIN8 identifier.
+	 */
+	public function get_product_var_gtin8() {
+		return isset( $this->global_identifiers['gtin8'] ) ? $this->global_identifiers['gtin8'] : '';
+	}
+
+	/**
+	 * Retrieves the product GTIN12 / UPC identifier.
+	 *
+	 * @return string The product GTIN12 / UPC identifier.
+	 */
+	public function get_product_var_gtin12() {
+		return isset( $this->global_identifiers['gtin12'] ) ? $this->global_identifiers['gtin12'] : '';
+	}
+
+	/**
+	 * Retrieves the product GTIN13 / EAN identifier.
+	 *
+	 * @return string The product GTIN13 / EAN identifier.
+	 */
+	public function get_product_var_gtin13() {
+		return isset( $this->global_identifiers['gtin13'] ) ? $this->global_identifiers['gtin13'] : '';
+	}
+
+	/**
+	 * Retrieves the product GTIN14 / ITF-14 identifier.
+	 *
+	 * @return string The product GTIN14 / ITF-14 identifier.
+	 */
+	public function get_product_var_gtin14() {
+		return isset( $this->global_identifiers['gtin14'] ) ? $this->global_identifiers['gtin14'] : '';
+	}
+
+	/**
+	 * Retrieves the product ISBN identifier.
+	 *
+	 * @return string The product ISBN identifier.
+	 */
+	public function get_product_var_isbn() {
+		return isset( $this->global_identifiers['isbn'] ) ? $this->global_identifiers['isbn'] : '';
+	}
+
+	/**
+	 * Retrieves the product MPN identifier.
+	 *
+	 * @return string The product MPN identifier.
+	 */
+	public function get_product_var_mpn() {
+		return isset( $this->global_identifiers['mpn'] ) ? $this->global_identifiers['mpn'] : '';
+	}
+
+	/**
 	 * Localizes scripts for the WooCommerce Replacevars plugin.
 	 *
 	 * @return array The localized values.
@@ -973,6 +1127,7 @@ class Yoast_WooCommerce_SEO {
 			'currencySymbol' => get_woocommerce_currency_symbol(),
 			'decimals'       => wc_get_price_decimals(),
 			'locale'         => str_replace( '_', '-', get_locale() ),
+			'price'          => $this->get_product_var_price(),
 		];
 	}
 

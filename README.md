@@ -1,8 +1,8 @@
 WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
-Tested up to: 5.3.2
-Stable tag: 12.6-RC2
+Tested up to: 5.4
+Stable tag: 12.7
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -30,12 +30,38 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 
+### 12.7: March 31st, 2020
+Bugfixes:
+
+* Fixes a bug where PHP notices and a PHP warning were thrown for `Product` schema without a price.
+* Fixes a bug where the `priceValidUntil` schema property wasn't output for products on sale with an explicitly set sale end date.
+
+Enhancements:
+
+* Improves the Open Graph product availability for better compatibility with Facebook and Pinterest.
+* Adds the product identifiers (GTIN, ISBN etc.) to the SEO title and Meta description replacement variables.
+* Adds a `color` attribute to the `Product` Schema output.
+
+### 12.6.2: March 11th, 2020
+Other:
+
+* We've tested with WooCommerce 4.0. Everything works as expected!
+
+### 12.6.1: February 27th, 2020
+Bugfixes:
+
+* Fixes a bug where the product price and tax inclusion were not accurately reflected in the Schema and Open Graph metatags.
+
+Enhancements:
+
+* Removes the `valueAddedTaxIncluded` Schema property when tax rate calculations are disabled in WooCommerce.
+* Removes the 'Prices in Open Graph and Schema include tax' setting in the plugin. Whether tax is included in Open Graph and Schema now solely relies on your product page settings in WooCommerce.
+
 ### 12.6: February 18th, 2020
 Bugfixes:
 
 * Fixes a bug where the internal linking and additional keyphrase functionality are missing from the product edit page.
 * Fixes a bug where the short description for the meta description and Twitter and Facebook description could still contain HTML tags and redundant spaces.
-* Fixes a bug where product attributes that have archives were not added to the Yoast SEO XML sitemap.
 
 Enhancements:
 

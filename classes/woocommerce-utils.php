@@ -45,30 +45,65 @@ class WPSEO_WooCommerce_Utils {
 		$display_price = $product->get_price();
 		$quantity      = $product->get_min_purchase_quantity();
 
-		if ( self::prices_with_tax() ) {
-			$display_price = wc_get_price_including_tax(
-				$product,
-				[
-					'qty'   => $quantity,
-					'price' => $display_price,
-				]
-			);
+		if ( wc_tax_enabled() ) {
+			// Taxes should be calculated.
+			if ( self::prices_should_include_tax() ) {
+				// Prices are stored **without** tax, add tax.
+				$display_price = wc_get_price_including_tax(
+					$product,
+					[
+						'qty'   => $quantity,
+						'price' => $display_price,
+					]
+				);
+			}
+			elseif ( self::prices_should_exclude_tax() ) {
+				// Prices are stored **with** tax, subtract tax.
+				$display_price = wc_get_price_excluding_tax(
+					$product,
+					[
+						'qty'   => $quantity,
+						'price' => $display_price,
+					]
+				);
+			}
 		}
 
 		return wc_format_decimal( $display_price, $decimals );
 	}
 
 	/**
-	 * Determines if prices should be returned with or without tax included.
+	 * Determines if tax should be added to the price stored in WooCommerce.
 	 *
 	 * @return bool True if prices should be displayed with tax added, false if not.
 	 */
-	public static function prices_with_tax() {
+	public static function prices_should_include_tax() {
 		return (
-			wc_tax_enabled()
-			&& ! wc_prices_include_tax()
-			&& get_option( 'woocommerce_tax_display_shop' ) === 'incl'
-			&& WPSEO_Options::get( 'woo_schema_og_prices_with_tax' )
+			! wc_prices_include_tax() &&
+			get_option( 'woocommerce_tax_display_shop' ) === 'incl'
 		);
+	}
+
+	/**
+	 * Determines if tax should be subtracted from the price as stored in WooCommerce.
+	 *
+	 * @return bool True if prices should be displayed with tax subtracted, false if not.
+	 */
+	public static function prices_should_exclude_tax() {
+		return (
+			wc_prices_include_tax() &&
+			get_option( 'woocommerce_tax_display_shop' ) === 'excl'
+		);
+	}
+
+	/**
+	 * Determines if prices have tax included or not.
+	 *
+	 * @return bool True if prices have tax included, false if not.
+	 *
+	 * @codeCoverageIgnore Wrapper method.
+	 */
+	public static function prices_have_tax_included() {
+		return get_option( 'woocommerce_tax_display_shop' ) === 'incl';
 	}
 }
