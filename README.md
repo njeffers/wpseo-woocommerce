@@ -30,6 +30,11 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 
+### 13.9: April 14th, 2020
+Enhancements:
+
+* Makes the plugin compatible with the indexables released in YoastSEO 14.0.
+
 ### 12.7: March 31st, 2020
 Bugfixes:
 
