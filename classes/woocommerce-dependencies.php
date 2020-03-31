@@ -40,7 +40,7 @@ class Yoast_WooCommerce_Dependencies {
 		}
 
 		// At least 12.6, in which we've implemented the new HelpScout Beacon.
-		if ( ! version_compare( $wordpress_seo_version, '12.6-RC0', '>=' ) ) {
+		if ( ! version_compare( $wordpress_seo_version, '14.0', '>=' ) ) {
 			add_action( 'all_admin_notices', [ $this, 'yoast_seo_upgrade_error' ] );
 
 			return false;
