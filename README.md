@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.2
 Tested up to: 5.4
-Stable tag: 12.7-RC1
+Stable tag: 12.7
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -33,6 +33,7 @@ Changelog
 ### 12.7: March 31st, 2020
 Bugfixes:
 
+* Fixes a bug where PHP notices and a PHP warning were thrown for `Product` schema without a price.
 * Fixes a bug where the `priceValidUntil` schema property wasn't output for products on sale with an explicitly set sale end date.
 
 Enhancements:
