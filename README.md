@@ -41,8 +41,8 @@ Enhancements:
 
 Other:
 
-* Compatibility with YoastSEO 14.0.
-* Sets the minimum supported YoastSEO version to 14.0.
+* Compatibility with Yoast SEO 14.0.
+* Sets the minimum supported Yoast SEO version to 14.0.
 
 ### 12.7: March 31st, 2020
 Bugfixes:
