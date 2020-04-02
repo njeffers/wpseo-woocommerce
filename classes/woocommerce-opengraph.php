@@ -18,15 +18,7 @@ class WPSEO_WooCommerce_OpenGraph {
 		add_filter( 'wpseo_opengraph_type', [ $this, 'return_type_product' ] );
 		add_filter( 'wpseo_opengraph_desc', [ $this, 'product_taxonomy_desc_enhancement' ] );
 
-		add_action( 'wpseo_opengraph', [ $this, 'product_enhancement' ], 50 );
 		add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
-
-		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'brand' ], 10 );
-		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'price' ], 20 );
-		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'pinterest_product_availability' ], 25 );
-		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'product_availability' ], 30 );
-		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'retailer_item_id' ], 40 );
-		add_action( 'Yoast\WP\Woocommerce\opengraph', [ $this, 'product_condition' ], 50 );
 	}
 
 	/**
@@ -70,19 +62,12 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @return bool False if we didn't output, true if we did.
 	 */
 	public function product_enhancement() {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter' );
+
 		$product = wc_get_product( get_queried_object_id() );
 		if ( ! is_object( $product ) ) {
 			return false;
 		}
-
-		/**
-		 * Action: 'Yoast\WP\Woocommerce\opengraph' - Allow developers to add to our OpenGraph tags.
-		 *
-		 * @since 12.6.0
-		 *
-		 * @api   WC_Product $product The WooCommerce product we're outputting for.
-		 */
-		do_action( 'Yoast\WP\Woocommerce\opengraph', $product );
 
 		return true;
 	}
@@ -154,6 +139,8 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function brand( WC_Product $product ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_OpenGraph_Presenter::product_brand' );
+
 		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
 		if ( $schema_brand !== '' ) {
 			$brand = $this->get_brand_term_name( $schema_brand, $product );
@@ -169,6 +156,8 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function price( WC_Product $product ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_OpenGraph_Presenter::product_price' );
+
 		/**
 		 * Filter: wpseo_woocommerce_og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
 		 *
@@ -204,6 +193,8 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function product_condition( WC_Product $product ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_OpenGraph_Presenter::product_condition' );
+
 		/**
 		 * Filter: Yoast\WP\Woocommerce\product_condition - Allow developers to prevent or change the output of the product condition in the OpenGraph tags.
 		 *
@@ -223,6 +214,8 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function retailer_item_id( WC_Product $product ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_OpenGraph_Presenter::product_retailer_item_id' );
+
 		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
 	}
 
@@ -232,6 +225,8 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function product_availability( WC_Product $product ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_OpenGraph_Presenter::product_availability' );
+
 		if ( $product->is_on_backorder() ) {
 			echo '<meta property="product:availability" content="available for order" />' . "\n";
 			return;
@@ -251,6 +246,8 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function pinterest_product_availability( WC_Product $product ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_OpenGraph_Presenter::pinterest_product_availability' );
+
 		if ( $product->is_on_backorder() ) {
 			echo '<meta property="og:availability" content="backorder" />' . "\n";
 			return;
