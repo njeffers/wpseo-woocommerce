@@ -59,7 +59,7 @@ class Utils_Test extends TestCase {
 	 * Test getting the product display price
 	 *
 	 * @covers WPSEO_WooCommerce_Utils::get_product_display_price
-	 * @covers WPSEO_WooCommerce_Utils::prices_with_tax
+	 * @covers WPSEO_WooCommerce_Utils::prices_should_include_tax
 	 */
 	public function test_get_product_display_price() {
 		$price    = 10;
@@ -68,9 +68,6 @@ class Utils_Test extends TestCase {
 		$product = Mockery::mock( 'WC_Product' )->makePartial();
 		$product->expects( 'get_price' )->once()->andReturn( $price );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
-
-		$options = Mockery::mock( 'alias:WPSEO_Options' )->makePartial();
-		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( true );
 
 		Monkey\Functions\expect( 'get_option' )
 			->once()
@@ -99,19 +96,12 @@ class Utils_Test extends TestCase {
 	/**
 	 * Test the different cases for prices with or without tax.
 	 *
-	 * @covers WPSEO_WooCommerce_Utils::prices_with_tax
+	 * @covers WPSEO_WooCommerce_Utils::prices_should_include_tax
 	 */
-	public function test_prices_with_tax() {
+	public function test_prices_should_include_tax() {
+		// Prices do not include tax, tax should be shown in shop => tax should be added.
 		Functions\stubs(
 			[
-				'wc_tax_enabled' => false,
-			]
-		);
-		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_with_tax() );
-
-		Functions\stubs(
-			[
-				'wc_tax_enabled'        => true,
 				'wc_prices_include_tax' => false,
 			]
 		);
@@ -120,19 +110,44 @@ class Utils_Test extends TestCase {
 			->with( 'woocommerce_tax_display_shop' )
 			->andReturn( 'excl' );
 
-		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_with_tax() );
+		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_should_include_tax() );
 
+		// Prices include tax => tax should never be added.
+		Functions\stubs(
+			[
+				'wc_prices_include_tax' => true,
+			]
+		);
+
+		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_should_include_tax() );
+	}
+
+	/**
+	 * Test the different cases for prices with or without tax.
+	 *
+	 * @covers WPSEO_WooCommerce_Utils::prices_should_exclude_tax
+	 */
+	public function test_prices_should_exclude_tax() {
+		// Prices include tax, tax should not be shown in shop => tax should be subtracted.
+		Functions\stubs(
+			[
+				'wc_prices_include_tax' => true,
+			]
+		);
 		Monkey\Functions\expect( 'get_option' )
-			->twice()
+			->once()
 			->with( 'woocommerce_tax_display_shop' )
-			->andReturn( 'incl' );
+			->andReturn( 'excl' );
 
-		$options = Mockery::mock( 'alias:WPSEO_Options' )->makePartial();
-		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( false );
+		$this->assertTrue( WPSEO_WooCommerce_Utils::prices_should_exclude_tax() );
 
-		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_with_tax() );
+		// Prices do not include tax => tax should not never be subtracted.
+		Functions\stubs(
+			[
+				'wc_prices_include_tax' => false,
+			]
+		);
 
-		$options->expects( 'get' )->once()->with( 'woo_schema_og_prices_with_tax' )->andReturn( true );
-		$this->assertTrue( WPSEO_WooCommerce_Utils::prices_with_tax() );
+		$this->assertFalse( WPSEO_WooCommerce_Utils::prices_should_exclude_tax() );
 	}
 }

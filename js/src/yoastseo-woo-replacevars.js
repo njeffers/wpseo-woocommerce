@@ -14,20 +14,18 @@ var modifiableFields = [
 ];
 
 /**
- * Calculates the price based on the set price and sale price.
+ * Gets the product active price.
  *
- * @returns {string} The calculated price.
+ * @returns {string} The active price.
  */
 function getPrice() {
-	var price = parseFloat( jQuery( "#_regular_price" ).val() );
+	var activePrice = wpseoWooReplaceVarsL10n.price;
 
-	return price.toLocaleString(
-		wpseoWooReplaceVarsL10n.locale,
-		{
-			style: "currency",
-			currency: wpseoWooReplaceVarsL10n.currency,
-		}
-	);
+	if ( ! activePrice ) {
+		return "";
+	}
+
+	return activePrice;
 }
 
 /**
@@ -133,7 +131,7 @@ var YoastReplaceVarPlugin = function() {
  * @returns {void}
  */
 YoastReplaceVarPlugin.prototype.registerEvents = function() {
-	jQuery( document ).on( "input", "#_regular_price, #_sku", this.declareReloaded.bind( this ) );
+	jQuery( document ).on( "input", "#_sku", this.declareReloaded.bind( this ) );
 
 	var brandElements = [ "#taxonomy-product_brand", "#pwb-branddiv" ];
 
@@ -164,6 +162,12 @@ YoastReplaceVarPlugin.prototype.registerReplacements = function() {
 	this.addReplacement( new ReplaceVar( "%%wc_sku%%",       "wc_sku" ) );
 	this.addReplacement( new ReplaceVar( "%%wc_shortdesc%%", "wc_shortdesc" ) );
 	this.addReplacement( new ReplaceVar( "%%wc_brand%%",     "wc_brand" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_gtin8%%",     "wc_gtin8" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_gtin12%%",    "wc_gtin12" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_gtin13%%",    "wc_gtin13" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_gtin14%%",    "wc_gtin14" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_isbn%%",      "wc_isbn" ) );
+	this.addReplacement( new ReplaceVar( "%%wc_mpn%%",       "wc_mpn" ) );
 };
 
 /**
@@ -194,6 +198,12 @@ YoastReplaceVarPlugin.prototype.replaceVariables = function( data ) {
 		data = data.replace( /%%wc_sku%%/g, jQuery( "#_sku" ).val() );
 		data = data.replace( /%%wc_shortdesc%%/g, getShortDescription() );
 		data = data.replace( /%%wc_brand%%/g, getBrand() );
+		data = data.replace( /%%wc_gtin8%%/g, jQuery( "#yoast_identfier_gtin8" ).val() );
+		data = data.replace( /%%wc_gtin12%%/g, jQuery( "#yoast_identfier_gtin12" ).val() );
+		data = data.replace( /%%wc_gtin13%%/g, jQuery( "#yoast_identfier_gtin13" ).val() );
+		data = data.replace( /%%wc_gtin14%%/g, jQuery( "#yoast_identfier_gtin14" ).val() );
+		data = data.replace( /%%wc_isbn%%/g, jQuery( "#yoast_identfier_isbn" ).val() );
+		data = data.replace( /%%wc_mpn%%/g, jQuery( "#yoast_identfier_mpn" ).val() );
 
 		data = this.replacePlaceholders( data );
 	}
