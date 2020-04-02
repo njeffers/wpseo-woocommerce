@@ -80,6 +80,7 @@ class Yoast_WooCommerce_SEO {
 			// Initialize schema & OpenGraph.
 			add_action( 'init', [ $this, 'initialize_opengraph' ] );
 			add_action( 'init', [ $this, 'initialize_schema' ] );
+			add_filter( 'wpseo_frontend_presenters', [ $this, 'add_frontend_presenter' ] );
 
 			// Add metadescription filter.
 			add_filter( 'wpseo_metadesc', [ $this, 'metadesc' ] );
@@ -126,6 +127,23 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function initialize_opengraph() {
 		new WPSEO_WooCommerce_OpenGraph();
+	}
+
+	/**
+	 * Adds the WooCommerce OpenGraph presenter.
+	 *
+	 * @param \Yoast\WP\SEO\Presenters\Abstract_Indexable_Presenter[] $presenters The presenter instances.
+	 *
+	 * @return \Yoast\WP\SEO\Presenters\Abstract_Indexable_Presenter[] The extended presenters.
+	 */
+	public function add_frontend_presenter( $presenters ) {
+		if ( ! is_array( $presenters ) ) {
+			return $presenters;
+		}
+
+		$presenters[] = new WPSEO_WooCommerce_Presenter();
+
+		return $presenters;
 	}
 
 	/**
