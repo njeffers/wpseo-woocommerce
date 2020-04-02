@@ -5,22 +5,20 @@
  * @package WPSEO_News
  */
 
-use Yoast\WP\SEO\Presentations\Indexable_Presentation;
+use Yoast\WP\SEO\Presenters\Abstract_Indexable_Presenter;
 
 /**
  * Represents the WooCommerce presenter.
  */
-class WPSEO_WooCommerce_Presenter {
+class WPSEO_WooCommerce_Presenter extends Abstract_Indexable_Presenter {
 
 	/**
 	 * Presents the WooCommerce metatags when applicable.
 	 *
-	 * @param Indexable_Presentation $presentation Presentation to use.
-	 *
 	 * @return string The rendered meta tag.
 	 */
-	public function present( Indexable_Presentation $presentation ) {
-		$product = wc_get_product( $presentation->model->object_id );
+	public function present() {
+		$product = wc_get_product( $this->presentation->model->object_id );
 		if ( ! $product instanceof WC_Product ) {
 			return '';
 		}
