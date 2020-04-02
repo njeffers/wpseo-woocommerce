@@ -274,12 +274,11 @@ class WPSEO_WooCommerce_Schema {
 		if ( $tag_stripped_term_name[0] === '"' && $tag_stripped_term_name[ ( strlen( $tag_stripped_term_name ) - 1 ) ] === '"' ) {
 			$tag_stripped_term_name = substr( $tag_stripped_term_name, 1, -1 );
 		}
-		$term->name = $tag_stripped_term_name;
 
 		if ( $term !== null ) {
 			$this->data[ $attribute ] = [
 				'@type' => 'Organization',
-				'name'  => $term->name,
+				'name'  => $tag_stripped_term_name,
 			];
 		}
 	}
