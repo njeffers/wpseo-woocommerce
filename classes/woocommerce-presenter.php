@@ -49,8 +49,6 @@ class WPSEO_WooCommerce_Presenter extends Abstract_Indexable_Presenter {
 	 *
 	 * @param string[]   $output  The OpenGraph output array.
 	 * @param WC_Product $product The WooCommerce product object.
-	 *
-	 * @return string
 	 */
 	public function product_brand( &$output, WC_Product $product ) {
 		$schema_brand = YoastSEO()->helpers->options->get( 'woo_schema_brand' );
