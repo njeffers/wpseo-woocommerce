@@ -25,15 +25,7 @@ class OpenGraph_Test extends TestCase {
 		$this->assertTrue( \has_filter( 'language_attributes', [ $og, 'product_namespace' ] ) );
 		$this->assertTrue( \has_filter( 'wpseo_opengraph_type', [ $og, 'return_type_product' ] ) );
 		$this->assertTrue( \has_filter( 'wpseo_opengraph_desc', [ $og, 'product_taxonomy_desc_enhancement' ] ) );
-		$this->assertTrue( \has_action( 'wpseo_opengraph', [ $og, 'product_enhancement' ] ) );
 		$this->assertTrue( \has_action( 'wpseo_add_opengraph_additional_images', [ $og, 'set_opengraph_image' ] ) );
-
-		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'brand' ] ) );
-		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'price' ] ) );
-		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'product_availability' ] ) );
-		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'pinterest_product_availability' ] ) );
-		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'retailer_item_id' ] ) );
-		$this->assertTrue( \has_action( 'Yoast\WP\Woocommerce\opengraph', [ $og, 'product_condition' ] ) );
 	}
 
 	/**
@@ -139,6 +131,14 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::price',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::product_price'
+			);
+
 		Monkey\Functions\expect( 'get_option' )
 			->once()
 			->with( 'woocommerce_tax_display_shop' )
@@ -184,6 +184,14 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::brand',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::product_brand'
+			);
+
 		$primary_term_mock = Mockery::mock( 'overload:WPSEO_Primary_Term' );
 		$primary_term_mock->expects( '__construct' )->once()->with( 'brand', null )->andReturnSelf();
 		$primary_term_mock->expects( 'get_primary_term' )->once()->with()->andReturn( 12345 );
@@ -210,6 +218,14 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::product_condition',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::product_condition'
+			);
+
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
 		$og->product_condition( $product );
@@ -232,6 +248,14 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::retailer_item_id',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::product_retailer_item_id'
+			);
+
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
 		$og->retailer_item_id( $product );
@@ -249,6 +273,14 @@ class OpenGraph_Test extends TestCase {
 		$product->expects( 'is_on_backorder' )->andReturn( false );
 		$product->expects( 'is_in_stock' )->andReturn( true );
 
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::product_availability',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::product_availability'
+			);
+
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
 		$og->product_availability( $product );
@@ -264,6 +296,14 @@ class OpenGraph_Test extends TestCase {
 	public function test_product_availability_on_backorder() {
 		$product = Mockery::mock( 'WC_Product' )->makePartial();
 		$product->expects( 'is_on_backorder' )->andReturn( true );
+
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::product_availability',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::product_availability'
+			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
@@ -282,6 +322,14 @@ class OpenGraph_Test extends TestCase {
 		$product->expects( 'is_on_backorder' )->andReturn( false );
 		$product->expects( 'is_in_stock' )->andReturn( false );
 
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::product_availability',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::product_availability'
+			);
+
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
 		$og->product_availability( $product );
@@ -299,6 +347,14 @@ class OpenGraph_Test extends TestCase {
 		$product->expects( 'is_on_backorder' )->andReturn( false );
 		$product->expects( 'is_in_stock' )->andReturn( true );
 
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::pinterest_product_availability',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::pinterest_product_availability'
+			);
+
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
 		$og->pinterest_product_availability( $product );
@@ -314,6 +370,14 @@ class OpenGraph_Test extends TestCase {
 	public function test_pinterest_product_availability_on_backorder() {
 		$product = Mockery::mock( 'WC_Product' )->makePartial();
 		$product->expects( 'is_on_backorder' )->andReturn( true );
+
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::pinterest_product_availability',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::pinterest_product_availability'
+			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
@@ -331,6 +395,14 @@ class OpenGraph_Test extends TestCase {
 		$product = Mockery::mock( 'WC_Product' )->makePartial();
 		$product->expects( 'is_on_backorder' )->andReturn( false );
 		$product->expects( 'is_in_stock' )->andReturn( false );
+
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::pinterest_product_availability',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter::pinterest_product_availability'
+			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		\ob_start();
@@ -541,6 +613,14 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::product_enhancement',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter'
+			);
+
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		$this->assertFalse( $og->product_enhancement() );
 	}
@@ -560,6 +640,14 @@ class OpenGraph_Test extends TestCase {
 				'do_action'             => null,
 			]
 		);
+
+		Monkey\Functions\expect( '_deprecated_function' )
+			->once()
+			->with(
+				'WPSEO_WooCommerce_OpenGraph::product_enhancement',
+				'WPSEO Woo 13.0',
+				'WPSEO_WooCommerce_Presenter'
+			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
 		$this->assertTrue( $og->product_enhancement() );
