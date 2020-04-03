@@ -1,6 +1,6 @@
 WooCommerce Yoast SEO
 =====================
-Requires at least: 5.2
+Requires at least: 5.3
 Tested up to: 5.4
 Stable tag: 13.0-RC1
 Requires PHP: 5.6.20
@@ -31,13 +31,19 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 
 ### 13.0: April 14th, 2020
+Bugfixes:
+
+* Fixes a bug where thumbnail product gallery images were added to the XML product sitemap instead of full size images.
+
 Enhancements:
 
-* Makes the plugin compatible with the indexables released in YoastSEO 14.0.
+* Adds a `Term hierarchy` snippet variable.
 
 Other:
 
-* Sets the minimum supported YoastSEO version to 14.0.
+* Compatibility with Yoast SEO 14.0.
+* Sets the minimum supported Yoast SEO version to 14.0.
+* Sets the minimum supported WordPress version to 5.3.
 
 ### 12.7: March 31st, 2020
 Bugfixes:
