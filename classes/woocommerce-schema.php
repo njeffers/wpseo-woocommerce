@@ -300,20 +300,20 @@ class WPSEO_WooCommerce_Schema {
 	 * @param string     $taxonomy  The taxonomy to get the attribute's value from.
 	 */
 	private function add_organization_for_attribute( $attribute, $product, $taxonomy ) {
-		$term     = $this->get_primary_term_or_first_term( $taxonomy, $product->get_id() );
-		$termname = $term->name;
+		$term = $this->get_primary_term_or_first_term( $taxonomy, $product->get_id() );
 
-		// Escape the string so that harmful input data will not be executed.
-		$escaped_term_name      = WPSEO_Utils::format_json_encode( $termname );
-		$tag_stripped_term_name = wp_strip_all_tags( $escaped_term_name );
-		if ( $tag_stripped_term_name[0] === '"' && $tag_stripped_term_name[ ( strlen( $tag_stripped_term_name ) - 1 ) ] === '"' ) {
-			$tag_stripped_term_name = substr( $tag_stripped_term_name, 1, -1 );
+		// Escape the string, so harmful input data will not be executed.
+		$escaped_term_name = WPSEO_Utils::format_json_encode( $term->name );
+		// Remove possible double quotes.
+		$stripped_term_name = wp_strip_all_tags( $escaped_term_name );
+		if ( $stripped_term_name[0] === '"' && $stripped_term_name[ ( strlen( $stripped_term_name ) - 1 ) ] === '"' ) {
+			$stripped_term_name = substr( $stripped_term_name, 1, -1 );
 		}
 
 		if ( $term !== null ) {
 			$this->data[ $attribute ] = [
 				'@type' => 'Organization',
-				'name'  => $tag_stripped_term_name,
+				'name'  => $stripped_term_name,
 			];
 		}
 	}
