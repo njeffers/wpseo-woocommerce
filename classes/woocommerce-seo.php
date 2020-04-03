@@ -492,15 +492,10 @@ class Yoast_WooCommerce_SEO {
 	 * @return array Array with the filtered columns.
 	 */
 	public function column_heading( $columns ) {
-		if ( WPSEO_Options::get( 'woo_hide_columns' ) !== true ) {
-			return $columns;
-		}
-
 		$keys_to_remove = [
 			'wpseo-title',
 			'wpseo-metadesc',
 			'wpseo-focuskw',
-			'wpseo-score',
 			'wpseo-score-readability',
 		];
 
