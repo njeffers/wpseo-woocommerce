@@ -30,7 +30,7 @@ class WPSEO_WooCommerce_Presenter extends Abstract_Indexable_Presenter {
 		 *
 		 * @api   WC_Product $product The WooCommerce product we're outputting for.
 		 */
-		do_action_deprecated( 'Yoast\WP\Woocommerce\opengraph', $product, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter' );
+		do_action_deprecated( 'Yoast\WP\Woocommerce\opengraph', $product, 'WPSEO Woo 13.0', 'wpseo_frontend_presenters' );
 
 		$output = [];
 
