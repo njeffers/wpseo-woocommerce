@@ -15,7 +15,7 @@ class Permalink_Watcher_Test extends TestCase {
 	/**
 	 * Instance of the WooCommerce Permalink Watcher.
 	 *
-	 * @var \WPSEO_Woocommerce_Permalink_Watcher|Mockery\MockInterface
+	 * @var \WPSEO_Woocommerce_Permalink_Watcher|\Mockery\MockInterface
 	 */
 	protected $instance;
 
