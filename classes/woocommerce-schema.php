@@ -180,7 +180,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Filters the offers array on sales, possibly unset them.
 	 *
-	 * @param array      $offers Schema Offer data.
+	 * @param array      $offers  Schema Offer data.
 	 * @param WC_Product $product The product.
 	 *
 	 * @return array Schema Offer data.
