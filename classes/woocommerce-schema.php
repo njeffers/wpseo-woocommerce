@@ -183,7 +183,7 @@ class WPSEO_WooCommerce_Schema {
 	 * @param array      $offers Schema Offer data.
 	 * @param WC_Product $product The product.
 	 *
-	 * @return array $offers    Schema Offer data.
+	 * @return array Schema Offer data.
 	 */
 	protected function filter_sales( $offers, $product ) {
 		foreach ( $offers as $key => $offer ) {
