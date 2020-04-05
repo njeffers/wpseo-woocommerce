@@ -79,8 +79,8 @@ class WPSEO_WooCommerce_Utils {
 	 */
 	public static function prices_should_include_tax() {
 		return (
-			! wc_prices_include_tax() &&
-			get_option( 'woocommerce_tax_display_shop' ) === 'incl'
+			! wc_prices_include_tax()
+			&& get_option( 'woocommerce_tax_display_shop' ) === 'incl'
 		);
 	}
 
@@ -91,8 +91,8 @@ class WPSEO_WooCommerce_Utils {
 	 */
 	public static function prices_should_exclude_tax() {
 		return (
-			wc_prices_include_tax() &&
-			get_option( 'woocommerce_tax_display_shop' ) === 'excl'
+			wc_prices_include_tax()
+			&& get_option( 'woocommerce_tax_display_shop' ) === 'excl'
 		);
 	}
 
