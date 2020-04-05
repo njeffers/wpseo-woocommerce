@@ -439,7 +439,7 @@ class WPSEO_WooCommerce_Schema {
 
 			if ( wc_tax_enabled() ) {
 				// Only add this property if tax calculation has been enabled in WooCommerce.
-				$offer['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_have_tax_included();
+				$offer['priceSpecification']['valueAddedTaxIncluded'] = $prices_include_tax;
 			}
 
 			$data[] = $offer;
