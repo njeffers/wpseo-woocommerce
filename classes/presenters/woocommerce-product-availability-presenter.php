@@ -8,7 +8,7 @@
 use WPSEO_WooCommerce_Abstract_Product_Availability_Presenter;
 
 /**
- * Represents the product's price currency.
+ * Represents the product's availability.
  */
 class WPSEO_WooCommerce_Product_Availability_Presenter extends WPSEO_WooCommerce_Abstract_Product_Availability_Presenter {
 
