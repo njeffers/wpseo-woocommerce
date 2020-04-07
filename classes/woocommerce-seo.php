@@ -1251,7 +1251,7 @@ class Yoast_WooCommerce_SEO {
 		 *
 		 * @deprecated 12.5.0. Use the {@see 'Yoast\WP\Woocommerce\og_price'} filter instead.
 		 *
-		 * @api        bool unsigned Defaults to true.
+		 * @api bool unsigned Defaults to true.
 		 */
 		$show_price = apply_filters_deprecated(
 			'wpseo_woocommerce_og_price',
@@ -1265,7 +1265,7 @@ class Yoast_WooCommerce_SEO {
 		 *
 		 * @since 12.5.0
 		 *
-		 * @api   bool unsigned Defaults to true.
+		 * @api bool unsigned Defaults to true.
 		 */
 		$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', $show_price );
 

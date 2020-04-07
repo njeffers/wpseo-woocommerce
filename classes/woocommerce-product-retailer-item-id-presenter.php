@@ -8,7 +8,7 @@
 use WPSEO_WooCommerce_Abstract_Product_Presenter;
 
 /**
- * Represents the product's retail item ID.
+ * Represents the product's retailer item ID.
  */
 class WPSEO_WooCommerce_Product_Retailer_Item_ID_Presenter extends WPSEO_WooCommerce_Abstract_Product_Presenter {
 
