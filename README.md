@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.3
 Tested up to: 5.4
-Stable tag: 13.0-RC1
+Stable tag: 13.0-RC2
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -30,7 +30,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 
-### 13.0: April 14th, 2020
+### 13.0: April 28th, 2020
 Bugfixes:
 
 * Fixes a bug where thumbnail product gallery images were added to the XML product sitemap instead of full size images.
