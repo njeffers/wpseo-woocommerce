@@ -65,7 +65,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @return bool False if we didn't output, true if we did.
 	 */
 	public function product_enhancement() {
-		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter' );
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0' );
 
 		$product = wc_get_product( get_queried_object_id() );
 		if ( ! is_object( $product ) ) {
@@ -142,7 +142,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function brand( WC_Product $product ) {
-		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter::product_brand' );
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Product_Brand_Presenter' );
 
 		$schema_brand = WPSEO_Options::get( 'woo_schema_brand' );
 		if ( $schema_brand !== '' ) {
@@ -159,7 +159,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function price( WC_Product $product ) {
-		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter::product_price' );
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Abstract_Product_Presenter' );
 
 		/**
 		 * Filter: wpseo_woocommerce_og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
@@ -196,7 +196,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function product_condition( WC_Product $product ) {
-		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter::product_condition' );
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Product_Condition_Presenter' );
 
 		/**
 		 * Filter: Yoast\WP\Woocommerce\product_condition - Allow developers to prevent or change the output of the product condition in the OpenGraph tags.
@@ -217,7 +217,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function retailer_item_id( WC_Product $product ) {
-		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter::product_retailer_item_id' );
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Product_Retailer_Item_ID_Presenter' );
 
 		echo '<meta property="product:retailer_item_id" content="' . esc_attr( $product->get_sku() ) . '" />' . "\n";
 	}
@@ -228,7 +228,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function product_availability( WC_Product $product ) {
-		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter::product_availability' );
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Product_Availability_Presenter' );
 
 		if ( $product->is_on_backorder() ) {
 			echo '<meta property="product:availability" content="available for order" />' . "\n";
@@ -249,7 +249,7 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function pinterest_product_availability( WC_Product $product ) {
-		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Presenter::pinterest_product_availability' );
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Pinterest_Product_Availability_Presenter' );
 
 		if ( $product->is_on_backorder() ) {
 			echo '<meta property="og:availability" content="backorder" />' . "\n";

@@ -136,7 +136,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::price',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::product_price'
+				'WPSEO_WooCommerce_Abstract_Product_Presenter'
 			);
 
 		Monkey\Functions\expect( 'get_option' )
@@ -189,7 +189,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::brand',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::product_brand'
+				'WPSEO_WooCommerce_Product_Brand_Presenter'
 			);
 
 		$primary_term_mock = Mockery::mock( 'overload:WPSEO_Primary_Term' );
@@ -223,7 +223,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::product_condition',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::product_condition'
+				'WPSEO_WooCommerce_Product_Condition_Presenter'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -253,7 +253,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::retailer_item_id',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::product_retailer_item_id'
+				'WPSEO_WooCommerce_Product_Retailer_Item_ID_Presenter'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -278,7 +278,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::product_availability',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::product_availability'
+				'WPSEO_WooCommerce_Product_Availability_Presenter'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -302,7 +302,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::product_availability',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::product_availability'
+				'WPSEO_WooCommerce_Product_Availability_Presenter'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -327,7 +327,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::product_availability',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::product_availability'
+				'WPSEO_WooCommerce_Product_Availability_Presenter'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -352,7 +352,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::pinterest_product_availability',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::pinterest_product_availability'
+				'WPSEO_WooCommerce_Pinterest_Product_Availability_Presenter'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -376,7 +376,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::pinterest_product_availability',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::pinterest_product_availability'
+				'WPSEO_WooCommerce_Pinterest_Product_Availability_Presenter'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -401,7 +401,7 @@ class OpenGraph_Test extends TestCase {
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::pinterest_product_availability',
 				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter::pinterest_product_availability'
+				'WPSEO_WooCommerce_Pinterest_Product_Availability_Presenter'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -617,8 +617,7 @@ class OpenGraph_Test extends TestCase {
 			->once()
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::product_enhancement',
-				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter'
+				'WPSEO Woo 13.0'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
@@ -645,8 +644,7 @@ class OpenGraph_Test extends TestCase {
 			->once()
 			->with(
 				'WPSEO_WooCommerce_OpenGraph::product_enhancement',
-				'WPSEO Woo 13.0',
-				'WPSEO_WooCommerce_Presenter'
+				'WPSEO Woo 13.0'
 			);
 
 		$og = new WPSEO_WooCommerce_OpenGraph();
