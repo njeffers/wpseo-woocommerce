@@ -7,6 +7,9 @@
 
 /**
  * Class WPSEO_WooCommerce_OpenGraph
+ *
+ * @deprecated 13.0
+ * @codeCoverageIgnore
  */
 class WPSEO_WooCommerce_OpenGraph {
 
