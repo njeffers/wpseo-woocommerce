@@ -62,7 +62,7 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'test', null, 123, null, null ],
 
 			// Tests the validation of the dbversion option.
-			[ 'woo_dbversion', 3, 1, 3, '' ],
+			[ 'woo_dbversion', 4, 1, 4, '' ],
 
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
 			[ 'woo_schema_brand', 'yoast', 'yoast', 'yoast', null ],
