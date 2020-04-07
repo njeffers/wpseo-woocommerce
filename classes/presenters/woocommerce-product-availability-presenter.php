@@ -30,7 +30,7 @@ class WPSEO_WooCommerce_Product_Availability_Presenter extends WPSEO_WooCommerce
 		}
 
 		if ( $this->is_in_stock ) {
-			return 'instock';
+			return 'in stock';
 		}
 
 		return 'out of stock';
