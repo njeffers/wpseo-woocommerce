@@ -2,8 +2,9 @@
 
 namespace Yoast\WP\Woocommerce\Tests\Classes;
 
-use Yoast\WP\Woocommerce\Tests\TestCase;
 use Mockery;
+use WPSEO_Woocommerce_Permalink_Watcher;
+use Yoast\WP\Woocommerce\Tests\TestCase;
 
 /**
  * Class WooCommerce_Schema_Test.
@@ -15,7 +16,7 @@ class Permalink_Watcher_Test extends TestCase {
 	/**
 	 * Instance of the WooCommerce Permalink Watcher.
 	 *
-	 * @var \WPSEO_Woocommerce_Permalink_Watcher|Mockery\MockInterface
+	 * @var \WPSEO_Woocommerce_Permalink_Watcher|\Mockery\MockInterface
 	 */
 	protected $instance;
 
@@ -25,7 +26,7 @@ class Permalink_Watcher_Test extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->instance = Mockery::mock( \WPSEO_Woocommerce_Permalink_Watcher::class )
+		$this->instance = Mockery::mock( WPSEO_Woocommerce_Permalink_Watcher::class )
 			->shouldAllowMockingProtectedMethods()
 			->makePartial();
 	}

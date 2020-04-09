@@ -80,6 +80,7 @@ class Yoast_WooCommerce_SEO {
 			// Initialize schema & OpenGraph.
 			add_action( 'init', [ $this, 'initialize_opengraph' ] );
 			add_action( 'init', [ $this, 'initialize_schema' ] );
+			add_filter( 'wpseo_frontend_presenters', [ $this, 'add_frontend_presenter' ] );
 
 			// Add metadescription filter.
 			add_filter( 'wpseo_metadesc', [ $this, 'metadesc' ] );
@@ -126,6 +127,42 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function initialize_opengraph() {
 		new WPSEO_WooCommerce_OpenGraph();
+	}
+
+	/**
+	 * Adds the WooCommerce OpenGraph presenter.
+	 *
+	 * @param \Yoast\WP\SEO\Presenters\Abstract_Indexable_Presenter[] $presenters The presenter instances.
+	 *
+	 * @return \Yoast\WP\SEO\Presenters\Abstract_Indexable_Presenter[] The extended presenters.
+	 */
+	public function add_frontend_presenter( $presenters ) {
+		if ( ! is_array( $presenters ) ) {
+			return $presenters;
+		}
+
+		$product = $this->get_product();
+		if ( ! $product instanceof WC_Product ) {
+			return $presenters;
+		}
+
+		$presenters[] = new WPSEO_WooCommerce_Product_OpenGraph_Deprecation_Presenter( $product );
+		$presenters[] = new WPSEO_WooCommerce_Product_Brand_Presenter( $product );
+
+		if ( $this->should_show_price() ) {
+			$presenters[] = new WPSEO_WooCommerce_Product_Price_Amount_Presenter( $product );
+			$presenters[] = new WPSEO_WooCommerce_Product_Price_Currency_Presenter( $product );
+		}
+
+		$is_on_backorder = $product->is_on_backorder();
+		$is_in_stock     = ( $is_on_backorder === true ) ? false : $product->is_in_stock();
+		$presenters[]    = new WPSEO_WooCommerce_Pinterest_Product_Availability_Presenter( $product, $is_on_backorder, $is_in_stock );
+		$presenters[]    = new WPSEO_WooCommerce_Product_Availability_Presenter( $product, $is_on_backorder, $is_in_stock );
+
+		$presenters[] = new WPSEO_WooCommerce_Product_Retailer_Item_ID_Presenter( $product );
+		$presenters[] = new WPSEO_WooCommerce_Product_Condition_Presenter( $product );
+
+		return $presenters;
 	}
 
 	/**
@@ -1201,5 +1238,41 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function checkbox() {
 		_deprecated_function( __METHOD__, 'WPSEO Woo 12.5' );
+	}
+
+	/**
+	 * Determines if the price should be shown.
+	 *
+	 * @return bool True when the price should be shown.
+	 */
+	private function should_show_price() {
+		/**
+		 * Filter: wpseo_woocommerce_og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
+		 *
+		 * @deprecated 12.5.0. Use the {@see 'Yoast\WP\Woocommerce\og_price'} filter instead.
+		 *
+		 * @api bool unsigned Defaults to true.
+		 */
+		$show_price = apply_filters_deprecated(
+			'wpseo_woocommerce_og_price',
+			[ true ],
+			'Yoast WooCommerce 12.5.0',
+			'Yoast\WP\Woocommerce\og_price'
+		);
+
+		/**
+		 * Filter: Yoast\WP\Woocommerce\og_price - Allow developers to prevent the output of the price in the OpenGraph tags.
+		 *
+		 * @since 12.5.0
+		 *
+		 * @api bool unsigned Defaults to true.
+		 */
+		$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', $show_price );
+
+		if ( is_bool( $show_price ) ) {
+			return $show_price;
+		}
+
+		return false;
 	}
 }
