@@ -300,15 +300,8 @@ class WPSEO_WooCommerce_Schema {
 	 * @param string     $taxonomy  The taxonomy to get the attribute's value from.
 	 */
 	private function add_organization_for_attribute( $attribute, $product, $taxonomy ) {
-		$term = $this->get_primary_term_or_first_term( $taxonomy, $product->get_id() );
-
-		// Escape the string, so harmful input data will not be executed.
-		$escaped_term_name = WPSEO_Utils::format_json_encode( $term->name );
-		// Remove possible double quotes.
-		$stripped_term_name = wp_strip_all_tags( $escaped_term_name );
-		if ( $stripped_term_name[0] === '"' && $stripped_term_name[ ( strlen( $stripped_term_name ) - 1 ) ] === '"' ) {
-			$stripped_term_name = substr( $stripped_term_name, 1, -1 );
-		}
+		$term               = $this->get_primary_term_or_first_term( $taxonomy, $product->get_id() );
+		$stripped_term_name = wp_strip_all_tags( $term->name );
 
 		if ( $term !== null ) {
 			$this->data[ $attribute ] = [
