@@ -884,6 +884,8 @@ class Schema_Test extends TestCase {
 		$schema_image->expects( '__construct' )->once()->with( $canonical . '#woocommerceimageplaceholder' )->andReturnSelf();
 		$schema_image->expects( 'generate_from_url' )->once()->with( $base_url . '/example_image.jpg' )->andReturn( $image_data );
 
+		Functions\expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
+
 		$data = [
 			'@type'       => 'Product',
 			'@id'         => $canonical . '#product',
@@ -1054,6 +1056,8 @@ class Schema_Test extends TestCase {
 		$schema_image->expects( '__construct' )->once()->with( $canonical . '#woocommerceimageplaceholder' )->andReturnSelf();
 		$schema_image->expects( 'generate_from_url' )->once()->with( $base_url . '/example_image.jpg' )->andReturn( $image_data );
 
+		Functions\expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
+
 		$data = [
 			'@type'       => 'Product',
 			'@id'         => $canonical . '#product',
@@ -1171,6 +1175,7 @@ class Schema_Test extends TestCase {
 
 		$utils = Mockery::mock( 'alias:WPSEO_Utils' );
 		$utils->expects( 'get_home_url' )->once()->with()->andReturn( $canonical );
+		Functions\expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->times( 6 )->with()->andReturn( $product_id );
