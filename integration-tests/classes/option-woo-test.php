@@ -62,14 +62,13 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'test', null, 123, null, null ],
 
 			// Tests the validation of the dbversion option.
-			[ 'woo_dbversion', 3, 1, 3, '' ],
+			[ 'woo_dbversion', 4, 1, 4, '' ],
 
 			// Tests the validation of the fields where the dirty value exists in the validate data types.
 			[ 'woo_schema_brand', 'yoast', 'yoast', 'yoast', null ],
 			[ 'woo_schema_manufacturer', 'yoast', 'yoast', 'yoast', null ],
 			[ 'woo_schema_color', 'yoast', 'yoast', 'yoast', null ],
 			[ 'woo_breadcrumbs', true, true, true, '' ],
-			[ 'woo_hide_columns', true, true, true, '' ],
 			[ 'woo_metabox_top', true, true, true, '' ],
 
 			// Validation where the dirty value is not in the validate data types.
@@ -77,7 +76,6 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 			[ 'woo_schema_manufacturer', 'bar', 'bar', 'yoast', null ],
 			[ 'woo_schema_color', 'bar', 'bar', 'yoast', null ],
 			[ 'woo_breadcrumbs', false, null, true, '' ],
-			[ 'woo_hide_columns', false, null, true, '' ],
 			[ 'woo_metabox_top', false, null, true, '' ],
 
 			// Validation where the old value is in the validate data types with short form enabled.
@@ -97,17 +95,14 @@ class WPSEO_Option_Woo_Test extends WPSEO_WooCommerce_UnitTestCase {
 
 			// Validation where the boolean old value is set with short form enabled.
 			[ 'woo_breadcrumbs', true, null, true, true, 'on' ],
-			[ 'woo_hide_columns', true, null, true, true, 'on' ],
 			[ 'woo_metabox_top', true, null, true, true, 'on' ],
 
 			// Validation where the boolean old value is not set with short form enabled.
 			[ 'woo_breadcrumbs', false, null, true, null, 'on' ],
-			[ 'woo_hide_columns', false, null, true, null, 'on' ],
 			[ 'woo_metabox_top', false, null, true, null, 'on' ],
 
 			// Validation where the boolean old value is not set with short form not enabled.
 			[ 'woo_breadcrumbs', false, null, true, true, 'off' ],
-			[ 'woo_hide_columns', false, null, true, true, 'off' ],
 			[ 'woo_metabox_top', false, null, true, true, 'off' ],
 		];
 	}

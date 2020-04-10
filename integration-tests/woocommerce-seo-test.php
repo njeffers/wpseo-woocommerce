@@ -16,20 +16,30 @@ class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 	 * @covers Yoast_WooCommerce_SEO::column_heading
 	 */
 	public function test_column_heading() {
-		WPSEO_Option_Woo::register_option();
-
 		$woocommerce = new Yoast_WooCommerce_SEO();
 
-		WPSEO_Options::set( 'woo_hide_columns', true );
+		$columns = [
+			'another-column'          => '',
+			'wpseo-title'             => '',
+			'wpseo-metadesc'          => '',
+			'wpseo-focuskw'           => '',
+			'wpseo-score'             => '',
+			'wpseo-score-readability' => '',
+		];
 
-		$actual   = $woocommerce->column_heading(
-			[
-				'wpseo-title'    => '',
-				'another-column' => '',
-				'wpseo-focuskw'  => '',
-			]
-		);
-		$expected = [ 'another-column' => '' ];
+		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
+			$columns += [
+				'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS  => '',
+				'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED => '',
+			];
+		}
+
+		$actual = $woocommerce->column_heading( $columns );
+
+		$expected = [
+			'another-column' => '',
+			'wpseo-score'    => '',
+		];
 
 		$this->assertSame( $expected, $actual );
 	}

@@ -45,7 +45,7 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		 *
 		 * @var int
 		 */
-		public $db_version = 3;
+		public $db_version = 4;
 
 		/**
 		 * Array of defaults for the option.
@@ -56,15 +56,14 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 		 */
 		protected $defaults = [
 			// Non-form fields, set via validation routine.
-			'woo_dbversion'                 => 0, // Leave default as 0 to ensure activation/upgrade works.
+			'woo_dbversion'           => 0, // Leave default as 0 to ensure activation/upgrade works.
 
 			// Form fields.
-			'woo_schema_brand'              => '',
-			'woo_schema_manufacturer'       => '',
-			'woo_schema_color'              => '',
-			'woo_breadcrumbs'               => true,
-			'woo_hide_columns'              => true,
-			'woo_metabox_top'               => true,
+			'woo_schema_brand'        => '',
+			'woo_schema_manufacturer' => '',
+			'woo_schema_color'        => '',
+			'woo_breadcrumbs'         => true,
+			'woo_metabox_top'         => true,
 		];
 
 		/**
@@ -152,7 +151,6 @@ if ( ! class_exists( 'WPSEO_Option_Woo' ) && class_exists( 'WPSEO_Option' ) ) {
 
 					/* boolean (checkbox) field - may not be in form */
 					case 'woo_breadcrumbs':
-					case 'woo_hide_columns':
 					case 'woo_metabox_top':
 						if ( isset( $dirty[ $key ] ) ) {
 							$clean[ $key ] = WPSEO_Utils::validate_bool( $dirty[ $key ] );

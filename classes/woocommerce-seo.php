@@ -479,24 +479,6 @@ class Yoast_WooCommerce_SEO {
 		echo '<p>';
 		printf(
 		/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce */
-			esc_html__( 'Both %2$s and %1$s add columns to the product page, to remove all but the SEO score column from %1$s on that page, check this box.', 'yoast-woo-seo' ),
-			'Yoast SEO',
-			'WooCommerce'
-		);
-		echo "</p>\n";
-
-		Yoast_Form::get_instance()->checkbox(
-			'woo_hide_columns',
-			sprintf(
-			/* translators: %1$s resolves to Yoast SEO */
-				esc_html__( 'Remove %1$s columns', 'yoast-woo-seo' ),
-				'Yoast SEO'
-			)
-		);
-
-		echo '<p>';
-		printf(
-		/* translators: %1$s resolves to Yoast SEO, %2$s resolves to WooCommerce */
 			esc_html__( 'Both %2$s and %1$s add metaboxes to the edit product page, if you want %2$s to be above %1$s, check the box.', 'yoast-woo-seo' ),
 			'Yoast SEO',
 			'WooCommerce'
@@ -547,15 +529,10 @@ class Yoast_WooCommerce_SEO {
 	 * @return array Array with the filtered columns.
 	 */
 	public function column_heading( $columns ) {
-		if ( WPSEO_Options::get( 'woo_hide_columns' ) !== true ) {
-			return $columns;
-		}
-
 		$keys_to_remove = [
 			'wpseo-title',
 			'wpseo-metadesc',
 			'wpseo-focuskw',
-			'wpseo-score',
 			'wpseo-score-readability',
 		];
 
