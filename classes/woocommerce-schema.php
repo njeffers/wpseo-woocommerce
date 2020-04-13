@@ -28,13 +28,6 @@ class WPSEO_WooCommerce_Schema {
 	protected $wc_version;
 
 	/**
-	 * Meta tags context.
-	 *
-	 * @var Meta_Tags_Context
-	 */
-	private $context;
-
-	/**
 	 * WPSEO_WooCommerce_Schema constructor.
 	 *
 	 * @param string $wc_version The WooCommerce version.
@@ -106,14 +99,11 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Changes the WebPage output to point to Product as the main entity.
 	 *
-	 * @param array             $webpage_data Product Schema data.
-	 * @param Meta_Tags_Context $context      The HTML tags context.
+	 * @param array $webpage_data Product Schema data.
 	 *
 	 * @return array Product Schema data.
 	 */
-	public function filter_webpage( $webpage_data, Meta_Tags_Context $context ) {
-		$this->context = $context;
-
+	public function filter_webpage( $webpage_data ) {
 		if ( is_product() ) {
 			$webpage_data['@type'] = 'ItemPage';
 		}
@@ -155,7 +145,7 @@ class WPSEO_WooCommerce_Schema {
 
 		// This product is the main entity of this page, so we set it as such.
 		$data['mainEntityOfPage'] = [
-			'@id' => $this->context->canonical . Schema_IDs::WEBPAGE_HASH,
+			'@id' => YoastSEO()->meta->for_current_page()->canonical . Schema_IDs::WEBPAGE_HASH,
 		];
 
 		// Now let's add this data to our overall output.
@@ -190,7 +180,7 @@ class WPSEO_WooCommerce_Schema {
 			// Add an @id to the offer.
 			if ( $offer['@type'] === 'Offer' ) {
 				$price                           = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
-				$data['offers'][ $key ]['@id']   = $this->context->site_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+				$data['offers'][ $key ]['@id']   = YoastSEO()->meta->for_current_page()->site_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
 				$data['offers'][ $key ]['price'] = $price;
 
 				$data['offers'][ $key ]['priceSpecification']['price']         = $price;
@@ -206,7 +196,7 @@ class WPSEO_WooCommerce_Schema {
 				}
 			}
 			if ( $offer['@type'] === 'AggregateOffer' ) {
-				$data['offers'][ $key ]['@id']    = $this->context->site_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
+				$data['offers'][ $key ]['@id']    = YoastSEO()->meta->for_current_page()->site_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
 				$data['offers'][ $key ]['offers'] = $this->add_individual_offers( $product );
 			}
 		}
@@ -298,7 +288,7 @@ class WPSEO_WooCommerce_Schema {
 		if ( ! empty( $data['offers'] ) ) {
 			foreach ( $data['offers'] as $key => $val ) {
 				$data['offers'][ $key ]['seller'] = [
-					'@id' => trailingslashit( $this->context->site_url ) . Schema_IDs::ORGANIZATION_HASH,
+					'@id' => trailingslashit( YoastSEO()->meta->for_current_page()->site_url ) . Schema_IDs::ORGANIZATION_HASH,
 				];
 			}
 		}
@@ -364,7 +354,7 @@ class WPSEO_WooCommerce_Schema {
 
 		if ( has_post_thumbnail() ) {
 			$this->data['image'] = [
-				'@id' => $this->context->canonical . Schema_IDs::PRIMARY_IMAGE_HASH,
+				'@id' => YoastSEO()->meta->for_current_page()->canonical . Schema_IDs::PRIMARY_IMAGE_HASH,
 			];
 
 			return;
@@ -372,7 +362,7 @@ class WPSEO_WooCommerce_Schema {
 
 		// Fallback to WooCommerce placeholder image.
 		if ( function_exists( 'wc_placeholder_img_src' ) ) {
-			$image_schema_id     = $this->context->canonical . '#woocommerceimageplaceholder';
+			$image_schema_id     = YoastSEO()->meta->for_current_page()->canonical . '#woocommerceimageplaceholder';
 			$placeholder_img_src = wc_placeholder_img_src();
 			$this->data['image'] = YoastSEO()->helpers->schema->image->generate_from_url( $image_schema_id, $placeholder_img_src );
 		}
@@ -451,7 +441,7 @@ class WPSEO_WooCommerce_Schema {
 
 			$offer = [
 				'@type'              => 'Offer',
-				'@id'                => $this->context->site_url . '#/schema/offer/' . $product_id . '-' . $key,
+				'@id'                => YoastSEO()->meta->for_current_page()->site_url . '#/schema/offer/' . $product_id . '-' . $key,
 				'name'               => $product_name . ' - ' . $variation_name,
 				'price'              => wc_format_decimal( $variation['display_price'], $decimals ),
 				'priceSpecification' => [
@@ -488,7 +478,7 @@ class WPSEO_WooCommerce_Schema {
 		$product_name = $product->get_name();
 
 		foreach ( $data['review'] as $key => $review ) {
-			$data['review'][ $key ]['@id']  = $this->context->site_url . '#/schema/review/' . $product_id . '-' . $key;
+			$data['review'][ $key ]['@id']  = YoastSEO()->meta->for_current_page()->site_url . '#/schema/review/' . $product_id . '-' . $key;
 			$data['review'][ $key ]['name'] = $product_name;
 		}
 
