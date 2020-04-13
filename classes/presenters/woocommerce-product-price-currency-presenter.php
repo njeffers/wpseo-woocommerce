@@ -25,6 +25,6 @@ class WPSEO_WooCommerce_Product_Price_Currency_Presenter extends WPSEO_WooCommer
 	 * @return string The raw value.
 	 */
 	public function get() {
-		return get_woocommerce_currency();
+		return (string) get_woocommerce_currency();
 	}
 }
