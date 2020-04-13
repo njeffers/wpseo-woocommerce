@@ -65,8 +65,7 @@ class WPSEO_WooCommerce_Schema {
 	 */
 	public function remove_unneeded_presenters( $presenters ) {
 		if ( is_product() ) {
-			foreach( $presenters as $key => $object ) {
-
+			foreach ( $presenters as $key => $object ) {
 				if (
 					is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Publisher_Presenter' ) ||
 					is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' )
@@ -75,6 +74,7 @@ class WPSEO_WooCommerce_Schema {
 				}
 			}
 		}
+
 		return $presenters;
 	}
 
@@ -143,7 +143,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Filter Schema Product data to work.
 	 *
-	 * @param array       $data    Schema Product data.
+	 * @param array      $data    Schema Product data.
 	 * @param WC_Product $product Product object.
 	 *
 	 * @return array Schema Product data.
@@ -173,7 +173,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Filters the offers array to enrich it.
 	 *
-	 * @param array       $data    Schema Product data.
+	 * @param array      $data    Schema Product data.
 	 * @param WC_Product $product The product.
 	 *
 	 * @return array Schema Product data.
@@ -189,15 +189,18 @@ class WPSEO_WooCommerce_Schema {
 
 			// Add an @id to the offer.
 			if ( $offer['@type'] === 'Offer' ) {
-				$price                                                         = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
-				$data['offers'][ $key ]['@id']                                 = $this->context->site_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
-				$data['offers'][ $key ]['price']                               = $price;
+				$price                           = WPSEO_WooCommerce_Utils::get_product_display_price( $product );
+				$data['offers'][ $key ]['@id']   = $this->context->site_url . '#/schema/offer/' . $product->get_id() . '-' . $key;
+				$data['offers'][ $key ]['price'] = $price;
+
 				$data['offers'][ $key ]['priceSpecification']['price']         = $price;
 				$data['offers'][ $key ]['priceSpecification']['priceCurrency'] = get_woocommerce_currency();
+
 				if ( wc_tax_enabled() ) {
 					// Only show this property if tax calculation has been enabled in WooCommerce.
 					$data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] = WPSEO_WooCommerce_Utils::prices_have_tax_included();
-				} else {
+				}
+				else {
 					// Remove `valueAddedTaxIncluded` property from Schema output by WooCommerce.
 					unset( $data['offers'][ $key ]['priceSpecification']['valueAddedTaxIncluded'] );
 				}
@@ -214,7 +217,7 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Filters the offers array on sales, possibly unset them.
 	 *
-	 * @param array       $offers  Schema Offer data.
+	 * @param array      $offers  Schema Offer data.
 	 * @param WC_Product $product The product.
 	 *
 	 * @return array $offers    Schema Offer data.
@@ -330,9 +333,9 @@ class WPSEO_WooCommerce_Schema {
 	/**
 	 * Adds an attribute to our Product data array with the value from a taxonomy, as an Organization,
 	 *
-	 * @param string      $attribute The attribute we're adding to Product.
+	 * @param string     $attribute The attribute we're adding to Product.
 	 * @param WC_Product $product   The WooCommerce product we're working with.
-	 * @param string      $taxonomy  The taxonomy to get the attribute's value from.
+	 * @param string     $taxonomy  The taxonomy to get the attribute's value from.
 	 */
 	private function add_organization_for_attribute( $attribute, $product, $taxonomy ) {
 		$term = $this->get_primary_term_or_first_term( $taxonomy, $product->get_id() );
@@ -437,11 +440,11 @@ class WPSEO_WooCommerce_Schema {
 	protected function add_individual_offers( $product ) {
 		$variations = $product->get_available_variations();
 
-		$currency           = get_woocommerce_currency();
-		$decimals           = wc_get_price_decimals();
-		$data               = [];
-		$product_id         = $product->get_id();
-		$product_name       = $product->get_name();
+		$currency     = get_woocommerce_currency();
+		$decimals     = wc_get_price_decimals();
+		$data         = [];
+		$product_id   = $product->get_id();
+		$product_name = $product->get_name();
 
 		foreach ( $variations as $key => $variation ) {
 			$variation_name = implode( ' / ', $variation['attributes'] );
