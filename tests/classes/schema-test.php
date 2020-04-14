@@ -6,9 +6,8 @@ use Brain\Monkey;
 use Brain\Monkey\Functions;
 use Mockery;
 use WPSEO_WooCommerce_Schema;
-use Yoast\WP\SEO\Tests\Mocks\Schema_IDs;
-use Yoast\WP\SEO\Tests\Mocks\YoastSEO;
 use Yoast\WP\Woocommerce\Tests\Doubles\Schema_Double;
+use Yoast\WP\Woocommerce\Tests\Mocks\Schema_IDs;
 use Yoast\WP\Woocommerce\Tests\TestCase;
 
 /**
@@ -55,7 +54,15 @@ class Schema_Test extends TestCase {
 		$this->assertTrue( \has_filter( 'wpseo_schema_webpage', [ $schema, 'filter_webpage' ] ) );
 		$this->assertTrue( \has_action( 'wp_footer', [ $schema, 'output_schema_footer' ] ) );
 
-		$this->assertFalse( \has_filter( 'woocommerce_structured_data_review', [ $schema, 'change_reviewed_entity' ] ) );
+		$this->assertFalse(
+			\has_filter(
+				'woocommerce_structured_data_review',
+				[
+					$schema,
+					'change_reviewed_entity',
+				]
+			)
+		);
 	}
 
 	/**
@@ -873,7 +880,10 @@ class Schema_Test extends TestCase {
 		);
 
 		$instance = Mockery::mock( Schema_Double::class )->makePartial();
-		$instance->expects( 'get_primary_term_or_first_term' )->twice()->with( 'product_cat', 1 )->andReturn( (object) [ 'name' => $product_name ] );
+		$instance->expects( 'get_primary_term_or_first_term' )
+			->twice()
+			->with( 'product_cat', 1 )
+			->andReturn( (object) [ 'name' => $product_name ] );
 
 		$image_data   = [
 			'url'    => $base_url . '/example_image.jpg',
@@ -881,8 +891,14 @@ class Schema_Test extends TestCase {
 			'height' => 50,
 		];
 		$schema_image = Mockery::mock( 'overload:WPSEO_Schema_Image' );
-		$schema_image->expects( '__construct' )->once()->with( $canonical . '#woocommerceimageplaceholder' )->andReturnSelf();
-		$schema_image->expects( 'generate_from_url' )->once()->with( $base_url . '/example_image.jpg' )->andReturn( $image_data );
+		$schema_image->expects( '__construct' )
+			->once()
+			->with( $canonical . '#woocommerceimageplaceholder' )
+			->andReturnSelf();
+		$schema_image->expects( 'generate_from_url' )
+			->once()
+			->with( $base_url . '/example_image.jpg' )
+			->andReturn( $image_data );
 
 		$data = [
 			'@type'       => 'Product',
@@ -975,10 +991,12 @@ class Schema_Test extends TestCase {
 		$this->meta
 			->expects( 'for_current_page' )
 			->times( 5 )
-			->andReturn( (object) [
-				'site_url'  => $base_url,
-				'canonical' => $canonical,
-			] );
+			->andReturn(
+				(object) [
+					'site_url'  => $base_url,
+					'canonical' => $canonical,
+				]
+			);
 
 		$instance->change_product( $data, $product );
 		$this->assertEquals( $expected, $instance->data );
@@ -1031,9 +1049,12 @@ class Schema_Test extends TestCase {
 		);
 
 		$instance = Mockery::mock( Schema_Double::class )->makePartial();
-		$instance->expects( 'get_primary_term_or_first_term' )->twice()->with( 'product_cat', 1 )->andReturn( (object) [ 'name' => $product_name ] );
+		$instance->expects( 'get_primary_term_or_first_term' )
+			->twice()
+			->with( 'product_cat', 1 )
+			->andReturn( (object) [ 'name' => $product_name ] );
 
-		$image_data   = [
+		$image_data = [
 			'@type'  => 'ImageObject',
 			'@id'    => $canonical . '#woocommerceimageplaceholder',
 			'url'    => $base_url . 'example_image.jpg',
@@ -1044,10 +1065,12 @@ class Schema_Test extends TestCase {
 		$this->meta
 			->expects( 'for_current_page' )
 			->times( 5 )
-			->andReturn( (object) [
-				'site_url'  => $base_url,
-				'canonical' => $canonical,
-			] );
+			->andReturn(
+				(object) [
+					'site_url'  => $base_url,
+					'canonical' => $canonical,
+				]
+			);
 
 		$this->helpers->schema->image
 			->expects( 'generate_from_url' )
@@ -1202,15 +1225,20 @@ class Schema_Test extends TestCase {
 		);
 
 		$instance = Mockery::mock( Schema_Double::class )->makePartial();
-		$instance->expects( 'get_primary_term_or_first_term' )->twice()->with( 'product_cat', 1 )->andReturn( (object) [ 'name' => $product_name ] );
+		$instance->expects( 'get_primary_term_or_first_term' )
+			->twice()
+			->with( 'product_cat', 1 )
+			->andReturn( (object) [ 'name' => $product_name ] );
 
 		$this->meta
 			->expects( 'for_current_page' )
 			->times( 5 )
-			->andReturn( (object) [
-				'site_url'  => $base_url,
-				'canonical' => $canonical,
-			] );
+			->andReturn(
+				(object) [
+					'site_url'  => $base_url,
+					'canonical' => $canonical,
+				]
+			);
 
 		$this->helpers->schema->image
 			->expects( 'generate_from_url' )
@@ -1270,8 +1298,8 @@ class Schema_Test extends TestCase {
 					],
 					'@id'                => $base_url . '#/schema/offer/1-0',
 					'priceSpecification' => [
-						'price'                 => '1.00',
-						'priceCurrency'         => 'GBP',
+						'price'         => '1.00',
+						'priceCurrency' => 'GBP',
 					],
 				],
 			],
@@ -1412,8 +1440,8 @@ class Schema_Test extends TestCase {
 					'price'              => '49.00',
 					'priceValidUntil'    => '2020-03-24',
 					'priceSpecification' => [
-						'price'                 => '49.00',
-						'priceCurrency'         => 'GBP',
+						'price'         => '49.00',
+						'priceCurrency' => 'GBP',
 					],
 					'priceCurrency'      => 'GBP',
 					'availability'       => 'http://schema.org/InStock',
@@ -1452,9 +1480,7 @@ class Schema_Test extends TestCase {
 		$this->meta
 			->expects( 'for_current_page' )
 			->once()
-			->andReturn( (object) [
-				'site_url'  => $base_url,
-			] );
+			->andReturn( (object) [ 'site_url' => $base_url ] );
 
 		$output = $schema->filter_offers( $input, $product );
 

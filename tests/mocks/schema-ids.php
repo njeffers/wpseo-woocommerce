@@ -1,11 +1,6 @@
 <?php
-/**
- * WPSEO plugin test file.
- *
- * @package Yoast\WP\SEO\Tests\Mocks
- */
 
-namespace Yoast\WP\SEO\Tests\Mocks;
+namespace Yoast\WP\Woocommerce\Tests\Mocks;
 
 /**
  * Class Schema_IDs.
