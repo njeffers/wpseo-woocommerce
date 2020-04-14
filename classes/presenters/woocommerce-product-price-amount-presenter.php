@@ -26,6 +26,6 @@ class WPSEO_WooCommerce_Product_Price_Amount_Presenter extends WPSEO_WooCommerce
 	 * @return string The raw value.
 	 */
 	public function get() {
-		return WPSEO_WooCommerce_Utils::get_product_display_price( $this->product );
+		return (string) WPSEO_WooCommerce_Utils::get_product_display_price( $this->product );
 	}
 }

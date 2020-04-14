@@ -36,15 +36,6 @@ class Schema_Double extends WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Retrieves the canonical URL for the current page.
-	 *
-	 * @return string The canonical URL.
-	 */
-	public function get_canonical() {
-		return parent::get_canonical();
-	}
-
-	/**
 	 * Filters the offers array to enrich it.
 	 *
 	 * @param array       $data    Schema Product data.
@@ -88,38 +79,5 @@ class Schema_Double extends WPSEO_WooCommerce_Schema {
 	 */
 	public function add_global_identifier( $product ) {
 		return parent::add_global_identifier( $product );
-	}
-
-	/**
-	 * Retrieve the global identifier type and value if we have one.
-	 *
-	 * @param \WC_Product $product Product object.
-	 *
-	 * @return array|bool An array of `type` and `value` on success, false on failure.
-	 */
-	public function get_global_identifier( $product ) {
-		return parent::get_global_identifier( $product );
-	}
-
-	/**
-	 * Add the GTIN number to our Schema.
-	 *
-	 * @param array $global_identifier An array of the global identifier data.
-	 *
-	 * @return void
-	 */
-	public function add_gtin( $global_identifier ) {
-		parent::add_gtin( $global_identifier );
-	}
-
-	/**
-	 * Add the MPN or ISBN number to our Schema.
-	 *
-	 * @param array $global_identifier An array of the global identifier data.
-	 *
-	 * @return void
-	 */
-	public function add_mpn_isbn( $global_identifier ) {
-		parent::add_mpn_isbn( $global_identifier );
 	}
 }
