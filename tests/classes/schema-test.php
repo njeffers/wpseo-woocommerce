@@ -1458,4 +1458,40 @@ class Schema_Test extends TestCase {
 
 		$this->assertSame( $expected_output, $output );
 	}
+
+	/**
+	 * Tests that the article publisher and article author presenters are removed as expected.
+	 */
+	public function test_remove_unneeded_presenters() {
+		$presenters = [
+			Mockery::mock( 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Publisher_Presenter' ),
+			Mockery::mock( 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' ),
+		];
+
+		Functions\expect( 'is_product' )
+			->once()
+			->andReturn( true );
+
+		$instance = new WPSEO_WooCommerce_Schema();
+
+		$this->assertEmpty( $instance->remove_unneeded_presenters( $presenters ) );
+	}
+
+	/**
+	 * Tests that no presenters are removed when not on a product page.
+	 */
+	public function test_remove_unneeded_presenters_only_on_product_page() {
+		$presenters = [
+			Mockery::mock( 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Publisher_Presenter' ),
+			Mockery::mock( 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' ),
+		];
+
+		Functions\expect( 'is_product' )
+			->once()
+			->andReturn( false );
+
+		$instance = new WPSEO_WooCommerce_Schema();
+
+		$this->assertSame( $presenters, $instance->remove_unneeded_presenters( $presenters ) );
+	}
 }
