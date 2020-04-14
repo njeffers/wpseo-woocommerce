@@ -5,8 +5,6 @@
  * @package WPSEO/WooCommerce
  */
 
-use WPSEO_WooCommerce_Abstract_Product_Presenter;
-
 /**
  * Represents the product's retailer item ID.
  */

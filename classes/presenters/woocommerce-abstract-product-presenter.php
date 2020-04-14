@@ -5,7 +5,6 @@
  * @package WPSEO/WooCommerce
  */
 
-use WC_Product;
 use Yoast\WP\SEO\Presenters\Abstract_Indexable_Tag_Presenter;
 
 /**
