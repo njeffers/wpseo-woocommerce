@@ -6,7 +6,6 @@
  */
 
 use Yoast\WP\SEO\Config\Schema_IDs;
-use Yoast\WP\SEO\Context\Meta_Tags_Context;
 
 /**
  * Class WPSEO_WooCommerce_Schema
