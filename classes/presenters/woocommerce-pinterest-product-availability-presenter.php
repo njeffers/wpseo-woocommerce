@@ -5,8 +5,6 @@
  * @package WPSEO/WooCommerce
  */
 
-use WPSEO_WooCommerce_Abstract_Product_Availability_Presenter;
-
 /**
  * Represents the Pinterest product availability.
  */
