@@ -22,7 +22,6 @@ class OpenGraph_Test extends TestCase {
 
 		$this->assertTrue( \has_filter( 'language_attributes', [ $og, 'product_namespace' ] ) );
 		$this->assertTrue( \has_filter( 'wpseo_opengraph_type', [ $og, 'return_type_product' ] ) );
-		$this->assertTrue( \has_filter( 'wpseo_opengraph_desc', [ $og, 'product_taxonomy_desc_enhancement' ] ) );
 		$this->assertTrue( \has_action( 'wpseo_add_opengraph_additional_images', [ $og, 'set_opengraph_image' ] ) );
 	}
 
@@ -47,34 +46,6 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 		$this->assertSame( 'article', $og->return_type_product( 'article' ) );
-	}
-
-	/**
-	 * Test the OpenGraph description enhancement.
-	 *
-	 * @covers WPSEO_WooCommerce_OpenGraph::product_taxonomy_desc_enhancement
-	 */
-	public function test_product_taxonomy_desc_enhancement() {
-		Functions\stubs(
-			[
-				'is_product_taxonomy' => false,
-			]
-		);
-
-		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertSame( 'example description', $og->product_taxonomy_desc_enhancement( 'example description' ) );
-
-		$expected = 'This is our expected description';
-
-		Functions\stubs(
-			[
-				'is_product_taxonomy' => true,
-				'term_description'    => $expected,
-				'wp_strip_all_tags'   => null,
-				'strip_shortcodes'    => null,
-			]
-		);
-		$this->assertSame( $expected, $og->product_taxonomy_desc_enhancement( 'example description' ) );
 	}
 
 	/**
