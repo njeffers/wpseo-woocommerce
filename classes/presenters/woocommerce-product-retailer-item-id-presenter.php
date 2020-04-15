@@ -5,8 +5,6 @@
  * @package WPSEO/WooCommerce
  */
 
-use WPSEO_WooCommerce_Abstract_Product_Presenter;
-
 /**
  * Represents the product's retailer item ID.
  */
@@ -25,6 +23,6 @@ class WPSEO_WooCommerce_Product_Retailer_Item_ID_Presenter extends WPSEO_WooComm
 	 * @return string The raw value.
 	 */
 	public function get() {
-		return $this->product->get_sku();
+		return (string) $this->product->get_sku();
 	}
 }

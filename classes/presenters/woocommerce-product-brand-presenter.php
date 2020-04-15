@@ -5,9 +5,6 @@
  * @package WPSEO/WooCommerce
  */
 
-use WPSEO_WooCommerce_Abstract_Product_Presenter;
-use WPSEO_WooCommerce_Utils;
-
 /**
  * Represents the product's brand.
  */

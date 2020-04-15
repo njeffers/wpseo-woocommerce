@@ -5,8 +5,6 @@
  * @package WPSEO/WooCommerce
  */
 
-use WPSEO_WooCommerce_Abstract_Product_Presenter;
-
 /**
  * Represents the product's price currency.
  */
@@ -25,6 +23,6 @@ class WPSEO_WooCommerce_Product_Price_Currency_Presenter extends WPSEO_WooCommer
 	 * @return string The raw value.
 	 */
 	public function get() {
-		return get_woocommerce_currency();
+		return (string) get_woocommerce_currency();
 	}
 }

@@ -7,9 +7,6 @@
 
 /**
  * Class WPSEO_WooCommerce_OpenGraph
- *
- * @deprecated 13.0
- * @codeCoverageIgnore
  */
 class WPSEO_WooCommerce_OpenGraph {
 
@@ -19,7 +16,6 @@ class WPSEO_WooCommerce_OpenGraph {
 	public function __construct() {
 		add_filter( 'language_attributes', [ $this, 'product_namespace' ], 11 );
 		add_filter( 'wpseo_opengraph_type', [ $this, 'return_type_product' ] );
-		add_filter( 'wpseo_opengraph_desc', [ $this, 'product_taxonomy_desc_enhancement' ] );
 
 		add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
 	}
@@ -42,11 +38,16 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Make sure the OpenGraph description is put out.
 	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
+	 *
 	 * @param string $desc The current description, will be overwritten if we're on a product page.
 	 *
 	 * @return string
 	 */
 	public function product_taxonomy_desc_enhancement( $desc ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0' );
+
 		if ( is_product_taxonomy() ) {
 			$term_desc = term_description();
 
@@ -61,6 +62,9 @@ class WPSEO_WooCommerce_OpenGraph {
 
 	/**
 	 * Adds the other product images to the OpenGraph output.
+	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
 	 *
 	 * @return bool False if we didn't output, true if we did.
 	 */
@@ -115,12 +119,17 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Retrieve the primary and if that doesn't exist first term for the brand taxonomy.
 	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
+	 *
 	 * @param string      $schema_brand The taxonomy the site uses for brands.
 	 * @param \WC_Product $product      The product we're finding the brand for.
 	 *
 	 * @return bool|string The brand name or false on failure.
 	 */
 	protected function get_brand_term_name( $schema_brand, $product ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0', 'WPSEO_WooCommerce_Product_Brand_Presenter::get' );
+
 		$primary_term = WPSEO_WooCommerce_Utils::search_primary_term( [ $schema_brand ], $product );
 		if ( ! empty( $primary_term ) ) {
 			return $primary_term;
@@ -139,6 +148,9 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Add the brand to the OpenGraph output.
 	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
+	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function brand( WC_Product $product ) {
@@ -155,6 +167,9 @@ class WPSEO_WooCommerce_OpenGraph {
 
 	/**
 	 * Add the price to the OpenGraph output.
+	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
 	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
@@ -193,6 +208,9 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Add the product condition.
 	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
+	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function product_condition( WC_Product $product ) {
@@ -214,6 +232,9 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Add the Item ID.
 	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
+	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
 	public function retailer_item_id( WC_Product $product ) {
@@ -224,6 +245,9 @@ class WPSEO_WooCommerce_OpenGraph {
 
 	/**
 	 * Add our product stock availability.
+	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
 	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
@@ -245,6 +269,9 @@ class WPSEO_WooCommerce_OpenGraph {
 
 	/**
 	 * Add our product stock availability for Pinterest Rich Pins.
+	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
 	 *
 	 * @param WC_Product $product The WooCommerce product object.
 	 */
