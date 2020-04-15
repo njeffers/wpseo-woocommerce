@@ -19,7 +19,6 @@ class WPSEO_WooCommerce_OpenGraph {
 	public function __construct() {
 		add_filter( 'language_attributes', [ $this, 'product_namespace' ], 11 );
 		add_filter( 'wpseo_opengraph_type', [ $this, 'return_type_product' ] );
-		add_filter( 'wpseo_opengraph_desc', [ $this, 'product_taxonomy_desc_enhancement' ] );
 
 		add_action( 'wpseo_add_opengraph_additional_images', [ $this, 'set_opengraph_image' ] );
 	}
@@ -42,11 +41,16 @@ class WPSEO_WooCommerce_OpenGraph {
 	/**
 	 * Make sure the OpenGraph description is put out.
 	 *
+	 * @deprecated 13.0
+	 * @codeCoverageIgnore
+	 *
 	 * @param string $desc The current description, will be overwritten if we're on a product page.
 	 *
 	 * @return string
 	 */
 	public function product_taxonomy_desc_enhancement( $desc ) {
+		_deprecated_function( __METHOD__, 'WPSEO Woo 13.0' );
+
 		if ( is_product_taxonomy() ) {
 			$term_desc = term_description();
 
