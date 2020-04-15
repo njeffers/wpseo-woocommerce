@@ -38,6 +38,7 @@ Bugfixes:
 Enhancements:
 
 * Adds a `Term hierarchy` snippet variable.
+* Unifies the OpenGraph description fallbacks as per https://developer.yoast.com/features/meta-tags/.
 
 Other:
 
