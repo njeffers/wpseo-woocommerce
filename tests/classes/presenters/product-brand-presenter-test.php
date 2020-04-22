@@ -47,12 +47,27 @@ class Product_Brand_Presenter_Test extends TestCase {
 		Mockery::mock( 'overload:Yoast\WP\SEO\Presenters\Abstract_Indexable_Tag_Presenter' );
 
 		$this->product = Mockery::mock( 'WC_Product' );
-		$this->product->expects( 'get_id' )->andReturn( 1 );
 
 		$this->instance          = new WPSEO_WooCommerce_Product_Brand_Presenter( $this->product );
 		$this->instance->helpers = (object) [
 			'options' => Mockery::mock( 'Yoast\WP\SEO\Helpers\Options_Helper' ),
 		];
+	}
+
+	/**
+	 * Tests the constructor.
+	 *
+	 * @covers ::__construct
+	 */
+	public function test_construct() {
+		$this->assertAttributeEquals( $this->product, 'product', $this->instance );
+	}
+
+	/**
+	 * Tests the tag format.
+	 */
+	public function test_tag_format() {
+		$this->assertAttributeEquals( '<meta property="product:brand" content="%s" />', 'tag_format', $this->instance );
 	}
 
 	/**
@@ -71,6 +86,7 @@ class Product_Brand_Presenter_Test extends TestCase {
 			->andReturn( $schema_brand );
 
 		// Tests for `get_brand_term_name`.
+		$this->product->expects( 'get_id' )->andReturn( 1 );
 		Mockery::mock( 'overload:WPSEO_Primary_Term' )
 			->expects( 'get_primary_term' )
 			->once()
@@ -108,6 +124,7 @@ class Product_Brand_Presenter_Test extends TestCase {
 			->andReturn( $schema_brand );
 
 		// Tests for `get_brand_term_name`.
+		$this->product->expects( 'get_id' )->andReturn( 1 );
 		Mockery::mock( 'overload:WPSEO_Primary_Term' )
 			->expects( 'get_primary_term' )
 			->once()
@@ -139,6 +156,7 @@ class Product_Brand_Presenter_Test extends TestCase {
 			->andReturn( $schema_brand );
 
 		// Tests for `get_brand_term_name`.
+		$this->product->expects( 'get_id' )->andReturn( 1 );
 		Mockery::mock( 'overload:WPSEO_Primary_Term' )
 			->expects( 'get_primary_term' )
 			->once()
