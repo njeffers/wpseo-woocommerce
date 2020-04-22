@@ -51,6 +51,8 @@ class Product_Availability_Presenter_Test extends TestCase {
 
 	/**
 	 * Tests the tag format.
+	 *
+	 * @coversNothing
 	 */
 	public function test_tag_format() {
 		$instance = new WPSEO_WooCommerce_Product_Availability_Presenter( $this->product, false );

@@ -65,6 +65,8 @@ class Product_Brand_Presenter_Test extends TestCase {
 
 	/**
 	 * Tests the tag format.
+	 *
+	 * @coversNothing
 	 */
 	public function test_tag_format() {
 		$this->assertAttributeEquals( '<meta property="product:brand" content="%s" />', 'tag_format', $this->instance );

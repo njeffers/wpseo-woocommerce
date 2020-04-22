@@ -55,6 +55,8 @@ class Product_Price_Amount_Presenter_Test extends TestCase {
 
 	/**
 	 * Tests the tag format.
+	 *
+	 * @coversNothing
 	 */
 	public function test_tag_format() {
 		$this->assertAttributeEquals( '<meta property="product:price:amount" content="%s" />', 'tag_format', $this->instance );
