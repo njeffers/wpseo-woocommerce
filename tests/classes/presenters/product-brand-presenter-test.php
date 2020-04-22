@@ -43,10 +43,12 @@ class Product_Brand_Presenter_Test extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		// Needs to exist.
+		// Needs to exist as WPSEO_WooCommerce_Product_Brand_Presenter depends on it.
 		Mockery::mock( 'overload:Yoast\WP\SEO\Presenters\Abstract_Indexable_Tag_Presenter' );
 
-		$this->product           = Mockery::mock( 'WC_Product' );
+		$this->product = Mockery::mock( 'WC_Product' );
+		$this->product->expects( 'get_id' )->andReturn( 1 );
+
 		$this->instance          = new WPSEO_WooCommerce_Product_Brand_Presenter( $this->product );
 		$this->instance->helpers = (object) [
 			'options' => Mockery::mock( 'Yoast\WP\SEO\Helpers\Options_Helper' ),
@@ -69,10 +71,9 @@ class Product_Brand_Presenter_Test extends TestCase {
 			->andReturn( $schema_brand );
 
 		// Tests for `get_brand_term_name`.
-		Mockery::mock( 'overload:WPSEO_WooCommerce_Utils' )
-			->expects( 'search_primary_term' )
+		Mockery::mock( 'overload:WPSEO_Primary_Term' )
+			->expects( 'get_primary_term' )
 			->once()
-			->with( [ $schema_brand ], $this->product )
 			->andReturn( '' );
 		Functions\expect( 'get_the_ID' )
 			->once()
@@ -107,10 +108,9 @@ class Product_Brand_Presenter_Test extends TestCase {
 			->andReturn( $schema_brand );
 
 		// Tests for `get_brand_term_name`.
-		Mockery::mock( 'overload:WPSEO_WooCommerce_Utils' )
-			->expects( 'search_primary_term' )
+		Mockery::mock( 'overload:WPSEO_Primary_Term' )
+			->expects( 'get_primary_term' )
 			->once()
-			->with( [ $schema_brand ], $this->product )
 			->andReturn( '' );
 		Functions\expect( 'get_the_ID' )
 			->once()
@@ -139,12 +139,15 @@ class Product_Brand_Presenter_Test extends TestCase {
 			->andReturn( $schema_brand );
 
 		// Tests for `get_brand_term_name`.
-		Mockery::mock( 'overload:WPSEO_WooCommerce_Utils' )
-			->expects( 'search_primary_term' )
+		Mockery::mock( 'overload:WPSEO_Primary_Term' )
+			->expects( 'get_primary_term' )
 			->once()
-			->with( [ $schema_brand ], $this->product )
 			->andReturn( 'primary' );
+		Functions\expect( 'get_term_by' )
+			->once()
+			->with( 'id', 'primary', 'test-brand' )
+			->andReturn( (object) [ 'name' => 'primary term' ] );
 
-		$this->assertEquals( 'primary', $this->instance->get() );
+		$this->assertEquals( 'primary term', $this->instance->get() );
 	}
 }
