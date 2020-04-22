@@ -81,7 +81,7 @@ class Product_Price_Amount_Presenter_Test extends TestCase {
 		expect( 'wc_tax_enabled' )->once()->andReturn( false );
 		expect( 'wc_format_decimal' )->once()->with( '11', 0 )->andReturn( 11 );
 
-		$this->assertEquals( '11', $this->instance->get() );
+		$this->assertSame( '11', $this->instance->get() );
 	}
 
 	/**
@@ -106,6 +106,6 @@ class Product_Price_Amount_Presenter_Test extends TestCase {
 		$actual = $this->instance->get();
 
 		$this->assertSame( '11', $actual );
-		$this->assertTrue( \is_string( $actual ) );
+		$this->assertInternalType( 'string', $actual );
 	}
 }

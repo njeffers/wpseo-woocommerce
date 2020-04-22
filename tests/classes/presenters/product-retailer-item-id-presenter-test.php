@@ -58,7 +58,7 @@ class Product_Retailer_Item_ID_Presenter_Test extends TestCase {
 	 * @coversNothing
 	 */
 	public function test_tag_format() {
-		$this->assertAttributeEquals( '<meta property="product:retailer_item_id" content="%s" />', 'tag_format', $this->instance );
+		$this->assertAttributeSame( '<meta property="product:retailer_item_id" content="%s" />', 'tag_format', $this->instance );
 	}
 
 	/**

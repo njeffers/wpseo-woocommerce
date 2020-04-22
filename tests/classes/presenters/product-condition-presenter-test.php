@@ -60,7 +60,7 @@ class Product_Condition_Presenter_Test extends TestCase {
 	 * @coversNothing
 	 */
 	public function test_tag_format() {
-		$this->assertAttributeEquals( '<meta property="product:condition" content="%s" />', 'tag_format', $this->instance );
+		$this->assertAttributeSame( '<meta property="product:condition" content="%s" />', 'tag_format', $this->instance );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class Product_Condition_Presenter_Test extends TestCase {
 			->with( 'new', $this->product )
 			->andReturn( 'condition' );
 
-		$this->assertEquals( 'condition', $this->instance->get() );
+		$this->assertSame( 'condition', $this->instance->get() );
 	}
 
 	/**
@@ -88,6 +88,9 @@ class Product_Condition_Presenter_Test extends TestCase {
 			->with( 'new', $this->product )
 			->andReturn( 123 );
 
-		$this->assertEquals( '123', $this->instance->get() );
+		$actual = $this->instance->get();
+
+		$this->assertSame( '123', $actual );
+		$this->assertInternalType( 'string', $actual );
 	}
 }

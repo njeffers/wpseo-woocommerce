@@ -2,10 +2,10 @@
 
 namespace Yoast\WP\Woocommerce\Tests\Classes\Presenters;
 
+use Brain\Monkey\Actions;
 use Mockery;
 use WPSEO_WooCommerce_Product_OpenGraph_Deprecation_Presenter;
 use Yoast\WP\Woocommerce\Tests\TestCase;
-use function Brain\Monkey\Actions\did;
 
 /**
  * Class Product_OpenGraph_Deprecation_Presenter_Test.
@@ -60,8 +60,8 @@ class Product_OpenGraph_Deprecation_Presenter_Test extends TestCase {
 	 * @covers ::get
 	 */
 	public function test_get() {
-		did( 'Yoast\WP\Woocommerce\opengraph' );
+		Actions\did( 'Yoast\WP\Woocommerce\opengraph' );
 
-		$this->assertEquals( '', $this->instance->get() );
+		$this->assertSame( '', $this->instance->get() );
 	}
 }

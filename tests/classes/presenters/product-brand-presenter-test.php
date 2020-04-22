@@ -69,7 +69,7 @@ class Product_Brand_Presenter_Test extends TestCase {
 	 * @coversNothing
 	 */
 	public function test_tag_format() {
-		$this->assertAttributeEquals( '<meta property="product:brand" content="%s" />', 'tag_format', $this->instance );
+		$this->assertAttributeSame( '<meta property="product:brand" content="%s" />', 'tag_format', $this->instance );
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Product_Brand_Presenter_Test extends TestCase {
 				]
 			);
 
-		$this->assertEquals( 'first', $this->instance->get() );
+		$this->assertSame( 'first', $this->instance->get() );
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Product_Brand_Presenter_Test extends TestCase {
 			->with( 123, $schema_brand )
 			->andReturn( [] );
 
-		$this->assertEquals( '', $this->instance->get() );
+		$this->assertSame( '', $this->instance->get() );
 	}
 
 	/**
@@ -168,6 +168,6 @@ class Product_Brand_Presenter_Test extends TestCase {
 			->with( 'id', 'primary', 'test-brand' )
 			->andReturn( (object) [ 'name' => 'primary term' ] );
 
-		$this->assertEquals( 'primary term', $this->instance->get() );
+		$this->assertSame( 'primary term', $this->instance->get() );
 	}
 }

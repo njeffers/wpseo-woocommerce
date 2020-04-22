@@ -45,8 +45,8 @@ class Product_Availability_Presenter_Test extends TestCase {
 		$instance = new WPSEO_WooCommerce_Product_Availability_Presenter( $this->product, false, true );
 
 		$this->assertAttributeEquals( $this->product, 'product', $instance );
-		$this->assertAttributeEquals( false, 'is_on_backorder', $instance );
-		$this->assertAttributeEquals( true, 'is_in_stock', $instance );
+		$this->assertAttributeSame( false, 'is_on_backorder', $instance );
+		$this->assertAttributeSame( true, 'is_in_stock', $instance );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class Product_Availability_Presenter_Test extends TestCase {
 	public function test_tag_format() {
 		$instance = new WPSEO_WooCommerce_Product_Availability_Presenter( $this->product, false );
 
-		$this->assertAttributeEquals( '<meta property="product:availability" content="%s" />', 'tag_format', $instance );
+		$this->assertAttributeSame( '<meta property="product:availability" content="%s" />', 'tag_format', $instance );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Product_Availability_Presenter_Test extends TestCase {
 	public function test_get() {
 		$instance = new WPSEO_WooCommerce_Product_Availability_Presenter( $this->product, false, false );
 
-		$this->assertEquals( 'out of stock', $instance->get() );
+		$this->assertSame( 'out of stock', $instance->get() );
 	}
 
 	/**
@@ -79,7 +79,7 @@ class Product_Availability_Presenter_Test extends TestCase {
 	public function test_get_on_backorder() {
 		$instance = new WPSEO_WooCommerce_Product_Availability_Presenter( $this->product, true );
 
-		$this->assertEquals( 'available for order', $instance->get() );
+		$this->assertSame( 'available for order', $instance->get() );
 	}
 
 	/**
@@ -90,6 +90,6 @@ class Product_Availability_Presenter_Test extends TestCase {
 	public function test_get_in_stock() {
 		$instance = new WPSEO_WooCommerce_Product_Availability_Presenter( $this->product, false, true );
 
-		$this->assertEquals( 'instock', $instance->get() );
+		$this->assertSame( 'instock', $instance->get() );
 	}
 }

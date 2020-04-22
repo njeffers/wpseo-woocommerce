@@ -59,7 +59,7 @@ class Product_Price_Currency_Presenter_Test extends TestCase {
 	 * @coversNothing
 	 */
 	public function test_tag_format() {
-		$this->assertAttributeEquals( '<meta property="product:price:currency" content="%s" />', 'tag_format', $this->instance );
+		$this->assertAttributeSame( '<meta property="product:price:currency" content="%s" />', 'tag_format', $this->instance );
 	}
 
 	/**
