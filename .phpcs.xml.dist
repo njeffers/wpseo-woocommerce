@@ -142,4 +142,9 @@
 		</properties>
 	</rule>
 
+	<!-- Disable max classname sniff in the tests for now. -->
+	<rule ref="Yoast.NamingConventions.ObjectNameDepth.MaxExceeded">
+		<exclude-pattern>/tests/*\.php$</exclude-pattern>
+	</rule>
+
 </ruleset>
