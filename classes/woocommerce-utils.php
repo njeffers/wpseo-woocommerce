@@ -106,4 +106,19 @@ class WPSEO_WooCommerce_Utils {
 	public static function prices_have_tax_included() {
 		return get_option( 'woocommerce_tax_display_shop' ) === 'incl';
 	}
+
+	/**
+	 * Determines the product type.
+	 *
+	 * @param WC_Product $product The WooCommerce Product.
+	 *
+	 * @return string The product type. Fallbacks to 'simple'.
+	 */
+	public static function get_product_type( $product ) {
+		if ( method_exists( $product, 'get_type' ) ) {
+			return $product->get_type();
+		}
+
+		return 'simple';
+	}
 }
