@@ -318,6 +318,11 @@ class WPSEO_WooCommerce_OpenGraph {
 	 * @return bool True on success, false on failure.
 	 */
 	protected function set_opengraph_image_product( $opengraph_image, WC_Product $product ) {
+		// Don't add the gallery images if the user set a specific image for this product.
+		if ( $this->is_opengraph_image_set_by_user( $product->get_id() ) ) {
+			return true;
+		}
+
 		$img_ids = $product->get_gallery_image_ids();
 
 		if ( is_array( $img_ids ) && $img_ids !== [] ) {
@@ -329,6 +334,20 @@ class WPSEO_WooCommerce_OpenGraph {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Checks whether users set a specific open graph image for a product.
+	 *
+	 * @param int $product_id The product ID.
+	 *
+	 * @return bool Whether users set a specific open graph image for a product.
+	 */
+	protected function is_opengraph_image_set_by_user( $product_id ) {
+		$indexable_repository = YoastSEO()->classes->get( 'Yoast\WP\SEO\Repositories\Indexable_Repository' );
+		$indexable            = $indexable_repository->find_by_id_and_type( $product_id, 'post' );
+
+		return $indexable->open_graph_image_source === 'set-by-user';
 	}
 
 	/**
