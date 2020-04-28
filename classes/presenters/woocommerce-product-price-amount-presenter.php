@@ -23,6 +23,13 @@ class WPSEO_WooCommerce_Product_Price_Amount_Presenter extends WPSEO_WooCommerce
 	 * @return string The raw value.
 	 */
 	public function get() {
+		$product_type = WPSEO_WooCommerce_Utils::get_product_type( $this->product );
+
+		// Omit the price amount for variable and grouped products.
+		if ( $product_type === 'variable' || $product_type === 'grouped' ) {
+			return '';
+		}
+
 		return (string) WPSEO_WooCommerce_Utils::get_product_display_price( $this->product );
 	}
 }
