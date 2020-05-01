@@ -80,6 +80,7 @@ class Yoast_WooCommerce_SEO {
 			// Initialize schema & OpenGraph.
 			add_action( 'init', [ $this, 'initialize_opengraph' ] );
 			add_action( 'init', [ $this, 'initialize_schema' ] );
+			add_action( 'init', [ $this, 'initialize_twitter' ] );
 			add_filter( 'wpseo_frontend_presenters', [ $this, 'add_frontend_presenter' ] );
 
 			// Add metadescription filter.
@@ -127,6 +128,14 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public function initialize_opengraph() {
 		new WPSEO_WooCommerce_OpenGraph();
+	}
+
+	/**
+	 * Initialized the twitter functionality.
+	 */
+	public function initialize_twitter() {
+		$twitter = new WPSEO_WooCommerce_Twitter();
+		$twitter->register_hooks();
 	}
 
 	/**
