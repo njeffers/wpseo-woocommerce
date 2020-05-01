@@ -13,6 +13,26 @@ use Yoast\WP\Woocommerce\Tests\TestCase;
 class OpenGraph_Test extends TestCase {
 
 	/**
+	 * Class instance to use for the test.
+	 *
+	 * @var \Mockery\MockInterface
+	 */
+	protected $instance;
+
+	/**
+	 * Set up the class which will be tested.
+	 *
+	 * @return void
+	 */
+	public function setUp() {
+		$this->instance = Mockery::mock( \WPSEO_WooCommerce_OpenGraph::class )
+			->shouldAllowMockingProtectedMethods()
+			->makePartial();
+
+		parent::setUp();
+	}
+
+	/**
 	 * Test that our constructor works.
 	 *
 	 * @covers WPSEO_WooCommerce_OpenGraph::__construct
@@ -37,15 +57,14 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
-		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertSame( 'product', $og->return_type_product( 'article' ) );
+		$this->assertSame( 'product', $this->instance->return_type_product( 'article' ) );
 
 		Functions\stubs(
 			[
 				'is_singular' => false,
 			]
 		);
-		$this->assertSame( 'article', $og->return_type_product( 'article' ) );
+		$this->assertSame( 'article', $this->instance->return_type_product( 'article' ) );
 	}
 
 	/**
@@ -54,8 +73,6 @@ class OpenGraph_Test extends TestCase {
 	 * @covers WPSEO_WooCommerce_OpenGraph::product_namespace
 	 */
 	public function test_product_namespace() {
-		$og = new WPSEO_WooCommerce_OpenGraph();
-
 		Functions\stubs(
 			[
 				'is_singular' => false,
@@ -63,14 +80,14 @@ class OpenGraph_Test extends TestCase {
 		);
 
 		$input = 'prefix="fn: https://yoast.com/bla"';
-		$this->assertSame( $input, $og->product_namespace( $input ) );
+		$this->assertSame( $input, $this->instance->product_namespace( $input ) );
 
 		Functions\stubs(
 			[
 				'is_singular' => true,
 			]
 		);
-		$this->assertSame( 'prefix="fn: https://yoast.com/bla product: http://ogp.me/ns/product#"', $og->product_namespace( $input ) );
+		$this->assertSame( 'prefix="fn: https://yoast.com/bla product: http://ogp.me/ns/product#"', $this->instance->product_namespace( $input ) );
 	}
 
 	/**
@@ -91,8 +108,7 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
-		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertTrue( $og->set_opengraph_image( $og_image ) );
+		$this->assertTrue( $this->instance->set_opengraph_image( $og_image ) );
 	}
 
 	/**
@@ -112,8 +128,7 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
-		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertFalse( $og->set_opengraph_image( $og_image ) );
+		$this->assertFalse( $this->instance->set_opengraph_image( $og_image ) );
 	}
 
 	/**
@@ -128,6 +143,7 @@ class OpenGraph_Test extends TestCase {
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_gallery_image_ids' )->once()->andReturn( [ 1234, 1235, 1236 ] );
+		$product->expects( 'get_id' )->once()->andReturn( 12 );
 
 		Functions\stubs(
 			[
@@ -137,8 +153,8 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
-		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertTrue( $og->set_opengraph_image( $og_image ) );
+		$this->instance->shouldReceive( 'is_opengraph_image_set_by_user' )->andReturnFalse();
+		$this->assertTrue( $this->instance->set_opengraph_image( $og_image ) );
 	}
 
 	/**
@@ -152,6 +168,7 @@ class OpenGraph_Test extends TestCase {
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_gallery_image_ids' )->once()->andReturn( [] );
+		$product->expects( 'get_id' )->once()->andReturn( 12 );
 
 		Functions\stubs(
 			[
@@ -161,8 +178,8 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
-		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertFalse( $og->set_opengraph_image( $og_image ) );
+		$this->instance->shouldReceive( 'is_opengraph_image_set_by_user' )->andReturnFalse();
+		$this->assertFalse( $this->instance->set_opengraph_image( $og_image ) );
 	}
 
 	/**
@@ -181,8 +198,7 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
-		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertFalse( $og->set_opengraph_image( $og_image ) );
+		$this->assertFalse( $this->instance->set_opengraph_image( $og_image ) );
 	}
 
 	/**
@@ -195,6 +211,7 @@ class OpenGraph_Test extends TestCase {
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_gallery_image_ids' )->once()->andReturn( [] );
+		$product->expects( 'get_id' )->once()->andReturn( 12 );
 
 		Functions\stubs(
 			[
@@ -204,7 +221,7 @@ class OpenGraph_Test extends TestCase {
 			]
 		);
 
-		$og = new WPSEO_WooCommerce_OpenGraph();
-		$this->assertFalse( $og->set_opengraph_image( $og_image ) );
+		$this->instance->shouldReceive( 'is_opengraph_image_set_by_user' )->andReturnFalse();
+		$this->assertFalse( $this->instance->set_opengraph_image( $og_image ) );
 	}
 }
