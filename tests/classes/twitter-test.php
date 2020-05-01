@@ -3,17 +3,16 @@
 namespace Yoast\WP\Woocommerce\Tests\Classes;
 
 use Mockery;
-use Yoast\WP\SEO\Presentations\Indexable_Presentation;
 use Yoast\WP\Woocommerce\Tests\TestCase;
 
 use Brain\Monkey;
 
 /**
- * Class OpenGraph_Test
+ * Class Twitter_Test
  *
  * @coversDefaultClass \WPSEO_WooCommerce_Twitter
  */
-class OpenGraph_Test extends TestCase {
+class Twitter_Test extends TestCase {
 
 	/**
 	 * The Twitter class under test.
@@ -22,6 +21,9 @@ class OpenGraph_Test extends TestCase {
 	 */
 	private $instance;
 
+	/**
+	 * Sets up the tests.
+	 */
 	public function setUp() {
 		$this->instance = new \WPSEO_WooCommerce_Twitter();
 
@@ -46,18 +48,19 @@ class OpenGraph_Test extends TestCase {
 	 */
 	public function test_fallback_to_product_gallery_image() {
 		// Empty image, so should provide a fallback.
-		$empty_image_url = '';
+		$empty_image_url    = '';
 		$fallback_image_url = 'http://basic.wordpress.test/wp-content/uploads/2020/04/teddy_2.jpg';
-		$context         = (object) [
+		$context            = (object) [
 			'open_graph_enabled' => false,
 		];
-		$model           = (object) [
+		$model              = (object) [
 			'object_id'       => 13,
 			'object_type'     => 'post',
 			'object_sub_type' => 'product',
 		];
-		$product = Mockery::mock( 'WC_Product' )->makePartial();
-		$product->expects( 'get_gallery_image_ids' )
+		$product            = Mockery::mock( 'WC_Product' )->makePartial();
+		$product
+			->expects( 'get_gallery_image_ids' )
 			->andReturn( [ 21, 23, 24 ] );
 
 		$presentation = $this->mock_presentation( $context, $model );
@@ -67,6 +70,62 @@ class OpenGraph_Test extends TestCase {
 			->andReturn( $product );
 
 		$this->mock_yoastseo( 21, $fallback_image_url );
+
+		$image_url = $this->instance->fallback_to_product_gallery_image( $empty_image_url, $presentation );
+
+		$this->assertSame( $fallback_image_url, $image_url );
+	}
+
+	/**
+	 * Tests that the twitter image does not fall back to the first
+	 * product gallery image when open graph is enabled.
+	 *
+	 * @covers ::fallback_to_product_gallery_image
+	 */
+	public function test_does_not_fallback_to_product_gallery_image_when_opengraph_is_enabled() {
+		// Empty image, so should provide a fallback.
+		$empty_image_url    = '';
+		$fallback_image_url = '';
+		$context            = (object) [
+			'open_graph_enabled' => true,
+		];
+		$model              = (object) [];
+
+		$presentation = $this->mock_presentation( $context, $model );
+
+		$image_url = $this->instance->fallback_to_product_gallery_image( $empty_image_url, $presentation );
+
+		$this->assertSame( '', $image_url );
+	}
+
+	/**
+	 * Tests that the twitter image does not fall back to an image
+	 * when no product gallery images exist.
+	 *
+	 * @covers ::fallback_to_product_gallery_image
+	 */
+	public function test_does_not_fallback_when_product_gallery_image_is_empty() {
+		// Empty image, so should provide a fallback.
+		$empty_image_url    = '';
+		$fallback_image_url = '';
+		$context            = (object) [
+			'open_graph_enabled' => false,
+		];
+		$model              = (object) [
+			'object_id'       => 13,
+			'object_type'     => 'post',
+			'object_sub_type' => 'product',
+		];
+		$product            = Mockery::mock( 'WC_Product' )->makePartial();
+		$product
+			->expects( 'get_gallery_image_ids' )
+			->andReturn( [] );
+
+		$presentation = $this->mock_presentation( $context, $model );
+
+		Monkey\Functions\expect( 'wc_get_product' )
+			->with( $model->object_id )
+			->andReturn( $product );
 
 		$image_url = $this->instance->fallback_to_product_gallery_image( $empty_image_url, $presentation );
 
@@ -101,7 +160,7 @@ class OpenGraph_Test extends TestCase {
 		$twitter_image_helper
 			->expects( 'get_by_id' )
 			->with( $fallback_image_id )
-			->andReturn( $fallback_image_url  );
+			->andReturn( $fallback_image_url );
 
 		$surfaces = (object) [
 			'helpers' => (object) [
