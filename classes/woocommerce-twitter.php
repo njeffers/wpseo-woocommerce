@@ -26,23 +26,27 @@ class WPSEO_WooCommerce_Twitter {
 	 * @return string The image fallback.
 	 */
 	public function fallback_to_product_gallery_image( $twitter_image, $presentation ) {
-		// We should only fall back to the Twitter image if OpenGraph is disabled and no other Twitter image is set.
-		if ( ! $presentation->context->open_graph_enabled && ! $twitter_image ) {
-			$object = $presentation->model;
+		// Do not fall back to product gallery image when open graph is enabled, or we already have a twitter image.
+		if ( $presentation->context->open_graph_enabled || $twitter_image ) {
+			return $twitter_image;
+		}
 
+		$object = $presentation->model;
+
+		// This method only provides a fallback for products.
+		if ( ! $object->object_type === 'post' && ! $object->object_sub_type === 'product' ) {
+			return $twitter_image;
+		}
+
+		$product = \wc_get_product( $object->object_id );
+
+		if ( $product ) {
 			// Fall back to the first image in the product gallery.
-			if ( $object->object_type === 'post' && $object->object_sub_type === 'product' ) {
-				$product = \wc_get_product( $object->object_id );
+			$gallery_image_ids      = $product->get_gallery_image_ids();
+			$first_gallery_image_id = \reset( $gallery_image_ids );
 
-				if ( $product ) {
-					$gallery_image_ids      = $product->get_gallery_image_ids();
-					$first_gallery_image_id = \reset( $gallery_image_ids );
-
-					if ( $first_gallery_image_id ) {
-						return YoastSEO()->helpers->twitter->image->get_by_id( $first_gallery_image_id );
-					}
-					return '';
-				}
+			if ( $first_gallery_image_id ) {
+				return YoastSEO()->helpers->twitter->image->get_by_id( $first_gallery_image_id );
 			}
 		}
 
