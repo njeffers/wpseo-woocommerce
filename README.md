@@ -34,6 +34,7 @@ Changelog
 Bugfixes:
 
 * Fixes a bug where the `twitter:image` meta tag would not fall back on the first product gallery image when no main product image was set.
+* Fixes a bug where all product gallery images would be output as `og:image` even though a user had set a specific image for a product.
 
 ### 13.0: April 28th, 2020
 Bugfixes:
