@@ -29,6 +29,11 @@ Frequently Asked Questions
 You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-seo/).
 
 Changelog
+=========
+### 13.1: May 12th, 2020
+Bugfixes:
+
+* Fixes a bug where the `twitter:image` meta tag would not fall back on the first product gallery image when no main product image was set.
 
 ### 13.0: April 28th, 2020
 Bugfixes:
