@@ -36,7 +36,7 @@ Bugfixes:
 
 Enhancements:
 
-* Omits the product:price:amount and product:price:currency og meta for variable and grouped products.
+* Omits the `product:price:amount` and `product:price:currency` og meta for variable and grouped products.
 
 ### 13.1: May 13th, 2020
 Bugfixes:
