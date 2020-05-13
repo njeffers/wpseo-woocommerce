@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.3
 Tested up to: 5.4
-Stable tag: 13.1-RC3
+Stable tag: 13.1
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -30,7 +30,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 13.1: May 12th, 2020
+### 13.1: May 13th, 2020
 Bugfixes:
 
 * Fixes a bug where the `twitter:image` meta tag would not fall back on the first product gallery image when no main product image was set.
