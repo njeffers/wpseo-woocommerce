@@ -30,6 +30,14 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 13.2: May 26th, 2020
+Bugfixes:
+* Fixes a bug where the organization schema on for a primary term would error.
+
+Enhancements:
+
+* Omits the product:price:amount and product:price:currency og meta for variable and grouped products.
+
 ### 13.1: May 13th, 2020
 Bugfixes:
 
