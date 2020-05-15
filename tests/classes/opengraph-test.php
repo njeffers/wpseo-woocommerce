@@ -25,7 +25,7 @@ class OpenGraph_Test extends TestCase {
 	 * @return void
 	 */
 	public function setUp() {
-		$this->instance = Mockery::mock( \WPSEO_WooCommerce_OpenGraph::class )
+		$this->instance = Mockery::mock( WPSEO_WooCommerce_OpenGraph::class )
 			->shouldAllowMockingProtectedMethods()
 			->makePartial();
 

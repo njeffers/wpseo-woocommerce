@@ -2,10 +2,10 @@
 
 namespace Yoast\WP\Woocommerce\Tests\Classes;
 
-use Mockery;
-use Yoast\WP\Woocommerce\Tests\TestCase;
-
 use Brain\Monkey;
+use Mockery;
+use WPSEO_WooCommerce_Twitter;
+use Yoast\WP\Woocommerce\Tests\TestCase;
 
 /**
  * Class Twitter_Test
@@ -25,7 +25,7 @@ class Twitter_Test extends TestCase {
 	 * Sets up the tests.
 	 */
 	public function setUp() {
-		$this->instance = new \WPSEO_WooCommerce_Twitter();
+		$this->instance = new WPSEO_WooCommerce_Twitter();
 
 		parent::setUp();
 	}
@@ -141,7 +141,7 @@ class Twitter_Test extends TestCase {
 	 * @return Mockery\MockInterface The mock presentation
 	 */
 	private function mock_presentation( $context, $model ) {
-		$presentation = \Mockery::mock();
+		$presentation = Mockery::mock();
 
 		$presentation->context = $context;
 		$presentation->model   = $model;
