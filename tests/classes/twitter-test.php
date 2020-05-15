@@ -84,12 +84,11 @@ class Twitter_Test extends TestCase {
 	 */
 	public function test_does_not_fallback_to_product_gallery_image_when_opengraph_is_enabled() {
 		// Empty image, so should provide a fallback.
-		$empty_image_url    = '';
-		$fallback_image_url = '';
-		$context            = (object) [
+		$empty_image_url = '';
+		$context         = (object) [
 			'open_graph_enabled' => true,
 		];
-		$model              = (object) [];
+		$model           = (object) [];
 
 		$presentation = $this->mock_presentation( $context, $model );
 
