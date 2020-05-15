@@ -59,8 +59,8 @@ class WPSEO_WooCommerce_Schema {
 		if ( is_product() ) {
 			foreach ( $presenters as $key => $object ) {
 				if (
-					is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Publisher_Presenter' ) ||
-					is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' )
+					is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Publisher_Presenter' )
+					|| is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' )
 				) {
 					unset( $presenters[ $key ] );
 				}

@@ -8,6 +8,7 @@ namespace Yoast\WP\Woocommerce\Tests\Mocks;
  * This is a copy from Yoast\WP\SEO\Config\Schema_IDs.
  */
 class Schema_IDs {
+
 	/**
 	 * Hash used for the Author `@id`.
 	 */
