@@ -32,11 +32,13 @@ Changelog
 =========
 ### 13.2: May 26th, 2020
 Bugfixes:
+
 * Fixes a bug where the organization schema on for a primary term would error.
 
 Enhancements:
 
 * Omits the `product:price:amount` and `product:price:currency` og meta for variable and grouped products.
+* Hides all Yoast columns in the Product overview page except the SEO Score column.
 
 ### 13.1: May 13th, 2020
 Bugfixes:
