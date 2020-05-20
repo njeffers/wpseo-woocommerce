@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.3
 Tested up to: 5.4
-Stable tag: 13.2-RC1
+Stable tag: 13.2-RC2
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -34,6 +34,7 @@ Changelog
 Bugfixes:
 
 * Fixes a bug where the organization schema on for a primary term would error.
+* Fixes a potential undefined variable notice.
 
 Enhancements:
 
