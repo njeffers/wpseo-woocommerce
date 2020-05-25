@@ -33,8 +33,9 @@ Changelog
 ### 13.2: May 26th, 2020
 Bugfixes:
 
-* Fixes a bug where the organization schema on for a primary term would error.
-* Fixes a potential undefined variable notice.
+* Fixes a bug where the organization schema for a primary term would error.
+* Fixes a bug where a potential undefined variable notice was shown when toggling the 'prices have tax included' WooCommerce option.
+* Fixes a bug where changing the product permalinks would not reset the permalinks in their respective indexables.
 
 Enhancements:
 
