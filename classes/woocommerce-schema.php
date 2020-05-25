@@ -141,6 +141,7 @@ class WPSEO_WooCommerce_Schema {
 		$data = $this->change_seller_in_offers( $data );
 		$data = $this->filter_reviews( $data, $product );
 		$data = $this->filter_offers( $data, $product );
+		$data = $this->filter_sku( $data, $product );
 
 		// This product is the main entity of this page, so we set it as such.
 		$data['mainEntityOfPage'] = [
@@ -225,6 +226,26 @@ class WPSEO_WooCommerce_Schema {
 		}
 
 		return $offers;
+	}
+
+	/**
+	 * Removes the SKU when it's empty to prevent the WooCommerce fallback to the product's ID.
+	 *
+	 * @param array      $data    Schema Product data.
+	 * @param WC_Product $product The product.
+	 *
+	 * @return array Schema Product data.
+	 */
+	protected function filter_sku( $data, $product ) {
+		/*
+		 * When the SKU of a product is left empty, WooCommerce makes it the value of the product's id.
+		 * In this method we check for that and unset it if done so.
+		 */
+		if ( empty( $product->get_sku() ) ) {
+			unset( $data['sku'] );
+		}
+
+		return $data;
 	}
 
 	/**

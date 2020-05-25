@@ -648,6 +648,27 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
+	 * Tests we remove the SKU when WooCommerce fallbacks to the product's ID.
+	 *
+	 * @covers ::filter_sku
+	 */
+	public function test_filter_sku_empty() {
+		$schema  = new Schema_Double();
+		$product = Mockery::mock( 'WC_Product' );
+
+		// The WooCommerce SKU input field is empty.
+		$product->expects( 'get_sku' )->once()->andReturn( '' );
+		// WooCommerce fallbacks to the products'ID.
+		$woocommeerce_sku_fallback = [
+			'sku' => '12345',
+		];
+
+		$output = $schema->filter_sku( $woocommeerce_sku_fallback, $product );
+
+		$this->assertEmpty( $output );
+	}
+
+	/**
 	 * Test adding the global identifier
 	 *
 	 * @covers ::add_global_identifier
@@ -844,12 +865,14 @@ class Schema_Test extends TestCase {
 	public function test_change_product() {
 		$product_id   = 1;
 		$product_name = 'TestProduct';
+		$product_sku  = 'sku1234';
 		$base_url     = 'http://local.wordpress.test/';
 		$canonical    = $base_url . 'product/test/';
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->times( 6 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
+		$product->expects( 'get_sku' )->once()->with()->andReturn( $product_sku );
 		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
@@ -1017,12 +1040,14 @@ class Schema_Test extends TestCase {
 	public function test_change_product_no_thumb() {
 		$product_id   = 1;
 		$product_name = 'TestProduct';
+		$product_sku  = 'sku1234';
 		$base_url     = 'http://local.wordpress.test/';
 		$canonical    = $base_url . 'product/test/';
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->times( 6 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
+		$product->expects( 'get_sku' )->once()->with()->andReturn( $product_sku );
 		$product->expects( 'get_price' )->once()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
@@ -1192,6 +1217,7 @@ class Schema_Test extends TestCase {
 	public function test_change_product_with_color() {
 		$product_id   = 1;
 		$product_name = 'TestProduct';
+		$product_sku  = 'sku1234';
 		$base_url     = 'http://local.wordpress.test/';
 		$canonical    = $base_url . 'product/test/';
 
@@ -1200,6 +1226,7 @@ class Schema_Test extends TestCase {
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->times( 6 )->with()->andReturn( $product_id );
 		$product->expects( 'get_name' )->once()->with()->andReturn( $product_name );
+		$product->expects( 'get_sku' )->once()->with()->andReturn( $product_sku );
 		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
