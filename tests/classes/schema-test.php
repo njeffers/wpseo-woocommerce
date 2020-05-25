@@ -212,10 +212,9 @@ class Schema_Test extends TestCase {
 		$expected_output                     = $input;
 		$expected_output['offers'][0]['@id'] = 'https://example.com/#/schema/offer/209643-0';
 
-		$base_url = 'http://example.com';
 		Functions\stubs(
 			[
-				'get_site_url'             => $base_url,
+				'get_site_url'             => 'http://example.com',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
 				'wc_format_decimal'        => static function ( $number ) {
@@ -244,7 +243,7 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
-	 * Test filtering offers with produc on backorder.
+	 * Test filtering offers with product on backorder.
 	 *
 	 * @covers ::filter_offers
 	 */
@@ -282,10 +281,9 @@ class Schema_Test extends TestCase {
 		$expected_output                     = $input;
 		$expected_output['offers'][0]['@id'] = 'https://example.com/#/schema/offer/209643-0';
 
-		$base_url = 'http://example.com';
 		Functions\stubs(
 			[
-				'get_site_url'             => $base_url,
+				'get_site_url'             => 'http://example.com',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
 				'wc_format_decimal'        => static function ( $number ) {
@@ -551,10 +549,9 @@ class Schema_Test extends TestCase {
 			],
 		];
 
-		$base_url = 'https://example.com';
 		Functions\stubs(
 			[
-				'get_site_url'             => $base_url,
+				'get_site_url'             => 'https://example.com',
 				'get_woocommerce_currency' => 'GBP',
 				'wc_prices_include_tax'    => false,
 				'wc_get_price_decimals'    => 2,
@@ -830,10 +827,9 @@ class Schema_Test extends TestCase {
 			],
 		];
 
-		$base_url = 'https://example.com';
 		Functions\stubs(
 			[
-				'get_site_url' => $base_url,
+				'get_site_url' => 'https://example.com',
 			]
 		);
 		$product = Mockery::mock( 'WC_Product' );
@@ -1539,7 +1535,6 @@ class Schema_Test extends TestCase {
 		$expected_output                     = $input;
 		$expected_output['offers'][0]['@id'] = 'http://example.com/#/schema/offer/209643-0';
 
-		$base_url = 'http://example.com/';
 		Functions\stubs(
 			[
 				'wc_get_price_decimals'    => 2,
@@ -1562,7 +1557,7 @@ class Schema_Test extends TestCase {
 		$this->meta
 			->expects( 'for_current_page' )
 			->once()
-			->andReturn( (object) [ 'site_url' => $base_url ] );
+			->andReturn( (object) [ 'site_url' => 'http://example.com/' ] );
 
 		$output = $schema->filter_offers( $input, $product );
 
