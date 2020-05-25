@@ -229,7 +229,7 @@ class WPSEO_WooCommerce_Schema {
 	}
 
 	/**
-	 * Check for the WooCommerce sku fallback to its id, and if so set it to an empty string again.
+	 * Removes the SKU when it's empty to prevent the WooCommerce fallback to the product's ID.
 	 *
 	 * @param array      $data    Schema Product data.
 	 * @param WC_Product $product The product.
@@ -239,7 +239,7 @@ class WPSEO_WooCommerce_Schema {
 	protected function filter_sku( $data, $product ) {
 		/*
 		 * When the SKU of a product is left empty, WooCommerce makes it the value of the product's id.
-		 * In this method we check for that and unset it if done so
+		 * In this method we check for that and unset it if done so.
 		 */
 		if ( empty( $product->get_sku() ) ) {
 			unset( $data['sku'] );
