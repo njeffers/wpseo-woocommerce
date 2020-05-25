@@ -5,7 +5,7 @@
  * @package WPSEO/WooCommerce
  */
 
-use Yoast\WP\SEO\ORM\Yoast_Model;
+use Yoast\WP\Lib\Model;
 use Yoast\WP\SEO\WordPress\Wrapper;
 
 /**
@@ -94,7 +94,7 @@ class WPSEO_Woocommerce_Permalink_Watcher {
 	 */
 	protected function reset_permalink_indexables( $type, $subtype ) {
 		Wrapper::get_wpdb()->update(
-			Yoast_Model::get_table_name( 'Indexable' ),
+			Model::get_table_name( 'Indexable' ),
 			[
 				'permalink' => null,
 			],
