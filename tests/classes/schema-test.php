@@ -648,6 +648,27 @@ class Schema_Test extends TestCase {
 	}
 
 	/**
+	 * Tests we remove the SKU when WooCommerce fallbacks to the product's ID.
+	 *
+	 * @covers ::filter_sku
+	 */
+	public function test_filter_sku_empty() {
+		$schema  = new Schema_Double();
+		$product = Mockery::mock( 'WC_Product' );
+
+		// The WooCommerce SKU input field is empty.
+		$product->expects( 'get_sku' )->once()->andReturn( '' );
+		// WooCommerce fallbacks to the products'ID.
+		$woocommeerce_sku_fallback = [
+			'sku' => '12345',
+		];
+
+		$output = $schema->filter_sku( $woocommeerce_sku_fallback, $product );
+
+		$this->assertEmpty( $output );
+	}
+
+	/**
 	 * Test adding the global identifier
 	 *
 	 * @covers ::add_global_identifier
