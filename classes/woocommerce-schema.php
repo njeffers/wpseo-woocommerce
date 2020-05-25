@@ -199,6 +199,11 @@ class WPSEO_WooCommerce_Schema {
 				$data['offers'][ $key ]['@id']    = YoastSEO()->meta->for_current_page()->site_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
 				$data['offers'][ $key ]['offers'] = $this->add_individual_offers( $product );
 			}
+
+			// Alter availability when product is "on backorder".
+			if ( $product->is_on_backorder() ) {
+				$data['offers'][ $key ]['availability'] = 'http://schema.org/PreOrder';
+			}
 		}
 
 		return $data;

@@ -212,10 +212,9 @@ class Schema_Test extends TestCase {
 		$expected_output                     = $input;
 		$expected_output['offers'][0]['@id'] = 'https://example.com/#/schema/offer/209643-0';
 
-		$base_url = 'http://example.com';
 		Functions\stubs(
 			[
-				'get_site_url'             => $base_url,
+				'get_site_url'             => 'http://example.com',
 				'wc_get_price_decimals'    => 2,
 				'wc_tax_enabled'           => false,
 				'wc_format_decimal'        => static function ( $number ) {
@@ -231,6 +230,76 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_price' )->once()->andReturn( 49 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( false );
+
+		$this->meta
+			->expects( 'for_current_page' )
+			->once()
+			->andReturn( (object) [ 'site_url' => 'https://example.com/' ] );
+
+		$output = $schema->filter_offers( $input, $product );
+
+		$this->assertSame( $expected_output, $output );
+	}
+
+	/**
+	 * Test filtering offers with product on backorder.
+	 *
+	 * @covers ::filter_offers
+	 */
+	public function test_filter_offers_with_product_on_backorder() {
+		$schema = new Schema_Double();
+		$input  = [
+			'@type'       => 'Product',
+			'name'        => 'Customizable responsive toolset',
+			'url'         => 'https://example.com/product/customizable-responsive-toolset/',
+			'description' => 'Sit debitis reprehenderit non rem natus. Corporis quidem quos et sit similique. Et ad hic exercitationem repudiandae rem laborum.\n\n\n\n\n\n\n\n\nCumque iusto cum enim ut. Et ipsum tempore dolorem ullam aspernatur autem et. Aut molestiae dolor natus. Ducimus molestias perspiciatis magni in libero deleniti ut. Rerum perspiciatis autem et maiores hic ducimus.\n\n\nAut tenetur ducimus distinctio quaerat deserunt sed. Sint ullam ut deserunt deleniti velit et. Incidunt in molestiae voluptas corrupti qui facilis quia.\n\n\n\n\n\nIste asperiores voluptas expedita id cupiditate. Sed error corrupti quibusdam dolor facere enim tenetur. Asperiores error qui commodi dolorem veritatis aspernatur.',
+			'image'       => [
+				'@id' => 'https://example.com/product/customizable-responsive-toolset/#primaryimage',
+			],
+			'sku'         => '209643',
+			'offers'      => [
+				[
+					'@type'              => 'Offer',
+					'price'              => '49.00',
+					'priceSpecification' => [
+						'price'         => '49.00',
+						'priceCurrency' => 'GBP',
+					],
+					'priceCurrency'      => 'GBP',
+					'availability'       => 'http://schema.org/PreOrder',
+					'url'                => 'https://example.com/product/customizable-responsive-toolset/',
+					'seller'             => [
+						'@type' => 'Organization',
+						'name'  => 'WooCommerce',
+						'url'   => 'https://example.com',
+					],
+				],
+			],
+		];
+
+		$expected_output                     = $input;
+		$expected_output['offers'][0]['@id'] = 'https://example.com/#/schema/offer/209643-0';
+
+		Functions\stubs(
+			[
+				'get_site_url'             => 'http://example.com',
+				'wc_get_price_decimals'    => 2,
+				'wc_tax_enabled'           => false,
+				'wc_format_decimal'        => static function ( $number ) {
+					return \number_format( $number, 2 );
+				},
+				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => false,
+			]
+		);
+
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->once()->andReturn( '209643' );
+		$product->expects( 'get_price' )->once()->andReturn( 49 );
+		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
+		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( true );
 
 		$this->meta
 			->expects( 'for_current_page' )
@@ -480,10 +549,9 @@ class Schema_Test extends TestCase {
 			],
 		];
 
-		$base_url = 'https://example.com';
 		Functions\stubs(
 			[
-				'get_site_url'             => $base_url,
+				'get_site_url'             => 'https://example.com',
 				'get_woocommerce_currency' => 'GBP',
 				'wc_prices_include_tax'    => false,
 				'wc_get_price_decimals'    => 2,
@@ -497,6 +565,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_available_variations' )->once()->andReturn( $variants );
 		$product->expects( 'get_name' )->once()->andReturn( 'Customizable responsive toolset' );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( false );
 
 		$this->meta
 			->expects( 'for_current_page' )
@@ -779,10 +848,9 @@ class Schema_Test extends TestCase {
 			],
 		];
 
-		$base_url = 'https://example.com';
 		Functions\stubs(
 			[
-				'get_site_url' => $base_url,
+				'get_site_url' => 'https://example.com',
 			]
 		);
 		$product = Mockery::mock( 'WC_Product' );
@@ -876,6 +944,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( false );
 
 		$mock = Mockery::mock( 'alias:WPSEO_Options' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'product_cat' );
@@ -1051,6 +1120,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_price' )->once()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( false );
 
 		$mock = Mockery::mock( 'alias:WPSEO_Options' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'product_cat' );
@@ -1230,6 +1300,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_price' )->once()->with()->andReturn( 1 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->with()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( false );
 
 		$mock = Mockery::mock( 'alias:WPSEO_Options' );
 		$mock->expects( 'get' )->once()->with( 'woo_schema_brand' )->andReturn( 'product_cat' );
@@ -1491,7 +1562,6 @@ class Schema_Test extends TestCase {
 		$expected_output                     = $input;
 		$expected_output['offers'][0]['@id'] = 'http://example.com/#/schema/offer/209643-0';
 
-		$base_url = 'http://example.com/';
 		Functions\stubs(
 			[
 				'wc_get_price_decimals'    => 2,
@@ -1509,11 +1579,12 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( true );
 		$product->expects( 'get_date_on_sale_to' )->once()->andReturn( 'not-a-null-value' );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( false );
 
 		$this->meta
 			->expects( 'for_current_page' )
 			->once()
-			->andReturn( (object) [ 'site_url' => $base_url ] );
+			->andReturn( (object) [ 'site_url' => 'http://example.com/' ] );
 
 		$output = $schema->filter_offers( $input, $product );
 
