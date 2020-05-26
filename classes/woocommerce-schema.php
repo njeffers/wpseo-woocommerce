@@ -59,8 +59,8 @@ class WPSEO_WooCommerce_Schema {
 		if ( is_product() ) {
 			foreach ( $presenters as $key => $object ) {
 				if (
-					is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Publisher_Presenter' ) ||
-					is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' )
+					is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Publisher_Presenter' )
+					|| is_a( $object, 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' )
 				) {
 					unset( $presenters[ $key ] );
 				}
@@ -141,6 +141,7 @@ class WPSEO_WooCommerce_Schema {
 		$data = $this->change_seller_in_offers( $data );
 		$data = $this->filter_reviews( $data, $product );
 		$data = $this->filter_offers( $data, $product );
+		$data = $this->filter_sku( $data, $product );
 
 		// This product is the main entity of this page, so we set it as such.
 		$data['mainEntityOfPage'] = [
@@ -198,6 +199,11 @@ class WPSEO_WooCommerce_Schema {
 				$data['offers'][ $key ]['@id']    = YoastSEO()->meta->for_current_page()->site_url . '#/schema/aggregate-offer/' . $product->get_id() . '-' . $key;
 				$data['offers'][ $key ]['offers'] = $this->add_individual_offers( $product );
 			}
+
+			// Alter availability when product is "on backorder".
+			if ( $product->is_on_backorder() ) {
+				$data['offers'][ $key ]['availability'] = 'http://schema.org/PreOrder';
+			}
 		}
 
 		return $data;
@@ -225,6 +231,26 @@ class WPSEO_WooCommerce_Schema {
 		}
 
 		return $offers;
+	}
+
+	/**
+	 * Removes the SKU when it's empty to prevent the WooCommerce fallback to the product's ID.
+	 *
+	 * @param array      $data    Schema Product data.
+	 * @param WC_Product $product The product.
+	 *
+	 * @return array Schema Product data.
+	 */
+	protected function filter_sku( $data, $product ) {
+		/*
+		 * When the SKU of a product is left empty, WooCommerce makes it the value of the product's id.
+		 * In this method we check for that and unset it if done so.
+		 */
+		if ( empty( $product->get_sku() ) ) {
+			unset( $data['sku'] );
+		}
+
+		return $data;
 	}
 
 	/**

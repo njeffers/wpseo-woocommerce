@@ -5,6 +5,7 @@ namespace Yoast\WP\Woocommerce\Tests\Classes\Presenters;
 use Mockery;
 use WPSEO_WooCommerce_Product_Price_Currency_Presenter;
 use Yoast\WP\Woocommerce\Tests\TestCase;
+
 use function Brain\Monkey\Functions\expect;
 
 /**

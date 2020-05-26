@@ -80,4 +80,16 @@ class Schema_Double extends WPSEO_WooCommerce_Schema {
 	public function add_global_identifier( $product ) {
 		return parent::add_global_identifier( $product );
 	}
+
+	/**
+	 * Enhances the SKU data output by WooCommerce.
+	 *
+	 * @param array       $data    SKU Schema data.
+	 * @param \WC_Product $product The WooCommerce product we're working with.
+	 *
+	 * @return array SKU Schema data.
+	 */
+	public function filter_sku( $data, $product ) {
+		return parent::filter_sku( $data, $product );
+	}
 }
