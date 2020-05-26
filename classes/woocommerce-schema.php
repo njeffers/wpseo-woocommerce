@@ -455,11 +455,12 @@ class WPSEO_WooCommerce_Schema {
 	protected function add_individual_offers( $product ) {
 		$variations = $product->get_available_variations();
 
-		$currency     = get_woocommerce_currency();
-		$decimals     = wc_get_price_decimals();
-		$data         = [];
-		$product_id   = $product->get_id();
-		$product_name = $product->get_name();
+		$currency           = get_woocommerce_currency();
+		$prices_include_tax = WPSEO_WooCommerce_Utils::prices_have_tax_included();
+		$decimals           = wc_get_price_decimals();
+		$data               = [];
+		$product_id         = $product->get_id();
+		$product_name       = $product->get_name();
 
 		foreach ( $variations as $key => $variation ) {
 			$variation_name = implode( ' / ', $variation['attributes'] );

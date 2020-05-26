@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.3
 Tested up to: 5.4
-Stable tag: 13.2-RC1
+Stable tag: 13.2
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -32,11 +32,15 @@ Changelog
 =========
 ### 13.2: May 26th, 2020
 Bugfixes:
-* Fixes a bug where the organization schema on for a primary term would error.
+
+* Fixes a bug where the organization schema for a primary term would error.
+* Fixes a bug where a potential undefined variable notice was shown when toggling the 'prices have tax included' WooCommerce option.
+* Fixes a bug where changing the product permalinks would not reset the permalinks in their respective indexables.
 
 Enhancements:
 
 * Omits the `product:price:amount` and `product:price:currency` og meta for variable and grouped products.
+* Hides all Yoast columns in the Product overview page except the SEO Score column.
 
 ### 13.1: May 13th, 2020
 Bugfixes:
