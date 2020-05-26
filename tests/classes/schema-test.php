@@ -1640,7 +1640,7 @@ class Schema_Test extends TestCase {
 	public function test_filter_offers_with_vat() {
 		$schema = new Schema_Double();
 
-		$input  = [
+		$input = [
 			'@type'       => 'Product',
 			'name'        => 'Customizable responsive toolset',
 			'url'         => 'https://example.com/product/customizable-responsive-toolset/',
@@ -1696,6 +1696,7 @@ class Schema_Test extends TestCase {
 		$product->expects( 'get_price' )->once()->andReturn( 49 );
 		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
 		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( false );
 
 		$this->meta
 			->expects( 'for_current_page' )
