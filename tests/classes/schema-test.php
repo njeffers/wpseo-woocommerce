@@ -9,6 +9,7 @@ use WPSEO_WooCommerce_Schema;
 use Yoast\WP\Woocommerce\Tests\Doubles\Schema_Double;
 use Yoast\WP\Woocommerce\Tests\Mocks\Schema_IDs;
 use Yoast\WP\Woocommerce\Tests\TestCase;
+use function Brain\Monkey\Functions\expect;
 
 /**
  * Class WooCommerce_Schema_Test.
@@ -992,7 +993,7 @@ class Schema_Test extends TestCase {
 			->with( $base_url . '/example_image.jpg' )
 			->andReturn( $image_data );
 
-		Functions\expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
+		expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
 
 		$data = [
 			'@type'       => 'Product',
@@ -1174,7 +1175,7 @@ class Schema_Test extends TestCase {
 			->with( $image_data['@id'], $image_data['url'] )
 			->andReturn( $image_data );
 
-		Functions\expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
+		expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
 
 		$data = [
 			'@type'       => 'Product',
@@ -1291,7 +1292,7 @@ class Schema_Test extends TestCase {
 		$base_url     = 'http://local.wordpress.test/';
 		$canonical    = $base_url . 'product/test/';
 
-		Functions\expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
+		expect( 'wp_strip_all_tags' )->twice()->andReturn( 'TestProduct' );
 
 		$product = Mockery::mock( 'WC_Product' );
 		$product->expects( 'get_id' )->times( 6 )->with()->andReturn( $product_id );
@@ -1459,8 +1460,8 @@ class Schema_Test extends TestCase {
 		$primary_term = Mockery::mock( 'overload:WPSEO_Primary_Term' );
 		$primary_term->expects( 'get_primary_term' )->once()->with()->andReturn( $id );
 
-		Functions\expect( 'get_term' )->once()->with( $id )->andReturn( $wp_term );
-		Functions\expect( 'get_the_terms' )->never()->withAnyArgs();
+		expect( 'get_term' )->once()->with( $id )->andReturn( $wp_term );
+		expect( 'get_the_terms' )->never()->withAnyArgs();
 
 		$instance = new Schema_Double();
 		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
@@ -1481,11 +1482,11 @@ class Schema_Test extends TestCase {
 		$primary_term = Mockery::mock( 'overload:WPSEO_Primary_Term' );
 		$primary_term->expects( 'get_primary_term' )->once()->with()->andReturn( false );
 
-		Functions\expect( 'get_term' )
+		expect( 'get_term' )
 			->never()
 			->withAnyArgs();
 
-		Functions\expect( 'get_the_terms' )
+		expect( 'get_the_terms' )
 			->once()
 			->with( $id, $taxonomy_name )
 			->andReturn(
@@ -1513,8 +1514,8 @@ class Schema_Test extends TestCase {
 		$primary_term = Mockery::mock( 'overload:WPSEO_Primary_Term' );
 		$primary_term->expects( 'get_primary_term' )->once()->with()->andReturn( false );
 
-		Functions\expect( 'get_term' )->never()->withAnyArgs();
-		Functions\expect( 'get_the_terms' )->once()->with( $id, $taxonomy_name )->andReturn( [] );
+		expect( 'get_term' )->never()->withAnyArgs();
+		expect( 'get_the_terms' )->once()->with( $id, $taxonomy_name )->andReturn( [] );
 
 		$instance = new Schema_Double();
 		$actual   = $instance->get_primary_term_or_first_term( $taxonomy_name, $id );
@@ -1602,7 +1603,7 @@ class Schema_Test extends TestCase {
 			Mockery::mock( 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' ),
 		];
 
-		Functions\expect( 'is_product' )
+		expect( 'is_product' )
 			->once()
 			->andReturn( true );
 
@@ -1622,12 +1623,88 @@ class Schema_Test extends TestCase {
 			Mockery::mock( 'Yoast\WP\SEO\Presenters\Open_Graph\Article_Author_Presenter' ),
 		];
 
-		Functions\expect( 'is_product' )
+		expect( 'is_product' )
 			->once()
 			->andReturn( false );
 
 		$instance = new WPSEO_WooCommerce_Schema();
 
 		$this->assertSame( $presenters, $instance->remove_unneeded_presenters( $presenters ) );
+	}
+
+	/**
+	 * Test filtering offers with valueAddedTaxIncluded.
+	 *
+	 * @covers ::filter_offers
+	 */
+	public function test_filter_offers_with_vat() {
+		$schema = new Schema_Double();
+
+		$input = [
+			'@type'       => 'Product',
+			'name'        => 'Customizable responsive toolset',
+			'url'         => 'https://example.com/product/customizable-responsive-toolset/',
+			'description' => 'Sit debitis reprehenderit non rem natus. Corporis quidem quos et sit similique. Et ad hic exercitationem repudiandae rem laborum.\n\n\n\n\n\n\n\n\nCumque iusto cum enim ut. Et ipsum tempore dolorem ullam aspernatur autem et. Aut molestiae dolor natus. Ducimus molestias perspiciatis magni in libero deleniti ut. Rerum perspiciatis autem et maiores hic ducimus.\n\n\nAut tenetur ducimus distinctio quaerat deserunt sed. Sint ullam ut deserunt deleniti velit et. Incidunt in molestiae voluptas corrupti qui facilis quia.\n\n\n\n\n\nIste asperiores voluptas expedita id cupiditate. Sed error corrupti quibusdam dolor facere enim tenetur. Asperiores error qui commodi dolorem veritatis aspernatur.',
+			'image'       => [
+				'@id' => 'https://example.com/product/customizable-responsive-toolset/#primaryimage',
+			],
+			'sku'         => '209643',
+			'offers'      => [
+				[
+					'@type'              => 'Offer',
+					'price'              => '49.00',
+					'priceSpecification' => [
+						'price'         => '49.00',
+						'priceCurrency' => 'GBP',
+					],
+					'priceCurrency'      => 'GBP',
+					'availability'       => 'http://schema.org/InStock',
+					'url'                => 'https://example.com/product/customizable-responsive-toolset/',
+					'seller'             => [
+						'@type' => 'Organization',
+						'name'  => 'WooCommerce',
+						'url'   => 'https://example.com',
+					],
+				],
+			],
+		];
+
+		$expected_output                     = $input;
+		$expected_output['offers'][0]['@id'] = 'https://example.com/#/schema/offer/209643-0';
+		$expected_output['offers'][0]['priceSpecification']['valueAddedTaxIncluded'] = true;
+
+		$base_url = 'http://example.com';
+		Functions\stubs(
+			[
+				'get_site_url'             => $base_url,
+				'wc_get_price_decimals'    => 2,
+				'wc_tax_enabled'           => true,
+				'wc_format_decimal'        => static function ( $number ) {
+					return \number_format( $number, 2 );
+				},
+				'get_woocommerce_currency' => 'GBP',
+				'wc_prices_include_tax'    => true,
+			]
+		);
+
+		expect( 'get_option' )
+			->with( 'woocommerce_tax_display_shop' )
+			->andReturn( 'incl' );
+
+		$product = Mockery::mock( 'WC_Product' );
+		$product->expects( 'get_id' )->once()->andReturn( '209643' );
+		$product->expects( 'get_price' )->once()->andReturn( 49 );
+		$product->expects( 'get_min_purchase_quantity' )->once()->andReturn( 1 );
+		$product->expects( 'is_on_sale' )->once()->andReturn( false );
+		$product->expects( 'is_on_backorder' )->once()->andReturn( false );
+
+		$this->meta
+			->expects( 'for_current_page' )
+			->once()
+			->andReturn( (object) [ 'site_url' => 'https://example.com/' ] );
+
+		$output = $schema->filter_offers( $input, $product );
+
+		$this->assertSame( $expected_output, $output );
 	}
 }
