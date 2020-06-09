@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.3
 Tested up to: 5.4
-Stable tag: 13.2
+Stable tag: 13.3-RC1
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -30,6 +30,15 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 13.3: June, 23th, 2020
+Bugfixes:
+
+* Fixes a bug where no SKU would be output when the SKU field was left empty. It will now fall back to the product’s ID.
+
+Enhancements:
+
+* Outputs `PreOrder` as availability property value in the Product schema when the product is “on backorder”.
+
 ### 13.2: May 26th, 2020
 Bugfixes:
 
