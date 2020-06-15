@@ -11,40 +11,6 @@
 class Yoast_WooCommerce_SEO_Test extends WPSEO_WooCommerce_UnitTestCase {
 
 	/**
-	 * Tests the filtering of Yoast SEO columns.
-	 *
-	 * @covers Yoast_WooCommerce_SEO::column_heading
-	 */
-	public function test_column_heading() {
-		$woocommerce = new Yoast_WooCommerce_SEO();
-
-		$columns = [
-			'another-column'          => '',
-			'wpseo-title'             => '',
-			'wpseo-metadesc'          => '',
-			'wpseo-focuskw'           => '',
-			'wpseo-score'             => '',
-			'wpseo-score-readability' => '',
-		];
-
-		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
-			$columns += [
-				'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS  => '',
-				'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED => '',
-			];
-		}
-
-		$actual = $woocommerce->column_heading( $columns );
-
-		$expected = [
-			'another-column' => '',
-			'wpseo-score'    => '',
-		];
-
-		$this->assertSame( $expected, $actual );
-	}
-
-	/**
 	 * Tests the sitemap filtering of a product that is not hidden.
 	 *
 	 * @covers Yoast_WooCommerce_SEO::filter_hidden_product

@@ -65,8 +65,8 @@ class Yoast_WooCommerce_SEO {
 			add_filter( 'wpseo_submenu_pages', [ $this, 'add_submenu_pages' ] );
 			add_action( 'admin_print_styles', [ $this, 'config_page_styles' ] );
 
-			// Products tab columns.
-			add_filter( 'manage_product_posts_columns', [ $this, 'column_heading' ], 11, 1 );
+			// Hide the Yoast SEO columns in the Product table by default, except the SEO score column.
+			add_action( 'admin_init', [ $this, 'set_yoast_columns_hidden_by_default' ] );
 
 			// Move Woo box above SEO box.
 			add_action( 'admin_footer', [ $this, 'footer_js' ] );
@@ -529,16 +529,18 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Removes the Yoast SEO columns in the edit products page.
+	 * Hides the Yoast SEO columns in the Product table by default, except the SEO score one.
 	 *
-	 * @since 1.0
-	 *
-	 * @param array $columns List of registered columns.
-	 *
-	 * @return array Array with the filtered columns.
+	 * @return void
 	 */
-	public function column_heading( $columns ) {
-		$keys_to_remove = [
+	public function set_yoast_columns_hidden_by_default() {
+		$user_id = get_current_user_id();
+
+		if ( get_user_option( 'wpseo_woo_columns_hidden_default', $user_id ) === '1' ) {
+			return;
+		}
+
+		$yoast_hidden = [
 			'wpseo-title',
 			'wpseo-metadesc',
 			'wpseo-focuskw',
@@ -546,15 +548,12 @@ class Yoast_WooCommerce_SEO {
 		];
 
 		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
-			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS;
-			$keys_to_remove[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED;
+			$yoast_hidden[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS;
+			$yoast_hidden[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED;
 		}
 
-		foreach ( $keys_to_remove as $key_to_remove ) {
-			unset( $columns[ $key_to_remove ] );
-		}
-
-		return $columns;
+		update_user_option( $user_id, 'manageedit-productcolumnshidden', $yoast_hidden, true );
+		update_user_option( $user_id, 'wpseo_woo_columns_hidden_default', '1', true );
 	}
 
 	/**
