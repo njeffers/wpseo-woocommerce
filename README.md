@@ -30,7 +30,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 13.3: June, 23th, 2020
+### 13.3: June, 23rd, 2020
 Bugfixes:
 
 * Fixes a bug where no SKU would be output when the SKU field was left empty. It will now fall back to the product’s ID.
