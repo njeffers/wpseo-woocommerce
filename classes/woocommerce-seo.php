@@ -66,7 +66,7 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'admin_print_styles', [ $this, 'config_page_styles' ] );
 
 			// Hide the Yoast SEO columns in the Product table by default, except the SEO score column.
-			add_action( 'admin_init', [ $this, 'set_yoast_columns_hidden_by_default' ] );
+			add_action( 'current_screen', [ $this, 'set_yoast_columns_hidden_by_default' ] );
 
 			// Move Woo box above SEO box.
 			add_action( 'admin_footer', [ $this, 'footer_js' ] );
@@ -531,16 +531,19 @@ class Yoast_WooCommerce_SEO {
 	/**
 	 * Hides the Yoast SEO columns in the Product table by default, except the SEO score one.
 	 *
+	 * @param WP_Screen $current_screen Current WP_Screen object.
+	 *
 	 * @return void
 	 */
-	public function set_yoast_columns_hidden_by_default() {
-		$user_id = get_current_user_id();
+	public function set_yoast_columns_hidden_by_default( $current_screen ) {
+		$user_id             = get_current_user_id();
+		$user_hidden_columns = get_hidden_columns( $current_screen );
 
 		if ( get_user_option( 'wpseo_woo_columns_hidden_default', $user_id ) === '1' ) {
 			return;
 		}
 
-		$yoast_hidden = [
+		$yoast_hidden_columns = [
 			'wpseo-title',
 			'wpseo-metadesc',
 			'wpseo-focuskw',
@@ -548,11 +551,13 @@ class Yoast_WooCommerce_SEO {
 		];
 
 		if ( class_exists( 'WPSEO_Link_Columns' ) ) {
-			$yoast_hidden[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS;
-			$yoast_hidden[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED;
+			$yoast_hidden_columns[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKS;
+			$yoast_hidden_columns[] = 'wpseo-' . WPSEO_Link_Columns::COLUMN_LINKED;
 		}
 
-		update_user_option( $user_id, 'manageedit-productcolumnshidden', $yoast_hidden, true );
+		$hidden_columns = array_merge( $user_hidden_columns, $yoast_hidden_columns );
+
+		update_user_option( $user_id, 'manageedit-productcolumnshidden', $hidden_columns, true );
 		update_user_option( $user_id, 'wpseo_woo_columns_hidden_default', '1', true );
 	}
 
