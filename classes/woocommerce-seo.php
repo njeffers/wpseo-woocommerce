@@ -536,12 +536,16 @@ class Yoast_WooCommerce_SEO {
 	 * @return void
 	 */
 	public function set_yoast_columns_hidden_by_default( $current_screen ) {
-		$user_id             = get_current_user_id();
-		$user_hidden_columns = get_hidden_columns( $current_screen );
+		$user_id = get_current_user_id();
 
-		if ( get_user_option( 'wpseo_woo_columns_hidden_default', $user_id ) === '1' ) {
+		if (
+			$current_screen->id !== 'edit-product' ||
+			get_user_option( 'wpseo_woo_columns_hidden_default', $user_id ) === '1'
+		) {
 			return;
 		}
+
+		$user_hidden_columns = get_hidden_columns( $current_screen );
 
 		$yoast_hidden_columns = [
 			'wpseo-title',
