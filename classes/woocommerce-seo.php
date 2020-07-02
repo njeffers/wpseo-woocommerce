@@ -509,7 +509,7 @@ class Yoast_WooCommerce_SEO {
 		);
 		echo '</fieldset>';
 
-		echo '</div>'; //yoast-feature
+		echo '</div>'; // yoast-feature.
 
 		// Submit button and debug info.
 		Yoast_Form::get_instance()->admin_footer( true, false );
