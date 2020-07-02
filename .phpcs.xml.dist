@@ -26,6 +26,9 @@
 	<!-- Check 20 files simultaneously. -->
 	<arg name="parallel" value="20"/>
 
+	<!-- Cache the results between runs. -->
+	<arg name="cache" value="./.cache/phpcs.cache"/>
+
 
 	<!--
 	#############################################################################
