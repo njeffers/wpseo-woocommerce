@@ -454,6 +454,8 @@ class Yoast_WooCommerce_SEO {
 			$taxonomies[ strtolower( $object_taxonomy->name ) ] = esc_html( $object_taxonomy->labels->name );
 		}
 
+		echo '<div class="yoast-feature">';
+
 		echo '<h2>' . esc_html__( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
 		<p>' . esc_html__( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>';
 
@@ -506,6 +508,8 @@ class Yoast_WooCommerce_SEO {
 			)
 		);
 		echo '</fieldset>';
+
+		echo '</div>'; //yoast-feature
 
 		// Submit button and debug info.
 		Yoast_Form::get_instance()->admin_footer( true, false );
