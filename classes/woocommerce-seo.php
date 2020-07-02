@@ -472,8 +472,9 @@ class Yoast_WooCommerce_SEO {
 				'Yoast SEO',
 				'WooCommerce'
 			);
-			echo "</p>\n";
+			echo '</p>';
 
+			echo '<fieldset id="id-name" class="yoast-field-group">';
 			Yoast_Form::get_instance()->checkbox(
 				'woo_breadcrumbs',
 				sprintf(
@@ -482,6 +483,7 @@ class Yoast_WooCommerce_SEO {
 					'WooCommerce'
 				)
 			);
+			echo '</fieldset>';
 		}
 
 		echo '<h2>' . esc_html__( 'Admin', 'yoast-woo-seo' ) . '</h2>';
@@ -492,8 +494,9 @@ class Yoast_WooCommerce_SEO {
 			'Yoast SEO',
 			'WooCommerce'
 		);
-		echo "</p>\n";
+		echo '</p>';
 
+		echo '<fieldset id="id-name" class="yoast-field-group">';
 		Yoast_Form::get_instance()->checkbox(
 			'woo_metabox_top',
 			sprintf(
@@ -502,6 +505,7 @@ class Yoast_WooCommerce_SEO {
 				'WooCommerce'
 			)
 		);
+		echo '</fieldset>';
 
 		// Submit button and debug info.
 		Yoast_Form::get_instance()->admin_footer( true, false );
