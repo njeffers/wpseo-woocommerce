@@ -30,6 +30,11 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 13.4: July, 21st, 2020
+Enhancements:
+
+* Hides the Yoast SEO columns by default in the Products overview table. 
+
 ### 13.3: June, 23rd, 2020
 Bugfixes:
 
