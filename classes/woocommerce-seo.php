@@ -454,6 +454,8 @@ class Yoast_WooCommerce_SEO {
 			$taxonomies[ strtolower( $object_taxonomy->name ) ] = esc_html( $object_taxonomy->labels->name );
 		}
 
+		echo '<div class="yoast-feature">';
+
 		echo '<h2>' . esc_html__( 'Schema & OpenGraph additions', 'yoast-woo-seo' ) . '</h2>
 		<p>' . esc_html__( 'If you have product attributes for the following types, select them here, the plugin will make sure they\'re used for the appropriate Schema.org and OpenGraph markup.', 'yoast-woo-seo' ) . '</p>';
 
@@ -472,8 +474,9 @@ class Yoast_WooCommerce_SEO {
 				'Yoast SEO',
 				'WooCommerce'
 			);
-			echo "</p>\n";
+			echo '</p>';
 
+			echo '<fieldset class="yoast-field-group">';
 			Yoast_Form::get_instance()->checkbox(
 				'woo_breadcrumbs',
 				sprintf(
@@ -482,6 +485,7 @@ class Yoast_WooCommerce_SEO {
 					'WooCommerce'
 				)
 			);
+			echo '</fieldset>';
 		}
 
 		echo '<h2>' . esc_html__( 'Admin', 'yoast-woo-seo' ) . '</h2>';
@@ -492,8 +496,9 @@ class Yoast_WooCommerce_SEO {
 			'Yoast SEO',
 			'WooCommerce'
 		);
-		echo "</p>\n";
+		echo '</p>';
 
+		echo '<fieldset class="yoast-field-group">';
 		Yoast_Form::get_instance()->checkbox(
 			'woo_metabox_top',
 			sprintf(
@@ -502,6 +507,9 @@ class Yoast_WooCommerce_SEO {
 				'WooCommerce'
 			)
 		);
+		echo '</fieldset>';
+
+		echo '</div>'; // yoast-feature.
 
 		// Submit button and debug info.
 		Yoast_Form::get_instance()->admin_footer( true, false );
