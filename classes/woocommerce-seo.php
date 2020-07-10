@@ -476,7 +476,7 @@ class Yoast_WooCommerce_SEO {
 			);
 			echo '</p>';
 
-			echo '<fieldset id="id-name" class="yoast-field-group">';
+			echo '<fieldset class="yoast-field-group">';
 			Yoast_Form::get_instance()->checkbox(
 				'woo_breadcrumbs',
 				sprintf(
@@ -498,7 +498,7 @@ class Yoast_WooCommerce_SEO {
 		);
 		echo '</p>';
 
-		echo '<fieldset id="id-name" class="yoast-field-group">';
+		echo '<fieldset class="yoast-field-group">';
 		Yoast_Form::get_instance()->checkbox(
 			'woo_metabox_top',
 			sprintf(
