@@ -536,16 +536,34 @@ class Yoast_WooCommerce_SEO {
 	 * @return void
 	 */
 	public function set_yoast_columns_hidden_by_default( $current_screen ) {
-		$user_id = get_current_user_id();
-
-		if (
-			$current_screen->id !== 'edit-product' ||
-			get_user_option( 'wpseo_woo_columns_hidden_default', $user_id ) === '1'
-		) {
+		// Don't do anything if we're not not on the edit products page.
+		if ( $current_screen->id !== 'edit-product' ) {
 			return;
 		}
 
+		$yoast_hidden_columns_old_defaults = [
+			'wpseo-title',
+			'wpseo-metadesc',
+			'wpseo-focuskw',
+		];
+
 		$user_hidden_columns = get_hidden_columns( $current_screen );
+
+		$user_hidden_yoast_columns = array_filter( $user_hidden_columns, [ $this, 'filter_yoast_columns' ] );
+
+		$is_old_default = ( count( array_diff( $yoast_hidden_columns_old_defaults, $user_hidden_yoast_columns ) ) === 0 ) ? true : false;
+
+		// Don't do anything if the Yoast hidden columns old defaults have been changed by the user.
+		if ( ! $is_old_default ) {
+			return;
+		}
+
+		$user_id = get_current_user_id();
+
+		// Don't do anything if the new defaults have already been set.
+		if ( get_user_option( 'wpseo_woo_columns_hidden_default', $user_id ) === '1' ) {
+			return;
+		}
 
 		$yoast_hidden_columns = [
 			'wpseo-title',
@@ -563,6 +581,28 @@ class Yoast_WooCommerce_SEO {
 
 		update_user_option( $user_id, 'manageedit-productcolumnshidden', $hidden_columns, true );
 		update_user_option( $user_id, 'wpseo_woo_columns_hidden_default', '1', true );
+	}
+
+	/**
+	 * Filter the Yoast columns from the user hidden columns.
+	 *
+	 * @param string $column The user hidden column identifier.
+	 *
+	 * @return bool Whether or not the column is a Yoast column.
+	 */
+	private function filter_yoast_columns( $column ) {
+		return strpos( $column, 'wpseo-' ) === 0;
+	}
+
+	/**
+	 * Filter items if they have a count of zero.
+	 *
+	 * @param array $item The item to potentially filter out.
+	 *
+	 * @return bool Whether or not the count is zero.
+	 */
+	private function filter_items( $item ) {
+		return $item['count'] !== 0;
 	}
 
 	/**
