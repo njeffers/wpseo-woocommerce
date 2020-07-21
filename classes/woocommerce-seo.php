@@ -551,10 +551,11 @@ class Yoast_WooCommerce_SEO {
 
 		$user_hidden_yoast_columns = array_filter( $user_hidden_columns, [ $this, 'filter_yoast_columns' ] );
 
-		$is_old_default = ( count( array_diff( $yoast_hidden_columns_old_defaults, $user_hidden_yoast_columns ) ) === 0 ) ? true : false;
+		$is_old_default = count( array_diff( $yoast_hidden_columns_old_defaults, $user_hidden_yoast_columns ) ) === 0;
 
 		// Don't do anything if the Yoast hidden columns old defaults have been changed by the user.
 		if ( ! $is_old_default ) {
+			update_user_option( $user_id, 'wpseo_woo_columns_hidden_default', '1', true );
 			return;
 		}
 
@@ -592,17 +593,6 @@ class Yoast_WooCommerce_SEO {
 	 */
 	private function filter_yoast_columns( $column ) {
 		return strpos( $column, 'wpseo-' ) === 0;
-	}
-
-	/**
-	 * Filter items if they have a count of zero.
-	 *
-	 * @param array $item The item to potentially filter out.
-	 *
-	 * @return bool Whether or not the count is zero.
-	 */
-	private function filter_items( $item ) {
-		return $item['count'] !== 0;
 	}
 
 	/**
