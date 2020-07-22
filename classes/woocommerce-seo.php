@@ -547,19 +547,20 @@ class Yoast_WooCommerce_SEO {
 			'wpseo-focuskw',
 		];
 
-		$user_hidden_columns = get_hidden_columns( $current_screen );
-
+		$user_id                   = get_current_user_id();
+		$user_hidden_columns       = get_hidden_columns( $current_screen );
 		$user_hidden_yoast_columns = array_filter( $user_hidden_columns, [ $this, 'filter_yoast_columns' ] );
-
-		$is_old_default = count( array_diff( $yoast_hidden_columns_old_defaults, $user_hidden_yoast_columns ) ) === 0;
+		$is_old_default            = (
+			count( $yoast_hidden_columns_old_defaults ) === count( $user_hidden_yoast_columns )
+			&& count( array_diff( $yoast_hidden_columns_old_defaults, $user_hidden_yoast_columns ) ) === 0
+			&& count( array_diff( $user_hidden_yoast_columns, $yoast_hidden_columns_old_defaults ) ) === 0
+		);
 
 		// Don't do anything if the Yoast hidden columns old defaults have been changed by the user.
 		if ( ! $is_old_default ) {
 			update_user_option( $user_id, 'wpseo_woo_columns_hidden_default', '1', true );
 			return;
 		}
-
-		$user_id = get_current_user_id();
 
 		// Don't do anything if the new defaults have already been set.
 		if ( get_user_option( 'wpseo_woo_columns_hidden_default', $user_id ) === '1' ) {
