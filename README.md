@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.3
 Tested up to: 5.4
-Stable tag: 13.4-RC1
+Stable tag: 13.4
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -30,10 +30,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 13.4: July, 21st, 2020
+### 13.4: July, 28th, 2020
 Enhancements:
 
-* Hides the Yoast SEO columns by default in the Products overview table. 
+* Hides the Yoast SEO columns in the Products overview table by default. 
 
 ### 13.3: June, 23rd, 2020
 Bugfixes:
