@@ -59,3 +59,8 @@ function initialize_yoast_woocommerce_seo() {
 if ( ! wp_installing() ) {
 	add_action( 'plugins_loaded', 'initialize_yoast_woocommerce_seo', 20 );
 }
+
+// Activation hook.
+if ( is_admin() ) {
+	register_activation_hook( __FILE__, [ 'Yoast_WooCommerce_SEO', 'install' ] );
+}
