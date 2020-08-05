@@ -30,12 +30,18 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 13.4: July, 28th, 2020
+### 13.5: August 4, 2020
+Other:
+
+* Enables tracking when activating the plugin. This can be disabled in the Yoast SEO configuration wizard.
+* Sets the minimum supported WordPress version to 5.4.
+
+### 13.4: July 28th, 2020
 Enhancements:
 
 * Hides the Yoast SEO columns in the Products overview table by default. 
 
-### 13.3: June, 23rd, 2020
+### 13.3: June 23rd, 2020
 Bugfixes:
 
 * Fixes a bug where no SKU would be output when the SKU field was left empty. It will now fall back to the product’s ID.
