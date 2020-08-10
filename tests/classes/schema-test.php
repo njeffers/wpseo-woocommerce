@@ -126,7 +126,7 @@ class Schema_Test extends TestCase {
 		);
 
 		$expected = [
-			'@type' => 'CheckoutPage',
+			'@type' => [ 'WebPage', 'CheckoutPage' ],
 		];
 		$schema   = new WPSEO_WooCommerce_Schema();
 		$this->assertSame( $expected, $schema->filter_webpage( $input ) );
@@ -140,7 +140,7 @@ class Schema_Test extends TestCase {
 		);
 
 		$expected = [
-			'@type' => 'ItemPage',
+			'@type' => [ 'WebPage', 'ItemPage' ],
 		];
 		$schema   = new WPSEO_WooCommerce_Schema();
 		$this->assertSame( $expected, $schema->filter_webpage( $input ) );
