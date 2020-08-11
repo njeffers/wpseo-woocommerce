@@ -30,7 +30,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 13.5: August 4, 2020
+### 13.5: August 18, 2020
 Other:
 
 * Enables tracking when activating the plugin. This can be disabled in the Yoast SEO configuration wizard.
