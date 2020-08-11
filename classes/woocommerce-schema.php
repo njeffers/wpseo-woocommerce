@@ -108,14 +108,12 @@ class WPSEO_WooCommerce_Schema {
 				$webpage_data['@type'] = [ $webpage_data['@type'] ];
 			}
 			$webpage_data['@type'][] = 'ItemPage';
-			$webpage_data['@type']   = array_unique( $webpage_data['@type'] );
 		}
 		if ( is_checkout() || is_checkout_pay_page() ) {
 			if ( ! is_array( $webpage_data['@type'] ) ) {
 				$webpage_data['@type'] = [ $webpage_data['@type'] ];
 			}
 			$webpage_data['@type'][] = 'CheckoutPage';
-			$webpage_data['@type']   = array_unique( $webpage_data['@type'] );
 		}
 
 		return $webpage_data;
