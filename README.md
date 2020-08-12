@@ -33,7 +33,7 @@ Changelog
 ### 13.5: August 18, 2020
 Enhancements:
 
-* Adds ‘WebPage’ as schema #webpage type to Product pages and Checkout pages.
+* Adds ‘WebPage’ as schema `@type` to Product pages and Checkout pages. This results in a `@type` array with at least 'WebPage' and 'ItemPage', or 'WebPage' and 'CheckoutPage'.
 
 Other:
 
