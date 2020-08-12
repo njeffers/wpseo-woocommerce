@@ -2,7 +2,7 @@ WooCommerce Yoast SEO
 =====================
 Requires at least: 5.4
 Tested up to: 5.5
-Stable tag: 13.5-RC1
+Stable tag: 13.5-RC2
 Requires PHP: 5.6.20
 Depends: Yoast SEO, WooCommerce
 
@@ -31,6 +31,10 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 Changelog
 =========
 ### 13.5: August 18, 2020
+Enhancements:
+
+* Adds ‘WebPage’ as schema #webpage type to Product pages and Checkout pages.
+
 Other:
 
 * Enables tracking when activating the plugin. This can be disabled in the Yoast SEO configuration wizard.
