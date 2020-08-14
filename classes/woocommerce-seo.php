@@ -143,7 +143,9 @@ class Yoast_WooCommerce_SEO {
 	 */
 	public static function install() {
 		// Enable tracking.
-		WPSEO_Options::set( 'tracking', true );
+		if ( class_exists( 'WPSEO_Options' ) && method_exists( 'WPSEO_Options', 'set' ) ) {
+			WPSEO_Options::set( 'tracking', true );
+		}
 	}
 
 	/**
