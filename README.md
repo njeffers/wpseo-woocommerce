@@ -30,6 +30,11 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 13.6: September 15th, 2020
+Other:
+
+* We've tested with WooCommerce 4.5. Everything works as expected!
+
 ### 13.5: August 18, 2020
 Enhancements:
 
