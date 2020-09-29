@@ -39,7 +39,7 @@ Other:
 
 * We've tested with WooCommerce 4.5. Everything works as expected!
 
-### 13.5: August 18, 2020
+### 13.5: August 18th, 2020
 Enhancements:
 
 * Adds ‘WebPage’ as schema `@type` to Product pages and Checkout pages. This results in a `@type` array with at least 'WebPage' and 'ItemPage', or 'WebPage' and 'CheckoutPage'.
