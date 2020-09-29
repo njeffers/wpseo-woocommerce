@@ -30,7 +30,7 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
-### 13.6: September 22nd, 2020
+### 13.6: September 29th, 2020
 Bugfixes:
 
 * Fixes a bug where no plugin icon and compatibility data would be displayed on the plugins update screen.
