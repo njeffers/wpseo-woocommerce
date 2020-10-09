@@ -20,35 +20,36 @@ class WPSEO_WooCommerce_Slack {
 	/**
 	 * Replace the default enhanced data (author, reading time) with custom data.
 	 *
-	 * @param array $data The array of labels => value.
+	 * @param array                  $data The array of labels => value.
 	 * @param Indexable_Presentation $presentation  The indexable presentation.
 	 *
 	 * @return array The filtered array.
 	 */
 	public function filter_enhanced_data( $data, $presentation ) {
-		$object     = $presentation->model;
-		$product    = \wc_get_product( $object->object_id );
+		$object  = $presentation->model;
+		$product = \wc_get_product( $object->object_id );
 
 		if ( $product ) {
-			$data       = [];
+			$data         = [];
 			$product_type = WPSEO_WooCommerce_Utils::get_product_type( $product );
 			// Omit the price amount for variable and grouped products.
 			$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', true ) && ! ( $product_type === 'variable' || $product_type === 'grouped' );
 
-			$availability = 'Out of stock';
+			$availability = __( 'Out of stock', 'yoast-woo-seo' );
 			if ( $product->is_on_backorder() ) {
-				$availability = 'On backorder';
+				$availability = __( 'On backorder', 'yoast-woo-seo' );
 			}
 
 			if ( $product->is_in_stock() ) {
-				$availability = 'In stock';
+				$availability = __( 'In stock', 'yoast-woo-seo' );
 			}
 
 			if ( $show_price ) {
 				$price = \wp_strip_all_tags( $product->get_price_html() );
-				$data[ __( 'Price', 'woocommerce' ) ] = $price;
+
+				$data[ __( 'Price', 'yoast-woo-seo' ) ] = $price;
 			}
-			$data[ __( 'Availability', 'woocommerce' ) ] = __( $availability, 'woocommerce' );
+			$data[ __( 'Availability', 'yoast-woo-seo' ) ] = $availability;
 		}
 
 		return $data;

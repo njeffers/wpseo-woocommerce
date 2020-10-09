@@ -51,17 +51,17 @@ class Slack_Test extends TestCase {
 			'Est. reading time' => '15 minutes',
 		];
 
-		$model              = (object) [
+		$model   = (object) [
 			'object_id'       => 13,
 			'object_type'     => 'post',
 			'object_sub_type' => 'product',
 		];
-		$product            = Mockery::mock( 'WC_Product' )->makePartial();
-		$price              = '&euro;25.00';
+		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$price   = '&euro;25.00';
 
 		$product
 			->expects( 'get_price_html' )
-			->andReturn(  );
+			->andReturn( $price );
 		$product
 			->expects( 'is_on_backorder' )
 			->andReturn( false );
@@ -78,12 +78,14 @@ class Slack_Test extends TestCase {
 			->with( $price )
 			->andReturn( $price );
 
-		$this->assertSame( [
-			'Price' => '&euro;25.00',
-			'Availability' => 'In stock',
-		], $this->instance->filter_enhanced_data( $data, $presentation ) );
+		$this->assertSame(
+			[
+				'Price'        => '&euro;25.00',
+				'Availability' => 'In stock',
+			],
+			$this->instance->filter_enhanced_data( $data, $presentation )
+		);
 	}
-
 
 	/**
 	 * Mocks the Indexable presentation.
@@ -95,7 +97,7 @@ class Slack_Test extends TestCase {
 	private function mock_presentation( $model ) {
 		$presentation = Mockery::mock();
 
-		$presentation->model   = $model;
+		$presentation->model = $model;
 
 		return $presentation;
 	}
