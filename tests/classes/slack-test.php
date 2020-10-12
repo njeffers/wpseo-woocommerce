@@ -41,7 +41,7 @@ class Slack_Test extends TestCase {
 	}
 
 	/**
-	 * Tests that the enhanced data is correctly filtered
+	 * Tests that the enhanced data is correctly filtered.
 	 *
 	 * @covers ::filter_enhanced_data
 	 */
@@ -90,9 +90,9 @@ class Slack_Test extends TestCase {
 	/**
 	 * Mocks the Indexable presentation.
 	 *
-	 * @param object $model   The model.
+	 * @param object $model The model.
 	 *
-	 * @return Mockery\MockInterface The mock presentation
+	 * @return Mockery\MockInterface The mock presentation.
 	 */
 	private function mock_presentation( $model ) {
 		$presentation = Mockery::mock();

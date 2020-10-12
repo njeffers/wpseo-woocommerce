@@ -11,17 +11,17 @@
 class WPSEO_WooCommerce_Slack {
 
 	/**
-	 * Register hooks.
+	 * Registers the hooks.
 	 */
 	public function register_hooks() {
 		\add_filter( 'wpseo_enhanced_data', [ $this, 'filter_enhanced_data' ], 10, 2 );
 	}
 
 	/**
-	 * Replace the default enhanced data (author, reading time) with custom data.
+	 * Replaces the default enhanced data (author, reading time) with custom data.
 	 *
-	 * @param array                  $data The array of labels => value.
-	 * @param Indexable_Presentation $presentation  The indexable presentation.
+	 * @param array                  $data         The array of labels => value.
+	 * @param Indexable_Presentation $presentation The indexable presentation.
 	 *
 	 * @return array The filtered array.
 	 */

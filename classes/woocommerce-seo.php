@@ -132,7 +132,7 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Initialized the twitter functionality.
+	 * Initializes the twitter functionality.
 	 */
 	public function initialize_twitter() {
 		$twitter = new WPSEO_WooCommerce_Twitter();
@@ -140,11 +140,11 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Initialized the slack functionality.
+	 * Initializes the slack functionality.
 	 */
 	public function initialize_slack() {
-		$twitter = new WPSEO_WooCommerce_Slack();
-		$twitter->register_hooks();
+		$slack = new WPSEO_WooCommerce_Slack();
+		$slack->register_hooks();
 	}
 
 	/**
