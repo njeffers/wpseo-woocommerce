@@ -81,6 +81,7 @@ class Yoast_WooCommerce_SEO {
 			add_action( 'init', [ $this, 'initialize_opengraph' ] );
 			add_action( 'init', [ $this, 'initialize_schema' ] );
 			add_action( 'init', [ $this, 'initialize_twitter' ] );
+			add_action( 'init', [ $this, 'initialize_slack' ] );
 			add_filter( 'wpseo_frontend_presenters', [ $this, 'add_frontend_presenter' ] );
 
 			// Add metadescription filter.
@@ -131,11 +132,19 @@ class Yoast_WooCommerce_SEO {
 	}
 
 	/**
-	 * Initialized the twitter functionality.
+	 * Initializes the twitter functionality.
 	 */
 	public function initialize_twitter() {
 		$twitter = new WPSEO_WooCommerce_Twitter();
 		$twitter->register_hooks();
+	}
+
+	/**
+	 * Initializes the slack functionality.
+	 */
+	public function initialize_slack() {
+		$slack = new WPSEO_WooCommerce_Slack();
+		$slack->register_hooks();
 	}
 
 	/**
