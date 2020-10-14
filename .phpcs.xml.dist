@@ -61,6 +61,16 @@
 	#############################################################################
 	-->
 
+	<rule ref="Yoast.NamingConventions.NamespaceName">
+		<properties>
+			<!-- Indicate which directories should be treated as project root directories for
+				 path-to-namespace translations. -->
+			<property name="src_directory" type="array">
+				<element value="config"/>
+			</property>
+		</properties>
+	</rule>
+
 	<!-- Verify that all gettext calls use the correct text domain. -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
@@ -103,6 +113,15 @@
 	#############################################################################
 	-->
 
+	<!-- Composer scripts are not WordPress and have console output. -->
+	<rule ref="WordPress.Security.EscapeOutput.OutputNotEscaped">
+		<exclude-pattern>/config/composer/*</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
+		<exclude-pattern>/config/composer/*</exclude-pattern>
+	</rule>
+
 	<!-- Allow for the double/mock classes to override methods just to change the visibility. -->
 	<rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
 		<exclude-pattern>/integration-tests/doubles/*\.php$</exclude-pattern>
@@ -122,6 +141,7 @@
 
 	<!-- Valid usage: For testing purposes, some non-prefixed globals are being created. -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<include-pattern>*/config/*\.php$</include-pattern>
 		<exclude-pattern>/integration-tests/bootstrap\.php$</exclude-pattern>
 		<exclude-pattern>/tests/bootstrap\.php$</exclude-pattern>
 	</rule>
