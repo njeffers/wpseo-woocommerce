@@ -5,6 +5,11 @@ build:
   - 'build:i18n'
   - 'build:js'
 
+'build-watch':
+  - 'shell:composer-install'
+  - 'build:js'
+  - 'watch'
+
 # Build JavaScript from assets to production
 'build:js':
   - 'clean:jsDistFiles'
@@ -26,6 +31,7 @@ build:
 'release:js':
   - 'clean:jsDistFiles'
   - 'webpack:buildProd'
+
 # Default task
 default:
   - build
