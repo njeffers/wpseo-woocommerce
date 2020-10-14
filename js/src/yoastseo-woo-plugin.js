@@ -1,4 +1,4 @@
-/* global YoastSEO, wpseoWooL10n */
+/* global YoastSEO, wpseoWooL10n, tinyMCE */
 
 import { getExcerpt, addExcerptEventHandlers, isTinyMCEAvailable } from "./yoastseo-woo-handle-excerpt-editors";
 
@@ -57,9 +57,9 @@ class YoastWooCommercePlugin {
 	 * @returns {void}
 	 */
 	bindEvents() {
-		if ( isTinyMCEAvailable( 'excerpt' ) ) {
-			const excerptElement = tinyMCE.get( 'excerpt' );
-			excerptElement.on( 'change', function() {
+		if ( isTinyMCEAvailable( "excerpt" ) ) {
+			const excerptElement = tinyMCE.get( "excerpt" );
+			excerptElement.on( "change", function() {
 				YoastSEO.app.analyzeTimer();
 			} );
 		}
@@ -133,14 +133,13 @@ class YoastWooCommercePlugin {
 	 * @returns {string} The data string parameter with the short description and the images outer html.
 	 */
 	addContent( data ) {
-		var short_desc = getExcerpt();
-		data += "\n\n" + short_desc;
+		data += "\n\n" + getExcerpt();
 
-		var images     = jQuery( "#product_images_container" ).find( "img" );
-
+		var images = jQuery( "#product_images_container" ).find( "img" );
 		for ( var i = 0; i < images.length; i++ ) {
 			data += images[ i ].outerHTML;
 		}
+
 		return data;
 	}
 }
