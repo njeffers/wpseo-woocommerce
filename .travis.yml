@@ -19,7 +19,7 @@ jobs:
   fast_finish: true
   include:
     - php: 7.3
-      env: WP_VERSION=5.5 WP_MULTISITE=1 PHPUNIT=1 PHPCS=1 JSCHECK=1 SECURITY=1
+      env: WP_VERSION=5.5 WP_MULTISITE=1 PHPUNIT=1 PHPCS=1 JSCHECK=1 SECURITY=1 TRAVIS_NODE_VERSION=lts/*
     - php: 5.6
       env: WP_VERSION=5.4 PHPLINT=1 PHPUNIT=1
     - php: 7.4
