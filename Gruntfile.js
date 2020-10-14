@@ -48,6 +48,7 @@ module.exports = function( grunt ) {
 				"js/src/**/*.js",
 			],
 			sass: [
+				// Work-around to avoid grunt-watch misconfiguration.
 				"non-existing-file",
 			],
 		},
