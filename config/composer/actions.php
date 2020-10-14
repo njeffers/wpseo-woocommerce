@@ -58,37 +58,6 @@ class Actions {
 	}
 
 	/**
-	 * Runs lint on the staged files.
-	 *
-	 * Used the composer lint-files command.
-	 *
-	 * @param Event $event Composer event that triggered this script.
-	 *
-	 * @return void
-	 */
-	public static function lint_branch( Event $event ) {
-		$branch = 'trunk';
-
-		$args = $event->getArguments();
-		if ( ! empty( $args ) ) {
-			$branch = $args[0];
-		}
-
-		exit( self::lint_changed_files( $branch ) );
-	}
-
-	/**
-	 * Runs lint on the staged files.
-	 *
-	 * Used the composer lint-files command.
-	 *
-	 * @return void
-	 */
-	public static function lint_staged() {
-		exit( self::lint_changed_files( '--staged' ) );
-	}
-
-	/**
 	 * Runs PHPCS on the staged files.
 	 *
 	 * Used the composer check-staged-cs command.
@@ -106,27 +75,6 @@ class Actions {
 		}
 
 		exit( self::check_cs_for_changed_files( $branch ) );
-	}
-
-	/**
-	 * Runs lint on changed files compared to some git reference.
-	 *
-	 * @param string $compare The git reference.
-	 *
-	 * @return int Exit code from the lint command.
-	 */
-	private static function lint_changed_files( $compare ) {
-		\exec( 'git diff --name-only --diff-filter=d ' . \escapeshellarg( $compare ), $files );
-
-		$php_files = self::filter_files( $files, '.php' );
-		if ( empty( $php_files ) ) {
-			echo 'No files to compare! Exiting.' . PHP_EOL;
-
-			return 0;
-		}
-
-		\system( 'composer lint-files -- ' . \implode( ' ', \array_map( 'escapeshellarg', $php_files ) ), $exit_code );
-		return $exit_code;
 	}
 
 	/**
