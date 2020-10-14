@@ -30,6 +30,11 @@ You can find the FAQ [online here](https://kb.yoast.com/kb/category/woocommerce-
 
 Changelog
 =========
+### 13.7: October 27th, 2020
+Enhancements:
+
+ * Shows the price and availability of a product in its snippet when sharing the product on Slack.
+
 ### 13.6: September 29th, 2020
 Bugfixes:
 
