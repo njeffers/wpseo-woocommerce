@@ -36,12 +36,14 @@ class WPSEO_WooCommerce_Slack {
 			$show_price = apply_filters( 'Yoast\WP\Woocommerce\og_price', true ) && ! ( $product_type === 'variable' || $product_type === 'grouped' );
 
 			$availability = __( 'Out of stock', 'yoast-woo-seo' );
-			if ( $product->is_on_backorder() ) {
-				$availability = __( 'On backorder', 'yoast-woo-seo' );
-			}
 
+			// Should be checked before backorder because it's true for both cases.
 			if ( $product->is_in_stock() ) {
 				$availability = __( 'In stock', 'yoast-woo-seo' );
+			}
+
+			if ( $product->is_on_backorder() ) {
+				$availability = __( 'On backorder', 'yoast-woo-seo' );
 			}
 
 			if ( $show_price ) {
