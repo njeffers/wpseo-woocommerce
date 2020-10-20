@@ -41,11 +41,11 @@ class Slack_Test extends TestCase {
 	}
 
 	/**
-	 * Tests that the enhanced data is correctly filtered.
+	 * Tests that the enhanced data is correctly filtered when product is in stock.
 	 *
 	 * @covers ::filter_enhanced_data
 	 */
-	public function test_filter_enhanced_data() {
+	public function test_filter_enhanced_data_stock() {
 		$data = [
 			'Written by'        => 'Agatha Christie',
 			'Est. reading time' => '15 minutes',
@@ -62,12 +62,14 @@ class Slack_Test extends TestCase {
 		$product
 			->expects( 'get_price_html' )
 			->andReturn( $price );
-		$product
-			->expects( 'is_on_backorder' )
-			->andReturn( false );
+
 		$product
 			->expects( 'is_in_stock' )
 			->andReturn( true );
+
+		$product
+			->expects( 'is_on_backorder' )
+			->andReturn( false );
 
 		$presentation = $this->mock_presentation( $model );
 
@@ -82,6 +84,55 @@ class Slack_Test extends TestCase {
 			[
 				'Price'        => '&euro;25.00',
 				'Availability' => 'In stock',
+			],
+			$this->instance->filter_enhanced_data( $data, $presentation )
+		);
+	}
+
+	/**
+	 * Tests that the enhanced data is correctly filtered when product is in backorder.
+	 *
+	 * @covers ::filter_enhanced_data
+	 */
+	public function test_filter_enhanced_data_backorder() {
+		$data = [
+			'Written by'        => 'Agatha Christie',
+			'Est. reading time' => '15 minutes',
+		];
+
+		$model   = (object) [
+			'object_id'       => 13,
+			'object_type'     => 'post',
+			'object_sub_type' => 'product',
+		];
+		$product = Mockery::mock( 'WC_Product' )->makePartial();
+		$price   = '&euro;25.00';
+
+		$product
+			->expects( 'get_price_html' )
+			->andReturn( $price );
+
+		$product
+			->expects( 'is_in_stock' )
+			->andReturn( true );
+
+		$product
+			->expects( 'is_on_backorder' )
+			->andReturn( true );
+
+		$presentation = $this->mock_presentation( $model );
+
+		Monkey\Functions\expect( 'wc_get_product' )
+			->with( $model->object_id )
+			->andReturn( $product );
+		Monkey\Functions\expect( 'wp_strip_all_tags' )
+			->with( $price )
+			->andReturn( $price );
+
+		$this->assertSame(
+			[
+				'Price'        => '&euro;25.00',
+				'Availability' => 'On backorder',
 			],
 			$this->instance->filter_enhanced_data( $data, $presentation )
 		);
