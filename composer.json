@@ -21,7 +21,8 @@
     "autoload-dev": {
         "classmap": [
             "tests/",
-            "integration-tests/"
+            "integration-tests/",
+            "config/"
         ]
     },
     "config": {
@@ -46,12 +47,17 @@
         "lint": [
             "@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php --exclude vendor --exclude node_modules --exclude .git"
         ],
-        "config-yoastcs": [
-            "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run",
-            "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs --config-set default_standard Yoast"
+        "cs": [
+            "Yoast\\WP\\Woocommerce\\Composer\\Actions::check_coding_standards"
         ],
         "check-cs": [
             "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs"
+        ],
+        "check-staged-cs": [
+            "@check-cs --filter=GitStaged"
+        ],
+        "check-branch-cs": [
+            "Yoast\\WP\\SEO\\Composer\\Actions::check_branch_cs"
         ],
         "fix-cs": [
             "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf"
