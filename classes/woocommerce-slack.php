@@ -14,7 +14,7 @@ class WPSEO_WooCommerce_Slack {
 	 * Registers the hooks.
 	 */
 	public function register_hooks() {
-		\add_filter( 'wpseo_enhanced_data', [ $this, 'filter_enhanced_data' ], 10, 2 );
+		\add_filter( 'wpseo_enhanced_slack_data', [ $this, 'filter_enhanced_data' ], 10, 2 );
 	}
 
 	/**

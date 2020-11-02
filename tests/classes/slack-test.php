@@ -36,7 +36,7 @@ class Slack_Test extends TestCase {
 	 * @covers ::register_hooks
 	 */
 	public function test_register_hooks() {
-		Monkey\Filters\expectAdded( 'wpseo_enhanced_data' );
+		Monkey\Filters\expectAdded( 'wpseo_enhanced_slack_data' );
 		$this->instance->register_hooks();
 	}
 
