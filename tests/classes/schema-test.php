@@ -9,6 +9,7 @@ use WPSEO_WooCommerce_Schema;
 use Yoast\WP\Woocommerce\Tests\Doubles\Schema_Double;
 use Yoast\WP\Woocommerce\Tests\Mocks\Schema_IDs;
 use Yoast\WP\Woocommerce\Tests\TestCase;
+
 use function Brain\Monkey\Functions\expect;
 
 /**
