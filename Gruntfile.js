@@ -42,6 +42,7 @@ module.exports = function( grunt ) {
 			artifact: "artifact",
 			php: [
 				"*.php",
+				"classes/**/*.php",
 			],
 			phptests: "tests/**/*.php",
 			js: [
