@@ -79,6 +79,7 @@ export default class ProductDescriptionAssessment extends Assessment {
 				text: this._l10n.woo_desc_good,
 			};
 		}
+
 		if ( length > 50 ) {
 			return {
 				score: 5,

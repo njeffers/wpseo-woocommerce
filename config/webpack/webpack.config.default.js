@@ -3,7 +3,7 @@ const path = require( "path" );
 const pkg = require( "../../package.json" );
 const UnminifiedWebpackPlugin = require( "unminified-webpack-plugin" );
 const CaseSensitivePathsPlugin = require( "case-sensitive-paths-webpack-plugin" );
-const { flattenVersionForFile } = require( "../version.js" );
+const { flattenVersionForFile } = require( "../grunt/lib/version.js" );
 const webpack = require( "webpack" );
 
 const externals = {

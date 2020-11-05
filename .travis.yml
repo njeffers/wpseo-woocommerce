@@ -19,7 +19,7 @@ jobs:
   fast_finish: true
   include:
     - php: 7.3
-      env: WP_VERSION=5.5 WP_MULTISITE=1 PHPUNIT=1 PHPCS=1 SECURITY=1
+      env: WP_VERSION=5.5 WP_MULTISITE=1 PHPUNIT=1 PHPCS=1 CHECKJS=1 SECURITY=1 TRAVIS_NODE_VERSION=lts/*
     - php: 5.6
       env: WP_VERSION=5.4 PHPLINT=1 PHPUNIT=1
     - php: 7.4
@@ -70,6 +70,12 @@ cache:
 before_install:
 - phpenv config-rm xdebug.ini || echo 'No xdebug config.'
 - export SECURITYCHECK_DIR=/tmp/security-checker
+- |
+  if [[ "$CHECKJS" == "1" ]]; then
+    nvm install $TRAVIS_NODE_VERSION
+    curl -o- -L https://yarnpkg.com/install.sh | bash
+    export PATH=$HOME/.yarn/bin:$PATH
+  fi
 
 install:
 - |
@@ -80,8 +86,8 @@ install:
   elif [[ "$TRAVIS_BUILD_STAGE_NAME" == "deploy" ]]; then
     composer install --no-dev --no-interaction
   fi
-
-- if [[ "$SECURITY" == "1" ]]; then wget -P $SECURITYCHECK_DIR https://get.sensiolabs.org/security-checker.phar && chmod +x $SECURITYCHECK_DIR/security-checker.phar;fi
+- if [[ "$CHECKJS" == "1" ]]; then yarn global add grunt-cli; yarn install; fi
+- if [[ "$SECURITY" == "1" ]]; then wget -P $SECURITYCHECK_DIR https://get.sensiolabs.org/security-checker.phar && chmod +x $SECURITYCHECK_DIR/security-checker.phar; fi
 
 before_script:
 - PLUGIN_SLUG=$(basename $(pwd))
@@ -105,7 +111,7 @@ before_script:
     cd -
   fi
 
-# Copy woocommerce seo to the test directory
+# Copy WooCommerce SEO to the test directory
 - |
   if [[ "$PHPUNIT" == "1" ]]; then
     cd ..
@@ -148,6 +154,14 @@ script:
     composer test
     travis_time_finish && travis_fold end "PHP.tests"
   fi
+# JS Linting
+- |
+  if [[ "$CHECKJS" == "1" ]]; then
+    travis_fold start "JS.check" && travis_time_start
+    grunt eslint:plugin
+    travis_time_finish && travis_fold end "JS.check"
+  fi
+# Composer config validation.
 - if [[ $TRAVIS_PHP_VERSION == "7.3" ]]; then composer validate --no-check-all; fi
 
 # Check for known security vulnerabilities in the currently locked-in dependencies.

@@ -1,5 +1,5 @@
 /* global require, process */
-const { flattenVersionForFile } = require( "./tools/version.js" );
+const { flattenVersionForFile } = require( "./config/grunt/lib/version.js" );
 const timeGrunt = require( "time-grunt" );
 const loadGruntConfig = require( "load-grunt-config" );
 const path = require( "path" );
@@ -9,9 +9,6 @@ module.exports = function( grunt ) {
 
 	const pkg = grunt.file.readJSON( "package.json" );
 	const pluginVersion = pkg.yoast.pluginVersion;
-
-	// Used to switch between development and release builds.
-	const developmentBuild = ! [ "release", "release:js", "artifact", "deploy:trunk", "deploy:master" ].includes( process.argv[ 2 ] );
 
 	// Define project configuration
 	const project = {
@@ -26,22 +23,13 @@ module.exports = function( grunt ) {
 			 * @returns {string} Config path.
 			 */
 			get config() {
-				return this.grunt + "config/";
+				return this.grunt + "task-config/";
 			},
-			grunt: "tools/grunt/",
+			grunt: "config/grunt/",
 			languages: "languages/",
 			logs: "logs/",
 		},
 		files: {
-			artifact: "artifact",
-			php: [
-				"*.php",
-			],
-			js: [
-				"js/src/**/*.js",
-				"!js/dist/*.min.js",
-			],
-			phptests: "tests/**/*.php",
 			/**
 			 * Gets the config path.
 			 *
@@ -50,15 +38,20 @@ module.exports = function( grunt ) {
 			get config() {
 				return project.paths.config + "*.js";
 			},
-			/**
-			 * Gets the changelog path file.
-			 *
-			 * @returns {string} Changelog path file.
-			 */
-			get changelog() {
-				return project.paths.theme + "changelog.txt";
-			},
 			grunt: "Gruntfile.js",
+			artifact: "artifact",
+			php: [
+				"*.php",
+				"classes/**/*.php",
+			],
+			phptests: "tests/**/*.php",
+			js: [
+				"js/src/**/*.js",
+			],
+			sass: [
+				// Work-around to avoid grunt-watch misconfiguration.
+				"non-existing-file",
+			],
 		},
 		pkg: grunt.file.readJSON( "package.json" ),
 	};
