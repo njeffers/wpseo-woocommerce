@@ -8,7 +8,7 @@
 use Yoast\WP\SEO\Config\Schema_IDs;
 
 /**
- * Class WPSEO_WooCommerce_Schema
+ * Class WPSEO_WooCommerce_Schema.
  */
 class WPSEO_WooCommerce_Schema {
 
@@ -162,6 +162,13 @@ class WPSEO_WooCommerce_Schema {
 		$this->add_manufacturer( $product );
 		$this->add_color( $product );
 		$this->add_global_identifier( $product );
+
+		/**
+		 * Filter: 'wpseo_schema_product' - Allow changing the Product type.
+		 *
+		 * @api array $data The Schema Product data.
+		 */
+		$this->data = apply_filters( 'wpseo_schema_product', $this->data );
 
 		return [];
 	}
