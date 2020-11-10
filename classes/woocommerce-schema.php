@@ -132,6 +132,13 @@ class WPSEO_WooCommerce_Schema {
 
 		$this->data['review'][] = $data;
 
+		/**
+		 * Filter: 'wpseo_schema_review' - Allow changing the Review type.
+		 *
+		 * @api array $data The Schema Review data.
+		 */
+		$this->data = apply_filters( 'wpseo_schema_review', $this->data );
+
 		return [];
 	}
 
