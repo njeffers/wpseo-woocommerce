@@ -232,7 +232,9 @@ class WPSEO_WooCommerce_Schema {
 			 */
 
 			if ( ! $product->is_on_sale() || ! $product->get_date_on_sale_to() ) {
-				unset( $offers[ $key ]['priceValidUntil'] );
+				if( apply_filters( 'wp_seo_schema_not_on_sale_remove_priceValidUntil', true, $product, $offer ) ) {
+					unset( $offers[ $key ][ 'priceValidUntil' ] );
+				}
 			}
 		}
 
